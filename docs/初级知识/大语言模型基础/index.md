@@ -158,6 +158,58 @@ LLM 的训练分为两个主要阶段：
 
 ---
 
+## 💡 深入理解：语言模型的演进与核心概念
+
+### 从 N-gram 到 Transformer
+
+语言模型的建模方法经历了三次重大飞跃：
+
+| 阶段 | 代表模型 | 核心原理 | 优势 | 局限 |
+|------|---------|---------|------|------|
+| **统计模型** | N-gram | 基于词频统计预测下一个词 | 简单快速 | 上下文窗口极短(仅前 N-1 个词)、稀疏性大 |
+| **神经网络** | RNN / LSTM | 逐步处理序列，学习上下文 | 比 N-gram 更长的上下文记忆 | 梯度消失、不能并行处理、长上下文仍受限 |
+| **大规模预训练** | Transformer (GPT/BERT) | 自注意力机制，同时处理所有 token | 全上下文理解、可并行训练、参数量级飞跃 | 计算成本高、上下文窗口有上限 |
+
+> 来源：[Google Developers — 大型语言模型简介](https://developers.google.com/machine-learning/crash-course/llm?hl=zh-cn)（2026 年 1 月更新）
+
+### Token 化（分词）详解
+
+Token 化是将文本切分为最小处理单元的过程。现代 LLM 大多使用**子词分词**（Subword Tokenization）：
+
+- `unwatched` → `un` + `watch` + `ed`
+- `cats` → `cat` + `s`
+- `antidisestablishmentarianism` → 6 个子字词
+
+**Token 数量估算**（英语环境）：
+- 4 个字符 ≈ 1 个 token
+- 3/4 个单词 ≈ 1 个 token
+- 400 tokens ≈ 300 个英文词
+
+Token 化已不限于文本——该概念已成功应用于计算机视觉和音频生成领域。
+
+### 语言模型的概率本质
+
+LLM 的核心是**概率预测**：给定前文，计算下一个 token 的概率分布。例如句子 *"When I hear rain on my roof, I ____ in my kitchen."* 的可能补全：
+
+| 概率 | 补全词 |
+|:----:|:------:|
+| 9.4% | 煮汤 |
+| 5.2% | 温热水壶 |
+| 3.6% | 畏缩 |
+| 2.5% | 小憩 |
+
+模型可选择概率最高者，或从高于阈值的候选词中随机采样——这种**随机性**正是 LLM 每次输出略有不同的原因。
+
+### 补充学习资源
+
+| 资源 | 类型 | 说明 |
+|------|------|------|
+| [Google ML Crash Course: LLM](https://developers.google.com/machine-learning/crash-course/llm) | 课程 | Google 官方的 LLM 入门（含交互式练习） |
+| [DataWhale Happy-LLM](https://github.com/datawhalechina/happy-llm) | 开源教程 | 从零搭建大语言模型的中文教程，7 章覆盖 NLP 基础到 LLM 应用 |
+| [Botpress：2026 十大 LLM 排名](https://botpress.com/tw/blog/best-large-language-models) | 对比分析 | 2026 年最新模型价格、上下文窗口、能力对比 |
+
+---
+
 ## 📚 参考来源
 
 1. [What is an LLM? A Guide on Large Language Models — DataCamp](https://www.datacamp.com/blog/what-is-an-llm-a-guide-on-large-language-models)（2023 年 12 月）
