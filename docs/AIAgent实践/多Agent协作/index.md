@@ -1,0 +1,204 @@
+# 👥 多 Agent 协作
+
+设计多智能体协作系统，让多个专业 AI Agent 分工合作，完成复杂任务。
+
+---
+
+## 📖 概述
+
+单个 Agent 能力有限。当任务涉及多个专业领域时，多 Agent 系统的优势就显现出来了。通过将不同角色分配给不同 Agent，每个 Agent 专注于特定的任务，最终通过协作产出更高质量的结果。
+
+> 来源：[Multi-Agent Orchestration Guide — Digital Applied](https://www.digitalapplied.com/blog/ai-agent-orchestration-workflows-guide)
+
+### 为什么需要多 Agent？
+
+| 问题 | 单 Agent | 多 Agent |
+|------|---------|---------|
+| 角色混淆 | 一个 Agent 承担所有角色 | 每个 Agent 专精一个角色 |
+| 上下文超长 | 对话越长 token 越多 | 各自维护独立上下文 |
+| 错误蔓延 | 一个判断失误影响全局 | 多 Agent 相互校验 |
+| 可扩展性 | 加功能需要改代码 | 加一个 Agent 即可 |
+
+---
+
+## 🏗️ 主流框架对比
+
+目前三大主流多 Agent 框架：
+
+| 框架 | 开发商 | 设计哲学 | 适用场景 | 学习曲线 |
+|------|--------|---------|---------|---------|
+| **CrewAI** | CrewAI Inc. | 角色分工制（Crew） | 内容生产、研究分析 | 低 |
+| **AutoGen** | Microsoft | 对话式多 Agent | 编程、数据分析 | 中 |
+| **LangGraph** | LangChain | 有状态图流程 | 生产级复杂工作流 | 高 |
+
+> 来源：[AutoGen vs CrewAI vs LangGraph — 2025 全面对比](https://www.youtube.com/watch?v=8HqeY5v0ohM)
+
+---
+
+## 👥 CrewAI 实战：博客创作团队
+
+CrewAI 的设计模式最直观：定义 Agent → 分配任务 → 组建 Crew → 运行。
+
+### 定义 Agent 角色
+
+```python
+from crewai import Agent
+
+planner = Agent(
+    role="内容策划师",
+    goal="规划博客文章结构和关键主题",
+    backstory="你是经验丰富的内容策略专家，擅长将复杂话题拆解成清晰的叙述结构",
+    llm="gpt-4o",
+    verbose=True
+)
+
+writer = Agent(
+    role="技术作者",
+    goal="根据大纲撰写技术博客的正文内容",
+    backstory="你是资深的技术写作专家，能将技术概念转化为通俗易懂的文章",
+    llm="gpt-4o",
+    verbose=True
+)
+
+editor = Agent(
+    role="编辑",
+    goal="审核并优化文章，确保逻辑连贯、语法正确、风格一致",
+    backstory="你是苛刻的编辑，追求完美，擅长润色和纠错",
+    llm="gpt-4o",
+    verbose=True
+)
+```
+
+### 定义任务
+
+```python
+from crewai import Task
+
+plan_task = Task(
+    description="为 'RAG Agent 构建指南' 写一个详细的大纲",
+    expected_output="包含引言、5个主要章节和结论的大纲",
+    agent=planner
+)
+
+write_task = Task(
+    description="根据大纲撰写博客正文，包含代码示例",
+    expected_output="完整的博客草稿",
+    agent=writer
+)
+
+edit_task = Task(
+    description="审核草稿，修改不通顺、不准确的部分",
+    expected_output="最终润色后的博客",
+    agent=editor
+)
+```
+
+### 组建 Crew 并运行
+
+```python
+from crewai import Crew
+
+crew = Crew(
+    agents=[planner, writer, editor],
+    tasks=[plan_task, write_task, edit_task],
+    verbose=True
+)
+
+result = crew.kickoff()
+print(result)
+```
+
+### 运行流程
+
+```
+规划（策划师）→ 撰写（作者）→ 审核（编辑）
+                              ↓
+                     产出最终文章
+```
+
+> 来源：[CrewAI 多 Agent 教程 — MLWorks](https://www.youtube.com/watch?v=viH5CDG4vWM)
+
+---
+
+## 🔄 LangGraph：更灵活的有状态编排
+
+LangGraph 适合需要复杂循环和状态管理的场景，提供更精细的控制。
+
+### 核心概念
+
+- **Node** — 每一个 Agent 或处理步骤
+- **Edge** — 节点之间的连接
+- **State** — 在节点间传递的共享状态
+- **Conditional Edge** — 基于状态的条件跳转
+
+### 示例：多步研究 Agent
+
+```python
+from langgraph.graph import StateGraph
+
+# 定义状态
+class ResearchState(TypedDict):
+    question: str
+    search_results: list
+    analysis: str
+    report: str
+
+# 定义步骤
+def search_web(state):    # → 搜索
+def analyze_results(state):  # → 分析
+def write_report(state):   # → 报告撰写
+def review_report(state):  # → 审查返回修改或结束
+
+# 构建图
+graph = StateGraph(ResearchState)
+graph.add_node("search", search_web)
+graph.add_node("analyze", analyze_results)
+graph.add_node("write", write_report)
+graph.add_node("review", review_report)
+
+graph.add_conditional_edges(
+    "review",
+    should_continue,  # 如果质量不够，回到 search
+    { "continue": "write", "end": "__end__" }
+)
+```
+
+---
+
+## 💡 最佳实践
+
+### 1. 角色设计原则
+
+- **职责不重叠** — 每个 Agent 负责明确的范围
+- **输出标准化** — 让 Agent 输出结构化格式（JSON/Markdown）
+- **设定边界** — Agent 超出能力范围时应明确表示
+
+### 2. 成本控制
+
+- 选择不同档次的模型：复杂分析用 GPT-4o，简单任务用 GPT-4o-mini
+- 设置最大迭代次数，防止无限循环
+- 缓存 Agent 中间结果
+
+### 3. 错误处理
+
+- 为每个 Agent 设置超时和重试机制
+- 实现"人类确认"节点，对关键决策进行人工干预
+- 记录完整运行日志，方便排查问题
+
+### 4. 框架选择建议
+
+| 你的需求 | 推荐框架 |
+|---------|---------|
+| 快速原型、内容生成 | CrewAI |
+| 数据分析、编程辅助 | AutoGen |
+| 生产级复杂编排 | LangGraph |
+| 想自己控制一切 | 自定义 Agent 框架 |
+
+---
+
+## 📚 参考来源
+
+- [AI Agent Orchestration Guide — Digital Applied](https://www.digitalapplied.com/blog/ai-agent-orchestration-workflows-guide)
+- [CrewAI Multi-Agent Tutorial — MLWorks (YouTube)](https://www.youtube.com/watch?v=viH5CDG4vWM)
+- [AutoGen vs CrewAI vs LangGraph 2025 Comparison (YouTube)](https://www.youtube.com/watch?v=8HqeY5v0ohM)
+- [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)

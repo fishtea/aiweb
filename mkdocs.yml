@@ -58,6 +58,9 @@ extra:
 extra_css:
   - assets/custom.css
 
+extra_javascript:
+  - assets/home.js
+
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -69,6 +72,9 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - admonition
   - attr_list
   - def_list
@@ -125,3 +131,8 @@ nav:
     - PyTorch: 工具专区/PyTorch/index.md
     - TensorFlow: 工具专区/TensorFlow/index.md
     - Ollama: 工具专区/Ollama/index.md
+  - 🧪 AI Agent 实践:
+    - AIAgent实践/index.md
+    - 函数调用 Agent: AIAgent实践/函数调用Agent/index.md
+    - RAG Agent 实战: AIAgent实践/RAGAgent实战/index.md
+    - 多 Agent 协作: AIAgent实践/多Agent协作/index.md
