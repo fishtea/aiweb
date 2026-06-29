@@ -1,215 +1,315 @@
-# Agent 智能体
+# Agent 智能体：从被动问答到自主行动
 
-> 智能体是 AI 从"问答工具"进化为"自主行动者"的关键范式。一个 Agent 能感知环境、制定计划、调用工具，最终独立完成复杂任务。
+## 什么事 Agent？
 
-## 🤖 什么是 AI Agent？
-
-AI Agent（智能体）是一个能够自主感知环境、做出推理、执行行动以实现目标的系统。它与普通 LLM 的核心区别在于：
-
-| 特性 | 普通 LLM | AI Agent |
-|------|---------|----------|
-| **主动性** | 被动回答问题 | 主动规划并执行任务 |
-| **工具使用** | 无（只有文字输出） | 可调用代码、API、文件等工具 |
-| **记忆** | 单轮或无记忆 | 有长短期记忆，能持续学习 |
-| **反馈循环** | 无 | 根据环境反馈调整行动 |
-| **目标导向** | 无 | 有明确目标和任务分解能力 |
-
-## 🏗️ Agent 架构
-
-Agent 通常遵循"感知 → 推理 → 行动"循环：
+**普通 LLM 调用**（被动）：
 
 ```
-        ┌─────────────────────────────┐
-        │        外部环境              │
-        │  (文件系统, API, 网页, 数据库) │
-        └──────┬──────────────┬───────┘
-               │              │
-        感知(输入)        行动(输出)
-               │              │
-               ▼              ▼
-        ┌─────────────────────────────┐
-        │           Agent             │
-        │  ┌───────────────────────┐  │
-        │  │   推理引擎 (LLM)      │  │
-        │  │  思考 → 决策 → 输出  │  │
-        │  └───────────────────────┘  │
-        │         │                   │
-        │    ┌────┴────┐             │
-        │    │ 记忆模块 │             │
-        │    │短期+长期 │             │
-        │    └─────────┘             │
-        └─────────────────────────────┘
+你："上海的天气怎么样？"
+模型："上海的天气是 25°C，多云。"
 ```
 
-## 🛠️ 工具使用与函数调用
+这就是一个问-答循环。模型**只有信息**，**没有行动能力**。它不知道上海的天气信息需要去查实时 API，它只是在训练数据中见过类似的问题和答案的配对。
 
-工具是 Agent 与外部世界交互的桥梁。LLM 通过函数调用（Function Calling）能力使用工具。
+**Agent 调用**（主动）：
 
-### 定义工具
+```
+你："帮我安排明天在上海的商务行程，包括航班、酒店和会议提醒。"
+
+Agent 开始执行：
+  — 工具调用：search_flights("深圳", "上海", "明天")
+  — 工具调用：search_hotels("上海陆家嘴", "明晚")
+  — 工具调用：get_weather("上海", "明天")
+  — 工具调用：create_calendar_event(...)
+  
+Agent："已为您预订明天早上 8:30 深圳→上海的航班，..."
+```
+
+区别清晰：Agent **拥有工具**，并且**自主决定调用顺序**。它不是一个问答机器人，它是一个**自主行动体**。
+
+---
+
+## ReAct 循环：Agent 的运行内核
+
+ReAct = Reasoning + Acting。这是目前最主流的 Agent 范式。看一个完整的执行 trace：
+
+### 实际问题
+
+> "我刚把代码推到 GitHub，请帮我对 main 分支做一次 code review，如果发现问题就提交 issue。"
+
+### 执行日志
+
+```
+=== ReAct 循环开始 ===
+
+[THOUGHT 1]
+用户要求做 code review。我需要：
+1. 获取 main 分支的最新 diff
+2. 逐文件审查代码
+3. 如果发现问题，创建 issue
+先获取 diff。
+
+[ACTION 1]  
+工具：run_command
+参数：{"command": "git diff main~1 main --stat"}
+结果："src/auth.py    | 15 +++++++
+     src/api.py     | 8 +++---
+     src/db.py      | 23 +++++++++++----
+     3 files changed, 38 insertions(+), 8 deletions(-)"
+
+[OBSERVATION 1]
+有三个文件被修改。先看 auth.py 的详细 diff。
+
+[THOUGHT 2]
+auth.py 的修改涉及用户认证模块，风险较高。先看完整 diff。
+
+[ACTION 2]
+工具：run_command
+参数：{"command": "git diff main~1 main -- src/auth.py"}
+结果："+def validate_token(token):
+    +    if len(token) < 32:
+    +        raise ValueError('Token too short')
+    +    # TODO: add signature verification
+    +    return True"
+
+[OBSERVATION 2]
+validate_token 函数有一个 TODO 注释标注了签名验证缺失。这是一个安全问题。
+需要创建一个 issue 标记这个漏洞。
+
+[THOUGHT 3]
+发现安全漏洞：validate_token 缺少签名验证。这应该标记为 high priority issue。
+立即创建 issue。
+
+[ACTION 3]
+工具：github_create_issue
+参数：{
+  "repo": "user/project",
+  "title": "Security: validate_token missing signature verification",
+  "body": "在 auth.py 新增的 validate_token 函数中，**没有实现 token 签名验证**。\n\n当前实现只检查了 token 长度，但没有验证 token 是否由可信签发者签名。\n\n风险等级：高\n建议：在 TODO 标注处实现 JWT 或 HMAC 签名验证。",
+  "labels": ["security", "bug"]
+}
+结果："Issue #42 created"
+
+[THOUGHT 4]
+问题已创建。继续审查剩余文件。
+
+[ACTION 4]
+工具：run_command
+参数：{"command": "git diff main~1 main -- src/api.py"}
+...
+
+=== 最终输出 ===
+"Code review 完成。发现 2 个问题：
+1. 🔴 [高] auth.py: validate_token 缺少签名验证 → Issue #42 已创建
+2. 🟡 [中] api.py: 删除了一个重复的输入校验，建议保留至少一层校验
+
+其他文件无重大问题。"
+```
+
+### 循环结构
+
+```
+      ┌──────────────────────────┐
+      │         THOUGHT          │  ← 推理当前状态，决定下一步
+      │     （思考当前状态）       │
+      └──────────┬───────────────┘
+                 │
+                 ▼
+      ┌──────────────────────────┐
+      │         ACTION           │  ← 调用工具执行操作
+      │     （执行具体动作）       │
+      └──────────┬───────────────┘
+                 │
+                 ▼
+      ┌──────────────────────────┐
+      │      OBSERVATION         │  ← 获取工具返回的结果
+      │     （观察工具输出）       │
+      └──────────┬───────────────┘
+                 │
+                 │（回到 THOUGHT，继续循环）
+                 ▼
+         直到任务完成 → FINAL ANSWER
+```
+
+**关键洞察**：Agent 的"思考"不是真的思考——它是通过语言推理来规划下一步。模型在"自言自语"中逐步逼近目标。
+
+---
+
+## Agent 的三个核心组件
+
+### 1. 工具（Tools）
+
+工具是 Agent 与外部世界交互的接口。没有工具的 Agent 就是一个普通 LLM。
+
+```
+┌─ 信息获取类工具 ─────────────────────────────┐
+│  search_web(query)       → 搜索引擎结果      │
+│  read_file(path)         → 读取本地文件      │
+│  query_database(sql)     → 执行 SQL 查询     │
+│  call_api(endpoint)      → 调用外部 API      │
+└──────────────────────────────────────────────┘
+
+┌─ 执行操作类工具 ─────────────────────────────┐
+│  run_command(cmd)        → 执行命令行        │
+│  write_file(path, text)  → 写入文件          │
+│  send_email(to, body)    → 发送邮件          │
+│  create_issue(repo, ...) → 创建 Issue       │
+└──────────────────────────────────────────────┘
+
+┌─ 辅助推理类工具 ─────────────────────────────┐
+│  python_repl(code)       → 执行 Python 计算  │
+│  calculator(expr)        → 精确数学计算      │
+│  decompress_pdf(path)    → PDF 文本提取      │
+└──────────────────────────────────────────────┘
+```
+
+**工具设计的黄金法则**：每个工具只做一件事，且接口清晰。工具描述对于 Agent 选对工具至关重要——写描述时不是写给人类看的，是写给 LLM 看的。
+
+```
+# ❌ 差的工具描述
+"这个工具可以处理数据"
+
+# ✅ 好的工具描述
+"search_web(query: str) → list[dict]: 执行 Google 搜索并返回 Top-5 结果。
+当用户问及时事、最新信息、或外部数据时使用此工具。
+如果用户的问题涉及本地文件，请勿使用此工具。"
+```
+
+### 2. 记忆（Memory）
+
+Agent 需要记忆来维持一致性。三个层级：
+
+| 记忆类型 | 存储内容 | 生命周期 | 访问速度 |
+|---------|---------|---------|---------|
+| 短期记忆 | 当前对话的完整上下文 | 单次对话 | 快（上下文窗口内） |
+| 长期记忆 | 跨会话的关键信息 | 持久化 | 慢（需要检索） |
+| 工作记忆 | 当前任务的中间状态 | 任务完成即丢弃 | 最快（显式状态） |
+
+**实现模式**：
 
 ```python
-# 工具定义示例：天气查询
-tools = [
-    {
-        "type": "function",
-        "function": {
-            "name": "get_weather",
-            "description": "查询指定城市的天气",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "city": {"type": "string", "description": "城市名称"},
-                    "date": {"type": "string", "description": "日期"}
-                },
-                "required": ["city"]
-            }
-        }
-    }
-]
+class AgentMemory:
+    def __init__(self):
+        self.short_term = []           # 当前对话历史
+        self.long_term = VectorStore()  # 跨会话记忆
+        self.working = {}              # 结构化中间状态
+    
+    def add_to_short(self, entry):
+        self.short_term.append(entry)
+        if len(self.short_term) > self.max_turns:
+            self.summarize_and_compact()  # 压缩历史
+    
+    def retrieve_relevant(self, query, k=5):
+        return self.long_term.search(query, k)
+    
+    def set_working(self, key, value):
+        self.working[key] = value
+    
+    def get_working(self, key):
+        return self.working.get(key)
 ```
 
-### 工具调用流程
+### 3. 规划（Planning）
 
-1. LLM 识别需要调用工具 → 输出函数名和参数
-2. 系统执行工具函数 → 返回结果
-3. LLM 将工具结果融入推理 → 生成最终回答
+复杂任务需要规划。两种主要模式：
 
-### 常用工具类型
-
-| 工具类型 | 示例 | 用途 |
-|---------|------|------|
-| **搜索** | Web Search API | 获取实时信息 |
-| **计算** | Python 解释器 | 精确数学运算 |
-| **文件** | 读写文件 | 处理文档和代码 |
-| **数据库** | SQL 查询 | 访问结构化数据 |
-| **API** | REST 接口 | 调用外部服务 |
-
-## 🧠 规划方法
-
-Agent 的"大脑"在于如何规划和拆解任务。
-
-### ReAct（Reasoning + Acting）
-
-交替进行推理和行动，是目前最主流的 Agent 范式：
+**ReAct（实时规划）**：想到哪做到哪，边做边调整。适合探索性任务。
+**Plan-and-Execute（先计划再执行）**：先制定完整计划，再逐步执行。适合确定性任务。
 
 ```
-思考：用户需要计算公司去年的总营收，我需要先找到财务数据
-行动：search_files("财务/2024/营收*")
-观察：找到了三个季度的数据文件
-思考：还缺第四季度数据，需要继续搜索
-行动：search_files("财务/2024/Q4*")
-观察：找到了第四季度数据
-思考：现在有了所有数据，可以开始计算
-行动：python_execute("sum(...)")
+Plan-and-Execute 示例：
+
+[PLAN]
+Step 1: 搜索"2024 年新能源汽车销量排名"
+Step 2: 获取每家公司 Q1 2025 的财报数据
+Step 3: 对比增长率并生成分析报告
+Step 4: 将报告保存为 markdown 文件
+
+[EXECUTION]
+执行 Step 1 → 结果：比亚迪 300 万辆，特斯拉 180 万辆...
+执行 Step 2 → 结果：比亚迪 Q1 增长 15%，特斯拉 Q1 下降 8%...
+执行 Step 3 → 生成报告...
+执行 Step 4 → 已保存
 ```
 
-### Chain-of-Thought（CoT）
+**混合策略（推荐）**：先做高层面规划，然后在每个步骤中采用 ReAct 式探索。
 
-让模型在回答前进行逐步推理，适合不需要外部工具的规划。
+---
 
-**示例**：
-```
-用户：北京到上海坐高铁需要多久？
-思考：1. 京沪高铁全长约1318公里
-      2. 高铁时速约300-350km/h
-      3. 中间停靠站约10个，每站2-3分钟
-      4. 全程约4.5小时
-结论：大约4-5小时
-```
+## Agent vs RAG：核心区别
 
-### Tree-of-Thoughts（ToT）
+| 维度 | RAG | Agent |
+|------|-----|-------|
+| 核心目标 | 让模型知道"不知道的事" | 让模型做"不会做的事" |
+| 交互方式 | 单轮：检索→生成 | 多轮：思考→行动→观察→... |
+| 复杂度 | 低，流水线式 | 高，循环式 |
+| 工具数量 | 0-1 个（检索器） | 多个，可组合 |
+| 状态管理 | 无状态 | 有状态 |
+| 失败模式 | 检索不到相关内容 | 陷入死循环/错误决策 |
 
-同时探索多条推理路径，并评估每条路径的可行性：
+**两者不是互斥的**。最佳实践是 Agent + RAG 结合——Agent 使用 RAG 工具来获取信息，再基于获取的信息做推理和行动。
 
-- 同时生成多个可能的推理方向
-- 对每个方向进行评估
-- 选择最有希望的路径继续深化
-- 回溯失败的路径
+---
 
-## 👥 多智能体系统
-
-多个 Agent 协作解决复杂问题，每个 Agent 扮演不同角色：
-
-```
-项目经理 Agent (协调者)
-  ├── 研究员 Agent (收集信息)
-  ├── 开发者 Agent (编写代码)
-  ├── 测试员 Agent (验证结果)
-  └── 文档员 Agent (记录过程)
-```
-
-### 多智能体通信模式
-
-- **轮询式**：主 Agent 依次询问子 Agent
-- **辩论式**：多个 Agent 各自提出方案并互相批评
-- **层级式**：上级 Agent 分解任务，下级执行
-
-## 💾 Agent 记忆
-
-记忆让 Agent 能够持续学习和改进。
-
-| 记忆类型 | 存储内容 | 示例 |
-|---------|---------|------|
-| **短期记忆** | 当前对话上下文 | 历史消息 |
-| **长期记忆** | 跨会话的知识 | 用户偏好、已完成任务 |
-| **工作记忆** | 当前任务的中间状态 | 已获取的数据、待办步骤 |
-
-## 🔧 主流框架
-
-| 框架 | 特点 | 适用场景 |
-|------|------|---------|
-| **LangChain Agent** | 生态丰富，工具多 | 快速原型开发 |
-| **AutoGPT** | 自主规划，长期任务 | 自动任务执行 |
-| **CrewAI** | 多智能体协作 | 团队协作场景 |
-| **Semantic Kernel** | 微软出品，企业级 | .NET / Azure 生态 |
-| **OpenAI Assistants** | 托管服务，开箱即用 | 生产级应用 |
-
-## 🚀 构建你的第一个 Agent
-
-### 最小可行 Agent
+## Agent 实战：构建一个简单 Agent
 
 ```python
-from openai import OpenAI
-
-client = OpenAI()
-
-def search_web(query):
-    # 调用搜索引擎 API
-    return f"搜索结果：{query}相关的信息..."
-
-def calculate(expression):
-    return eval(expression)
-
-tools = [search_web, calculate]
-
-def agent(query):
-    messages = [
-        {"role": "system", "content": "你是一个智能助手，可以使用工具回答问题。"},
-        {"role": "user", "content": query}
-    ]
+# 一个最小化 Agent 实现（完整版见附录）
+class MinimalAgent:
+    def __init__(self, llm, tools):
+        self.llm = llm
+        self.tools = {t.name: t for t in tools}
+        self.max_steps = 10
     
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=messages,
-        tools=tools
-    )
-    
-    # 处理工具调用...
-    return response.choices[0].message.content
+    def run(self, task):
+        messages = [{"role": "system", "content": self.SYSTEM_PROMPT},
+                    {"role": "user", "content": task}]
+        
+        for step in range(self.max_steps):
+            response = self.llm(messages)
+            action = self.parse_action(response)
+            
+            if action["type"] == "finish":
+                return action["result"]
+            
+            observation = self.tools[action["name"]](**action["args"])
+            messages.append({"role": "assistant", "content": response})
+            messages.append({"role": "tool", "content": str(observation)})
+        
+        return "Max steps reached"
 ```
 
-## ⚠️ 常见陷阱
+**生产级 Agent 框架**（选一个即可）：
 
-1. **无限循环**：Agent 反复调用同一个工具
-   - 解决：设置最大迭代次数
+| 框架 | 语言 | 特色 | 适用场景 |
+|------|------|------|---------|
+| LangChain | Python | 生态最丰富 | 通用 Agent 开发 |
+| CrewAI | Python | 多 Agent 协作 | 角色分工场景 |
+| AutoGen | Python | 多 Agent 对话 | 复杂任务分解 |
+| Semantic Kernel | C#/Python | Azure 集成 | 企业 .NET 环境 |
+| DSPy | Python | 编译优化 | 需要调优 Agent 行为 |
 
-2. **工具过于复杂**：一次提供太多工具选择
-   - 解决：分组管理，精简工具集
+---
 
-3. **安全风险**：Agent 执行危险操作
-   - 解决：沙箱执行，权限最小化
+## 常见失败模式
 
-4. **成本失控**：Agent 产生大量 API 调用
-   - 解决：设置调用预算，使用缓存
+```
+□ 工具幻觉：Agent 调用了一个不存在的工具名
+   → 解决方案：约束工具选择空间，用 JSON schema 做验证
 
-> **下一步**：Agent 的效果很大程度取决于如何与 LLM 沟通。学习 [提示词工程](../提示词工程/index.md) 来优化你的 Agent 行为。
+□ 死循环：Agent 反复调用同一个工具
+   → 解决方案：设置 max_steps，加入"重复检测"逻辑
+
+□ 累积误差：早期步骤的微小错误被放大
+   → 解决方案：关键步骤加入人工确认节点（human-in-the-loop）
+
+□ 上下文溢出：多轮工具调用后上下文窗口被撑满
+   → 解决方案：压缩历史、滚动窗口、总结中间结果
+
+□ 权限越界：Agent 执行了不应该执行的操作
+   → 解决方案：工具层做权限校验，敏感操作需二次确认
+```
+
+## 下一步
+
+要设计更好的 Agent，你需要精通 [提示词工程 →](../提示词工程/index.md)——因为 Agent 的思考逻辑本质上是由 prompt 驱动的推理链路。

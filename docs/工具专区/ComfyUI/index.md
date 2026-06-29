@@ -1,212 +1,196 @@
-# ComfyUI
+# ComfyUI：像搭乐高一样组装图像生成
 
-> ComfyUI 是一个基于节点/流程图界面的 Stable Diffusion 图像生成工具，以其高效性、可重现性和灵活的工作流系统在 AI 绘画社区中备受推崇。
-
----
-
-## 为什么选择 ComfyUI？
-
-与主流的 AUTOMATIC1111（A1111）相比，ComfyUI 采用完全不同的设计理念：
-
-| 特性 | ComfyUI | A1111 |
-|-----|---------|-------|
-| **界面** | 节点流程图 | 传统表单式 |
-| **工作流** | 可视化图形 | 选项卡切换 |
-| **显存效率** | 高（按需加载） | 中等 |
-| **执行速度** | 快（优化管道） | 标准 |
-| **可重现性** | 极高（工作流文件） | 中等 |
-| **学习曲线** | 较陡 | 平缓 |
-| **高级控制** | 极强 | 强 |
+> 当大部分人在使用 Automatic1111 的"一键生成"时，追求精确的人转向了 ComfyUI。
+> 它不是"更难的替代品"，而是"更可控的创作工具"。
 
 ---
 
-## 核心概念
+## 为什么叫"节点式"工作流？
 
-### 节点（Nodes）
+想象你在做一碗拉面：
 
-节点是 ComfyUI 的基本构建块，每个节点执行一个特定功能：
-
+**Automatic1111（类比：拉面套餐）**
 ```
-[Checkpoint Loader] → [VAE Decode] → [Save Image]
-         ↓
-[CLIP Text Encode] → [KSampler] → [VAE Decode]
-         ↓
-[Empty Latent Image]
+店员：你要什么拉面？
+你：豚骨拉面（选 preset）
+店员：3 分钟后给你一碗
+【你无法调整火候、面硬度、汤浓度】
 ```
 
-### 常见节点类型
+**ComfyUI（类比：开放式厨房）**
+```
+你：
+  1. 烧水（KSampler 节点）
+  2. 煮面（Checkpoint Loader + 正/负提示词）
+  3. 调汤（ControlNet 调节）
+  4. 加溏心蛋（LoRA 注入）
+  5. 摆盘（VAE Decode → Save Image）
+【每一步你都可以精确调整参数】
+```
 
-| 节点类型 | 功能 | 示例 |
-|---------|------|------|
-| **模型节点** | 加载模型 | Checkpoint Loader, LoRA Loader |
-| **输入节点** | 提供输入 | CLIP Text Encode, Empty Latent |
-| **采样节点** | 执行去噪 | KSampler, SamplerCustom |
-| **图像节点** | 图像处理 | VAE Decode, Upscale Image |
-| **遮罩节点** | 遮罩操作 | Mask to Image, Composite |
-| **控制节点** | 高级控制 | ControlNet, IP-Adapter |
+**ComfyUI 的核心理念**：把图像生成拆解为可独立控制、可串联、可复用的节点。
 
 ---
 
-## 快速开始
+## 基础节点解释（从零开始）
 
-### 安装
+### 最简单的 T2I 工作流
+
+```
+Load Checkpoint ──→ CLIP Text Encode (正面提示词) ──┐
+                    CLIP Text Encode (负面提示词) ──┤
+                                                    ↓
+                                               KSampler ──→ VAE Decode ──→ Save Image
+                                                    ↑
+                                             Empty Latent Image
+```
+
+**每个节点的角色**：
+| 节点 | 中文名 | 功能 |
+|------|-------|------|
+| Load Checkpoint | 加载模型 | 选择 SD1.5 / SDXL / FLUX 底模 |
+| CLIP Text Encode | 编码提示词 | 把文字变成模型能理解的向量 |
+| Empty Latent Image | 初始化潜图 | 设置宽高，生成纯噪声 |
+| KSampler | 采样器 | 核心——逐步去噪，把噪声变成潜图 |
+| VAE Decode | 解码器 | 把潜空间的图转为像素图 |
+| Save Image | 保存 | 输出 PNG/JPG |
+
+### 关键参数解析
+
+**KSampler 里的参数决定了 80% 的出图质量**：
+
+**Steps（步数）**：
+- 默认 20 | SDXL 推荐 25-30 | FLUX 推荐 28-50
+- 步数越多越精细，但边际效益递减
+- 技巧：先用 20 步快速摸草图，定稿后用 40 步出最终图
+
+**CFG（Classifier Free Guidance）**：
+- 范围 1-20+ | 默认 7
+- CFG 越高→越忠实于提示词→但可能偏"味精感"
+- CFG 越低→模型自由发挥空间越大→可能偏离提示词
+- 技巧：高 CFG(12-15) 配写真风，低 CFG(4-6) 配艺术风
+
+**Sampler Name（采样器）**：
+- **DPM++ 2M Karras**：高质素，速度快（默认推荐）
+- **Euler a**：收敛快，适合快速测试
+- **DPM++ 2M SDE Karras**：质量最高，但慢
+- **DDIM**：支持步数很少（4-10 步）就出图
+
+---
+
+## 常用工作流模板
+
+### ① 文生图（T2I）—— 标准
+
+最基本的流程，适合概念设计、插图生成。
+
+```
+[Checkpoint] → [正面提示词] ─┐
+                [负面提示词]  ├→ [KSampler] → [VAE Decode] → [Save]
+                              │
+                 [Latent Image]
+```
+
+### ② 图生图（I2I）—— 改图
+
+把已有图片按新提示词重新生成。
+
+```
+[Load Image] → [VAE Encode] ─┐
+                              ├→ [KSampler] (denoise=0.6)
+[Checkpoint] → [提示词] ────┘    → [VAE Decode] → [Save]
+
+关键参数：denoise (降噪强度)
+0.0 = 完全不变  0.3 = 微调颜色/光影
+0.6 = 改变构图  1.0 = 完全重画
+```
+
+### ③ Inpainting —— 局部重绘
+
+只修改图片的特定区域。
+
+```
+[Load Image + Mask] → [VAE Encode] ─┐
+                                      ├→ [KSampler] (denoise=0.8-1.0)
+[Checkpoint (inpaint版)] → [提示词] ─┘
+                                      → [VAE Decode] → [Save]
+
+Mask = 你画的选区，白色=要改的部分
+```
+
+### ④ 文生视频 —— AnimateDiff
+
+用 AnimateDiff 插件把静态图变成短视频。
+
+```
+[Checkpoint] → [提示词] → [KSampler] + [AnimateDiff Loop]
+                           → 连续 16 帧 → [Video Combine] → .mp4
+```
+
+---
+
+## 自定义节点生态
+
+ComfyUI 最强大的地方——社区贡献的**第三方节点**。
+
+### 必装节点管理器
 
 ```bash
-# 标准安装
-git clone https://github.com/comfyanonymous/ComfyUI.git
-cd ComfyUI
-pip install -r requirements.txt
-
-# 启动
-python main.py
-
-# 访问 http://localhost:8188
+# 在 ComfyUI 安装目录
+git clone https://github.com/ltdrdata/ComfyUI-Manager custom_nodes/
 ```
 
-### 模型目录结构
+**有了 Manager 后，你可以直接在 UI 里搜索安装节点。**
 
-```
-ComfyUI/
-├── models/
-│   ├── checkpoints/    # 主模型 (SDXL, SD3 等)
-│   ├── loras/          # LoRA 模型
-│   ├── vae/            # VAE 模型
-│   ├── controlnet/     # ControlNet 模型
-│   ├── upscale_models/ # 放大模型
-│   └── clip/           # CLIP 模型
-├── custom_nodes/       # 自定义节点
-├── input/              # 输入图片
-├── output/             # 输出图片
-└── workflows/          # 工作流文件
-```
+### 核心扩展推荐
+
+| 节点包 | 功能 | 必装指数 |
+|--------|------|---------|
+| **ComfyUI-Manager** | 节点安装/更新/管理 | ⭐⭐⭐⭐⭐ |
+| **ComfyUI-Impact-Pack** | 综合工具集（分割、放大、遮罩） | ⭐⭐⭐⭐⭐ |
+| **Efficiency Nodes** | 简化工作流节点 | ⭐⭐⭐⭐ |
+| **WAS Node Suite** | 文本/图像工具包 | ⭐⭐⭐⭐ |
+| **rgthree-comfy** | 快捷节点（超级提示词、种子箱） | ⭐⭐⭐⭐ |
+| **ComfyUI-KJNodes** | 批处理/动画 | ⭐⭐⭐ |
+| **AnimateDiff-Evolved** | 视频生成 | ⭐⭐⭐ |
+| **ComfyUI-Frame-Interpolation** | 视频帧插值 | ⭐⭐⭐ |
 
 ---
 
-## 核心工作流示例
+## ComfyUI 为什么更好？
 
-### 基础文生图工作流
+| 维度 | ComfyUI | Automatic1111 |
+|------|---------|--------------|
+| **可复现性** | ✅ 工作流存为 JSON，下次直接加载 | ❌ 需要记参数，手动设置 |
+| **显存效率** | ✅ 更少显存消耗 | ❌ 资源浪费 |
+| **批处理** | ✅ 原生支持批量队列 | ⚠️ 需要插件 |
+| **工作流分享** | ✅ JSON 文件，社区丰富 | ⚠️ 只能截图 |
+| **学习曲线** | ❌ 陡峭 | ✅ 简单 |
+| **新手友好** | ❌ 需要理解原理 | ✅ 入门快 |
+| **定制化** | ✅ 无限可能 | ❌ 受限 |
+| **调试** | ✅ 能可视化每一步 | ❌ 黑盒 |
 
-```
-1. [Checkpoint Loader] → 加载 SDXL 模型
-2. [CLIP Text Encode] → 输入正向提示词
-3. [CLIP Text Encode] → 输入负向提示词
-4. [Empty Latent Image] → 设置图片尺寸
-5. [KSampler] → 连接以上输入，设置参数
-6. [VAE Decode] → 将潜在表示解码为图像
-7. [Save Image] → 保存生成结果
-```
-
-### 图生图工作流
-
-```
-[Load Image] → [VAE Encode] ──────────────────┐
-                                                ↓
-[Checkpoint Loader] → [CLIP Text Encode] → [KSampler] → [VAE Decode] → [Save Image]
-```
-
-### ControlNet 工作流
-
-```
-[Load Image] → [Canny Edge Detection] ──┐
-                                         ↓
-[Checkpoint Loader] → [CLIP Encode] → [ControlNet Apply] → [KSampler] → [输出]
-```
+**最简单的选择建议**：
+- 你只偶尔生成几张图 → **A1111**
+- 你要每天工作、批量生成、精确控制 → **ComfyUI**
+- 你想用 FLUX / SD3 / AnimateDiff → **ComfyUI（很多模型只在 ComfyUI 上可用）**
 
 ---
 
-## 提高效率的技巧
+## 工作流分享文化
 
-### 队列批处理
+ComfyUI 有一个独特的文化——分享工作流。
 
-```python
-# ComfyUI API 批量调用
-import requests
-import json
+**工作流文件**：一个 `.json` 文件，包含所有节点、参数、连接关系。
 
-with open("workflow.json", "r") as f:
-    workflow = json.load(f)
+**如何分享**：直接把 JSON 拖入 ComfyUI 窗口，自动加载完整工作流。
 
-# 修改提示词
-workflow["6"]["inputs"]["text"] = "a cat, masterpiece"
-
-response = requests.post(
-    "http://localhost:8188/prompt",
-    json={"prompt": workflow}
-)
-print(response.json())
-```
-
-### 快捷键
-
-| 快捷键 | 功能 |
-|-------|------|
-| Ctrl+Enter | 执行队列 |
-| Ctrl+Shift+Enter | 执行当前节点 |
-| Tab | 搜索并添加节点 |
-| Ctrl+C/V | 复制粘贴节点 |
-| Ctrl+D | 禁用选中节点 |
-| Space+拖拽 | 平移画布 |
-| 滚轮 | 缩放 |
+**去哪里找**：
+- [OpenArt Workflows](https://openart.ai/workflows)
+- [CivitAI](https://civitai.com) 的工作流板块
+- [ComfyUI Workflows 网站](https://comfyworkflows.com)
+- Reddit r/comfyui
 
 ---
 
-## 自定义节点
-
-ComfyUI 的强大之处在于其**丰富的自定义节点生态**：
-
-| 节点集 | 功能 |
-|-------|------|
-| **ComfyUI-Manager** | 节点管理器，一键安装 |
-| **WAS Node Suite** | 图像处理工具集 |
-| **Efficiency Nodes** | 工作流效率优化 |
-| **AnimateDiff** | AI 视频生成 |
-| **IP-Adapter** | 图像提示适配器 |
-| **Face Restoration** | 人脸修复（GFPGAN） |
-
-### 安装自定义节点
-
-通过 ComfyUI-Manager 安装，或手动克隆到 `custom_nodes/`：
-
-```bash
-cd ComfyUI/custom_nodes
-git clone https://github.com/ltdrdata/ComfyUI-Manager.git
-# 重启 ComfyUI
-```
-
----
-
-## 优势
-
-- **显存效率高**：按需加载模型，SDXL 可在 6GB 显存运行
-- **执行速度快**：优化计算管道，减少冗余操作
-- **可重现性**：工作流文件分享，完全复现结果
-- **灵活性强**：可视化流程图，组合灵活
-- **生态丰富**：大量高质量自定义节点
-- **API 友好**：可通过 API 批量调用
-
-## 局限
-
-- **学习曲线陡**：节点式界面需要适应
-- **新手不友好**：需要理解 Stable Diffusion 技术概念
-- **工作流管理**：复杂工作流可能很混乱
-- **调试困难**：节点连接错误不易排查
-
----
-
-## 应用场景
-
-- **精控图像生成**：ControlNet + 多次迭代
-- **批量图像处理**：自动化流水线
-- **AI 视频制作**：AnimateDiff 工作流
-- **工作流分享**：社区共享高质量工作流
-- **进阶用户**：需要精细控制的研究和创作
-
----
-
-## 下一步
-
-- 安装 ComfyUI 并加载 SDXL 模型
-- 从社区下载工作流文件学习
-- 学习使用 ControlNet 和 IP-Adapter
-- 探索 AnimateDiff 做 AI 视频
-- 安装 ComfyUI-Manager 扩展节点生态
+> **一句话总结**：ComfyUI 是面向"创造者"而非"使用者"的工具。如果你愿意花时间搭建工作流，你能获得全方位的控制权和最高质量的输出。门槛高，天花板也高。

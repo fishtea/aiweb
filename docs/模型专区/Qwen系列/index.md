@@ -1,166 +1,179 @@
-# Qwen 系列（通义千问）
+# Qwen：通义千问，中文世界的开源冠军
 
-> 阿里巴巴通义千问（Qwen）系列是中文大模型的开源标杆，在中文理解、数学推理和代码生成方面表现卓越。
-
----
-
-## 发展历程
-
-| 版本 | 发布时间 | 参数量 | 关键特性 |
-|-----|---------|-------|---------|
-| Qwen | 2023.08 | 7B, 14B, 72B | 初代，中文能力突出 |
-| Qwen 1.5 | 2024.02 | 0.5B-72B | 全系列、多尺寸覆盖 |
-| Qwen 2 | 2024.06 | 0.5B-72B | MoE 版本、更强推理 |
-| Qwen 2.5 | 2024.09 | 0.5B-72B | **最强开源中文模型** |
-| Qwen 2.5-Coder | 2024.11 | 1.5B-32B | 代码专项优化 |
-| Qwen 2.5-Math | 2024.11 | 1.5B-72B | 数学推理增强 |
-| Qwen 2.5-VL | 2025.01 | 3B-72B | 视觉语言多模态 |
-| Qwen 3 | 2025.04 | 0.6B-235B | 思考模式、全面升级 |
+> 当西方模型在中文上磕磕绊绊时，阿里云 Qwen 从一开始就把中文作为第一语言。
+> 在中文理解上，Qwen 是目前所有开源模型中的标杆。
 
 ---
 
-## 模型规格（Qwen 2.5）
+## 为什么需要"中国特供"模型？
 
-| 规格 | 0.5B | 1.5B | 7B | 14B | 32B | 72B |
-|-----|------|------|-----|-----|-----|-----|
-| 硬件要求 | 手机/CPU | 低端GPU | 消费级 | 中端GPU | 多卡 | 服务器 |
-| 推理显存 | 1GB | 3GB | 14GB | 28GB | 64GB | 144GB |
-| 量化 4bit | 0.5GB | 1GB | 4GB | 8GB | 16GB | 40GB |
-| 智能水平 | 基础 | 基础 | 良好 | 优秀 | 优秀 | 卓越 |
+一个数据就能说明问题：
 
-**适合各种场景，从手机端到服务器全覆盖。**
+| 模型 | 中文 MMLU | 中文成语理解 | 古诗生成 | 中文梗理解 |
+|------|-----------|-------------|---------|-----------|
+| GPT-4o | 82% | ⚠️ 会错意 | 还行 | ❌ 完全不懂 |
+| LLaMA 3 70B | 75% | ❌ 常出错 | 勉强 | ❌ 不懂 |
+| **Qwen 2.5 72B** | **92%** | **✅ 准确** | **优秀** | **✅ 懂梗** |
+| DeepSeek V3 | 88% | ✅ 不错 | 良好 | ✅ 懂大部分 |
 
----
-
-## 核心优势
-
-### 1. 中文能力行业领先
-
-Qwen 系列在中文理解与生成方面达到开源模型的最佳水平：
-
-- **中文写作**：符合中文表达习惯，成语、俗语运用自然
-- **中文知识**：对中国文化、历史、社会有深入理解
-- **中英翻译**：高质量的中英互译能力
-
-### 2. 数学推理
-
-Qwen2.5-Math 在数学基准测试中表现突出：
-
-| 基准 | Qwen2.5-Math-72B | GPT-4o | Claude 3.5 |
-|-----|-----------------|--------|------------|
-| GSM8K | 96.8% | 95.9% | 96.4% |
-| MATH | 85.8% | 76.9% | 79.1% |
-| 中国高考数学 | 92.5% | — | — |
-
-### 3. 代码能力
-
-Qwen2.5-Coder 在代码生成任务上表现优异：
-
-- 支持 Python、Java、C++、JavaScript 等主流语言
-- 代码补全、调试、重构均表现良好
+这不是"民族主义"，而是**训练数据的分布问题**。如果模型训练数据中中文只占 5%，它不可能理解"甩锅"、"躺平"、"卷"这些文化负载词背后的深层含义。
 
 ---
 
-## 本地使用
+## Qwen 技术架构
 
-### 使用 Transformers
+### GQA（Grouped Query Attention）
 
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
+Qwen 2 开始使用 GQA，这是应对长上下文的关键技术。
 
-model_name = "Qwen/Qwen2.5-7B-Instruct"
+**简单解释**：
+- 传统注意力：每个查询（Query）头配一个独立的键（Key）头
+- GQA：多个查询头共享一个键头
+- 效果：**KV Cache 减少 50%-75%**，推理速度更快
 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    torch_dtype="auto",
-    device_map="auto"
-)
+**Qwen 2.5 配置**：
+| 模型大小 | 注意力头数 | KV 头数（GQA） | 压缩比 |
+|----------|-----------|---------------|--------|
+| 0.5B | 14 | 2 | 7× |
+| 7B | 28 | 4 | 7× |
+| 14B | 40 | 8 | 5× |
+| 32B | 64 | 8 | 8× |
+| 72B | 64 | 8 | 8× |
 
-prompt = "用 Python 实现一个二叉树的中序遍历"
-messages = [{"role": "user", "content": prompt}]
-text = tokenizer.apply_chat_template(
-    messages, tokenize=False, add_generation_prompt=True
-)
-inputs = tokenizer([text], return_tensors="pt").to(model.device)
+### SwiGLU 激活函数
 
-outputs = model.generate(**inputs, max_new_tokens=512)
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print(response)
+继承自 PaLM 和 LLaMA，但 Qwen 的版本有优化：
+
+```
+SwiGLU(x) = Swish(W₁x) ⊙ (W₂x)
 ```
 
-### 使用 Ollama
+比 ReLU 好 1-2 个百分点，比 GeLU 略优。这是现在大模型的标配。
+
+### 长上下文支持
+
+| 版本 | 默认上下文 | 可通过 YaRN 扩展 | 实际可用 |
+|------|-----------|-----------------|---------|
+| Qwen 2 | 32K | 128K | 32K |
+| Qwen 2.5 | 32K | **256K** | 128K+ |
+| Qwen 2.5 (long) | 128K | 512K | 256K+ |
+
+YaRN（Yet another RoPE extensioN method）是 Qwen 团队提出的一种位置编码扩展方法，比 PI（Positional Interpolation）更稳定。
+
+---
+
+## Qwen 2.5 系列全览
+
+### 模型矩阵
+
+```
+Qwen 2.5 系列 (2024年)
+├── 0.5B  → 手机端 / IoT / 简单分类
+├── 1.5B  → 边缘设备 / 简单对话
+├── 3B    → 消费级 GPU / 推理入门
+├── 7B    → 单卡 RTX 4090 最佳选择
+├── 14B   → 高精度单卡 / 量化双卡
+├── 32B   → 2× RTX 4090 / 单卡 A100
+├── 72B   → 2× A100 / 旗舰性能
+├── 110B  → 4× A100 / 顶级开源
+└── 角色专精版本
+    ├── Qwen 2.5-Coder → 代码
+    └── Qwen 2.5-Math → 数学推理
+```
+
+### 基准成绩
+
+| 基准 | Qwen 2.5 72B | LLaMA 3 70B | 差距 |
+|------|-------------|-------------|------|
+| MMLU (英文) | 86.1% | 86.4% | -0.3% |
+| CMMLU (中文) | **88.9%** | 73.5% | **+15.4%** |
+| HumanEval (代码) | 85.3% | 82.6% | +2.7% |
+| GSM8K (数学) | 95.8% | 93.0% | +2.8% |
+| IFEval (指令遵循) | 88.5% | 85.6% | +2.9% |
+
+> **结论**：在英文上 Qwen 略逊 LLaMA。在中文上碾压。在代码和数学上小幅领先。
+
+---
+
+## 微调生态
+
+Qwen 的微调生态仅次于 LLaMA，而且有更好的工具链。
+
+### 官方工具
+
+**Qwen-Finetune**：阿里提供的微调脚本，支持：
+- LoRA / QLoRA / Full FT
+- 单 GPU 到多 GPU
+- DeepSpeed ZeRO 2/3
+- 数据格式自动处理
 
 ```bash
-ollama run qwen2.5:7b
-ollama run qwen2.5:72b  # 需大显存
+# 一句话开始微调
+bash finetune/finetune_lora_single_gpu.sh \
+  -m Qwen/Qwen2.5-7B \
+  -d ./my_training_data.json
 ```
 
-### 使用 vLLM 部署
+### 社区优质微调
 
-```python
-from vllm import LLM, SamplingParams
+| 变体 | 基础 | 特色 | 适合 |
+|------|------|------|------|
+| Qwen 2.5-7B-Instruct | 7B | 官方指令版 | 日常对话 |
+| Yi 1.5 | 6B/9B/34B | 零一万物出品，中文也很好 | 对比测试 |
+| Firefly-Qwen | 7B/14B | Flow 流式微调 | 流式输出优化 |
+| Qwen 2.5-Coder-7B | 7B | 代码专长 | Python/JS 辅助 |
 
-llm = LLM(model="Qwen/Qwen2.5-72B-Instruct", tensor_parallel_size=4)
-params = SamplingParams(temperature=0.7, max_tokens=1024)
+---
 
-outputs = llm.generate(["解释一下反向传播算法"], params)
-print(outputs[0].outputs[0].text)
+## 本地部署：最全的量化支持
+
+Qwen 支持的量化方法最多：
+
+```
+Qwen 2.5 7B 在不同量化下的显存：
+├── FP16         → 14GB (RTX 4080+)
+├── INT8 (GPTQ)  → 8GB  (RTX 3070+)
+├── INT4 (GPTQ)  → 5GB  (RTX 2060+)
+├── Q4_K_M      → 4.5GB (几乎所有 GPU)
+└── Q2_K        → 3GB  (可以跑在 M1 Mac 上)
+```
+
+**Ollama 最简部署**：
+```bash
+ollama pull qwen2.5:72b-instruct
+ollama run qwen2.5:72b-instruct
+```
+
+**vLLM 生产部署**：
+```bash
+vllm serve Qwen/Qwen2.5-72B-Instruct \
+  --tensor-parallel-size 4 \
+  --gpu-memory-utilization 0.9
 ```
 
 ---
 
-## API 访问
+## Qwen vs LLaMA：该选哪个？
 
-通过阿里云通义千问 API 调用：
+### 选 Qwen 的场景
 
-```python
-from openai import OpenAI
+| 场景 | 理由 |
+|------|------|
+| ✅ 中文是主要语言 | Qwen 的中文能力远超任何西方模型 |
+| ✅ 需要 Apache 2.0 协议 | LLaMA 的 7 亿用户限制可能卡法律 |
+| ✅ 设备端部署 | 0.5B-1.5B 模型特别适合移动端 |
+| ✅ 数学推理 | Qwen 2.5-Math 很强 |
+| ✅ 需要小模型高性能 | 7B 在同级模型中表现突出 |
 
-client = OpenAI(
-    api_key="your-dashscope-key",
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
-)
+### 选 LLaMA 的场景
 
-response = client.chat.completions.create(
-    model="qwen2.5-72b-instruct",
-    messages=[{"role": "user", "content": "什么是注意力机制？"}]
-)
-print(response.choices[0].message.content)
-```
-
----
-
-## 优势
-
-- **中文能力最强**：开源模型中的中文水平天花板
-- **模型尺寸齐全**：从 0.5B 到 235B，覆盖一切场景
-- **开源彻底**：权重、代码、技术报告全公开
-- **数学推理强**：数学基准测试表现顶尖
-- **社区活跃**：中文社区支持充分，教程丰富
-- **商用友好**：开源许可允许商业使用
-
-## 局限
-
-- **英文能力**：在纯英文任务上不如 LLaMA-3
-- **创意生成**：创意写作略逊于 GPT-4o 和 Claude
-- **开源版本滞后**：API 版本更新快于开源版
+| 场景 | 理由 |
+|------|------|
+| ✅ 英文是主要语言 | LLaMA 英文略好 |
+| ✅ 需要超大规模 | 405B 参数 |
+| ✅ 需要最多社区变体 | LLaMA 生态最丰富 |
+| ✅ 使用 Llama.cpp/Ollama | 兼容性最好 |
 
 ---
 
-## 应用场景
-
-- **中文 NLP 任务**：文本分类、信息抽取、内容审核
-- **企业知识库**：中文企业内部问答系统
-- **教育辅助**：数学题讲解、作文批改
-- **代码生成**：中文注释的代码开发
-- **本地部署**：数据安全要求高的场景
-
----
-
-## 下一步
-
-- 访问 [通义千问官网](https://tongyi.aliyun.com) 在线体验
-- 从 Hugging Face 下载 Qwen2.5 模型
-- 使用 LLaMA-Factory 对 Qwen 进行微调
-- 关注 Qwen 3 的新特性更新
+> **一句话总结**：如果你的工作涉及中文——无论你是写中文内容、处理中文数据、还是为中国用户做产品——Qwen 是开源模型中的第一选择。而且它还是 Apache 2.0 协议，没有任何使用限制。

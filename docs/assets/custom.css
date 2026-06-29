@@ -2,7 +2,6 @@
    AI 学习路径导航 - 自定义样式
    ============================================ */
 
-/* ---- 首页英雄区 ---- */
 .md-typeset h1 {
   font-size: 2.4rem;
   font-weight: 700;
@@ -20,7 +19,6 @@
   border-radius: 0 8px 8px 0;
 }
 
-/* ---- 卡片网格 ---- */
 .grid.cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -60,17 +58,23 @@
   opacity: 1;
 }
 
-/* ---- 代码块美化 ---- */
-.highlight {
-  border-radius: 8px;
+.md-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255,255,255,0.85) !important;
 }
 
-.md-typeset code {
-  border-radius: 4px;
-  font-size: 0.85em;
+[data-md-color-scheme="slate"] .md-header {
+  background-color: rgba(0,0,0,0.85) !important;
 }
 
-/* ---- 表格美化 ---- */
+.md-typeset hr {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--md-primary-fg-color), transparent);
+  border: none;
+  margin: 2.5em 0;
+}
+
 .md-typeset table:not([class]) {
   border-radius: 8px;
   overflow: hidden;
@@ -83,49 +87,6 @@
   font-weight: 600;
 }
 
-/* ---- 导航栏 ---- */
-.md-header {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(255,255,255,0.85) !important;
-}
-
-[data-md-color-scheme="slate"] .md-header {
-  background-color: rgba(0,0,0,0.85) !important;
-}
-
-/* ---- 分割线 ---- */
-.md-typeset hr {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--md-primary-fg-color), transparent);
-  border: none;
-  margin: 2.5em 0;
-}
-
-/* ---- 按钮美化 ---- */
-.md-typeset .md-button {
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
-
-.md-typeset .md-button--primary {
-  background: linear-gradient(135deg, var(--md-primary-fg-color), var(--md-primary-fg-color--dark));
-  border: none;
-}
-
-/* ---- 页脚 ---- */
-.md-footer {
-  border-top: 3px solid var(--md-primary-fg-color);
-}
-
-/* ---- 标签页 ---- */
-.md-typeset .tabbed-set {
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* ---- 响应式调整 ---- */
 @media screen and (max-width: 76.1875em) {
   .md-typeset h1 { font-size: 1.8rem; }
   .grid.cards { grid-template-columns: 1fr; }

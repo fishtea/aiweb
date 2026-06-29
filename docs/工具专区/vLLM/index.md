@@ -1,219 +1,229 @@
-# vLLM
+# vLLM：大模型推理的速度革命
 
-> vLLM 是一个高性能的大语言模型推理引擎，通过 PagedAttention 等创新技术，实现了业界领先的推理吞吐量。
-
----
-
-## 为什么需要 vLLM？
-
-将大模型部署为生产服务时，面临的关键挑战：
-
-- **显存瓶颈**：KV 缓存占用大量显存，限制并发数
-- **吞吐量低**：传统实现无法充分利用 GPU 算力
-- **请求管理**：批量处理和调度难度大
-- **延迟波动**：长序列推理的延迟不稳定
-
-vLLM 通过一系列技术创新解决了这些问题。
+> 2023 年 6 月，UC Berkeley 的一篇论文和开源项目改变了 LLM 推理的格局。
+> 在此之前，部署一个 70B 模型需要复杂的工程优化。vLLM 之后，一条命令搞定高吞吐推理。
 
 ---
 
-## 核心技术
+## 问题：传统 LLM 推理为什么又慢又贵？
 
-### PagedAttention
+### 显存的"黑洞"
 
-vLLM 最核心的创新是 **PagedAttention**，灵感来自操作系统的虚拟内存管理：
+运行一个 70B 模型（FP16）需要 140GB 显存。但问题不止于模型权重——**KV Cache** 才是最大的内存杀手。
 
-**传统注意力**：KV 缓存按最大序列长度分配连续显存
-- 碎片化严重，实际使用率仅 20-40%
-
-**PagedAttention**：KV 缓存按页分配非连续显存
-- 类似虚拟内存的页表机制
-- 显存利用率接近 100%
-- 支持动态增长和回收
-
+**KV Cache 是什么**：
 ```
-传统方式: |████████░░░░░░░░████████░░░░|  (50% 浪费)
-PagedAttention: |████████████████████████|  (接近 100% 利用)
+用户："法国的首都是什么？"
+模型逐 token 生成："巴" → "黎"
+
+生成"巴"时，模型计算了所有注意力头的 Key 和 Value
+生成"黎"时，它需要重新计算吗？
+不！之前的 Key/Value 被缓存了起来 = KV Cache
 ```
 
-### 连续批处理（Continuous Batching）
+**KV Cache 有多大**：
+```
+一个 70B 模型处理 2048 tokens 的请求：
+每层 × 每头 × 每 token × 2（Key+Value）× 精度
+≈ 每 token 约 5MB
+2048 tokens = 10GB+
 
-传统批处理：等一批请求全部完成后再处理下一批
-vLLM：请求到达后立即加入当前批次，完成即移除
+100 个并发请求 → 1000GB+ KV Cache
+```
 
+**传统方案的问题**：显存被"碎片化"。有些 KV Cache 提前完成了但空间被占着，新请求找不到连续的内存块。
+
+### 批处理的浪费
+
+传统批处理（Static Batching）：
+```
+┌─────────────────────┐
+│ 请求A (长)  ████████│
+│ 请求B (短)  ██      │  ← 等 B 等 A 完成
+│ 请求C (中)  ████    │  ← 等 C 等 A 完成
+└─────────────────────┘
+所有请求必须一起开始一起结束。
+短的请求只能干等长的请求。
+```
+
+---
+
+## vLLM 的解决方案
+
+### PagedAttention — 显存的"虚拟内存"
+
+vLLM 把操作系统中的"分页"（Paging）概念引入 KV Cache 管理。
+
+**传统方式**：KV Cache 存在一个连续的内存块。
+
+```
+请求A: [KKKKKKKKKKKKKKKK] ← 连续分配
+        ↑ 如果内存碎片，分配失败
+```
+
+**PagedAttention**：KV Cache 被分成固定的"页"（Block），可以存在不连续的内存位置。
+
+```
+请求A: 页[K1]→页[K3]→页[K5]→页[K2]→页[K4]
+       ↑ 页表（Page Table）记录映射关系
+       ↑ 不连续的物理页，逻辑上连续
+```
+
+**效果对比**：显存利用率从 20-40% 提升到 **95%+**。
+
+### Continuous Batching — 动态批处理
+
+不再等所有请求一起结束。
+
+```
+时间 →
+请求A: ████░░░░░████░░░░░░░████
+请求B: ░░████░░░░░░░████
+请求C: ░░░░████░░░░░░░░░░░████
+       ↑ 新请求可以随时加入
+       ↑ 完成的请求立即退出，释放空间
+```
+
+**传统 vs 连续批处理**：
 ```
 传统批处理:
-[Req1] [Req2] [Req3] ──全部完成── [Req4] [Req5]
+[A: 10s] [B: 1s] [C: 3s] → 总时间 = 10s（B 和 C 等 A）
 
 连续批处理:
-[Req1] → [Req1 Req2] → [Req1 Req2 Req3] → [Req2 Req3] → [Req3]
+A: ████████████
+B: ██▓▓▓▓▓▓▓▓▓▓  ← B 早完成了，但空间被释放
+C: ████████████
+总时间 = 10s，但吞吐量提高 2-3 倍
 ```
 
 ---
 
-## 性能对比
+## 性能基准：vLLM vs 其他方案
 
-| 指标 | HuggingFace Transformers | vLLM |
-|-----|------------------------|------|
-| 吞吐量 | 1x（基准） | **10-23x** |
-| 显存效率 | 20-40% | **95-100%** |
-| 请求调度 | FIFO | **连续批处理** |
-| KV 缓存管理 | 连续分配 | **分页管理** |
-| 并行解码 | 不支持 | **支持** |
+### 吞吐量对比
+
+| 方案 | 吞吐量 (tokens/s) | 相对 vLLM | 适用场景 |
+|------|-------------------|-----------|---------|
+| **vLLM** | **3200** | 1.0× | 生产部署标准 |
+| HuggingFace TGI | 2100 | 0.66× | 简单部署 |
+| TensorRT-LLM | 3800 | 1.19× | 极致性能（需 NVIDIA）|
+| llama.cpp | 1500 | 0.47× | 个人使用 |
+| 原生 HF + 自己写 | 500-800 | 0.16-0.25× | 不推荐 |
+
+**测试条件**：LLaMA 70B, 4× A100 80GB, batch=32, input_len=512, output_len=256
+
+### 显存节省对比
+
+| 上下文长度 | 传统方案 | vLLM (PagedAttention) | 节省 |
+|-----------|---------|----------------------|------|
+| 2K tokens | 8GB | 2.5GB | 69% |
+| 4K tokens | 17GB | 5.1GB | 70% |
+| 8K tokens | 35GB | 9.8GB | 72% |
+| 32K tokens | 142GB | 38GB | 73% |
 
 ---
 
-## 快速开始
+## 实际部署：一条命令起飞
 
-### 安装
+### 基础部署
 
 ```bash
 pip install vllm
+
+python -m vllm.entrypoints.openai.api_server \
+  --model Qwen/Qwen2.5-72B-Instruct \
+  --tensor-parallel-size 4 \
+  --gpu-memory-utilization 0.9 \
+  --max-model-len 8192
 ```
 
-### 基本使用
+**参数说明**：
+| 参数 | 含义 | 推荐 |
+|------|------|------|
+| `tensor-parallel-size` | GPU 数量 | N 张卡设 N |
+| `gpu-memory-utilization` | 显存占用比例 | 0.85-0.95 |
+| `max-model-len` | 最大上下文 | 根据显存调整 |
+| `dtype` | 精度 | auto (FP16/BF16) |
+| `enforce-eager` | 是否禁用 CUDA 图 | 调试时开启 |
 
-```python
-from vllm import LLM, SamplingParams
+### 与 OpenAI API 完全兼容
 
-# 加载模型
-llm = LLM(
-    model="meta-llama/Meta-Llama-3.1-8B-Instruct",
-    tensor_parallel_size=1,    # 单卡
-    dtype="auto",
-    max_model_len=8192         # 最大上下文长度
-)
-
-# 采样参数
-params = SamplingParams(
-    temperature=0.7,
-    top_p=0.9,
-    max_tokens=1024,
-    presence_penalty=0.1
-)
-
-# 批量生成
-prompts = [
-    "解释什么是量子计算。",
-    "用 Python 写一个快速排序。",
-    "太阳系有几颗行星？"
-]
-outputs = llm.generate(prompts, params)
-
-for output in outputs:
-    print(f"提示: {output.prompt}")
-    print(f"生成: {output.outputs[0].text}\n")
-```
-
----
-
-## 部署为 API 服务
-
-### 启动服务
-
-```bash
-# 启动兼容 OpenAI API 的服务
-vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct \
-    --host 0.0.0.0 \
-    --port 8000 \
-    --tensor-parallel-size 1 \
-    --max-model-len 8192 \
-    --gpu-memory-utilization 0.9
-```
-
-### 调用服务
+启动后，任何用 OpenAI SDK 的代码都可以切换到 vLLM：
 
 ```python
 from openai import OpenAI
 
-# 完全兼容 OpenAI API
 client = OpenAI(
     base_url="http://localhost:8000/v1",
-    api_key="not-needed"  # vLLM 不验证 key
+    api_key="not-needed"
 )
 
 response = client.chat.completions.create(
-    model="meta-llama/Meta-Llama-3.1-8B-Instruct",
-    messages=[
-        {"role": "user", "content": "什么是强化学习？"}
-    ],
-    temperature=0.7,
-    max_tokens=512
+    model="Qwen/Qwen2.5-72B-Instruct",
+    messages=[{"role": "user", "content": "你好"}]
 )
-
-print(response.choices[0].message.content)
 ```
+
+**这意味着**：所有用 OpenAI API 的工具（LangChain、Cursor、Continue.dev）可以无缝切换到你本地的 vLLM 实例。
 
 ---
 
-## 高级配置
-
-### 多 GPU 部署
-
-```bash
-# 张量并行（多卡分摊模型）
-vllm serve meta-llama/Meta-Llama-3.1-70B-Instruct \
-    --tensor-parallel-size 4
-
-# 流水线并行
-vllm serve meta-llama/Meta-Llama-3.1-70B-Instruct \
-    --pipeline-parallel-size 2
-```
+## 高级功能
 
 ### 量化支持
 
 ```bash
-# AWQ 量化
-vllm serve TheBloke/Llama-2-7B-AWQ --quantization awq
+# AWQ 量化（推荐，质量损失最小）
+vllm serve model-path --quantization awq
 
 # GPTQ 量化
-vllm serve TheBloke/Llama-2-7B-GPTQ --quantization gptq
+vllm serve model-path --quantization gptq
+
+# FP8（H100 原生支持）
+vllm serve model-path --dtype float8
+```
+
+### Prefix Caching（前缀缓存）
+
+相同的前缀（如 System Prompt）只计算一次 KV Cache：
+
+```python
+server_kwargs = {
+    "enable_prefix_caching": True
+}
+```
+
+**效果**：在共享 system prompt 的场景下，首 token 延迟降低 50-80%。
+
+### Speculative Decoding（投机解码）
+
+用小模型生成候选 tokens，大模型验证——加速 2-3×：
+
+```bash
+vllm serve Qwen2.5-72B \
+  --speculative-model Qwen2.5-7B \
+  --num-speculative-tokens 5
 ```
 
 ---
 
-## 生产环境最佳实践
+## 什么时候用 vLLM？
 
-| 配置项 | 推荐值 | 说明 |
-|-------|-------|------|
-| `gpu-memory-utilization` | 0.85-0.95 | GPU 显存利用率 |
-| `max-num-seqs` | 256 | 最大并发请求数 |
-| `max-model-len` | 8192-32768 | 模型最大上下文 |
-| `enable-prefix-caching` | True | 前缀缓存加速 |
-| `enforce-eager` | False | 使用 CUDA 图加速 |
+### ✅ 适合的场景
 
----
+- 生产环境需要高吞吐
+- 部署 30B+ 大模型
+- 需要 OpenAI 兼容 API
+- 多个应用共享同一模型
+- 需要严格的延迟控制
 
-## 优势
+### ❌ 不适合的场景
 
-- **超高吞吐**：比 HuggingFace 实现快 10-20 倍
-- **显存高效**：PagedAttention 接近零浪费
-- **兼容 OpenAI API**：即插即用，生态兼容
-- **支持多种模型**：LLaMA、Mistral、Qwen、DeepSeek 等
-- **高级功能**：前缀缓存、多模态支持、LoRA 服务
-
-## 局限
-
-- **部署复杂度**：多 GPU 配置需要专业运维知识
-- **仅限推理**：不支持训练和微调
-- **模型兼容性**：部分模型需额外适配
-- **首次加载慢**：大模型首次加载需要时间
+- 个人本地调试（Ollama 更简单）
+- 只需要单个模型单次调用
+- 没有 GPU（vLLM 需要 CUDA）
+- 只需要小模型（7B 以下用什么差异不大）
 
 ---
 
-## 应用场景
-
-- **生产推理服务**：高并发 LLM API
-- **批量离线推理**：大规模数据处理
-- **模型评测**：需要高效运行大量测试用例
-- **多租户服务**：为多个应用提供模型服务
-
----
-
-## 下一步
-
-- 安装 vLLM 并运行一个小模型测试
-- 启动 OpenAI 兼容 API 服务
-- 对比 vLLM 与原始 Transformers 的吞吐量差异
-- 学习张量并行和流水线并行的配置
-- 了解 PagedAttention 的技术细节论文
+> **一句话总结**：vLLM 是目前生产环境中推理部署的"事实标准"。PagedAttention 解决了 LLM 推理的最大瓶颈——显存管理和批处理效率。如果你的应用依赖 LLM，vLLM 应该是你的首选推理后端。
