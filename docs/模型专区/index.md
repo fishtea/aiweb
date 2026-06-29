@@ -12,5 +12,12 @@
 | [Qwen 系列](Qwen系列/index.md) | 阿里通义千问 Qwen2.5、VL 视觉模型 |
 | [Stable Diffusion](StableDiffusion/index.md) | SDXL、SD3 图像生成，ComfyUI 工作流 |
 | [Mixtral 系列](Mixtral系列/index.md) | Mistral AI MoE 模型，Mixtral 8x22B |
+| [开源模型部署选型](开源模型部署选型/index.md) | 从能力、成本、显存、许可证和推理引擎角度选择开源模型 |
 
 > 每篇包含：模型概述、能力特点、学习资源、使用方式
+
+## 选型入口
+
+- 商业 API 集成：优先对比 GPT、Claude、Gemini 等闭源模型的能力边界、上下文、工具调用和成本。
+- 私有化或本地运行：先读 [开源模型部署选型](开源模型部署选型/index.md)，再进入 LLaMA、Qwen、DeepSeek、Mixtral 等专题。
+- 图像生成工作流：阅读 [Stable Diffusion](StableDiffusion/index.md)，并结合 [ComfyUI](/工具专区/ComfyUI/) 实践。
