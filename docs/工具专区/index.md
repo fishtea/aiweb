@@ -14,6 +14,7 @@
 | [TensorFlow](TensorFlow/index.md) | Google 深度学习框架，Keras API |
 | [Ollama](Ollama/index.md) | 本地 LLM 运行工具，模型管理与 API 服务 |
 | [部署运维](部署运维/index.md) | AI 应用上线后的监控、日志、降级、安全和质量闭环 |
+| [GitHub 热门项目](GitHub热门项目/index.md) | 每周精选热门 AI 开源项目，含 Star 增长分析 |
 
 > 每篇包含：工具简介、核心功能、入门教程、进阶用法
 
@@ -23,3 +24,4 @@
 - 本地模型运行：先看 Ollama，生产推理再看 vLLM 和部署运维。
 - 图像生成：以 ComfyUI 为工作流入口，结合 Stable Diffusion 模型专题。
 - 训练和微调：按 PyTorch、Hugging Face、TensorFlow 的生态支持选择。
+- 趋势追踪：每周查看 [GitHub 热门项目](GitHub热门项目/index.md) 了解最新开源动态。
