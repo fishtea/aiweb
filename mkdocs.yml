@@ -58,9 +58,6 @@ extra:
 extra_css:
   - assets/custom.css
 
-extra_javascript:
-  - assets/home.js
-
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
