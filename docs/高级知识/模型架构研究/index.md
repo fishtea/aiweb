@@ -1,367 +1,152 @@
-# 模型架构研究：Transformer 内部结构完全拆解
+# 模型架构研究
 
-> 这一篇是整本手册里最硬的。如果你能理解这里的所有内容，你已经具备了阅读 Transformer 论文原文所需的基础知识。
-
----
-
-## 自注意力机制：Transformer 的引擎
-
-### 从输入到输出
-
-```
-输入: "我 爱 自然 语言 处理"
-        │    │    │    │    │
-        ▼    ▼    ▼    ▼    ▼
-    ┌─────────────────────────────┐
-    │      Token Embedding        │  ← 每个 token → 向量（如 4096 维）
-    │      + Positional Encoding   │  ← 加入位置信息
-    └──────────┬──────────────────┘
-               │
-               ▼
-    ┌─────────────────────────────┐
-    │     QKV Linear Projection   │  ← 每个 token 通过三个矩阵乘
-    │  (权重矩阵 W_Q, W_K, W_V)    │     生成 Query, Key, Value 向量
-    └──────────┬──────────────────┘
-               │
-               ▼
-    ┌─────────────────────────────┐
-    │       Scaled Dot-Product    │  ← 核心计算
-    │        Attention Score      │     Q·K^T / √d_k
-    └──────────┬──────────────────┘
-               │
-               ▼
-    ┌─────────────────────────────┐
-    │       Softmax → Weighted    │  ← 注意力权重 × Value
-    │        Sum of Values        │     得到每个 token 的新表示
-    └──────────┬──────────────────┘
-               │
-               ▼
-    ┌─────────────────────────────┐
-    │      Output Projection      │  ← 再经过一个线性层
-    └─────────────────────────────┘
-```
-
-### 自注意力计算的逐行示意
-
-假设序列长度为 4（"我 爱 NLP"），隐层维度 d=8。简化为单头注意力：
-
-```
-Step 1: 每个 token 有 Q, K, V 三个向量
-
-token: "我"     Q₁=[0.2, 0.5, ...]  K₁=[0.1, 0.3, ...]  V₁=[0.4, 0.2, ...]
-token: "爱"     Q₂=[0.8, 0.1, ...]  K₂=[0.7, 0.2, ...]  V₂=[0.5, 0.9, ...]
-token: "N"      Q₃=[0.3, 0.4, ...]  K₃=[0.2, 0.6, ...]  V₃=[0.1, 0.7, ...]
-token: "LP"     Q₄=[0.6, 0.7, ...]  K₄=[0.9, 0.1, ...]  V₄=[0.8, 0.3, ...]
-
-Step 2: 计算注意力分数矩阵 S = Q × K^T / √d_k
-
-                   K₁     K₂     K₃     K₄      ← Key
-              ┌─────────────────────────┐
-         Q₁   │ 0.8   0.3   0.1   0.5  │     "我" 关注各词的程度
-         Q₂   │ 0.4   0.9   0.2   0.6  │     "爱" 关注各词的程度
-    Query Q₃   │ 0.7   0.1   0.8   0.2  │     "N"  关注各词的程度
-         Q₄   │ 0.2   0.5   0.3   0.9  │     "LP" 关注各词的程度
-              └─────────────────────────┘
-              ↑
-           Value 权重将由这个矩阵决定
-
-Step 3: Softmax 归一化（每行和为 1）
-
-                   K₁     K₂     K₃     K₄
-              ┌─────────────────────────┐
-         Q₁   │ 0.45  0.19  0.15  0.21 │     "我" 34% 关注自己
-         Q₂   │ 0.14  0.52  0.12  0.22 │     "爱" 52% 关注自己
-         Q₃   │ 0.23  0.10  0.47  0.20 │     "N"  47% 关注自己
-         Q₄   │ 0.12  0.18  0.15  0.55 │     "LP" 55% 关注自己
-              └─────────────────────────┘
-
-Step 4: 加权求和 Output = Softmax(S) × V
-
-"我"的新表示 = 0.45×V₁ + 0.19×V₂ + 0.15×V₃ + 0.21×V₄
-"爱"的新表示 = 0.14×V₁ + 0.52×V₂ + 0.12×V₃ + 0.22×V₄
-...以此类推
-```
-
-这就是自注意力的本质：**每个 token 通过"询问"（Q）其他 token 的"键"（K），来决定从其他 token 的"值"（V）中取多少信息来更新自己。**
-
-### 为什么需要缩放因子 √d_k
-
-当 d_k 较大时，Q·K^T 的点积值会很大（向量维数越高，内积的期望值越大），导致 softmax 进入饱和区域（梯度接近 0）。除以 √d_k 把方差控制回 1 附近，保持梯度健康。
+> 本页面总结了 Transformer 架构原理及其替代方案，涵盖 Mamba（状态空间模型）、混合专家模型（MoE）等前沿架构。
 
 ---
 
-## 多头注意力（Multi-Head Attention）
+## 1. Transformer 架构基础
 
-### 为什么需要多头？
+### 1.1 核心组件
 
-单头注意力只能学到**一种**关注模式。多头并行学习多种关注模式：
+Transformer 架构（Vaswani et al., 2017）包含以下核心组件：
+
+- **自注意力机制（Self-Attention）**：计算序列中每对位置之间的注意力权重
+- **多头注意力（Multi-Head Attention）**：并行计算多个注意力头，捕获不同类型的依赖关系
+- **前馈网络（FFN）**：逐位置的非线性变换
+- **残差连接与层归一化**：稳定训练
+- **位置编码**：注入序列位置信息
+
+### 1.2 注意力计算
 
 ```
-单头："我" → 主要关注自己（位置偏差）
-多头头1："我" → 关注"爱"（语法关系）
-多头头2："我" → 关注"NLP"（语义关系）
-多头头3："我" → 关注自己（残差保持）
+Attention(Q, K, V) = softmax(QK^T / √d_k) V
 ```
 
-### 计算流程
+- 时间复杂度：O(n²·d) — 随序列长度平方增长
+- 这是 Transformer 的主要计算瓶颈
 
-```
-输入维度: d_model = 4096
-头数: h = 32
-每头维度: d_k = d_v = 4096 / 32 = 128
+### 1.3 局限
 
-Step 1: 输入 × W_Q, W_K, W_V（三个矩阵，形状 4096×4096）
-        输出：Q, K, V 各为 4096 维
-
-Step 2: 拆分成 32 个头
-        Q → [Q_head1(128维), Q_head2(128维), ..., Q_head32(128维)]
-        K → [K_head1(128维), ..., K_head32(128维)]
-        V → [V_head1(128维), ..., V_head32(128维)]
-
-Step 3: 32 个头**并行**做自注意力
-        头1: Attention(Q₁, K₁, V₁) → 128 维输出
-        头2: Attention(Q₂, K₂, V₂) → 128 维输出
-        ...
-        头32: Attention(Q₃₂, K₃₂, V₃₂) → 128 维输出
-
-Step 4: 拼接 32 个头
-        [128, 128, ..., 128] → 4096 维
-
-Step 5: 通过输出投影层 W_O（4096 × 4096）
-        得到最终输出
-```
-
-**多头 vs 单头**：单头 4096 维 vs 32 个头各 128 维。计算量相同，但表达能力质变——32 个不同的"视角"独立学习关注模式，然后融合。
+- **二次方复杂度**：长序列场景下计算和内存开销极大
+- **KV 缓存**：推理时需要缓存 Key/Value，随上下文增长线性增加
+- **固定位置编码**：外推能力有限（虽已被 RoPE 等改进）
 
 ---
 
-## 位置编码：让模型知道词序
+## 2. Mamba：选择性状态空间模型
 
-### 问题
+**来源：** [What Is a Mamba Model? Complete Guide - ArticSledge](https://www.articsledge.com/post/mamba-model)
 
-Transformer 的自注意力是**排列不变**的——把 "我打你" 和 "你打我" 输入同一个注意力层，输出是一样的。
+Mamba 由 Albert Gu 和 Tri Dao 于 2023 年 12 月提出（arXiv:2312.00752），是一种**以线性时间复杂度处理序列**的模型架构。
 
-### RoPE（Rotary Position Embedding）——当前主流方案
+> *"Mamba processes text, images, and genomic data with linear time complexity. While GPT-4 slows down as context grows, Mamba maintains constant speed."*
 
-RoPE 的核心思想：**在 Q 和 K 的内积计算中隐式编码位置信息**。不是直接给 embedding 加位置向量，而是旋转 Q 和 K。
+### 2.1 核心创新
 
-```
-旋转操作（2维简化版）：
-位置 m 处的向量 x = [x₁, x₂] 旋转角度 m·θ：
+| 创新 | 描述 |
+|------|------|
+| **选择性状态空间** | 参数 Δ、B、C 成为输入的函数，实现内容感知处理 |
+| **硬件感知并行扫描** | 利用 GPU 内存层次结构的融合 CUDA 内核 |
+| **简化架构** | 无自注意力、无 MLP 子层、无位置编码、无 KV 缓存 |
 
-Rot(x, m) = [x₁·cos(mθ) - x₂·sin(mθ), 
-             x₁·sin(mθ) + x₂·cos(mθ)]
+### 2.2 架构组成
 
-多维情况：将 d 维向量分成 d/2 组，每组 2 维，
-          每组使用不同的 θ 值（θᵢ = 10000^(-2i/d)）
-```
+每个 Mamba 块包含：
+1. 线性投影（扩展）
+2. 1D 卷积（局部依赖）
+3. 选择性 SSM（全局上下文）
+4. 非线性激活（SiLU/Swish）
+5. 线性投影（压缩）
 
-**为什么 RoPE 好**：
-- 内积结果只依赖**相对位置**（Rot(Q, m) · Rot(K, n) = f(Q, K, m-n)）
-- 随着 |m-n| 增大，内积衰减（远处词贡献减小）
-- 支持外推（推理时的序列长度可以超出训练长度）
+### 2.3 性能对比
 
-### RoPE 与其他编码对比
+| 模型 | 参数量 | Perplexity | 训练速度 |
+|------|--------|------------|----------|
+| Mamba-2.8B | 2.8B | **8.54** | 基准 |
+| Transformer++ | 2.8B | 8.69 | 0.8× |
+| Mamba-1.4B | 1.4B | **9.16** | 1.2× |
+| Transformer | 1.4B | 9.64 | 1.0× |
 
-| 编码方式 | 相对位置 | 可外推 | 复杂度 | 使用模型 |
-|---------|:-------:|:-----:|:-----:|---------|
-| 绝对位置编码（sin/cos） | 否 | 有限 | O(n) | 原始 Transformer |
-| Learned Positional Embedding | 否 | 差 | O(n) | BERT, GPT-2 |
-| RoPE | 是 | 好 | O(n) | LLaMA, Qwen, Mistral |
-| ALiBi | 是 | 最好 | O(1) | MPT, BLOOM |
-| xPOS | 是 | 好 | O(n) | GLM |
+**关键发现：**
+- Mamba-2.8B 优于同尺寸 Transformer
+- Mamba-1.4B 以一半参数匹配 Transformer 性能
+- **推理吞吐量提升 5 倍**（无 KV 缓存）
+- Mamba 可处理 **1M token** 上下文，选择性拷贝准确率 >95%
 
----
+### 2.4 Mamba-2（2024 年 5 月）
 
-## 归一化：RMSNorm vs LayerNorm
+- **核心洞察：** SSM 和注意力通过结构化半可分矩阵存在数学关联
+- 状态维度从 16 增加到 128（8 倍提升）
+- 训练速度提升 2-8 倍
+- Mamba-2-2.7B MMLU：39.6% vs Pythia-2.8B 36.5%
 
-### LayerNorm
+### 2.5 混合架构
 
-```
-LayerNorm(x) = (x - μ) / σ × γ + β
+纯 Mamba 在上下文学习和精确拷贝方面存在不足。**混合 Mamba-Transformer 架构**通过以特定比例混合两种层来解决这一问题。
 
-其中 μ = mean(x), σ = std(x)
-γ 和 β 是可学习的缩放和偏移参数
-```
-
-**作用**：把每一层的激活值拉回到稳定分布，防止梯度爆炸/消失。
-
-### RMSNorm——LayerNorm 的简化版
-
-```
-RMSNorm(x) = x / RMS(x) × γ
-
-其中 RMS(x) = sqrt(mean(x²))
-去掉了 LayerNorm 的均值减法
-```
-
-**为什么 RMSNorm 在 LLM 中更流行**：
-- 减少计算量（不需要算均值，省一次 reduce 操作）
-- 在 LLM 中表现与 LayerNorm 相当甚至略好
-- 现代 LLM（LLaMA、Mistral、Qwen）几乎全部使用 RMSNorm
-
-**位置**：在 Transformer 中，Norm 放在**每个子层之前**（Pre-LN 架构），而非原始论文的放在之后（Post-LN）。Pre-LN 训练更稳定。
+| 模型 | 架构比例 | 应用 |
+|------|---------|------|
+| **Jamba** (AI21) | 7:1 Mamba:Transformer + MoE | 企业 NLP，256K 上下文 |
+| **Codestral Mamba** (Mistral) | 纯 Mamba-2 | 代码补全，HumanEval 75.0% |
+| **Granite 4.0** (IBM) | 9:1 + MoE | 首个 ISO 42001 认证 LLM |
+| **MoE-Mamba** | Mamba + MoE 替换 MLP | 2.2× 更快训练收敛 |
 
 ---
 
-## 最新架构创新
+## 3. 混合专家模型（Mixture of Experts, MoE）
 
-### Mamba：状态空间模型（SSM）
+**来源：** [MoE-Mamba: Efficient Selective SSMs with MoE](https://llm-random.github.io/posts/moe_mamba), [Hybrid Mamba-Transformer MoE - Emergent Mind](https://www.emergentmind.com/topics/hybrid-mamba-transformer-mixture-of-experts-architecture)
 
-**Transformer 的痛点**：自注意力是 O(n²) 复杂度。序列长度翻倍，计算量翻四倍。
+### 3.1 MoE 核心概念
 
-**Mamba 的核心思想**：用状态空间模型替代注意力。
+- 将 FFN 层替换为多个"专家"（小型 FFN）
+- **门控网络（Router）** 动态选择激活哪些专家
+- 每个 token 只激活部分专家，实现**条件计算**
 
-```
-Transformer: y = softmax(QK^T/√d)V       ← O(n²)
-     Mamba:  h_t = A·h_{t-1} + B·x_t    ← O(n)
-             y_t = C·h_t
-```
+### 3.2 优势
 
-通俗理解：Mamba 维护一个"压缩记忆"（状态 h），每次读取新 token 时更新记忆，然后用当前状态生成输出。和 RNN 的思路类似，但通过**硬件友好的并行扫描算法**解决了 RNN 的序列依赖问题。
+- **参数扩展**：总参数量大，但计算量保持可控
+- **专业化**：不同专家学习不同领域的知识
+- **高效训练**：更少的训练步骤达到相同性能
 
-**优势**：
-- 线性复杂度，支持超长序列（100K+ tokens）
-- 推理速度快（不需要缓存 K,V）
-- 训练可以并行化（SSM 的卷积视角）
+### 3.3 MoE-Mamba
 
-**劣势**：
-- 在某些任务（尤其是需要"精确检索"的任务，如 MMLU）上仍落后于 Transformer
-- 长距离依赖建模能力尚在验证中
+**来源：** [MoE-Mamba Paper Analysis](https://llm-random.github.io/posts/moe_mamba)
 
-### MoE（Mixture of Experts）
-
-**核心思想**：不是所有参数在每个输入上都有用。让模型学会"按需激活"。
-
-```
-输入 x
-    │
-    ▼
-┌──────────┐
-│  Router  │  ← 一个轻量的门控网络（额外的小 MLP）
-│ (Gating) │     输出每个 expert 的激活概率
-└────┬─────┘
-     │
-     ▼
-  ┌──────┐   ┌──────┐   ┌──────┐
-  │Exp 1 │   │Exp 2 │   │Exp 3 │   ...  ← 每个 expert 就是一个 FFN
-  └──┬───┘   └──┬───┘   └──┬───┘
-     │          │          │
-     └──────────┼──────────┘
-                ▼
-         加权求和（Top-2 路由）
-                │
-                ▼
-            输出
-```
-
-**关键设计**：
-- **Top-2 路由**：每次只激活 2 个 expert（总共 8-64 个），其余不计算
-- **负载均衡损失**：防止所有输入都路由到同一个 expert
-- **Z-loss**：稳定门控网络训练
-
-**MoE 的实际效果**：
-```
-Mixtral 8x7B:  
-  - 总参数量：47B（8个 7B expert 的 FFN + 共享注意力层）
-  - 每次激活参数量：~13B（2个 expert + 共享层）
-  - 性能：对标 LLaMA-2 70B
-  - 推理速度：接近 13B 模型
-```
-
-**这就是 MoE 的价值**：用 1/5 的推理成本，达到接近大 10x 的密集模型的性能。
-
-### GQA（Grouped Query Attention）
-
-**问题**：标准多头注意力中，每个头有自己的 K,V 缓存。对长序列推理，K,V 缓存大小与**头数 × 序列长度**成正比，是推理时的主要显存瓶颈。
-
-**GQA 的解法**：让多个 Query 头共享 Key-Value 头。
-
-```
-标准 MHA（Multi-Head Attention）:
-  Q 头: [Q₁] [Q₂] [Q₃] [Q₄] [Q₅] [Q₆] [Q₇] [Q₈]
-  K 头: [K₁] [K₂] [K₃] [K₄] [K₅] [K₆] [K₇] [K₈]
-  V 头: [V₁] [V₂] [V₃] [V₄] [V₅] [V₆] [V₇] [V₈]
-  KV 缓存大小 = 8 × seq_len × d_k
-
-GQA-4（4 组，每组 2 个 Q 头共享 1 个 KV 头）:
-  Q 头: [Q₁ Q₂] [Q₃ Q₄] [Q₅ Q₆] [Q₇ Q₈]
-  K 头: [K₁]    [K₂]    [K₃]    [K₄]
-  V 头: [V₁]    [V₂]    [V₃]    [V₄]
-  KV 缓存大小 = 4 × seq_len × d_k  ← 节省 50%
-
-MQA（Multi-Query Attention，所有 Q 共享 1 个 KV）:
-  Q 头: [Q₁ Q₂ Q₃ Q₄ Q₅ Q₆ Q₇ Q₈]
-  K 头: [K₁]
-  V 头: [V₁]
-  KV 缓存大小 = 1 × seq_len × d_k  ← 节省 87.5%
-```
-
-**权衡**：
-
-| 方案 | KV 缓存节省 | 质量损失 | 使用模型 |
-|------|:---------:|:-------:|---------|
-| MHA（标准） | 0% | 基准 | GPT-3, BERT |
-| GQA-8（8组） | 50% | ~0.5% | LLaMA-3, Mistral |
-| GQA-4（4组） | 75% | ~1% | Gemma, Qwen-2.5 |
-| MQA（1组） | 87.5% | ~2-3% | PaLM, Falcon |
-
-**GQA 是当前的最优平衡点**——LLaMA-3 从 LLaMA-2 的 MHA 切换到了 GQA-8，推理阶段 KV 缓存降低 50%，而质量损失几乎可以忽略。
+> *"MoE-Mamba reaches the same performance as Mamba in 2.2× less training steps while preserving the inference performance gains of Mamba against the Transformer."*
 
 ---
 
-## 完整 Transformer 层结构
+## 4. 生产级混合模型
 
-```
-输入: x (batch_size × seq_len × d_model)
-    │
-    ▼
-┌─────────────────────────────────────────────────┐
-│  RMSNorm                                         │  ← Pre-LN
-│  ↓                                               │
-│  GQA Multi-Head Attention                        │  ← 这里是因果掩码（causal mask）
-│  (带 RoPE 位置编码)                               │    保证每个位置只看前面
-│  ↓                                               │
-│  Residual Connection: x + Attention(x)           │  ← 残差连接
-└──────────────────────┬──────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────┐
-│  RMSNorm                                         │
-│  ↓                                               │
-│  SwiGLU Feed-Forward Network                     │  ← LLaMA 系列使用的激活函数
-│  (hidden_dim = 3.5 × d_model, 而非 4×)           │     相比 ReLU 质量更好
-│  ↓                                               │
-│  Residual Connection: x + FFN(x)                 │
-└──────────────────────┬──────────────────────────┘
-                       │
-                       ▼
-下一层（重复 N 次，N=32 对于 7B 模型，N=80 对于 70B 模型）
-```
-
-最终，最后一层的输出通过 **LM Head**（一个线性层，权重通常与 Token Embedding 共享）映射到词汇表大小的概率分布。
+| 模型 | 架构 | 关键指标 |
+|------|------|----------|
+| **Jamba 1.5** (AI21) | 混合 Mamba-Transformer + MoE, 398B 总/94B 激活 | SOTA 在 NVIDIA RULER 基准 |
+| **Granite 4.0** (IBM) | 9:1 Mamba-2:Transformer + MoE | 70% RAM 减少，单 H100 可运行 |
+| **Codestral Mamba** (Mistral) | Mamba-2, 7.3B | HumanEval 75.0%, 256K 上下文 |
 
 ---
 
-## 总结：一张图看清架构演化
+## 5. 架构演进方向
 
-```
-2017  Transformer (原始) ─── MHA, LayerNorm, ReLU, Post-LN
-  │
-  ├── 2018  GPT ─── Causal LM, 单向注意力
-  ├── 2018  BERT ─── Encoder-only, 双向注意力
-  │
-  ├── 2022  PaLM ─── MQA, SwiGLU, RoPE
-  ├── 2023  LLaMA ─── Pre-LN, RMSNorm, SwiGLU, RoPE
-  ├── 2023  Mistral ─── Sliding Window Attention, GQA
-  ├── 2023  Mixtral ─── MoE (8 experts × 7B)
-  ├── 2023  Mamba ─── SSM, 无注意力
-  ├── 2024  LLaMA-3 ─── GQA-8, 更大的 vocab (128K)
-  └── 2024  DeepSeek-V2 ─── Multi-head Latent Attention + MoE
-```
+**来源：** [FTI Consulting - Frontiers of AI Research 2025](https://www.fticonsulting.com/insights/articles/frontiers-ai-research-2025)
 
-**趋势**：
-1. 注意力正被优化（MHA → MQA → GQA），而非替代
-2. MoE 让"大模型"不再等同于"高推理成本"
-3. SSM（Mamba）是第一个有潜力的注意力替代方案，但尚未全面超越
-4. Norm、激活函数、位置编码的优化已经收敛——RMSNorm + SwiGLU + RoPE 成为事实标准
+### 当前趋势
+
+1. **从纯 Transformer 到混合架构** — Mamba + Attention + MoE 的组合
+2. **从 Scaling Law 到效率创新** — 更少的参数、更快的推理
+3. **从通用模型到专业化** — 特定领域的架构优化
+4. **从随机到混合 AI** — 神经网络 + 符号逻辑的结合
+
+> *"We are seeing a combination of R&D activities: new engineering approaches, hybrid AI model approaches, and continuing fundamental research on new classes of models."*
+
+---
+
+## 🔗 参考资料
+
+- [What Is a Mamba Model? Complete Guide - ArticSledge](https://www.articsledge.com/post/mamba-model)
+- [Hybrid Mamba-Transformer MoE Architecture - Emergent Mind](https://www.emergentmind.com/topics/hybrid-mamba-transformer-mixture-of-experts-architecture)
+- [MoE-Mamba: Efficient Selective SSMs with MoE](https://llm-random.github.io/posts/moe_mamba)
+- [Mixture-of-Mamba - Hugging Face Blog](https://huggingface.co/blog/Kseniase/mixtureofmamba)
+- [The Transformer Architecture Is Being Replaced - Towards AI](https://pub.towardsai.net/the-transformer-architecture-is-being-replaced-what-47-000-hours-of-training-data-revealed-e483c5ad7c6c)
+- [Frontiers of AI Research 2025 - FTI Consulting](https://www.fticonsulting.com/insights/articles/frontiers-ai-research-2025)

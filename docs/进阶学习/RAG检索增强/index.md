@@ -1,232 +1,133 @@
-# RAG 检索增强生成：让大模型拥有实时知识
+# RAG 检索增强生成
 
-## 核心问题
-
-```
-大模型知道《三体》的剧情——因为它的训练数据截止到 2023 年。
-但如果你问它今天（2026年6月）的新闻，它一无所知。
-你甚至不能重新训练它——每次训练耗时数月、耗资数百万。
-```
-
-**RAG 的解法很直白**：不要试图让模型记住所有信息，而是让它在回答问题前去查阅资料。就像考试开卷——你不用背整本书，只需要知道答案在哪一章。
+> 检索增强生成（Retrieval-Augmented Generation, RAG）是一种系统设计模式，将**检索**（搜索/查找相关文档）与**生成**（LLM 基于检索上下文生成答案）相结合。
 
 ---
 
-## 系统架构蓝图
+## 1. RAG 是什么？
 
-```
-                     ┌──────────────────────────────┐
-                     │          用户提问              │
-                     │    "公司 Q3 的营收是多少？"      │
-                     └──────────┬───────────────────┘
-                                │
-                                ▼
-┌───────────────────────────────────────────────────────┐
-│                  检索模块 (Retriever)                   │
-│                                                       │
-│  ┌──────────┐    ┌──────────────┐    ┌────────────┐  │
-│  │ 文档分块  │───▶│  向量化嵌入   │───▶│  向量搜索   │  │
-│  │ Chunking │    │  Embedding   │    │  ANN Search │  │
-│  └──────────┘    └──────────────┘    └──────┬─────┘  │
-│                                             │        │
-│                    ┌────────────────────────┘        │
-│                    ▼                                 │
-│          ┌──────────────────┐                       │
-│          │   Top-K 相关片段  │                       │
-│          └──────┬───────────┘                       │
-└─────────────────┼─────────────────────────────────────┘
-                  │
-                  ▼
-┌───────────────────────────────────────────────────────┐
-│                  增强模块 (Augmenter)                   │
-│                                                       │
-│   ┌─────────────────────────────────────────┐        │
-│   │ Prompt 组装：系统指令 + 检索片段 + 问题   │        │
-│   └──────────────────┬──────────────────────┘        │
-└──────────────────────┼────────────────────────────────┘
-                       │
-                       ▼
-┌───────────────────────────────────────────────────────┐
-│                  生成模块 (Generator)                   │
-│                                                       │
-│   ┌─────────────────────────────────────────┐        │
-│   │  LLM 基于上下文的回答                      │        │
-│   │  "根据公司财报，Q3营收为1.2亿美元..."      │        │
-│   └─────────────────────────────────────────┘        │
-└───────────────────────────────────────────────────────┘
-```
+**来源：** [RAG Tutorial: Architecture, Implementation, and Production Guide - Glukhov](https://www.glukhov.org/rag)
 
-三步走：**分块 → 检索 → 生成**。下面逐一拆解。
+RAG 是一种**无需重新训练模型**即可为 LLM 注入外部知识的方法。与微调不同，RAG：
+
+- **不需要重新训练模型**
+- **通过更新文档索引即可刷新知识**
+- **提供引用来源，保证可审计性**
+- **减少幻觉，提高事实准确性**
+
+> *"If you only improve one thing in a working RAG system: add reranking and an evaluation harness."*
 
 ---
 
-## 第一步：文档分块（Chunking）
+## 2. RAG 架构
 
-这是 RAG 系统中最容易被低估的步骤。分块策略直接决定了检索质量。
-
-### 策略对比
-
-| 策略 | 块大小 | 重叠 | 适用场景 | 优点 | 缺点 |
-|------|--------|------|----------|------|------|
-| 固定大小 | 256-512 tokens | 10-20% | 通用文档 | 简单，可控 | 可能切断语义 |
-| 段落级 | 1-3 段落 | 0 | 结构化文本 | 保留语义单元 | 块大小不一致 |
-| 句子级 | 1-3 句子 | 1 句 | FAQ、问答 | 位置精确 | 上下文不足 |
-| 递归分块 | 动态 | 自适应 | 代码、Markdown | 尊重原始结构 | 实现复杂 |
-| 语义分块 | 按主题切分 | 按语义边界 | 长文档 | 检索质量最高 | 需要额外模型 |
-
-### 实战建议
+### 2.1 基础 RAG 流程
 
 ```
-问：如何选择块大小？
-答：取决于你的检索粒度。
-
-- 如果问题是事实型的（"公司CEO是谁？"）→ 小分块（128-256 tokens）
-- 如果问题是总结型的（"合同的主要条款有哪些？"）→ 大分块（512-1024 tokens）
-- 如果两者都有 → 多粒度索引（同时建立小块和大块索引）
+用户查询 → 嵌入查询 → 向量搜索 → 检索文档 → 构建提示词 → LLM 生成 → 输出
 ```
 
-**一个常见的坑**：分块太小，模型拿到碎片化信息无法回答全局性问题；分块太大，大段无用信息淹没了关键片段。
+### 2.2 生产级 RAG 蓝图
+
+**来源：** [RAG and Generative AI - Microsoft Learn](https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview)
+
+**数据摄入管道（离线/持续）：**
+1. 加载文档
+2. 文本分块（Chunking）
+3. 生成向量嵌入
+4. 存入向量数据库 + 元数据索引
+
+**查询管道（在线）：**
+1. 查询嵌入
+2. 向量搜索（或混合搜索）
+3. 重排序（Reranking）
+4. 构建提示词（含检索上下文）
+5. LLM 生成响应
+6. 评估（忠实度、引用准确性）
+
+### 2.3 现代 RAG 架构演进
+
+| 阶段 | 描述 |
+|------|------|
+| **Naive RAG** | 简单向量搜索 + LLM 生成 |
+| **Advanced RAG** | 查询重写、混合搜索、重排序、缓存 |
+| **Modular RAG** | 可替换的检索/生成模块组合 |
+| **Agentic RAG** | LLM 辅助查询规划、多源访问、结构化响应 |
+| **GraphRAG** | 图遍历 + 向量相似度搜索结合 |
 
 ---
 
-## 第二步：向量化与索引
+## 3. 核心组件详解
 
-### 嵌入模型选择
+### 3.1 文本分块（Chunking）
 
-```
-传统方法（已过时）：
-  Bag of Words → 词频统计，丢失语义
-  TF-IDF → 考虑词权重，但仍然基于词汇匹配
+检索质量很大程度上取决于分块策略。
 
-现代方法：
-  text-embedding-3-small (OpenAI)    → 1536维，性价比高
-  text-embedding-3-large (OpenAI)    → 3072维，精度更高
-  bge-large-zh (BAAI)                → 中文场景首选
-  m3e (Moka)                         → 轻量级中文嵌入
-  jina-embeddings-v3                 → 支持多语言，1024维
-  Cohere Embed v3                    → 企业级，支持多模态
-```
+**来源：** [RAG Tutorial - Chunking Strategies](https://www.glukhov.org/rag/retrieval/chunking-strategies-in-rag/)
 
-### 向量数据库选项
-
-| 方案 | 搜索算法 | 部署难度 | 扩展性 | 特色 |
-|------|---------|---------|--------|------|
-| Chroma | HNSW | 极简（pip install） | 单机 | 上手最快，适合原型 |
-| Milvus | IVF/HNSW | 中等（需要 Docker） | 分布式 | 生产级性能 |
-| Qdrant | HNSW | 简单 | 水平扩展 | Rust 实现，速度快 |
-| Pinecone | 托管 | SaaS | 自动缩放 | 最省心，但贵 |
-| pgvector | IVFFlat | 简单（PostgreSQL 插件） | 依赖 PG | 如果你已经在用 PG |
-| FAISS | IVF/HNSW | 中等 | 内存限制 | 纯本地，研究首选 |
-
-**选型决策**：
-
-```
-你在做原型 → Chroma（零配置）
-你已经有 PostgreSQL → pgvector（少引入一个系统）
-你需要生产部署，团队有运维能力 → Milvus
-你不想管运维 → Pinecone
-你的数据量 < 100 万 → 哪个都行，选最熟悉的
-```
-
----
-
-## 第三步：检索质量提升
-
-### 基础检索 -> 高级检索
-
-```
-基础检索（baseline）：
-  [嵌入] → [余弦相似度] → [Top-K]
-
-高级检索（production）：
-  [混合检索] → [重排序] → [动态 Top-K]
-  
-  混合检索 = 向量相似度 + BM25 关键词匹配
-  重排序 = 用一个更精确的 model（如 Cohere Rerank）重新排 Top-100
-  动态 Top-K = 根据 query 的置信度动态调整返回数量
-```
-
-### 检索后处理
-
-拿到检索片段后，不要直接塞进 prompt。先做三步处理：
-
-```python
-def prepare_context(raw_chunks, query, max_tokens=3000):
-    # 1. 去重（同一文档的相邻块）
-    chunks = deduplicate_adjacent(raw_chunks)
-    
-    # 2. 截断（控制总长度）
-    chunks = truncate_to_token_limit(chunks, max_tokens)
-    
-    # 3. 排序（与 query 最相关的放最前面）
-    chunks = sort_by_relevance(chunks, query)
-    
-    # 4. 格式化（给每段加来源标记）
-    context = "\n\n".join(
-        f"[来源 {i+1}] {c.text}"
-        for i, c in enumerate(chunks)
-    )
-    return context
-```
-
----
-
-## 评估 RAG 系统
-
-RAG 有两条评估轴，缺一不可：
-
-### 检索质量（Retrieval Quality）
-
-| 指标 | 含义 | 理想值 |
-|------|------|--------|
-| Recall@K | 相关文档被召回的比例 | > 0.9 |
-| Precision@K | 召回的文档中真正相关的比例 | > 0.7 |
-| MRR | 第一个正确答案的排名 | > 0.8 |
-| NDCG | 排名的质量（考虑顺序） | > 0.8 |
-
-### 生成质量（Generation Quality）
-
-| 指标 | 含义 | 测量方法 |
+| 策略 | 方法 | 适用场景 |
 |------|------|----------|
-| Faithfulness | 回答是否基于检索内容（不瞎编） | 逐句检查引用来源 |
-| Answer Relevance | 回答是否针对问题 | 人工评分 / LLM-as-Judge |
-| Context Precision | 模型是否正确使用了上下文 | 对比有/无上下文的输出 |
-| Hallucination Rate | 编造内容的比例 | 事实核查 |
+| 固定大小分块 | 按固定 token 数切分 | 简单、快速、通用 |
+| 语义分块 | 按句子/段落边界切分 | 需要语义完整性 |
+| 层级分块 | 文档 → 章节 → 块 | 需要多粒度检索 |
 
-**实用评估脚本**（RAGAS 框架）：
+> *"Poor chunking is one of the most common causes of underperforming RAG systems."*
 
-```python
-from ragas import evaluate
-from ragas.metrics import faithfulness, answer_relevancy, context_precision
+### 3.2 向量搜索
 
-result = evaluate(
-    dataset=your_test_set,           # 包含 question, answer, contexts
-    metrics=[
-        faithfulness,
-        answer_relevancy,
-        context_precision,
-    ]
-)
-print(result)
-```
+- **基础：** 余弦相似度 / 点积相似度
+- **高级：** 混合搜索（BM25 + 向量）、层级检索、查询重写
 
----
+### 3.3 重排序（Reranking）
 
-## 常见陷阱清单
+> 重排序是 RAG 实现中**最大**的质量改进因素。
 
-```
-□ 分块切断了关键信息（跨块依赖）
-□ 嵌入模型和文档语言不匹配（中文文档用了英文嵌入）
-□ 向量搜索只返回精确匹配，忽略了同义词
-□ 检索 Top-K 的 K 是固定的，没有根据问题动态调整
-□ prompt 中检索上下文太长，模型"迷失在中间"
-□ 没有做重排序，前几个结果噪音多
-□ 没有追溯引用来源，用户无法验证答案
-□ 索引只做了文本，忽略了表格、图片中的信息
-```
+重排序提升 `precision@k`，减少噪声，提升端到端答案质量。在生产环境中，重排序往往比切换更大的模型更有效。
+
+### 3.4 评估框架
+
+| 层级 | 测量指标 | 重要性 |
+|------|----------|--------|
+| 数据摄入 | 分块覆盖率、去重率、嵌入版本 | 防止静默漂移 |
+| 检索 | recall@k、precision@k、MRR/NDCG | 判断是否获取正确证据 |
+| 重排序 | 相对 baseline 的 precision@k 增量 | 验证重排序 ROI |
+| 生成 | 忠实度/依地性、引用准确性 | 减少幻觉 |
+| 系统 | 延迟 p50/p95、每次查询成本、缓存命中率 | 保持生产可用性 |
+
+> **最小评估套件：** 50-200 个查询足以检测主要回归问题。
 
 ---
 
-## 下一步
+## 4. RAG vs 微调
 
-当你的 RAG 系统需要做多步推理（比如"对比 A 和 B 的 Q3 营收差异"），单纯的"检索→生成"循环不够了。你需要 [Agent 智能体 →](../Agent智能体/index.md) 来编排复杂的工具调用链。
+| 维度 | RAG | 微调 |
+|------|-----|------|
+| 知识更新 | 刷新文档索引即可 | 需要重新训练 |
+| 可审计性 | 可提供引用来源 | 黑盒输出 |
+| 幻觉控制 | 依赖检索质量 | 依赖训练数据质量 |
+| 计算成本 | 低（仅推理） | 高（需要训练） |
+| 长尾知识 | 强（可检索任何文档） | 弱（可能遗忘） |
+| 延迟 | 较高（含检索步骤） | 较低（直接生成） |
+
+---
+
+## 5. 主流工具与框架
+
+| 工具 | 用途 |
+|------|------|
+| **LangChain** | RAG 流程编排 |
+| **LlamaIndex** | 数据索引与检索 |
+| **Chroma / Weaviate / Pinecone** | 向量数据库 |
+| **FAISS** | 高效向量相似度搜索 |
+| **Cohere Rerank / BGE Reranker** | 重排序模型 |
+| **RAGAS** | RAG 评估框架 |
+
+---
+
+## 🔗 参考资料
+
+- [RAG Tutorial: Architecture, Implementation, and Production Guide - Glukhov](https://www.glukhov.org/rag)
+- [RAG Architecture Explained: 2026 Guide - ORQ.AI](https://orq.ai/blog/retrieval-augmented-generation-for-knowledge-intensive-nlp-tasks)
+- [RAG and Generative AI - Microsoft Learn](https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview)
+- [Retrieval Augmented Generation: A Complete Guide - WEKA](https://www.weka.io/learn/guide/ai-ml/retrieval-augmented-generation)
+- [What is RAG? A Practical Guide - K2View](https://www.k2view.com/what-is-retrieval-augmented-generation)

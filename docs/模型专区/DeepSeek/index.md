@@ -1,125 +1,136 @@
-# DeepSeek：量化基金公司如何做出世界级大模型
+# DeepSeek — 深度求索
 
-> 一家做量化交易的中国公司，做出了让整个硅谷瞩目的开源模型。
-> 这是一个关于"小团队大创新"和"极致成本效率"的故事。
-
----
-
-## 背景：幻方量化
-
-DeepSeek 的母公司叫**幻方量化**（High-Flyer），管理着数百亿人民币的量化对冲基金。
-
-**"一家量化基金公司为什么要做大模型？"**
-
-答案：他们早就积累了大规模 GPU 集群来做股票交易策略的计算。当 GPT-3 在 2020 年惊艳世界时，幻方发现自己手头的硬件资源足以进入这个领域。这就像拳击手发现自己本来就有健身房和沙袋——为什么不打几场比赛？
-
-2023 年，幻方正式成立 DeepSeek（深度求索），目标是**用最少的资源做出最强的开源模型**。
+> DeepSeek（深度求索）是由中国 AI 公司深度求索开发的大语言模型系列。DeepSeek 以极致的性价比和创新的 MoE 架构闻名，其 V3 和 R1 模型在 2024-2025 年震撼了全球 AI 社区。
 
 ---
 
-## 技术突破：DeepSeek 的四大创新
+## 模型演进
 
-### 1️⃣ MoE（Mixture of Experts）— V2 / V3 系列
-
-DeepSeek 选择了 MoE 架构，但不是简单照搬：
-
-**DeepSeek V2（236B 总参数 / 21B 活跃参数）**
-- 推理时只激活 21B 参数——效果接近 Dense 70B，成本只有 1/3
-- 在 2024 年初发布时，以极低的 API 价格震惊市场
-
-**DeepSeek V3（671B 总参数 / 37B 活跃参数）**
-- 2024 年底发布，使用了极其高效的训练策略
-- 训练成本：**约 560 万美元**（对比 GPT-4 估计的 1-2 亿美元）
-- 在多项基准上超过 LLaMA 3 405B，接近 GPT-4
-
-### 2️⃣ MLA（Multi-head Latent Attention）
-
-这是 DeepSeek 最具原创性的架构创新。
-
-**问题**：传统多头注意力（MHA）的 KV Cache 随上下文长度线性增长，长上下文时内存爆炸。
-
-**MLA 的思路**：
-- 将 Key 和 Value 压缩到更低维度的"潜在空间"
-- 推理时只缓存压缩后的向量，需要时再解压
-- 效果：**KV Cache 大小减少 75%-85%**，速度提升 2-3 倍
-
-**行业影响**："All models will adopt MLA within 12 months"——一位匿名研究员如是说。它的确太有效了。
-
-### 3️⃣ DeepSeek R1 — 开源推理模型之王
-
-2025 年 1 月发布的推理模型，MIT 协议开源。
-
-**关键发现**：
-- 纯粹通过 **强化学习**（而非人类标注）教会模型"思考"
-- 模型在数学证明、逻辑推理、代码竞赛中展现接近 o1 的能力
-- **推理链（CoT）** 内部化——模型可以像人类一样"自我对话"直到找到答案
-
-**基准**：
-| 基准 | DeepSeek R1 | GPT o1 | 差距 |
-|------|-------------|--------|------|
-| AIME 2024 | 79.8% | 79.2% | +0.6% |
-| MATH-500 | 97.3% | 96.4% | +0.9% |
-| Codeforces | Top 7.6% | Top 11% | +3.4% |
-
-**价格对比**：
-- GPT o1 API：$15 / 1M tokens（输入）
-- DeepSeek R1 API：**$0.55 / 1M tokens**
-- 便宜了 27 倍。
-
-### 4️⃣ 极致成本效率
-
-DeepSeek 的核心哲学：**不是做最强的模型，而是做最强且最便宜的模型**。
-
-| 对比 | GPT-4o | Claude 3.5 Sonnet | DeepSeek V3 |
-|------|--------|-------------------|-------------|
-| 输入价格（/1M tokens） | $2.50 | $3.00 | **$0.27** |
-| 输出价格（/1M tokens） | $10.00 | $15.00 | **$1.10** |
-| 上下文 | 128K | 200K | 128K |
-| 开源 | ❌ | ❌ | ✅ MIT |
-
-**实际案例**：处理 1 亿 tokens（约 7500 万英文单词）：
-- GPT-4o：$250 - $1000
-- DeepSeek V3：**$27 - $110**
+| 模型 | 发布时间 | 总参数量 | 激活参数量 | 架构特点 |
+|------|---------|---------|-----------|---------|
+| DeepSeek-V2 | 2024.01 | 236B | 21B | 引入 MLA + MoE |
+| DeepSeek-V3 | 2024.12 | 671B | 37B | 更激进的 MoE + FP8 训练 |
+| DeepSeek-R1 | 2025.01 | 671B | 37B | 基于 V3 的推理增强模型 |
+| DeepSeek-V3.1 | 2025.03 | 671B | 37B | V3 增强版 |
+| DeepSeek-R1-0528 | 2025.05 | 671B | 37B | R1 增强版 |
+| DeepSeek-V4 | 2026 | — | — | 新旗舰 |
 
 ---
 
-## DeepSeek 产品矩阵
+## 架构创新
 
+根据 [Fireworks AI 的 DeepSeek 架构分析](https://fireworks.ai/blog/deepseek-model-architecture)：
+
+### 1. Multi-Head Latent Attention (MLA)
+
+传统 MHA（Multi-Head Attention）在推理时需要缓存完整的 KV 矩阵，消耗大量显存。MLA 的核心创新是：
+
+- 将 Key 和 Value 投影到 **低维潜在空间**
+- 推理时只需缓存低维的潜在向量，而非完整的 KV 矩阵
+- **大幅降低显存占用**，同时保持甚至提升注意力质量
+
+### 2. 激进 MoE
+
+根据 [DeepSeek-V3 GitHub](https://github.com/deepseek-ai/deepseek-v3) 的技术细节：
+
+- 总参数 671B，每 token 仅激活 **37B 参数**
+- 从 V2 的 1 个所有专家激活层增加到 V3 的 **3 个共享专家层**
+- 采用 **auxiliary-loss-free** 负载均衡策略——消除辅助损失对模型质量的负面影响
+- FP8 混合精度训练，显著降低训练成本
+
+### 3. Multi-Token Prediction (MTP)
+
+DeepSeek-V3 在训练中引入多 Token 预测目标：模型同时预测下一个 token 和后多个 token，增强对长期依赖的理解能力。
+
+---
+
+## DeepSeek-R1 — 推理增强
+
+根据 [BentoML DeepSeek 完全指南](https://www.bentoml.com/blog/the-complete-guide-to-deepseek-models-from-v3-to-r1-and-beyond)：
+
+- **R1-Zero:** 完全通过强化学习（RL）训练，无监督数据，展现出"顿悟"式的推理能力
+- **R1:** 在 RL 基础上加入冷启动数据和多阶段训练，提升了可读性和稳定性
+- **蒸馏版本:** 将 R1 的推理能力蒸馏到 Qwen (1.5B-32B) 和 LLaMA (8B-70B) 等小模型
+
+### 架构细节
+
+根据 [Towards AI 的 DeepSeek-R1 架构分析](https://pub.towardsai.net/deepseek-r1-model-architecture-853fefac7050)：
+
+- 基于 DeepSeek-V3-Base 架构
+- **61 层 Transformer**（前 3 层为标准 FFN，第 4-61 层使用 MoE）
+- 全部使用 MLA 替代标准多头注意力
+- 上下文长度：**128K tokens**
+
+---
+
+## 性能表现
+
+DeepSeek-V3 在多个基准上达到或超越了 GPT-4 和 Claude 3.5 Sonnet 水平：
+
+| 基准 | DeepSeek-V3 | GPT-4 | Claude 3.5 Sonnet |
+|------|-------------|-------|-------------------|
+| MMLU (5-shot) | **87.1** | 86.4 | 88.7 |
+| MMLU-Pro | 75.9 | — | 78.0 |
+| WinoGrande | **86.3** | — | — |
+
+*数据来源: [DeepSeek-V3 GitHub README](https://github.com/deepseek-ai/deepseek-v3)*
+
+---
+
+## 如何使用
+
+### API 调用
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="your-deepseek-api-key",
+    base_url="https://api.deepseek.com"
+)
+
+completion = client.chat.completions.create(
+    model="deepseek-chat",  # 或 deepseek-reasoner
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "解释 DeepSeek 的 MoE 架构。"}
+    ]
+)
+
+print(completion.choices[0].message.content)
 ```
-DeepSeek V2     → 通用对话 + 编码 (236B MoE)    2024.5
-DeepSeek V2.1   → 长上下文 + 更新数据           2024.8
-DeepSeek V3     → GPT-4 级通用能力             2024.12
-DeepSeek R1     → 推理模型 (o1 级)             2025.1
-DeepSeek Coder  → 代码专项 (V2 版本已很强)      持续更新
+
+### 本地运行
+
+```bash
+# 通过 Ollama
+ollama run deepseek-v3
+
+# 通过 vLLM
+vllm serve deepseek-ai/DeepSeek-V3
 ```
 
 ---
 
-## 应该使用 DeepSeek 吗？
+## 优势与局限
 
-### ✅ 用 DeepSeek 的理由
+**优势:**
+- **极致性价比:** 训练成本仅约 $5.5M，推理成本远低于 GPT-4
+- **顶级推理能力:** R1 在数学和编程推理任务上达到 GPT-4o 级别
+- **开源权重:** 模型权重和蒸馏版本均可下载
+- **MLA 创新:** 显存效率极高
 
-1. **预算有限**：API 价格是无与伦比的低
-2. **需要推理能力**：R1 在数学和逻辑任务上接近 o1
-3. **搭建自己的服务**：开源 + MIT 协议，没有使用限制
-4. **编程辅助**：DeepSeek Coder 在同级模型中领先
-5. **中文理解**：对中文的掌握比绝大多数西方模型好
-
-### ❌ 避开 DeepSeek 的理由
-
-1. **需要最高质量的创意写作**：GPT-4o 和 Claude 的"品味"更好
-2. **对数据隐私有极高要求**：DeepSeek API 服务器在中国
-3. **需要视觉能力**：DeepSeek 的多模态能力不如 GPT-4o/Gemini
-4. **需要最新的世界知识**：DeepSeek 的知识截止时间通常晚于闭源模型
+**局限:**
+- 内容过滤较为严格（中国公司背景）
+- 英文能力略逊于 GPT-4（中文场景表现极佳）
+- 超大模型需多 GPU 才能运行
+- 稳定性偶有波动
 
 ---
 
-## 未来：DeepSeek 下一步会做什么？
-
-- **DeepSeek R1-V**：视觉推理模型？
-- **多模态融合**：将 MLA + MoE 扩展到图像和视频？
-- **更极致的成本**：训练成本已经是 GPT-4 的 1/30，还能更低吗？
-
----
-
-> **一句话总结**：DeepSeek 证明了不需要十亿美元和万卡集群也能做出世界级模型。如果你对"性价比"有执念，DeepSeek 是目前最好的选择。
+**参考资料：**
+- [DeepSeek-V3 GitHub](https://github.com/deepseek-ai/deepseek-v3)
+- [DeepSeek v3 and R1 Architecture (Fireworks AI)](https://fireworks.ai/blog/deepseek-model-architecture)
+- [Complete Guide to DeepSeek Models (BentoML)](https://www.bentoml.com/blog/the-complete-guide-to-deepseek-models-from-v3-to-r1-and-beyond)
+- [DeepSeek-R1 Model Architecture (Towards AI)](https://pub.towardsai.net/deepseek-r1-model-architecture-853fefac7050)
+- [DeepSeek-R1 Model Architecture (Founders Creative)](https://www.founderscreative.org/model-architecture-behind-deepseek-r1)

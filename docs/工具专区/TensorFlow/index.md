@@ -1,42 +1,192 @@
-# TensorFlow
+# TensorFlow — 生产级 ML 平台
 
-## 为什么 TensorFlow 还活着
+> TensorFlow 是 Google 开发的开源机器学习框架，专为生产级 ML 管道设计。TensorFlow 2.x 推出了 Eager Execution 和 Keras 高级 API，大大降低了使用门槛，同时保留了 TensorFlow Serving、TF Lite 等强大的生产部署能力。
 
-2019 年 PyTorch 在学术界超越 TensorFlow 时，很多人以为 TF 要死了。但事实是：**TensorFlow 没死，它转型了**。
+---
 
-### 它的位置
+## 框架概述
 
-PyTorch 赢了研究，TF 赢了部署：
-
-| 场景 | 赢家 |
+| 属性 | 详情 |
 |------|------|
-| 学术论文、快速原型 | PyTorch |
-| 移动端/嵌入式 | **TensorFlow Lite** |
-| 浏览器推理 | **TensorFlow.js** |
-| 大规模生产部署 | **TF Serving / TFX** |
-| TPU 训练 | **TensorFlow**（独家） |
-| Keras 快速上手 | 平手（Keras 3 已支持多后端） |
+| **开发者** | Google Brain Team |
+| **首次发布** | 2015 年 |
+| **当前版本** | TensorFlow 2.x (2025) |
+| **许可** | Apache 2.0 |
+| **核心语言** | Python + C++/CUDA |
+| **GitHub** | [tensorflow/tensorflow](https://github.com/tensorflow/tensorflow) |
 
-### TensorFlow 2.x 的改变
+---
 
-TF 1.x 的计算图模式（先定义图再执行）让无数人弃坑。2.x 引入 Eager Execution，体验接近 PyTorch：
+## TensorFlow 2.x 设计理念
+
+根据 [TensorFlow 2 Quickstart for Beginners](https://www.tensorflow.org/tutorials/quickstart/beginner)：
+
+### 核心原则
+
+1. **Eager 执行** — 立即运行操作（不再需要 Session.run）
+2. **Keras 作为高级 API** — 简单直观的模型构建方式
+3. **tf.data** — 高性能数据管道
+4. **SavedModel 格式** — 标准化的模型序列化
+
+### Keras API — 初学者友好
+
+Keras 是 TensorFlow 的官方高级 API：
 
 ```python
-# TF 2.x 和 PyTorch 一样即时执行
 import tensorflow as tf
-x = tf.constant([1, 2, 3])
-print(x * 2)  # tf.Tensor([2 4 6], shape=(3,), ...)
+
+# 构建序列模型
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dense(10)
+])
+
+# 编译模型
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+# 训练
+model.fit(x_train, y_train, epochs=5)
+
+# 评估
+model.evaluate(x_test, y_test, verbose=2)
+# 结果: ~98% 准确率
 ```
 
-### 谁在用
+---
 
-- **Google 全家桶**：搜索、广告、Gmail 的 ML 基础设施
-- **制造业/物联网**：TF Lite 在树莓派和手机上的部署生态没有对手
-- **TPU 用户**：想用 Google TPU，只能用 TF（JAX 也可以，但生态不同）
-- **Keras 用户**：很多人不知道 Keras 可以用 TF 以外的后端了
+## TensorFlow 生态
 
-### 一句话
+根据 [TensorFlow 技术指南](https://www.tensorflow.org/tutorials/quickstart/beginner)：
 
-> PyTorch 是研究者的选择，TensorFlow 是工程师的归宿。
+### 核心库
 
-如果你是学生或研究者，主学 PyTorch。如果你是做端侧部署或要用 Google 的云 TPU，TensorFlow 绕不开。
+| 组件 | 功能 |
+|------|------|
+| **TensorFlow Core** | 基础计算框架 |
+| **Keras** | 高级神经网络 API |
+| **tf.data** | 高性能数据管道 |
+| **tf.function / AutoGraph** | 将 Python 函数编译为计算图 |
+
+### 生产部署工具
+
+| 工具 | 适用场景 |
+|------|---------|
+| **TensorFlow Serving** | 服务器端模型部署 |
+| **TensorFlow Lite** | 移动端/嵌入式设备 |
+| **TensorFlow.js** | 浏览器端 ML |
+| **TensorFlow Hub** | 预训练模型市场 |
+| **TensorBoard** | 可视化和调试 |
+| **TFX (TensorFlow Extended)** | 端到端 ML 管道 |
+
+---
+
+## 对比：TensorFlow vs PyTorch
+
+| 维度 | TensorFlow | PyTorch |
+|------|-----------|---------|
+| **计算图** | 静态图 → 现在支持 Eager | 原生动态图 |
+| **学习曲线** | 中等（Keras 降低了门槛） | 中高 |
+| **生产部署** | ✅ 更成熟（Serving/TFLite/JS） | ⚠️ 正在追赶 |
+| **研究使用** | ⚠️ 较少 | ✅ 学术主流 |
+| **移动端** | ✅ TF Lite 成熟 | ⚠️ 较少支持 |
+| **调试** | ⚠️ 可调试性一般 | ✅ Python 原生的调试体验 |
+| **LLM 生态** | ⚠️ 较少 | ✅ HuggingFace + PyTorch 为主 |
+
+---
+
+## 如何开始
+
+### 安装
+
+```bash
+pip install tensorflow
+# 验证安装
+python -c "import tensorflow as tf; print(tf.__version__)"
+```
+
+### 进阶 — 自定义模型（子类化 API）
+
+根据 [TensorFlow 2 Quickstart for Experts](https://www.tensorflow.org/tutorials/quickstart/advanced)：
+
+```python
+class MyModel(tf.keras.Model):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = Conv2D(32, 3, activation='relu')
+        self.flatten = Flatten()
+        self.d1 = Dense(128, activation='relu')
+        self.d2 = Dense(10)
+
+    def call(self, x):
+        x = self.conv1(x)
+        x = self.flatten(x)
+        x = self.d1(x)
+        return self.d2(x)
+
+# 自定义训练循环
+@tf.function
+def train_step(images, labels):
+    with tf.GradientTape() as tape:
+        predictions = model(images)
+        loss = loss_object(labels, predictions)
+    gradients = tape.gradient(loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+```
+
+---
+
+## 生产部署
+
+TensorFlow 的核心优势在于生产部署：
+
+### TensorFlow Serving
+
+```bash
+# 导出 SavedModel
+model.save('my_model/1/')
+
+# 启动 Serving 容器
+docker run -p 8501:8501 \
+  --mount type=bind,source=/path/to/my_model,target=/models/my_model \
+  -e MODEL_NAME=my_model -t tensorflow/serving
+```
+
+### TensorFlow Lite（移动端/边缘设备）
+
+```python
+converter = tf.lite.TFLiteConverter.from_saved_model('my_model')
+tflite_model = converter.convert()
+with open('model.tflite', 'wb') as f:
+    f.write(tflite_model)
+```
+
+---
+
+## 优势与局限
+
+**优势:**
+- **最成熟的生产部署栈:** TF Serving、TF Lite、TF.js 三件套
+- **端到端平台:** 从数据管道到模型服务一体化
+- **Google 生态集成:** 与 GCP、TPU、Vertex AI 深度整合
+- **Keras 降低门槛:** 可视化构建模型
+- **量化和优化工具丰富**
+
+**局限:**
+- **研究领域主导地位被 PyTorch 取代**
+- **API 变更历史:** 1.x→2.x 迁移痛苦
+- **动态图性能不如原生的静态图模式**
+- **LLM 社区生态不如 PyTorch 丰富**
+- **调试体验不如 Python 原生**
+
+---
+
+**参考资料：**
+- [TensorFlow 2 Quickstart for Beginners](https://www.tensorflow.org/tutorials/quickstart/beginner)
+- [TensorFlow 2 Quickstart for Experts](https://www.tensorflow.org/tutorials/quickstart/advanced)
+- [TensorFlow for Machine Learning Beginner's Guide 2025](https://www.technaureus.com/blog-detail/tensorflow-for-machine-learning-a-beginners-guide)
+- [TensorFlow Full Course 2025 (Simplilearn)](https://www.youtube.com/watch?v=1saRltqot8c)
+- [TensorFlow 2.0 Quick Start Guide (Packt)](https://www.packtpub.com/en-us/product/tensorflow-20-quick-start-guide-9781789530759)

@@ -1,75 +1,91 @@
-# PyTorch 为什么赢？一场深度学习框架的"三国演义"
+# PyTorch — 深度学习框架
 
-> 2017 年，Google 的 TensorFlow 还是绝对的王者。
-> 2023 年，PyTorch 以 80%+ 的论文使用率碾压了所有对手。
-> 这不是"同样好的产品被更多人选了"，而是"选对设计哲学"的经典案例。
+> PyTorch 是 Meta（Facebook）开发的**动态计算图**深度学习框架。它是目前 AI 研究和开发中使用最广泛的框架，从学术论文到生成式 AI 产品，PyTorch 无处不在。
 
 ---
 
-## 历史: TensorFlow vs PyTorch 的战争
+## 框架概述
 
-### TensorFlow 1.x（2015-2018）— 静态图的时代
-
-TensorFlow 的设计继承自 Google Brain 的 DistBelief，核心哲学：
-
-**静态计算图（Static Graph）**：
-```python
-# 1. 先建图（Graph Mode）
-a = tf.placeholder(tf.float32)
-b = tf.placeholder(tf.float32)
-c = tf.add(a, b)
-
-# 2. 然后在 Session 中执行
-with tf.Session() as sess:
-    result = sess.run(c, feed_dict={a: 1.0, b: 2.0})
-```
-
-**问题**：
-- 🐌 调试困难：不能 print，不能断点——图只有在 session.run 时才执行
-- 📝 代码冗长：占位符(placeholder)、变量作用域(variable_scope)、会话(session)
-- 🔄 动态控制流：if/else/for 在静态图中需要特殊的 tf.cond/tf.while_loop
-
-**Google 的人怎么说**？"TensorFlow 是为产品部署设计的，不是为研究设计的。"
-
-### PyTorch（2016-至今）— 动态图的革命
-
-PyTorch 的设计源自 Torch（Lua 框架），但用 Python 重新实现：
-
-**动态计算图（Dynamic Graph / Define-by-Run）**：
-```python
-# 这就是普通 Python 代码！
-a = torch.tensor(1.0, requires_grad=True)
-b = torch.tensor(2.0, requires_grad=True)
-c = a + b  # 图在这里才构建
-
-# 可以随时 print
-print(c)  # tensor(3.0, grad_fn=<AddBackward0>)
-
-# 反向传播
-c.backward()
-print(a.grad)  # tensor(1.)
-```
-
-**PyTorch 的本质胜利**："代码即模型，模型即代码。"
-
-- 🙌 能用 Python debugger（pdb）调试模型
-- 🙌 可以用 print 看中间值
-- 🙌 可以用普通的 if/else/for 循环控制流程
-- 🙌 动态 Transformer、可变长度 RNN → 自然支持
-
-### TensorFlow 2.x / Keras（2019-）— 迟到十年的道歉
-
-Google 意识到了问题，在 TF 2.0 中引入了 Eager Execution（动态图）。
-
-**但太晚了。研究社区已经全部迁移到了 PyTorch。**
-
-> TensorFlow 2.x 就像是"Google 终于承认 PyTorch 的设计是对的"。
+| 属性 | 详情 |
+|------|------|
+| **开发者** | Meta AI (Facebook AI Research) |
+| **首次发布** | 2016 年 (PyTorch 0.1) |
+| **当前版本** | PyTorch 2.x (2025) |
+| **许可** | BSD |
+| **核心语言** | Python + C++/CUDA |
+| **GitHub** | [pytorch/pytorch](https://github.com/pytorch/pytorch) |
 
 ---
 
-## PyTorch 核心组件解析
+## 为什么 PyTorch 成为主流？
 
-### 🔧 nn.Module — 一切的基类
+根据 [PyTorch 教程 (GeeksForGeeks)](https://www.geeksforgeeks.org/deep-learning/pytorch-tutorial-2) 和 [UvA DL Notebooks](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html)：
+
+### 动态计算图（Define-by-Run）
+
+与 TensorFlow 1.x 的静态图不同，PyTorch 使用**动态计算图**：
+- 图在执行时即时构建
+- 可以随意使用 Python 控制流（if/for/while）
+- 调试直观（标准的 Python 错误信息）
+
+```python
+# 动态图示例 — 条件分支
+for epoch in range(n_epochs):
+    for x, y in train_loader:
+        optimizer.zero_grad()
+        pred = model(x)
+        loss = criterion(pred, y)
+        loss.backward()
+        optimizer.step()
+```
+
+### PyTorch 2.x 关键特性
+
+| 特性 | 说明 |
+|------|------|
+| **torch.compile** | 即时编译优化，提升 40-50% 性能 |
+| **TorchDynamo** | 安全捕获 Python 计算图 |
+| **TorchInductor** | 生成 CUDA/CPU 优化内核 |
+| **DTensor** | 分布式张量，简化模型并行 |
+| **torch.export** | 模型导出到标准格式 |
+
+---
+
+## 核心概念
+
+### 张量（Tensor）
+
+PyTorch 中的基本数据结构，类似 NumPy 但支持 GPU：
+
+```python
+import torch
+
+# 创建张量
+x = torch.tensor([1, 2, 3])           # 一维
+y = torch.rand(2, 3)                   # 随机
+z = torch.zeros(4, 4)                  # 全零
+
+# GPU 加速
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+x_gpu = x.to(device)
+
+print(f"Using device: {device}")
+```
+
+### 自动微分（Autograd）
+
+自动计算梯度，反向传播的核心：
+
+```python
+x = torch.randn(3, requires_grad=True)
+y = x ** 2 + 2 * x
+y.sum().backward()   # 自动计算梯度
+print(x.grad)        # 输出梯度
+```
+
+### 模块（nn.Module）
+
+所有神经网络的基础类：
 
 ```python
 import torch.nn as nn
@@ -77,193 +93,101 @@ import torch.nn as nn
 class MyModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.linear = nn.Linear(128, 256)
-        self.dropout = nn.Dropout(0.1)
-        self.activation = nn.ReLU()
+        self.linear = nn.Linear(10, 5)
+        self.relu = nn.ReLU()
 
     def forward(self, x):
-        x = self.linear(x)
-        x = self.dropout(x)
-        x = self.activation(x)
-        return x
-
-model = MyModel()
-print(model)  # 自动打印所有层
-```
-
-**Module 的神奇之处**：
-- 自动注册所有参数（parameters() 和 named_parameters()）
-- 自动处理 GPU 转换（model.to("cuda") 递归移动所有子模块）
-- 支持嵌套（Module 里可以包含其他 Module）
-- 支持 hooks（前向/反向后插入自定义操作）
-
-### 📈 autograd — 自动求导
-
-PyTorch 的杀手特性——自动计算梯度。
-
-```python
-x = torch.randn(3, requires_grad=True)
-y = x * 2
-z = y.mean()  # scalar 损失
-
-z.backward()  # 自动计算所有输入的梯度
-print(x.grad)  # dz/dx = [0.667, 0.667, 0.667]
-```
-
-**背后的原理**：每个 tensor 操作都在构建一个"计算图"，记录了从输入到输出的所有操作。`backward()` 从输出节点开始，沿图反向传播梯度（链式法则）。
-
-### 🏋️ optim — 优化器
-
-```python
-import torch.optim as optim
-
-optimizer = optim.AdamW(
-    model.parameters(),
-    lr=1e-4,
-    weight_decay=0.01
-)
-```
-
-**支持的优化器**：SGD、Adam、AdamW、Adamax、RMSprop、LBFGS……
-
-### 📦 DataLoader — 数据加载
-
-```python
-from torch.utils.data import DataLoader, Dataset
-
-class MyDataset(Dataset):
-    def __init__(self, data):
-        self.data = data
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        return self.data[idx]
-
-loader = DataLoader(
-    dataset,
-    batch_size=32,
-    shuffle=True,
-    num_workers=4  # 并行加载
-)
+        return self.relu(self.linear(x))
 ```
 
 ---
 
-## 训练循环解剖
+## 训练循环模板
 
 ```python
-model = MyModel().to("cuda")
-optimizer = optim.AdamW(model.parameters(), lr=1e-4)
+# 数据加载
+dataset = MyDataset(file)
+train_loader = DataLoader(dataset, batch_size=16, shuffle=True)
 
-for epoch in range(10):
-    model.train()  # 训练模式（dropout 开启）
-    for batch in dataloader:
-        x, y = batch
-        x, y = x.to("cuda"), y.to("cuda")
+# 模型
+model = MyModel().to(device)
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-        # 1. 前向
-        pred = model(x)
-        loss = nn.CrossEntropyLoss()(pred, y)
-
-        # 2. 清零梯度
+# 训练循环
+for epoch in range(n_epochs):
+    model.train()
+    for x, y in train_loader:
         optimizer.zero_grad()
-
-        # 3. 反向传播
+        x, y = x.to(device), y.to(device)
+        pred = model(x)
+        loss = criterion(pred, y)
         loss.backward()
-
-        # 4. 梯度裁剪（防止梯度爆炸）
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-
-        # 5. 更新参数
         optimizer.step()
 
-    # 评估
-    model.eval()  # 评估模式（dropout 关闭）
-    with torch.no_grad():  # 不计算梯度（节省显存和计算）
-        for batch in val_loader:
-            ...
+# 验证
+model.eval()
+with torch.no_grad():
+    # 验证代码
+    pass
 ```
-
-**5 步循环是所有 PyTorch 训练的标准写法**。不管是 1B 还是 70B 的模型，循环结构都一样。区别只在于分布式策略。
 
 ---
 
-## 分布式训练：从小到大的路径
+## PyTorch 生态
 
-### DDP（Distributed Data Parallel）
+| 库 | 功能 | 类型 |
+|----|------|------|
+| **torchvision** | 计算机视觉工具 | 官方 |
+| **torchaudio** | 音频处理 | 官方 |
+| **torchtext** | 文本处理 | 社区 |
+| **HuggingFace Transformers** | Transformer 模型 | 第三方 |
+| **PyTorch Lightning** | 训练脚手架 | 第三方 |
+| **torchtune** | LLM 微调 | 官方（Meta） |
 
-同机多卡或多机多卡的标准方案。每个 GPU 有完整模型副本，处理不同批次数据，同步梯度。
+---
+
+## 如何开始
+
+### 安装
 
 ```bash
-# 一条命令启动
-torchrun --nproc_per_node=4 train.py
+# CPU 版本
+pip install torch torchvision torchaudio
+
+# CUDA 版本
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-### FSDP（Fully Sharded Data Parallel）
+### 从示例开始
 
-把模型参数、梯度、优化器状态分片到多个 GPU 上。
-
-```
-传统 DDP:
-GPU0: [全部参数 + 全部优化器状态]
-GPU1: [全部参数 + 全部优化器状态]
-GPU2: [全部参数 + 全部优化器状态]
-GPU3: [全部参数 + 全部优化器状态]
-总显存: 4 × 模型大小 × 3（参数+梯度+状态）
-
-FSDP:
-GPU0: [参数 1/4 + 优化器 1/4]
-GPU1: [参数 1/4 + 优化器 1/4]
-GPU2: [参数 1/4 + 优化器 1/4]
-GPU3: [参数 1/4 + 优化器 1/4]
-总显存: 模型大小 × 3（没有复制）
-```
-
-```python
-from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
-
-model = FSDP(model)
-```
-
-**让 70B 模型的微调从 8×A100 降到 4×A100**。
+推荐学习路径：
+1. [PyTorch 官方 60 分钟入门教程](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html)
+2. [PyTorch 官方教程](https://pytorch.org/tutorials/)
+3. 动手实现简单模型（MLP、CNN、RNN）
 
 ---
 
-## PyTorch + HuggingFace 生态
+## 优势与局限
 
-PyTorch 的胜利很大程度上是因为它成为了 HuggingFace Transformers 的"默认框架"。
+**优势:**
+- **研究首选:** 学术界最广泛使用的框架
+- **动态图:** 调试友好，适合实验
+- **丰富的生态:** 几乎所有的 LLM 和扩散模型都用 PyTorch 实现
+- **torch.compile:** 即时代码优化
+- **强大的分布式训练支持**
 
-```
-PyTorch ← HuggingFace Transformers ← 全世界的模型和数据集
-```
-
-```python
-# 用 HF 加载 → 用 PyTorch 训练 → 上传回 HF
-from transformers import AutoModelForCausalLM, Trainer
-
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.1-8B")
-trainer = Trainer(model=model, ...)
-trainer.train()
-model.push_to_hub("my-fine-tuned-llama")
-```
+**局限:**
+- **生产部署不如 TensorFlow 成熟**
+- **深度学习框架的通病：学习曲线陡峭**
+- **移动端支持不如 TensorFlow Lite**
+- **C++ API 不如 Python API 完善**
 
 ---
 
-## PyTorch 2.x：编译时代
-
-2023 年发布的 PyTorch 2.0 引入了 `torch.compile()`：
-
-```python
-model = MyModel()
-compiled_model = torch.compile(model)  # 一行加速 30-50%
-```
-
-**原理**：将 Python 代码编译成 GPU 内核（通过 Triton 编译器）。不需要修改任何模型代码。
-
----
-
-> **一句话总结**：PyTorch 赢了因为它尊重 Python 程序员的使用习惯。动态图、Pythonic API、强大的社区生态。它不是最强的框架，它是**最自然的框架**。
->
-> 行业内现在有一个共识：**"PyTorch 用于研究，JAX 用于实验，TensorFlow 用于……切换。"**
+**参考资料：**
+- [PyTorch Tutorial (GeeksForGeeks)](https://www.geeksforgeeks.org/deep-learning/pytorch-tutorial-2)
+- [UvA DL Notebooks — Introduction to PyTorch](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html)
+- [NTU PyTorch Tutorial PDF](https://speech.ee.ntu.edu.tw/~hylee/GenAI-ML/2025-fall-course-data/Pytorch%20Tutorial.pdf)
+- [Learn PyTorch in 5 Projects (freeCodeCamp)](https://www.youtube.com/watch?v=E0bwEAWmVEM)
+- [Best Resources to Learn PyTorch 2025 (Reddit)](https://www.reddit.com/r/learnmachinelearning/comments/1j5trra/best_resources_to_learn_pytorch_in_2025)

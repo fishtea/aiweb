@@ -1,172 +1,195 @@
-# 模型微调技术：当通用模型不够用时
+# 模型微调技术
 
-## 问题现场
-
-```
-你：请用标准的法律文书格式，为原告起草一份诉讼请求。
-GPT-4：[输出一份格式凌乱、条款不全、引用错误的法律文书]
-你：请严格按照《民事诉讼法》格式要求重写。
-GPT-4：[格式对了，但内容明显是模板填充]
-你：我给你 5 个示例，请参照这个格式写。
-GPT-4：[这次好很多，但遇到专业条款还是瞎编]
-```
-
-**根因**：通用模型的知识广度 vs 你的专业深度，存在结构性矛盾。模型见过海量法律文本，但它不是法律专家——它只是在概率上"猜"下一个词。
-
-**解法**：模型微调。
+> 本页面总结了大型语言模型（LLM）的主流微调技术，重点涵盖 LoRA、QLoRA 及 Hugging Face 生态下的实践方法。
 
 ---
 
-## 三种微调路线
+## 1. 概述
 
-### 路线 A：全量微调（Full Fine-tuning）
+微调（Fine-tuning）是指在预训练模型基础上，使用特定领域数据进一步训练，以提升模型在目标任务上的表现。对于 LLM，微调可以在不改变模型架构的前提下，显著提升其在特定任务（如 Text-to-SQL、代码生成、文档摘要）上的质量。
 
-```
-输入：模型权重
-过程：所有参数参与训练
-输出：全新权重文件
-成本：高（6×A100 起）
-质量：取决于数据量
-适配度：专机专用
-```
-
-更新所有参数，相当于给模型做"全身整容"。效果上限最高，但成本也最高。适用于：
-- 你有大量（10 万+）高质量标注数据
-- 你需要模型彻底改变输出行为（比如学会某种特殊协议）
-- 预算不是问题
-
-### 路线 B：LoRA（Low-Rank Adaptation）
-
-```
-输入：原模型权重（不修改）
-过程：注入低秩适配矩阵，只训练这些矩阵
-输出：一个几 MB 的 adapter 文件
-成本：低（单张 4090 可行）
-质量：与全量微调差距在 5% 以内
-适配度：热插拔，随时切换
-```
-
-LoRA 的核心思想——"不要重新训练模型，而是教它如何调整自己的行为"。在原权重的旁边旁路一个小的可训练矩阵（秩 r=8 或 r=16），训练时只更新这个旁路。推理时把旁路合并回去，几乎无额外开销。
-
-### 路线 C：QLoRA（Quantized LoRA）
-
-```
-输入：4-bit 量化后的模型权重
-过程：在量化模型上做 LoRA
-输出：一个 adapter 文件
-成本：极低（单张 3060 可行）
-质量：与 LoRA 差距约 1%
-适配度：消费级显卡就能跑
-```
-
-QLoRA = LoRA + 量化。把模型权重量化到 4-bit（使用 NF4 格式），显存需求降到原来的 1/4。你可以在 24GB 显存上微调 70B 模型。
+> *"Not all use cases require fine-tuning – evaluate existing models/APIs first."* — [Philschmid 微调指南](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
 
 ---
 
-## 对比表
+## 2. 核心技术
 
-| 维度 | 全量微调 | LoRA | QLoRA |
-|------|---------|------|-------|
-| 可训练参数 | 100% | ~0.1-1% | ~0.1-1% |
-| 显存需求（7B） | ~56GB | ~16GB | ~6GB |
-| 显存需求（70B） | ~560GB | ~140GB | ~24GB |
-| 训练时间（相对） | 10x | 1x | 1.2x |
-| 推理延迟差异 | 无 | 可忽略 | 略微增加 |
-| 输出质量（相对） | 基准（100%） | 95-99% | 94-98% |
-| 数据需求 | 10万+ | 50-1000条 | 50-1000条 |
-| 切换任务 | 需重新训练 | 换 adapter 文件 | 换 adapter 文件 |
+### 2.1 LoRA（Low-Rank Adaptation）
 
-**结论**：90% 的场景下，LoRA/QLoRA 是正确选择。全量微调只在极其特殊的场景下有必要。
+**来源：** [Databricks Blog - Efficient Fine-Tuning with LoRA](https://www.databricks.com/blog/efficient-fine-tuning-lora-guide-llms)
+
+LoRA 的核心思想是：**不直接更新完整的权重矩阵，而是训练两个低秩矩阵（LoRA Adapter）来近似权重更新**。训练完成后，Adapter 可以合并回原模型或在推理时动态加载。
+
+**关键超参数：**
+
+| 参数 | 描述 | 推荐值 |
+|------|------|--------|
+| `r` | 低秩矩阵的秩，决定可训练参数量 | 8-256 |
+| `lora_alpha` | 缩放因子 | 16-128 |
+| `lora_dropout` | Dropout 率 | 0.05-0.1 |
+| `target_modules` | 应用 LoRA 的目标层 | 建议覆盖所有线性层 |
+
+**关键实验发现（Databricks）：**
+
+| r | target_modules | 输出质量 | 可训练参数量 |
+|---|----------------|----------|-------------|
+| 8 | 仅 Attention 层 | **低** | 2.66M |
+| 16 | 仅 Attention 层 | **低** | 5.32M |
+| **8** | **所有线性层** | **高** | **12.99M** |
+| 8 | 所有线性层 (8-bit) | 高 | 12.99M |
+
+> *"The biggest improvement is observed in targeting all linear layers in the adaptation process, as opposed to just the attention blocks."*
+
+### 2.2 QLoRA（量化 LoRA）
+
+QLoRA 是 LoRA 的内存优化版本，将预训练模型以 **4-bit 量化** 权重加载到 GPU，同时保持与标准 LoRA 几乎相同的效果。通过 `bitsandbytes` + `PEFT` + `TRL` 实现。
+
+**优势：**
+- 单张 24GB GPU 即可微调 7B 参数模型
+- 微调效果与全精度 LoRA 无显著差异
+- 支持双重量化（Double Quantization）进一步节省显存
+
+### 2.3 PEFT（Parameter-Efficient Fine-Tuning）
+
+Hugging Face 的 [PEFT](https://github.com/huggingface/peft) 库统一了多种参数高效微调方法：
+
+- **LoRA / QLoRA** — 低秩适应
+- **Adapter** — 在 Transformer 层间插入小型适配层
+- **Prefix Tuning** — 在输入前添加可训练的前缀向量
+- **IA³** — 通过学习向量对激活进行缩放
 
 ---
 
-## 上手：LoRA 微调一个 7B 模型（PyTorch + PEFT）
+## 3. 实战：使用 Hugging Face TRL 微调 LLM
+
+**来源：** [How to Fine-Tune LLMs in 2024 with Hugging Face - Philschmid](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
+
+### 3.1 环境准备
+
+```bash
+pip install "transformers==4.36.2" "datasets==2.16.1" "accelerate==0.26.1"
+pip install "bitsandbytes==0.42.0" "peft" "trl"
+```
+
+如需 Flash Attention（Ampere GPU 及以上）：
+```bash
+MAX_JOBS=4 pip install flash-attn --no-build-isolation
+```
+
+### 3.2 数据集准备
+
+以 Text-to-SQL 为例，使用 `b-mc2/sql-create-context` 数据集：
 
 ```python
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
-from peft import LoraConfig, get_peft_model, TaskType
-from datasets import load_dataset
+def create_conversation(sample):
+    return {
+        "messages": [
+            {"role": "system", "content": f"SCHEMA: {sample['context']}"},
+            {"role": "user", "content": sample["question"]},
+            {"role": "assistant", "content": sample["answer"]}
+        ]
+    }
+```
 
-# 1. 加载基础模型
-model_name = "mistralai/Mistral-7B-v0.1"
+### 3.3 4-bit 量化加载模型
+
+```python
+from transformers import BitsAndBytesConfig
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
 model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    torch_dtype=torch.bfloat16,         # 使用 BF16 节省显存
+    model_id,
     device_map="auto",
+    quantization_config=bnb_config,
+    attn_implementation="flash_attention_2",
+    torch_dtype=torch.bfloat16
 )
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-tokenizer.pad_token = tokenizer.eos_token
+```
 
-# 2. 配置 LoRA
-lora_config = LoraConfig(
-    task_type=TaskType.CAUSAL_LM,
-    r=8,                                # 秩的大小——8 是个好起点
-    lora_alpha=32,                      # 缩放系数
-    lora_dropout=0.1,                   # 防止过拟合
-    target_modules=["q_proj", "v_proj"],# 只训练 Q 和 V 投影层
+### 3.4 LoRA 配置（推荐全线性层）
+
+```python
+from peft import LoraConfig
+
+peft_config = LoraConfig(
+    lora_alpha=128,
+    lora_dropout=0.05,
+    r=256,
+    bias="none",
+    target_modules="all-linear",
+    task_type="CAUSAL_LM",
 )
+```
 
-model = get_peft_model(model, lora_config)
+### 3.5 训练超参数
 
-# 3. 查看可训练参数
-model.print_trainable_parameters()  
-# 输出示例: trainable params: 4,194,304 / 7,000,000,000 ≈ 0.06%
+```python
+from transformers import TrainingArguments
 
-# 4. 训练
-training_args = TrainingArguments(
-    output_dir="./mistral-lora-legal",
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,      # 等效 batch size = 16
-    learning_rate=2e-4,
+args = TrainingArguments(
+    output_dir="my-finetuned-model",
     num_train_epochs=3,
-    logging_steps=10,
-    save_strategy="epoch",
-    fp16=False,
-    bf16=True,                          # BF16 比 FP16 更稳定
+    per_device_train_batch_size=3,
+    gradient_accumulation_steps=2,
+    gradient_checkpointing=True,
+    learning_rate=2e-4,
+    bf16=True,
+    warmup_ratio=0.03,
+    lr_scheduler_type="constant",
 )
+```
 
-trainer = Trainer(
+### 3.6 SFTTrainer 训练
+
+```python
+from trl import SFTTrainer
+
+trainer = SFTTrainer(
     model=model,
-    args=training_args,
-    train_dataset=your_dataset,         # 你的训练数据
+    args=args,
+    train_dataset=dataset,
+    peft_config=peft_config,
+    max_seq_length=3072,
+    tokenizer=tokenizer,
 )
 trainer.train()
-
-# 5. 保存 adapter (只有几 MB)
-model.save_pretrained("./mistral-lora-legal-adapter")
 ```
 
-**关键参数调优指南**：
-
-| 参数 | 小数据（<200条） | 中数据（200-2000条） | 大数据（>2000条） |
-|------|:---:|:---:|:---:|
-| r（秩） | 8 | 16 | 32 |
-| lora_alpha | 16 | 32 | 64 |
-| learning_rate | 1e-4 | 2e-4 | 5e-5 |
-| num_epochs | 5-10 | 3-5 | 2-3 |
-| dropout | 0.2 | 0.1 | 0.05 |
-
-**警告**：秩不是越大越好。r=8 和 r=64 的差距经常在统计上不显著（甚至更大的 r 可能过拟合）。
+> **成本参考：** 在 AWS `g5.2xlarge` (NVIDIA A10G, 24GB VRAM) 上微调 CodeLlama-7B 约需 1.5 小时，费用约 **$1.80**。
 
 ---
 
-## 什么时候不该微调
+## 4. LoRA 超参数调优建议
 
-```
-┌─ 你的问题能用 prompt 解决吗？ ──────── 是 → 别微调，先优化 prompt
-│
-└─ 你的问题能用 few-shot 解决吗？ ────── 是 → 别微调，加示例
-    │
-    └─ 你的问题能用 RAG 解决吗？ ──────── 是 → 别微调，先建检索
-        │
-        └─ 都不是 → 微调是你的工具
-```
+**来源：** [Unsloth - LoRA Fine-tuning Hyperparameters Guide](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide)
 
-微调不是万能药。它解决的是**输出行为的结构性问题**（格式、风格、领域知识深度），不是**事实准确性**（那是 RAG 的领地）或**逻辑推理**（那是 prompt 设计的事）。
+| 超参数 | 建议 |
+|--------|------|
+| 学习率 | 标准 LoRA/QLoRA：`2e-4`；强化学习（DPO/GRPO）：`5e-6`；全参数微调：更低 |
+| 训练轮数 | 避免过多轮数以防止过拟合 |
+| `r` 值 | 从 8-16 开始，复杂任务可提高到 256 |
+| `target_modules` | 推荐覆盖所有线性层以获得最佳效果 |
 
 ---
 
-## 下一步
+## 5. 总结
 
-数据怎么准备？清洗、格式、质量检查？参见 [RAG 检索增强 →](../RAG检索增强/index.md) 中的数据处理方法论。
+- **LoRA 可以在使用 4 倍更少显存的情况下达到全参数微调的效果**
+- **target_modules 的选择比 rank 值更关键** — 覆盖所有线性层效果显著优于仅覆盖 Attention 层
+- QLoRA（4-bit）与标准 LoRA（8-bit）在生成质量上无显著差异
+- Hugging Face 的 TRL + PEFT + Transformers 生态提供了开箱即用的微调工具链
+
+---
+
+## 🔗 参考资料
+
+- [How to Fine-Tune LLMs in 2024 with Hugging Face - Philschmid](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
+- [Efficient Fine-Tuning with LoRA for LLMs - Databricks Blog](https://www.databricks.com/blog/efficient-fine-tuning-lora-guide-llms)
+- [LoRA Hyperparameters Guide - Unsloth](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide)
+- [Implementing LoRA From Scratch - Daily Dose of Data Science](https://www.dailydoseofds.com/implementing-lora-from-scratch-for-fine-tuning-llms)
+- [A Beginners Guide to Fine Tuning LLM Using LoRA - Zohaib.me](https://zohaib.me/a-beginners-guide-to-fine-tuning-llm-using-lora)

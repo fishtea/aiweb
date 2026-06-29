@@ -1,246 +1,146 @@
-# 提示词工程：实用配方手册
+# 提示词工程
 
-> **实用优先，不讲理论。** 每个场景讨论一个具体的"你遇到什么问题、怎么解决、为什么有效"。
+> 提示词工程（Prompt Engineering）是设计和优化提示词，以高效利用大语言模型完成各种任务的学科。
 
 ---
 
-## 场景一：你需要结构化输出
+## 1. 什么是提示词工程？
 
-**问题**：模型返回的是自由文本，但你想要 JSON / XML / 表格。
+**来源：** [Prompt Engineering Guide - DAIR.AI](https://www.promptingguide.ai)
 
-**做法**：直接把输出格式写在 prompt 中，用示例锚定格式。
+> *"Prompt engineering is a relatively new discipline for developing and optimizing prompts to efficiently use language models (LMs) for a wide variety of applications and research topics."*
 
-```
-系统：你是一个数据提取助手。请严格按照以下格式输出：
-<response>
-  <extracted>
-    <field name="公司名称">{value}</field>
-    <field name="营收">{value}</field>
-    <field name="年份">{value}</field>
-  </extracted>
-  <confidence>{0.0 - 1.0}</confidence>
-</response>
-```
+**来源：** [Ultimate Guide to Prompt Engineering 2026 - Lakera AI](https://www.lakera.ai/blog/prompt-engineering-guide)
 
-**为什么有效**：XML tag 给模型提供了明确的"出口边界"。模型在生成时能精确知道每个 tag 何时开始、何时结束。JSON 也有效，但 XML 在复杂嵌套时出错率更低。
+> *"Prompt engineering is a soft skill with hard consequences — the quality of your prompts directly affects usefulness, safety, and reliability."*
 
-**进阶技巧**：在 prompt 末尾加一个 tag 前缀作为"启动提示"，模型会自动补全。
-
-```
-输出格式：
-{"name": "...", "revenue": ..., "year": ...}
-
-现在开始，请输出：
-{"name": "
-```
-
-## 场景二：需要多步推理
-
-**问题**：直接问复杂问题，模型走捷径、跳步骤、答错。
-
-**做法**：Chain-of-Thought（思维链）——让模型**显式写出中间步骤**。
-
-```
-用户：一辆车以 60km/h 的速度行驶了 2 小时，然后以 80km/h 的速度行驶了 1.5 小时，总共走了多远？
-
-助手：我先算第一段：60 km/h × 2 h = 120 km
-再算第二段：80 km/h × 1.5 h = 120 km
-总和：120 + 120 = 240 km
-总共行驶了 240 公里。
-```
-
-**变体——Zero-shot CoT**：不需要示例，只需在 prompt 后加一句"让我们一步一步思考"。
-
-```
-用户：一辆车...总共走了多远？让我们一步一步思考。
-```
-
-**变体——Tree-of-Thought**：当问题有多个分支时，让模型同时探索多条推理路径，然后选择最合理的。
-
-## 场景三：需要输出一致性
-
-**问题**：同样的 prompt，模型每次输出不同格式。有些好有些坏。
-
-**做法**：System Prompt（定义角色/规则）+ Few-shot Examples（格式示例）
-
-```
-系统：你是专业的医疗报告摘要助手。你的输出必须遵循以下规则：
-1. 始终使用 SOAP 格式（主观/客观/评估/计划）
-2. 只基于提供的临床记录，不编造信息
-3. 每条陈述标注置信度：[高/中/低]
-
-用户：
-临床记录：[病历文本]
-
-助手：
-Subjective: 患者主诉头痛3天...[高]
-Objective: 体温38.2°C，血压130/85...[高]
-Assessment: 疑似偏头痛...[中]
-Plan: 建议休息，必要时服用布洛芬...[中]
-```
-
-**分隔符技巧**：用 `---` 或 `===` 或 `"""` 分割 prompt 的不同区块，降低模型混淆格式规则和实际内容。
-
-## 场景四：需要控制输出长度
-
-**问题**：模型回答要么太啰嗦，要么太简略。
-
-**做法**：明确长度约束 + 惩罚机制。
-
-```
-# 不好
-"请简要回答"
-
-# 好  
-"请将回答控制在 50 字以内。如果超出，每超出 10 字扣 1 分。"
-
-# 更精确
-"回答格式：用 3 个要点列出，每个要点不超过 15 字。
-示例：
-- 要点一：续航提升20%
-- 要点二：重量减轻15%
-- 要点三：价格降低10%"
-```
-
-**进阶技巧**：用 **"First Token Forcing"**——在 prompt 末尾写上预期回答的开头词，锁定走向。
-
-```
-问题：请分析一下这份财报的亮点。
-
-回答模板：
-2024年Q3财报亮点包括：[
-```
-
-模型会顺着"2024年Q3财报亮点包括："继续生成，而不是另起炉灶。
-
-## 场景五：需要模型使用外部工具
-
-**问题**：模型不知道实时信息，需要调 API。
-
-**做法**：定义工具调用接口，让模型选择工具和参数。
-
-```
-用户：北京的天气怎么样？
-
-助手（内部推理）：
-我需要查询实时天气。可用的工具有：
-- get_weather(city: str, date: str)
-
-调用 get_weather(city="北京", date="2024-06-29")
-
-工具返回：{"temp": 32, "condition": "晴"} 
-
-助手：北京今天 32°C，天气晴朗。
-```
-
-**注意**：工具调用的 prompt 设计核心是**让模型理解每个工具的用途**，而不是让模型知道用哪个工具的格式。工具描述不清，模型就会选错工具。
-
-## 场景六：需要处理长上下文
-
-**问题**：文档太长，模型在中间迷失（Lost in the Middle 现象）。
-
-**做法**：将重要信息放在开头和结尾。
-
-```
-# 正确的信息布局
-[系统指令] ← 最重要的规则放在这里
-[最新/最相关的文档] ← 第二重要
-[背景文档] ← 中间
-[最近一条用户消息] ← 结尾，模型最关注
-[具体问题] ← 紧接在最后
-```
-
-**实证数据**：研究表明，模型对 prompt 前 20% 和后 20% 的内容关注度最高，中间 60% 的准确率会下降 20-40%。
-
-## 场景七：需要减少幻觉
-
-**问题**：模型编造了不存在的信息。
-
-**做法**：约束事实来源 + 要求标注置信度 + 追问引用。
-
-```
-系统：回答时必须基于提供的参考文档。如果你不确定，请明确说"我不知道"。
-不要编造数据、日期或来源。
-引用格式：[文档编号: 段落编号]
-
-如果参考文档中没有相关信息，请回答："未在参考文档中找到相关信息。"
-```
-
-**反直觉技巧**：允许模型说"不知道"实际上会提高它正确回答的概率——因为模型不再被迫编造。
-
-## 场景八：需要模型扮演角色
-
-**问题**：模型回答太"通用"，缺少领域特色。
-
-**做法**：角色 + 语调 + 知识边界。
-
-```
-# 薄弱
-"你是一位老师"
-
-# 有力
-"你有 15 年高中物理教学经验，擅长用生活类比解释抽象概念。
-你的表达风格是：先用一个日常现象引发学生好奇，再揭示背后的物理原理。
-你的知识边界：仅限于高中物理课程内容。
-如果学生问超纲问题，你说'这个我们大学物理课会学到，先记下来'。"
-```
-
-**三层结构**：
-1. **身份背景**（你是谁、有什么经验）
-2. **行为风格**（你怎么表达、怎么互动）
-3. **知识边界**（你知道什么、不知道什么）
-
-## 场景九：需要多语言混合
-
-**问题**：模型在回答中文问题时混入了英文。
-
-**做法**：显式约定语言 + 特殊情况处理。
-
-```
-系统：全程使用中文回答。
-例外情况：
-- 专业术语首次出现时可以标注英文缩写，如"注意力机制（Attention）"
-- 代码、API 名、技术参数保留原文
-- 人名保留原文格式
-```
-
-## 场景十：测试 prompt 质量
-
-**问题**：不知道改动的效果。
-
-**做法**：建立回归测试集。改 prompt 前先跑一遍，改完后对比。
-
-```python
-test_cases = [
-    {"input": "苹果公司2024年的营收是多少？", "expected_contains": ["营收", "数字"]},
-    {"input": "讲个笑话", "expected_does_not_contain": ["作为AI"]},
-    {"input": "1+1等于几？", "expected": "2"},
-]
-
-def test_prompt(prompt_template, cases):
-    passed = 0
-    for case in cases:
-        response = llm.invoke(prompt_template.format(input=case["input"]))
-        if "expected" in case and case["expected"] in response:
-            passed += 1
-        if "expected_contains" in case and all(c in response for c in case["expected_contains"]):
-            passed += 1
-    return passed / len(cases)
-```
+提示词工程不仅关乎"怎么写提示词"，它涵盖了与 LLM 交互和开发的广泛技能：
+- 理解模型能力与局限
+- 设计高效提示结构
+- 控制输出格式、风格和安全
+- 防御对抗性攻击
 
 ---
 
-## 速查表
+## 2. 提示词类型与技巧
 
-| 你要什么 | 用什么技术 | 一句话口诀 |
-|---------|-----------|-----------|
-| 结构化输出 | XML tag + 格式示例 | "画好框，模型往里填" |
-| 多步推理 | Chain-of-Thought | "让模型说过程，不说结论" |
-| 输出一致性 | System + Few-shot | "定规矩 + 给模板" |
-| 控制长度 | 显示约束 + 示例 | "说清楚多长算长" |
-| 使用工具 | 工具定义 + 调用接口 | "给模型说明书，不帮它挑" |
-| 处理长上下文 | 关键信息放两端 | "头和尾最值钱" |
-| 减少幻觉 | 标注来源 + 允许说"不知道" | "有据可查，无据就认" |
-| 角色扮演 | 身份 + 风格 + 边界 | "我是谁、怎么说、不知道什么" |
-| 多语言混合 | 默认语言 + 例外清单 | "定规则前先防例外" |
-| 测试效果 | 回归测试集 | "不改了就跑一遍" |
+**来源：** [Prompt Engineering Guide - DAIR.AI](https://www.promptingguide.ai), [K2View - Prompt Engineering Techniques](https://www.k2view.com/blog/prompt-engineering-techniques)
+
+### 2.1 零样本提示（Zero-shot）
+
+直接给出任务指令，不提供示例。
+
+```
+将以下句子翻译成法语："Hello, how are you?"
+```
+
+### 2.2 少样本提示（Few-shot）
+
+在提示词中包含多个示例，帮助模型理解任务模式和格式。
+
+```
+将英文翻译成法语：
+English: "Good morning" → French: "Bonjour"
+English: "Thank you" → French: "Merci"
+English: "How much does this cost?" → French:
+```
+
+### 2.3 思维链提示（Chain-of-Thought, CoT）
+
+引导模型逐步推理，特别适合数学、逻辑等复杂任务。
+
+**来源：** [OpenAI Prompt Engineering Best Practices](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
+
+```
+问题：一个长方形的长是 8 米，宽是 5 米，它的面积是多少？
+让我们一步步思考：
+面积 = 长 × 宽
+面积 = 8 米 × 5 米
+面积 = 40 平方米
+答案：40 平方米
+```
+
+### 2.4 自一致性（Self-Consistency）
+
+生成多个推理路径并投票选取最一致的答案。在 CoT 基础上进一步提高准确性。
+
+### 2.5 角色提示（Role-based）
+
+为模型分配特定角色，控制输出风格和专业性。
+
+```
+你是一位资深网络安全分析师。请分析以下日志...
+```
+
+### 2.6 提示链（Prompt Chaining）
+
+将复杂任务拆分为多个子提示，逐步执行。适合需要多步处理的任务。
+
+### 2.7 思维树（Tree of Thoughts, ToT）
+
+在每个推理步骤探索多个可能性分支，进行广度优先搜索。
+
+---
+
+## 3. 提示词设计最佳实践
+
+**来源：** [OpenAI Best Practices for Prompt Engineering](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
+
+### ✅ 基本原则
+
+| 原则 | 说明 |
+|------|------|
+| **指令放开头** | 使用 `###` 或 `"""` 分隔指令和上下文 |
+| **具体明确** | 详细描述期望的输出内容、长度、格式、风格 |
+| **分步指令** | 复杂任务拆分为步骤 |
+| **提供示例** | 少样本提示通常优于零样本 |
+| **指定输出格式** | JSON、Markdown、列表等 |
+| **使用分隔符** | 清晰区分提示词的不同部分 |
+
+### ❌ 常见错误
+
+| 错误 | 示例 | 改进 |
+|------|------|------|
+| 模糊指令 | "写个摘要" | "用三句话总结以下文本，突出主要观点和结论" |
+| 缺少约束 | "写一首诗" | "写一首 14 行十四行诗，主题是人工智能" |
+| 未指定格式 | "列出要点" | "用 Markdown 无序列表列出 5 个要点" |
+
+---
+
+## 4. 提示词安全与风险
+
+**来源：** [Lakera AI - Prompt Engineering Guide](https://www.lakera.ai/blog/prompt-engineering-guide)
+
+提示词工程不仅是可用性工具，也涉及安全风险：
+
+| 风险类型 | 描述 |
+|----------|------|
+| **提示注入** | 恶意输入覆盖系统指令 |
+| **提示泄露** | 诱导模型输出系统提示词 |
+| **越狱攻击** | 绕过模型安全限制 |
+| **对抗性提示** | 利用模型漏洞产生有害输出 |
+
+> *"You can often bypass LLM guardrails by simply reframing a question — the line between aligned and adversarial behavior is thinner than most people think."*
+
+---
+
+## 5. 提示词组件
+
+| 组件 | 用途 | 示例 |
+|------|------|------|
+| **系统消息** | 设定行为、语气、角色 | "你是一位乐于助人的法律助手" |
+| **指令** | 指导具体操作 | "用两个要点总结以下文本" |
+| **上下文** | 提供背景信息 | 用户对话记录、文档等 |
+| **示例** | 展示格式/语气 | 少样本/一样本示例 |
+| **输出约束** | 限制输出格式/长度 | Markdown / JSON / 200 字以内 |
+| **分隔符** | 区分提示词各部分 | `### 指令`、`"""`、`——` |
+
+---
+
+## 🔗 参考资料
+
+- [Prompt Engineering Guide - DAIR.AI](https://www.promptingguide.ai)
+- [Ultimate Guide to Prompt Engineering 2026 - Lakera AI](https://www.lakera.ai/blog/prompt-engineering-guide)
+- [Best practices for prompt engineering with the OpenAI API](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
+- [Prompt Engineering Techniques - K2View](https://www.k2view.com/blog/prompt-engineering-techniques)
+- [Advanced 2026 Guide to Prompt Engineering - YouTube](https://www.youtube.com/watch?v=qBlX6FhDm2E)

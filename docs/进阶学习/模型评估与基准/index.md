@@ -1,236 +1,155 @@
-# 模型评估与基准：如何真正读懂一份模型评测报告
+# 模型评估与基准
 
-## 别只看分数
-
-> "Llama-3-70B 在 MMLU 上得了 82%，而 Qwen-2.5-72B 得了 85%。所以 Qwen 更好？"
->
-> **不一定。** 一个基准上的 3% 差距能说明什么，取决于那个基准测的是什么、怎么测的、测试集有多大。
+> 模型评估是 LLM 开发流程中至关重要的一环。标准化的评估基准和工具可以客观比较不同模型的能力，并追踪训练进展。
 
 ---
 
-## 五大核心基准
+## 1. 为什么需要标准化评估？
 
-### MMLU（Massive Multitask Language Understanding）
+**来源：** [EleutherAI - Evaluating LLMs](https://www.eleuther.ai/projects/large-language-model-evaluation)
 
-**测什么**：模型的知识广度——57 个学科（法律、医学、物理、哲学...），约 14,000 道选择题。
+LLM 的性能往往受小实现细节影响，不同代码库之间的结果难以直接比较。为了解决这一问题，EleutherAI 推出了 **LM Evaluation Harness**——一个统一的评估框架。
 
-**格式**：5-shot（给 5 个示例后再考），四选一。
+> *"The LM Evaluation Harness provides a ground-truth location to evaluate new LLMs and saves practitioners time implementing few-shot evaluations repeatedly while ensuring that their results can be compared against previous work."*
 
-```
-示例题目：
-在光合作用中，氧气来源于：
-A. 二氧化碳  B. 水  C. 葡萄糖  D. 光
-
-正确答案：B
-```
-
-**分数的含义**：
-
-| 分数 | 含义 |
-|------|------|
-| 25% | = 随机猜，模型完全不懂 |
-| 50% | 比随机好，但很弱 |
-| 70% | 基础知识扎实，能通过大多数常识测试 |
-| 80% | 相当于一个受过良好教育的大学毕业生 |
-| 90%+ | 领域专家级知识覆盖 |
-| 94-97% | 当前 SOTA，接近人类专家上限 |
-
-**注意**：MMLU 是**知识记忆测试**，不是**推理测试**。一个模型 MMLU 很高不代表它善于推理。
-
-**考题分析**（2024年几个代表性模型）：
-
-| 模型 | MMLU | 5个最弱学科 | 5个最强学科 |
-|-----|------|------------|------------|
-| GPT-4 | 86.4% | 临床知识、解剖学 | 抽象代数、形式逻辑 |
-| Claude 3.5 Sonnet | 88.7% | 营养学、医学 | 数论、拓扑学 |
-| Gemini Ultra | 90.0% | 法律、经济 | 物理、化学 |
-| Llama-3-70B | 82.0% | 哲学、社会学 | 计算机科学、数学 |
-| Qwen-2.5-72B | 85.3% | 历史、法律 | 物理、化学（中文） |
-
-**规律**：英文训练的模型在文科类表现波动较大；数学和计算机科学是所有模型表现最稳定的学科。
+**核心优势：**
+- 同一提示词、评分和报告标准
+- YAML 配置 + commit hash 完全可复现
+- 支持 HuggingFace、vLLM、GGUF、OpenAI 兼容 API
+- 已被 NVIDIA、Cohere、Nous Research 及 Open LLM Leaderboard 采用
 
 ---
 
-### HumanEval（代码生成能力）
+## 2. 核心 Benchmark
 
-**测什么**：模型能否正确生成函数——给出函数签名和 docstring，模型补全函数体。
+**来源：** [LLM Eval Harness: Benchmark Any Model on 200+ Tasks (2026 Guide)](https://www.morphllm.com/llm-eval-harness)
 
-**格式**：164 道 Python 编程题，pass@1 和 pass@10。
-
-```
-题目：
-def unique_elements(lst):
-    """Return a sorted list of unique elements."""
-    # 模型补全这里
-
-期望输出：
-    return sorted(set(lst))
-```
-
-**分数的含义**：
-
-| pass@1 | 含义 |
-|--------|------|
-| 20-40% | 能写简单的辅助函数，但复杂逻辑不可靠 |
-| 40-60% | 能处理中等复杂的算法，但边缘情况经常出错 |
-| 60-80% | 生产级代码能力，可以辅助日常开发 |
-| 80-90%+ | 优秀，能处理大部分 LeetCode 中等难度问题 |
-
-**进阶指标——SWE-bench Verified**（更真实的编程测试）：
-
-| 模型 | SWE-bench Verified | 真实场景能力 |
-|-----|:-----------------:|------------|
-| GPT-4 | 18% | 偶尔能修 bug |
-| Claude 3.5 Sonnet | 49% | 能处理复杂的 PR 修改 |
-| Devin | ~30% | 专项工具但受限 |
-| 人类工程师 | ~80%+ | 基准线 |
-
-**注**：SWE-bench 的分数普遍低，不是因为题难，而是因为数据集中的 bug 修复任务需要**精准定位和修改**——比从零写代码难得多。
+| Benchmark | 测试内容 | 格式 | 典型用途 |
+|-----------|---------|------|----------|
+| **MMLU** | 57 个学科通用知识 | 4 选 1 选择题 | 通用能力评估 |
+| **MMLU-Pro** | 更难的 MMLU（10 选项 + 推理） | 10 选 1 | Open LLM Leaderboard v2 |
+| **HellaSwag** | 常识推理 | 4 选 1 补全 | 语言理解基线 |
+| **ARC-Challenge** | 小学科学题（困难版） | 4 选 1 | 推理能力 |
+| **GSM8K** | 小学数学应用题 | 生成式 | 数学推理 |
+| **GPQA** | 博士级科学问题 | 4 选 1 | 专家知识 |
+| **TruthfulQA** | 常见误解 | MC + 生成 | 事实准确性 |
+| **BBH** | 23 个 BIG-Bench 困难任务 | 混合 | 挑战性推理 |
+| **IFEval** | 指令跟随 | 生成式 + 评分 | 指令遵从度 |
+| **HumanEval** | 代码生成 | 生成式 | 编程能力 |
 
 ---
 
-### GSM8K（数学推理）
+## 3. LM Evaluation Harness 使用指南
 
-**测什么**：数学应用题。8,500 道小学数学题（但简单不代表容易——它们需要多步推理）。
+### 3.1 安装
 
-```
-题目：
-小明买了 8 个苹果，每个苹果 3 元，给了收银员 50 元。
-找零多少钱？
+```bash
+# 基础安装（仅 API 评估）
+pip install lm-eval
 
-需要步骤：
-1. 总价 = 8 × 3 = 24 元
-2. 找零 = 50 - 24 = 26 元
-答案：26 元
-```
+# 含 HuggingFace 支持
+pip install "lm-eval[hf]"
 
-**分数的含义**：
+# 含 vLLM 支持
+pip install "lm-eval[vllm]"
 
-| 分数 | 含义 |
-|------|------|
-| 30% | 简单算术都做不好 |
-| 50-60% | 能处理两步推理 |
-| 70-80% | 能处理常规数学题 |
-| 85-90%+ | 达到初中数学水平 |
-| 95%+ | 接近人类 |
-
-**容易踩的坑**：
-- GSM8K 分数高≠模型懂数学——有些模型靠"模式匹配"而不是真正推理答对
-- GSM8K 的测试集有数据泄漏风险（训练集里可能包含了类似题目）
-- 用 **GSM8K Hard** 或 **MATH** 做更严格的测试
-
----
-
-### Chatbot Arena（人类偏好排名）
-
-**测什么**：**人类觉得谁的答案更好**。不是选择题，是盲测对战。
-
-**格式**：
-```
-用户提问 → 模型 A 和模型 B 各给出答案 → 用户盲选谁更好
-（用户不知道哪个答案来自哪个模型）
-→ 累积数百万次投票 → Elo 排名
+# 完整安装
+pip install "lm-eval[all]"
 ```
 
-**排名示例（2025年1月数据）**：
+### 3.2 运行基准测试
 
-| 排名 | 模型 | Elo 分数 | 95%置信区间 |
-|-----|------|:--------:|:----------:|
-| 1 | GPT-4o | 1373 | ±5 |
-| 2 | Claude 3.5 Sonnet | 1358 | ±6 |
-| 3 | Gemini 2.0 Pro | 1330 | ±8 |
-| 4 | Llama-3.1-405B | 1310 | ±7 |
-| 5 | Qwen-2.5-72B | 1295 | ±10 |
-| ... | ... | ... | ... |
-| 15 | Mixtral 8x7B | 1180 | ±9 |
-
-**Arena 的优点**：它测的是**真实用户偏好**，不是人造测试集。分数差异超过置信区间才代表"真的更好"。
-
-**Arena 的缺点**：偏好受**写作风格**影响很大——用户更喜欢看起来"聪明"的回答，而不是更准确的回答。
-
----
-
-### MT-Bench（多轮对话能力）
-
-**测什么**：模型在**多轮对话**中是否保持一致性。
-
-**格式**：80 道题，每道包含 2-3 轮追问。用 GPT-4 做裁判给分（1-10 分）。
-
-```
-第一轮："解释量子计算的基本原理。"
-第二轮："量子比特和经典比特的区别是什么？"
-第三轮："如果我要入门量子计算，应该从哪里开始学？"
+**评估 GPT-2 的 HellaSwag：**
+```bash
+lm-eval \
+  --model hf \
+  --model_args pretrained=gpt2,dtype=float32 \
+  --tasks hellaswag \
+  --output_path results/gpt2/
 ```
 
-**典型得分**：
-
-| 模型 | MT-Bench |
-|-----|:--------:|
-| GPT-4 | 9.18 |
-| Claude 3 Opus | 8.97 |
-| GPT-3.5 | 7.94 |
-| Llama-2 70B | 6.80 |
-
-**> 7 分**：多轮对话一致性可接受  
-**> 8 分**：能处理复杂的深入追问  
-**> 9 分**：几乎不会忘记前文，能自然衔接多轮对话
-
----
-
-## 对比阅读指南：看完一篇 benchmark 你要问自己 5 个问题
-
+**评估 Llama 3.1 8B 的多项能力：**
+```bash
+lm-eval \
+  --model hf \
+  --model_args pretrained=meta-llama/Meta-Llama-3.1-8B-Instruct,dtype=bfloat16 \
+  --tasks mmlu,hellaswag,arc_challenge,gsm8k \
+  --num_fewshot 5 \
+  --batch_size auto \
+  --output_path results/llama-3.1-8b/
 ```
-□ 1. 这个基准测的是什么能力？
-   → MMLU 测知识，HumanEval 测代码，GSM8K 测推理
-   → 一个模型在某个基准上得高分，不代表它在其他方面也强
 
-□ 2. 这个基准的测试方式是怎样的？
-   → 选择题？生成题？对抗性测试？
-   → 选择题更容易"猜对"（4选1，25%是底线）
+### 3.3 使用 vLLM 后端（更快）
 
-□ 3. 数据集有没有泄漏风险？
-   → 如果模型在训练阶段已经"见过"测试题，分数就不可信
-   → 检查论文中是否声明了"decontamination"
+```bash
+lm-eval \
+  --model vllm \
+  --model_args pretrained=meta-llama/Meta-Llama-3.1-8B-Instruct,dtype=auto,gpu_memory_utilization=0.8 \
+  --tasks mmlu,hellaswag,gsm8k \
+  --num_fewshot 5
+```
 
-□ 4. 置信区间有多大？
-   → GPT-4 MMLU 86.4% ± 1.2% → 真实区间 85.2%-87.6%
-   → 两个模型的分数差距如果小于置信区间的叠加，可能不显著
+### 3.4 通过 OpenAI 兼容 API 评估
 
-□ 5. 这个分数和我的实际使用场景有什么关系？
-   → 你要做代码助手 → 关注 HumanEval/SWE-bench
-   → 你要做客服机器人 → 关注 Chatbot Arena/MT-Bench
-   → 你要做考试助手 → 关注 MMLU
+```bash
+lm-eval \
+  --model local-chat-completions \
+  --model_args model=meta-llama/Meta-Llama-3.1-8B-Instruct,base_url=http://localhost:8000/v1/chat/completions,num_concurrent=32 \
+  --tasks gsm8k,ifeval \
+  --apply_chat_template
 ```
 
 ---
 
-## 建立你自己的评估体系
+## 4. 评估方法论
 
-基准分数是**参考**。你的生产环境才是**裁决者**。
+### 4.1 评分方式
 
-```python
-class CustomEvaluator:
-    """针对你的场景定制评估。"""
-    
-    def __init__(self):
-        self.metrics = []
-    
-    def add_metric(self, name, func, weight=1.0):
-        self.metrics.append({"name": name, "func": func, "weight": weight})
-    
-    def evaluate(self, model, test_cases):
-        scores = {}
-        for metric in self.metrics:
-            result = metric["func"](model, test_cases)
-            scores[metric["name"]] = result * metric["weight"]
-        return scores
+| 方式 | 说明 | 适用任务 |
+|------|------|----------|
+| **Loglikelihood** | 基于 token 概率评分 | MMLU、HellaSwag（需模型输出 logprobs） |
+| **Generative** | 模型生成文本，提取答案评分 | GSM8K、HumanEval、IFEval |
 
-# 示例：客服场景
-evaluator = CustomEvaluator()
-evaluator.add_metric("准确率", accuracy_on_golden_set, weight=0.4)
-evaluator.add_metric("回答长度", length_penalty(max_chars=500), weight=0.1)
-evaluator.add_metric("语气友好度", tone_classifier_score, weight=0.2)
-evaluator.add_metric("引用准确率", citation_check, weight=0.3)
+### 4.2 结果解读
+
+```json
+{
+  "results": {
+    "hellaswag": {
+      "acc": 0.6153,
+      "acc_stderr": 0.0049
+    },
+    "mmlu": {
+      "acc": 0.6874,
+      "acc_stderr": 0.0031
+    }
+  }
+}
 ```
 
-**关键原则**：权重应该基于你的业务价值，而不是基准分数。
+- `acc`：准确率
+- `acc_stderr`：标准差（评估不确定性）
+- `--log_samples`：保存每个输入/输出到 JSONL，便于调试
+
+---
+
+## 5. MMLU-Pro：更难的 MMLU
+
+**来源：** [MMLU-Pro - EleutherAI GitHub](https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/mmlu_pro/README.md)
+
+MMLU-Pro 是 MMLU 的增强版本，主要改进：
+
+- **选项从 4 个扩展到 10 个**，减少猜测准确率
+- **增加更多推理型问题**，减少纯知识记忆
+- **提示词敏感性从 4-5% 降低到 2%**，评估更稳定
+- **思维链（CoT）在 MMLU-Pro 上比直接回答效果更好**
+
+---
+
+## 🔗 参考资料
+
+- [LLM Eval Harness Guide - Morphllm](https://www.morphllm.com/llm-eval-harness)
+- [EleutherAI - Evaluating LLMs](https://www.eleuther.ai/projects/large-language-model-evaluation)
+- [LM Evaluation Harness GitHub](https://github.com/EleutherAI/lm-evaluation-harness)
+- [MMLU-Pro Paper](https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/mmlu_pro/README.md)
+- [NVIDIA NeMo LM Harness Evaluation](https://docs.nvidia.com/nemo/microservices/25.8.0/evaluate/evaluation-types/lm-harness.html)

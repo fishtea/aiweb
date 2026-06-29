@@ -1,78 +1,74 @@
-# 模型选购指南：你要做 X 任务，该选哪个模型？
+# 模型专区
 
-> 这不是技术评测，是给你的购物清单。2025 年的大模型市场比超市货架还挤，每家都宣称自己"最强"。别信广告，看需求。
-
----
-
-## 快速决策表
-
-| 你的任务 | 首选模型 | 备选方案 | 上下文 | 开源？ | 成本 |
-|----------|----------|----------|--------|--------|------|
-| 日常聊天、写作辅助 | **GPT-4o** | Claude 3.5 Sonnet | 128K | ❌ | 中等 |
-| 长文档分析、合同审查 | **Claude 3 Opus** | Gemini 1.5 Pro | 200K | ❌ | 高 |
-| 代码生成、Debug | **Claude 3.5 Sonnet** | GPT-4o / DeepSeek Coder | 200K | ❌/✅ | 中低 |
-| 数学推理、逻辑题 | **DeepSeek R1** | GPT o1 / o3 | 128K | ✅ (MIT) | 极低 |
-| 中文任务、本地部署 | **Qwen 2.5 (72B)** | DeepSeek V3 | 128K | ✅ (Apache 2.0) | 极低 |
-| 自己跑开源模型 | **LLaMA 3 (70B)** | Mistral 8x22B | 128K | ✅ (自定义) | 按硬件 |
-| 图像生成 | **FLUX.1** | SD3.5 / Midjourney | - | ✅ (部分) | 低-中 |
-| 多模态（图+文+音） | **Gemini 2.0 Flash** | GPT-4o | 1M | ❌ | 低 |
-| 低成本推理 API | **DeepSeek V3** | Gemini 2.0 Flash | 128K | ✅ | **极低** |
-| Agent / 工具调用 | **Claude 3.5 Sonnet** | GPT-4o | 200K | ❌ | 中 |
-| 翻译、改写 | **GPT-4o mini** | Qwen 2.5 (7B) | 128K | ❌/✅ | 极低 |
-| 科研论文阅读 | **Claude 3 Opus** | Gemini 1.5 Pro | 200K / 1M | ❌ | 高 |
+> 精选主流大语言模型与生成式AI模型，为您提供架构解析、性能对比与使用指南。
 
 ---
 
-## 按场景深度分析
+## 为什么需要了解这些模型？
 
-### 🗣️ 日常对话与创意写作
-
-**推荐：GPT-4o > Claude Sonnet > Gemini Flash**
-
-GPT-4o 在对话流畅度、语气把控和创意发散上仍然是标杆。Claude Sonnet 写作更有"文学感"，但有时候过于规矩。Gemini Flash 速度快但深度略逊。
-
-**成本建议**：日常用 GPT-4o mini 或 Gemini Flash 就够，省钱且快。
-
-### 💻 编程与软件开发
-
-**推荐：Claude 3.5 Sonnet > DeepSeek Coder V2 > GPT-4o**
-
-Claude 在生成完整代码文件、重构和调试上表现突出。DeepSeek Coder 性价比极高——API 价格只有 GPT-4 的 1/20。GPT-4o 在理解和修改已有代码库方面不错。
-
-**开源方案**：DeepSeek Coder V2 (236B MoE) 本地部署需要 2× A100，但 API 调用极便宜。
-
-### 📄 长文档处理
-
-**推荐：Gemini 1.5 Pro (1M) > Claude 3 Opus (200K) > GPT-4o (128K)**
-
-Gemini 1.5 Pro 的 100 万 token 上下文是目前无敌的——一次塞进整套《三体》三部曲不是问题。Claude 200K 也够用，而且检索更精准。
-
-**注意**：长上下文 ≠ 长上下文利用能力。大多数模型在超过 64K 后注意力会稀释。
-
-### 🧮 数学推理
-
-**推荐：DeepSeek R1 > GPT o1 > Gemini 2.0**
-
-DeepSeek R1 是开源推理模型之首。o1 的"思考链"也很强但极其缓慢且贵。R1 在 MATH 基准上接近 o1，价格只有 1/30。
-
-### 🌏 中文任务
-
-**推荐：Qwen 2.5 (72B) > DeepSeek V3 > GPT-4o**
-
-Qwen 对中文理解深度（成语、古诗、梗）远超所有西方模型。DeepSeek V3 在技术文档翻译上也很强。
+2024–2025 年，AI 模型生态快速演进。从闭源商业模型到开源权重模型，从纯文本模型到多模态模型，不同模型有不同的设计哲学、架构特点和最佳使用场景。本专区为您梳理当前最具影响力的模型家族。
 
 ---
 
-## 一句话总结
+## 模型总览
 
-```
-要做 → 聊天     → 闭源选 GPT-4o，开源选 Qwen 72B
-要做 → 代码     → 闭源选 Claude，开源选 DeepSeek Coder
-要做 → 长文     → Gemini 1.5 Pro
-要做 → 推理     → DeepSeek R1
-要做 → 省钱     → DeepSeek V3 API
-要做 → 画图     → FLUX + ComfyUI
-要做 → 省心     → 随便选，现在模型都够强
-```
+| 模型家族 | 开发者 | 架构特点 | 核心优势 | 适合场景 |
+|---------|--------|---------|---------|---------|
+| **GPT 系列** | OpenAI | Decoder-only Transformer | 广泛知识、强大的推理和多模态能力 | 通用对话、内容生成、代码、图像理解 |
+| **Claude 系列** | Anthropic | Transformer + Constitutional AI | 安全性、长上下文、编程能力 | 企业级应用、代码、安全敏感的对话 |
+| **LLaMA 系列** | Meta | Decoder-only Transformer (GQA) | 最强的开源模型生态 | 自托管部署、微调、研究 |
+| **DeepSeek** | 深度求索 | MoE + Multi-head Latent Attention | 极高的性价比、强推理能力 | 数学、编程、推理任务、经济高效部署 |
+| **Gemini 系列** | Google DeepMind | 原生多模态 Transformer | 最全面的多模态理解 | 跨模态任务、Google 生态集成 |
+| **Qwen 系列** | 阿里巴巴 | Dense / MoE 双路线 | 多语言、代码、数学能力均衡 | 中文场景、通用任务、开源部署 |
+| **Stable Diffusion** | Stability AI | MMDiT (扩散 Transformer) | 开源图像生成、社区生态 | 文本到图像生成、创意设计 |
+| **Mixtral 系列** | Mistral AI | Sparse MoE | 高效推理、开源 | 推理效率优先的场景、自部署 |
 
-> **最终建议**：别绑定一家。搭建一个"模型路由"方案——简单任务走便宜模型，复杂任务走旗舰模型。聪明人用工具，聪明团队用组合。
+---
+
+## 选择指南
+
+### 按任务选择
+
+| 任务 | 推荐模型 | 理由 |
+|------|---------|------|
+| **通用对话/写作** | GPT-4o, Claude Sonnet | 中文英文均强，风格灵活 |
+| **编程/代码生成** | Claude Sonnet, GPT-4o, DeepSeek-Coder | SWE-Bench 前列 |
+| **数学/科学推理** | DeepSeek R1, GPT-4o, Gemini Pro | 具备深度推理能力 |
+| **图像生成** | Stable Diffusion 3, FLUX | 最好的开源方案 |
+| **中文任务** | Qwen, DeepSeek | 原生中文训练数据 |
+| **本地部署/隐私** | LLaMA 3, Qwen 2.5, DeepSeek | 开源权重可自部署 |
+| **长文档分析** | Claude Sonnet (200K), Gemini (1M+) | 超长上下文窗口 |
+
+### 按硬件预算选择
+
+| 预算 | 推荐方案 |
+|------|---------|
+| **API 调用** | GPT-4o（最强综合），DeepSeek（最经济） |
+| **消费级 GPU (8-16GB)** | LLaMA 3 8B, Qwen 2.5 7B, Mistral 7B |
+| **专业 GPU (24GB+)** | LLaMA 3 70B, Mixtral 8x7B, Qwen 2.5 72B |
+| **多 GPU 集群** | LLaMA 3 405B, DeepSeek V3, Qwen2.5-Max |
+
+---
+
+## 快速链接
+
+- [GPT 系列](/模型专区/GPT系列) — OpenAI 的旗舰模型家族
+- [Claude 系列](/模型专区/Claude系列) — Anthropic 的安全导向模型
+- [LLaMA 系列](/模型专区/LLaMA系列) — Meta 的开源主力
+- [DeepSeek](/模型专区/DeepSeek) — 中国黑马，极致性价比
+- [Gemini 系列](/模型专区/Gemini系列) — Google 的原生多模态
+- [Qwen 系列](/模型专区/Qwen系列) — 阿里的全能选手
+- [Stable Diffusion](/模型专区/StableDiffusion) — 开源的图像生成标杆
+- [Mixtral 系列](/模型专区/Mixtral系列) — Mistral 的高效 MoE
+
+---
+
+**参考资料：**
+- [OpenAI GPT-4 Technical Report (arXiv:2303.08774)](https://arxiv.org/abs/2303.08774)
+- [Anthropic Claude Models Guide](https://www.codegpt.co/blog/anthropic-claude-models-complete-guide)
+- [Meta Llama 3 Official Blog](https://ai.meta.com/blog/meta-llama-3/)
+- [DeepSeek-V3 GitHub](https://github.com/deepseek-ai/deepseek-v3)
+- [Google Gemini API Models](https://ai.google.dev/gemini-api/docs/models)
+- [Qwen2.5 Technical Report (arXiv:2412.15115)](https://arxiv.org/abs/2412.15115)
+- [Stable Diffusion 3 Research Paper](https://stability.ai/news-updates/stable-diffusion-3-research-paper)
+- [Mixtral of Experts Blog](https://mistral.ai/news/mixtral-of-experts)

@@ -1,75 +1,104 @@
-# 进阶学习：从爱好者到专业人士的五个跨越
+# 进阶学习
 
-> 你能用 API 调出一个聊天窗口——这谁都会。真正的分水岭在于：当模型答错时，你能否定位根因，而不是换一个 prompt 重试三遍。
-
-## 五个关键挑战
-
-下面这五个能力，是业余玩家和专业工程师之间的硬分界线。逐一攻克它们，你就从"会调 API"变成了"能造系统"。
+> 本页面整理了机器学习工程师进阶所需的核心知识与技能路线，涵盖 MLOps、生产化部署、模型微调、RAG、Agent 等前沿方向。
 
 ---
 
-### 1. 适应性 Adaptation
+## 🎯 学习路线概览
 
-**业余做法**：换模型。GPT-4 不行就换 Claude，Claude 不行就等下一代。
+从基础到进阶的典型成长路径：
 
-**专业做法**：对同一个模型做针对性改造。LoRA 微调、RAG 知识注入、prompt 策略优化——用工程手段把一个"差不多"的模型变成"刚刚好"的解决方案。
-
-等你学完本节，你会知道：
-- 什么时候该微调，什么时候该 RAG（它们不是互斥的）
-- 如何用 50 条高质量样本把 7B 模型变成领域专家
-- 为什么全量微调在绝大多数场景下都是浪费钱
-
-### 2. 检索 Retrieval
-
-**业余做法**：把所有文档塞进 prompt 的 system message 里，然后抱怨"上下文窗口不够"。
-
-**专业做法**：把外部知识做成可检索的索引。文档分块 → 向量化 → 语义搜索 → 动态注入。
-
-关键认知转变：**LLM 不需要知道所有东西，它只需要知道去哪里找，以及如何把找到的信息组织成答案。** 你设计的不是一个问答系统，而是一个检索-生成流水线。
-
-### 3. 自主性 Agency
-
-**业余做法**：一问一答，人类在循环中做所有决策。
-
-**专业做法**：给模型工具（搜索、计算器、代码执行器、API 调用），让它自己决定调用顺序。这就是 Agent。
-
-代理人模式和普通 LLM 调用的区别，就像自动驾驶和定速巡航的区别。你不再控制每一步，而是定义目标、边界和可用资源，让模型自己走完路径。
-
-### 4. 沟通 Communication
-
-**业余做法**：把所有要求写进一段 prompt，希望模型能猜对。
-
-**专业做法**：把沟通拆成三个层级——
-- **System Prompt**：角色、边界、行为准则（不变层）
-- **Few-shot Examples**：格式示范、推理模式（示例层）
-- **User Message**：具体任务（变化层）
-
-专业 prompt engineer 的工作不像是"写指令"，更像是"设计协议"。你的 prompt 是 API 文档，不是心里话。
-
-### 5. 度量 Measurement
-
-**业余做法**："感觉这次回答好了"。
-
-**专业做法**：你必须能回答这三个问题：
-- 这个改动是**真的变好了**，还是**碰巧通过了我的测试用例**？
-- 模型的准确率是 **70% 还是 90%**？差了 20 个百分点意味着什么？
-- 你的评估指标和**用户实际体验**有多大差距？
-
-没有度量就没有优化。本节教你如何建立评估流水线，用数据驱动模型改进。
+1. **机器学习工程基础** — 数据预处理、模型开发、评估
+2. **深度学习与 NLP** — Transformer、预训练模型、Prompt Engineering
+3. **模型微调技术** — LoRA、QLoRA、PEFT 参数高效微调
+4. **检索增强生成 (RAG)** — 向量数据库、检索管道、混合搜索
+5. **AI Agent 智能体** — ReAct 模式、LangChain/LangGraph、工具调用
+6. **MLOps 与生产化** — CI/CD、模型监控、A/B 测试
+7. **模型评估与基准** — MMLU、HumanEval、lm-eval-harness
 
 ---
 
-## 学习路径建议
+## 📚 推荐资源
 
-如果你时间有限，按优先级排序：
+### 1. MLOps 完整学习路线
+
+**来源：** [Coursera MLOps Learning Roadmap (2026)](https://www.coursera.org/resources/mlops-learning-roadmap)
+
+- MLOps 将 DevOps 理念（自动化、CI/CD、基础设施即代码、监控）扩展到 ML 特有的需求：数据依赖、实验追踪、模型漂移和重训练
+- 推荐学习路径：Python 基础 → ML 基础 → MLOps 工具链 → 云平台实践
+- 关键技能：自动化流水线、可复现性、模型治理
+
+### 2. 全栈机器学习工程师路线图
+
+**来源：** [Advanced Machine Learning Engineer Roadmap 2024 - GitHub](https://github.com/farukalamai/advanced-machine-learning-engineer-roadmap-2024)
+
+- 涵盖数据收集与预处理、模型开发、部署和维护的全流程技能
+- 重点工具：NumPy/Pandas（数据处理）、Matplotlib/Seaborn（可视化）、Scikit-learn/TensorFlow/PyTorch（建模）
+- 进阶方向：MLOps、深度学习、NLP、计算机视觉
+
+### 3. Chip Huyen 的 MLOps 指南
+
+**来源：** [MLOps Guide - Huyenchip.com](https://huyenchip.com/mlops)
+
+- 从入门到高级的系统化材料集合
+- 强调 ML + 工程基础的重要性，包括强化学习、NLP 基础
+- 生产化 ML 的挑战和对策
+- 2025 年更新：正在开发 ML/AI 工程最小可行课程
+
+### 4. 进阶 MLOps 路线图 (2024)
+
+**来源：** [MLOps Roadmap 2024 - Maria Vechtomova](https://www.marvelousmlops.io/p/mlops-roadmap-2024)
+
+- 构建 MLOps 平台所需的多元化技能
+- 包括：容器化（Docker）、编排（Kubernetes）、特征存储、模型注册中心
+- 强调实验追踪（MLflow）、数据版本控制（DVC）、监控（Prometheus/Grafana）
+
+---
+
+## 🛠️ 进阶技能树
 
 ```
-微调技术 → RAG → Agent → 评估 → Prompt工程
-(立竿见影)  (高频场景)  (进阶)  (度量)  (基础但常被高估)
+├── 数据处理
+│   ├── 大规模数据管道 (Spark, Ray)
+│   ├── 特征工程与特征存储 (Feast)
+│   └── 数据版本控制 (DVC, LakeFS)
+├── 模型开发
+│   ├── 参数高效微调 (LoRA, QLoRA, Adapter)
+│   ├── 检索增强生成 (RAG)
+│   ├── AI Agent 框架 (LangChain, LangGraph, CrewAI)
+│   └── 提示词工程 (CoT, Few-shot, ReAct)
+├── 生产化部署
+│   ├── 模型服务 (vLLM, TGI, Triton)
+│   ├── 容器化与编排 (Docker, K8s)
+│   └── CI/CD for ML (GitHub Actions, ArgoCD)
+├── 监控与运维
+│   ├── 模型监控 (MLflow, Prometheus)
+│   ├── 漂移检测 (Evidently, WhyLabs)
+│   └── A/B 测试与实验管理
+└── 评估与基准
+    ├── LM Evaluation Harness
+    ├── MMLU/MMLU-Pro
+    ├── HumanEval/GSM8K
+    └── 自定义评估管道
 ```
-
-但如果你只做一件事：**先学会如何评估模型输出。** 没有度量，后面所有技术都是盲打。
 
 ---
 
-**下一步**：[模型微调技术 →](./模型微调技术/index.md)
+## 📖 本目录内容
+
+| 子页面 | 描述 |
+|--------|------|
+| [模型微调技术](/进阶学习/模型微调技术/) | LoRA、QLoRA、PEFT 及 Hugging Face TRL 实战 |
+| [RAG 检索增强](/进阶学习/RAG检索增强/) | 检索增强生成架构、向量搜索、重排序 |
+| [Agent 智能体](/进阶学习/Agent智能体/) | ReAct 模式、LangChain/LangGraph Agent 开发 |
+| [提示词工程](/进阶学习/提示词工程/) | 零样本/少样本、思维链、自一致性等技术 |
+| [模型评估与基准](/进阶学习/模型评估与基准/) | MMLU、LM Evaluation Harness、评估方法论 |
+
+---
+
+## 🔗 参考资料
+
+- [Coursera MLOps Learning Roadmap](https://www.coursera.org/resources/mlops-learning-roadmap)
+- [Advanced Machine Learning Engineer Roadmap](https://github.com/farukalamai/advanced-machine-learning-engineer-roadmap-2024)
+- [MLOps Guide - Huyenchip.com](https://huyenchip.com/mlops)
+- [MLOps Roadmap 2024](https://www.marvelousmlops.io/p/mlops-roadmap-2024)

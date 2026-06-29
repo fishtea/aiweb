@@ -1,212 +1,151 @@
-# Stable Diffusion：图像生成的乐高世界
+# Stable Diffusion — Stability AI
 
-> 它不是一个模型，是一个生态系统。
-> 就像 Linux 是操作系统，Stable Diffusion 是图像生成领域的"开源基石"。
-
----
-
-## 一条提示词生成的背后：管线拆解
-
-当你输入 `"a cat wearing a top hat, digital art"` 并点击生成时，背后发生的远比看上去复杂。
-
-```
-Text Encoder          UNet (Diffusion)         VAE Decoder
-┌──────────┐         ┌──────────────────┐     ┌──────────┐
-│ "a cat   │──768D──→│ 去噪过程          │────→│ 像素解码 │────→ 🖼️
-│ wearing  │ 向量    │ 50步 × 去噪     │     │ 512→512 │     成品图
-│ a hat"   │         │ 每一步都是残差    │     │ 潜→像素  │
-└──────────┘         └──────────────────┘     └──────────┘
-```
-
-### 第一步：文本编码器（CLIP / T5）
-
-提示词 → 768 维向量（SD1.5）或 4096 维向量（SD3/FLUX）。
-
-**提示词工程不是对模型说的，是对文本编码器说的**。好的提示词能让编码器产生更好的条件向量。这就是为什么"前置词"（如照片级、大师作品、8K）有效——它们不是改变模型，而是帮编码器更精确地定位语义空间。
-
-### 第二步：UNet（扩散网络）
-
-这是核心。一个 U 形残差网络，**逐步从纯噪声中还原出图像**。
-
-**50 步的动画**（简化版）：
-```
-Step 0:  纯噪声（完全随机）
-Step 10: 隐约看到轮廓（猫的形状）
-Step 20: 细节开始浮现（毛、帽子）
-Step 30: 颜色和光影
-Step 40: 纹理和边缘锐化
-Step 50: 成品
-```
-
-每一步都在"往更接近提示词的方向调整"。采样器（Sampler）决定如何去噪——DPM++ 2M Karras、Euler a、DDIM……不同采样器速度和质量差异很大。
-
-### 第三步：VAE Decoder
-
-UNet 工作在"潜空间"（压缩后的特征空间），VAE Decoder 把它解码回全尺寸像素图。
-
-**理解"潜空间"**：
-```
-像素空间的 512×512×3 = 786,432 个值
-   ↓ 编码器压缩
-潜空间的 64×64×4 = 16,384 个值（减少 48 倍）
-   ↑ VAE Decoder 解码
-回到像素空间
-```
-
-这使扩散过程在速度快 48 倍的潜空间进行。
+> Stable Diffusion（稳定扩散）是由 Stability AI 主导开发的开源文本到图像生成模型系列。从 2022 年的 SD 1.0 发展到 2024 年的 SD3，Stable Diffusion 系列是开源图像生成领域的标杆。
 
 ---
 
-## 模型代际：SD1.5 → SDXL → SD3 → FLUX
+## 模型演进
 
-### SD1.5（2022）— 开源引爆点
-
-- **核心规格**：860M 参数，512×512 输出
-- **意义**：第一个可以免费下载的开源图像生成模型
-- **弱点**：512 分辨率偏低，手指画不好，文字基本是乱码
-
-**在 2025 年还用 SD1.5 吗？**
-| 用例 | 建议 |
-|------|------|
-| LoRA 训练（大量资源） | ✅ 还是值得，生态最成熟 |
-| 高质量出图 | ❌ 换 SDXL 或 FLUX |
-| 低显存（6GB） | ✅ SD1.5 最低需求 |
-| 视频生成（AnimateDiff） | ✅ 兼容性最好 |
-
-### SDXL（2023）— 分辨率跃进
-
-- **核心规格**：2.6B 参数（基础模型）+ 6B 细化模型，**1024×1024** 输出
-- **创新**：两个模型级联（base + refiner），更好的构图，更好的文字理解
-- **弱点**：需要 8GB+ VRAM，速度比 SD1.5 慢
-
-**SDXL vs SD1.5**：
-```
-SD1.5 生成的猫：                    SDXL 生成的猫：
-┌──────────────────┐               ┌──────────────────┐
-│  一只模糊的猫    │               │  清晰的猫，光照  │
-│  背景简化        │               │  背景有层次      │
-│  512×512         │               │  1024×1024       │
-│  偶尔多一条腿    │               │  解剖学基本正确  │
-└──────────────────┘               └──────────────────┘
-```
-
-### SD3（2024.6）— 文字能力突破
-
-- **核心规格**：8B 参数（MMDiT 架构），支持 1024×1024
-- **创新**：**理解文字**——可以在图中写出正确的文字
-- **问题**：社区反馈"过于卡通、审美不如 SDXL 和 FLUX"
-
-### FLUX.1（2024.8）— 当前最强开源模型
-
-Black Forest Labs（原 Stability AI 核心团队）出品。
-
-| 版本 | 参数 | 速度 | 质量 | 开源 |
-|------|------|------|------|------|
-| FLUX.1-dev | 12B | 慢 | 🏆 顶级 | ✅ 非商业 |
-| FLUX.1-schnell | 12B | **极快** | 🏆 顶级（稍降） | ✅ Apache 2.0 |
-| FLUX.1-pro | 12B | 快 | 🏆 顶级 | ❌ API |
-
-**FLUX 的核心优势**：
-- 手部解剖学明显优于 SD3
-- 文字成功率极高
-- 对复杂提示的理解力强
-- 美学品质接近 Midjourney
+| 模型 | 发布时间 | 架构 | 参数规模 | 特点 |
+|------|---------|------|---------|------|
+| SD 1.0 | 2022.08 | Latent Diffusion + U-Net | ~1B | 首个开源文生图模型 |
+| SD 1.5 | 2022.10 | Latent Diffusion + U-Net | ~1B | 社区最广泛采用 |
+| SD 2.0 | 2022.11 | Latent Diffusion + U-Net | ~1B | 改进文本生成 |
+| SDXL 1.0 | 2023.07 | Latent Diffusion + U-Net | ~3.5B | 大幅提升图像质量 |
+| SD 3.0 | 2024.03 | **MMDiT** | 800M-8B | 架构转型为 Diffusion Transformer |
+| SD 3.5 | 2024.10 | MMDiT | 8B | 改进版 |
+| FLUX.1 | 2024.08 | Diffusion Transformer | 12B | Black Forest Labs 开发，社区新宠 |
 
 ---
 
-## 工具链：你的创作平台
+## SD3 — MMDiT 架构革命
 
-### ComfyUI — 节点式工作流（推荐）
+根据 [Stability AI 的 SD3 研究论文公告](https://stability.ai/news-updates/stable-diffusion-3-research-paper)：
 
-"像搭积木一样搭建图像生成流程"。
+### 核心创新：MMDiT
 
-```
-[Text] → [CLIP Text Encode] → [KSampler] → [VAE Decode] → [Save Image]
-                                  ↑
-[Image] → [Load Image] → [IPAdapter] → [KSampler (img2img)]
-                                  ↑
-                            [ControlNet]
-```
+**Multimodal Diffusion Transformer (MMDiT)** 是 SD3 最大的架构变革：
 
-**为什么选 ComfyUI**：
-- 完全可复现（工作流可以保存为 JSON）
-- 自定义节点生态极其丰富
-- 显存效率比 A1111 好
-- 适合批量生产和复杂管线
+- 从传统的 **U-Net** 架构转型为 **Diffusion Transformer (DiT)** 架构
+- **两套独立的权重**分别处理图像和语言表示
+- **联合序列进行注意力计算**：允许跨模态信息流动，同时保持各模态的独立空间
+- 从 450M 到 8B 参数的扩展实验显示**没有饱和迹象**
 
-### Automatic1111 — 上手最简单
+### 文本编码器
 
-"一键安装，图形界面，适合新手"。
-- 有 WebUI，给参数滑块
-- 插件市场（已不如 ComfyUI 丰富）
-- 容易上手但难以复现
+SD3 使用三个文本编码器：
+- **两个 CLIP 模型**：处理通用文本理解
+- **一个 T5 (4.7B 参数)**：处理复杂文本理解（推理时可移除以节省内存）
+  - 移除 T5：视觉美学 50% 胜率（无影响），文字遵循 46%（轻微下降），排版 38%（显著下降）
 
----
+### Rectified Flow 改进
 
-## 三大扩展技术
-
-### LoRA（Low-Rank Adaptation）
-
-**是什么**：在已有模型基础上，训练一个只有几 MB 的"微调适配器"，不改变原模型。
-
-**能做什么**：
-- 固定角色画风："用刘亦菲的脸"
-- 固定艺术风格："用水墨画风格"
-- 固定物体："这个特定品牌的猫粮包装"
-
-**用法**：把 .safetensors 文件放进 models/LoRA 文件夹，生成时在提示词中加入 `<lora:filename:0.8>`。
-
-### ControlNet
-
-**是什么**：用额外条件（骨骼、深度图、边缘检测、Canny）精确控制生成。
-
-**常见用法**：
-```
-Canny Edge → "边缘线描 → 上色"
-OpenPose → "身体姿态 → 换衣服"
-Depth → "场景深度 → 换场景风格"
-Scribble → "涂鸦 → 精细绘画"
-```
-
-### IP-Adapter
-
-**是什么**：用一张参考图控制风格/内容，类似 Midjourney 的"垫图"。
-
-**对比 ControlNet**：
-- ControlNet：控制"结构"
-- IP-Adapter：控制"风格"
-
-两者可以组合使用。
+- 使用 Rectified Flow (RF) 公式
+- 引入**新的轨迹采样调度**，更重视轨迹中间部分（更具挑战性的预测任务）
+- Reweighted RF 变体在所有步数范围内持续提升性能
 
 ---
 
-## Prompt 工程：图像 vs 文本
+## 性能对比
 
-跟 LLM 的提示词工程**完全不同**。
+根据 SD3 论文的人类偏好评估：
 
-### 好提示词公式
-
-```
-[主体描述] + [环境/背景] + [光照] + [画风] + [质量标记]
-```
-
-**示例**：
-```
-❌ "一只猫" → 模糊、平庸
-✅ "一只戴高礼帽的波斯猫，站在维多利亚时代的书房里，
-   暖色灯光，油画风格，细节丰富，8K" → 非常好
-```
-
-### 常用的质量标记词
-
-| 正向词 | 负向词（bad quality） |
-|--------|---------------------|
-| masterpiece, best quality | worst quality, low quality |
-| highly detailed | blurry, distorted |
-| professional | ugly, deformed |
-| 8K, HD | bad anatomy, bad hands |
-| cinematic lighting | text, watermark |
+| 模型 | 提示遵循 | 排版 | 视觉美学 |
+|------|---------|------|---------|
+| **SD3 8B** | **最佳** | **最佳** | **最佳** |
+| DALL·E 3 | 竞争 | 竞争 | 竞争 |
+| Midjourney v6 | 竞争 | 较弱 | 较强 |
+| Ideogram v1 | 竞争 | 竞争 | 竞争 |
+| SDXL | — | — | — |
 
 ---
 
-> **一句话总结**：Stable Diffusion 生态是目前最强大的开源图像生成方案。如果你愿意花时间学习 ComfyUI + ControlNet + LoRA 的组合，你能产出的图片质量超过大多数商业产品。门槛高一些，但天花板也高得多。
+## FLUX.1 — Black Forest Labs 的崛起
+
+根据 [FLUX 架构解析 (arXiv:2507.09595)](https://arxiv.org/html/2507.09595v1)：
+
+- 由原 Stability AI 核心团队（Black Forest Labs）开发
+- 采用 **Flow Matching** 架构，基于 Diffusion Transformer
+- 12B 参数，在提示遵循、图像质量和多样性上超越 SD3
+- 与 Midjourney、DALL·E 3 竞争
+
+### FLUX 模型规格
+
+| 版本 | 特点 | 许可 |
+|------|------|------|
+| FLUX.1 Pro | 完整版，最高质量 | 商业 |
+| FLUX.1 Dev | 开源版，蒸馏得到 | 开源 |
+| FLUX.1 Schnell | 极速版，4 步生成 | 开源 |
+| FLUX.2 | 升级版，2025 年发布 | — |
+
+---
+
+## 如何使用
+
+### 本地运行 ComfyUI
+
+ComfyUI 是最流行的 SD 工作流管理工具：
+
+1. 安装 ComfyUI
+2. 下载模型权重（SD3 / FLUX）
+3. 搭建工作流
+
+### 通过 API (Stability AI)
+
+```python
+import requests
+import base64
+
+response = requests.post(
+    "https://api.stability.ai/v2beta/stable-image/generate/sd3",
+    headers={
+        "authorization": f"Bearer your-api-key",
+        "accept": "image/*"
+    },
+    files={
+        "prompt": "A beautiful landscape with mountains and sunset, cinematic lighting",
+        "output_format": "png"
+    }
+)
+```
+
+### 通过 Hugging Face
+
+```python
+from diffusers import StableDiffusion3Pipeline
+import torch
+
+pipe = StableDiffusion3Pipeline.from_pretrained(
+    "stabilityai/stable-diffusion-3-medium-diffusers",
+    torch_dtype=torch.float16
+).to("cuda")
+
+image = pipe("A cat wearing a hat, digital art").images[0]
+image.save("cat.png")
+```
+
+---
+
+## 优势与局限
+
+**优势:**
+- **开源生态:** 完全开源，社区活跃
+- **灵活部署:** 可在消费级 GPU 运行
+- **丰富的社区资源:** 数千种 LoRA、ControlNet 扩展
+- **ComfyUI 工作流:** 可视化节点编辑，无限定制
+- **成本低廉:** 相比 Midjourney/DALL·E，本地运行成本极低
+
+**局限:**
+- 人体结构（特别是手部）有时不正确
+- 复杂提示遵循仍有局限
+- 需要 GPU 才能获得合理速度
+- FLUX 等更优模型需要更高硬件配置
+
+---
+
+**参考资料：**
+- [Stable Diffusion 3 Research Paper (Stability AI)](https://stability.ai/news-updates/stable-diffusion-3-research-paper)
+- [Demystifying Flux Architecture (arXiv:2507.09595)](https://arxiv.org/html/2507.09595v1)
+- [Flux vs SD3 Comparison (YouTube)](https://www.youtube.com/watch?v=hSnepsdGzdo)
+- [SDXL vs Flux Comparison (Facebook)](https://www.facebook.com/groups/stablediffusion/posts/1433531040645700)
+- [Diffusion Models Overview (Medium)](https://medium.com/diffusion-doodles/the-myriad-of-diffusion-models-f0907ee6cc6b)
