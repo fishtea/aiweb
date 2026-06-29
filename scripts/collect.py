@@ -16,6 +16,7 @@ import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 # 项目根目录
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -347,17 +348,46 @@ def deduplicate(existing_urls, new_results):
 # ============================================================
 # 文档生成
 # ============================================================
+def normalize_url(url):
+    """URL归一化：去除追踪参数、尾斜杠，统一为规范格式"""
+    if not url:
+        return url
+    try:
+        parsed = urlparse(url)
+        # 去除追踪参数
+        tracking_params = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 
+                          'utm_content', 'ref', 'source', 'source_url', 'si', 'mc_cid',
+                          'mc_eid', 'fbclid', 'gclid', 'gclsrc', 'dclid', 'zanpid'}
+        query_params = parse_qs(parsed.query, keep_blank_values=True)
+        clean_params = {k: v for k, v in query_params.items() 
+                       if k.lower() not in tracking_params}
+        clean_query = urlencode(clean_params, doseq=True) if clean_params else ''
+        
+        # 标准化路径：去尾斜杠、转小写
+        path = parsed.path.rstrip('/') or '/'
+        
+        clean_url = urlunparse((
+            parsed.scheme.lower(),
+            parsed.netloc.lower(),
+            path,
+            parsed.params,
+            clean_query,
+            ''  # 去掉fragment
+        ))
+        return clean_url
+    except Exception:
+        return url
+
 def load_existing_urls(cat_dir):
-    """读取已有资源列表中的URL"""
+    """读取已有资源列表中的URL（已归一化）"""
     urls = set()
     index_file = cat_dir / "index.md"
     if index_file.exists():
         content = index_file.read_text(encoding="utf-8")
-        # 提取所有URL
         for line in content.split("\n"):
             match = re.search(r'\((https?://[^)]+)\)', line)
             if match:
-                urls.add(match.group(1))
+                urls.add(normalize_url(match.group(1)))
     return urls
 
 def format_resource_markdown(title, url, body, translated=False):
@@ -478,17 +508,23 @@ def main():
     
     print(f"\n搜索完成，共 {total_searched} 条结果\n")
     
-    # 分类归档
+    # 分类归档（带跨查询去重）
     for (cat, sub), query_results in results_map.items():
         tags = query_results[0][2]  # 取第一个的tags
         cat_dir = PROJECT_ROOT / "docs" / cat / sub
         existing_urls = load_existing_urls(cat_dir)
+        seen_in_batch = set()  # 本轮跨查询去重
         
         all_new = []
         for query, results, q_tags in query_results:
             matched = [r for r in results if classify_resource(r.get("title", ""), r.get("body", ""), tags)]
-            deduped = deduplicate(existing_urls, matched)
-            all_new.extend(deduped)
+            for r in matched:
+                raw_url = r.get("url", "")
+                norm_url = normalize_url(raw_url) if raw_url else ""
+                if norm_url and norm_url not in existing_urls and norm_url not in seen_in_batch:
+                    seen_in_batch.add(norm_url)
+                    r["url"] = norm_url  # 替换为归一化URL
+                    all_new.append(r)
         
         if all_new:
             added = append_to_category(cat, sub, all_new)
