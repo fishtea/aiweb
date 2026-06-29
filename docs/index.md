@@ -1,11 +1,11 @@
-# 🤖 AI 学习路径导航
+# AI 学习路径导航
 
-> **最全面的中文AI学习资源库 | 每日自动更新**
+> **最全面的中文AI学习资源库 · 每日自动更新**  
 > 从入门到精通，覆盖各大模型与工具，中英文资源全翻译为中文
 
 ---
 
-## 📚 学习路线
+## 学习路线
 
 <div class="grid cards" markdown>
 
@@ -13,7 +13,8 @@
 
     ---
 
-    适合零基础入门，涵盖AI基本概念、机器学习基础、深度学习入门、大语言模型基础
+    适合零基础入门  
+    人工智能概念 · 机器学习基础 · 深度学习 · 大语言模型入门
 
     [:octicons-arrow-right-24: 开始学习](初级知识/index.md)
 
@@ -21,7 +22,8 @@
 
     ---
 
-    掌握核心实践技能：模型微调、RAG检索增强、Agent智能体、提示词工程
+    掌握核心实践技能  
+    模型微调 · RAG检索增强 · Agent智能体 · 提示词工程
 
     [:octicons-arrow-right-24: 进阶提升](进阶学习/index.md)
 
@@ -29,7 +31,8 @@
 
     ---
 
-    深入AI前沿：模型训练与优化、多模态模型、AI安全与对齐、模型架构研究
+    深入AI前沿领域  
+    模型训练优化 · AI安全对齐 · 多模态模型 · 前沿架构
 
     [:octicons-arrow-right-24: 深入探索](高级知识/index.md)
 
@@ -37,7 +40,8 @@
 
     ---
 
-    各主流AI模型的详细学习指南：GPT、Claude、LLaMA、DeepSeek、Gemini、Qwen等
+    各主流AI模型学习指南  
+    GPT · Claude · LLaMA · DeepSeek · Gemini · Qwen
 
     [:octicons-arrow-right-24: 查看模型](模型专区/index.md)
 
@@ -45,7 +49,8 @@
 
     ---
 
-    必备AI工具学习资源：LangChain、ComfyUI、vLLM、HuggingFace、Ollama等
+    必备AI工具使用指南  
+    LangChain · ComfyUI · vLLM · HuggingFace · Ollama
 
     [:octicons-arrow-right-24: 查看工具](工具专区/index.md)
 
@@ -53,26 +58,42 @@
 
 ---
 
-## 🔥 最新资源
+## 最新资源
 
 > 每日自动采集最新AI学习资源，涵盖教程、论文、课程、工具等
 
 <!-- LATEST_RESOURCES_START -->
-*正在每日更新中...*
+*资源采集中，每日更新...*
 <!-- LATEST_RESOURCES_END -->
 
 ---
 
-## 🎯 特色
+## 分类统计
 
-- **📅 每日更新** — 自动搜索采集最新AI学习资源
-- **🌐 中英双语** — 英文资源自动翻译为中文
-- **🏷️ 分类清晰** — 按难度 + 模型 + 工具三轴分类
-- **🔍 全文检索** — 支持站内全文搜索
-- **📱 响应式** — PC和移动端均可流畅浏览
+<div class="grid cards" markdown>
 
----
+-   :material-chart-box-outline:{ .lg .middle } 目前收录
 
-## 🤝 贡献
+    ---
 
-欢迎通过 [Gitee Issues](https://gitee.com/fishtea/aiweb/issues) 提交建议或资源推荐！
+    覆盖 **5** 大分类 · **29** 个子分类  
+    中英文资源自动翻译归类  
+    每日 **9:00** 自动更新
+
+-   :material-update:{ .lg .middle } 持续更新
+
+    ---
+
+    - **自动采集** — DuckDuckGo 多渠道搜索
+    - **智能翻译** — 英文资源自动译成中文
+    - **严格去重** — URL归一化 + 跨查询去重
+    - **双平台同步** — GitHub + Gitee
+
+-   :material-magnify:{ .lg .middle } 站内搜索
+
+    ---
+
+    支持全文搜索，快速找到所需资源  
+    使用右上角搜索框或按 `Ctrl+K` / `⌘K`
+
+</div>

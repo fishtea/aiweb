@@ -1,43 +1,74 @@
 # AI学习路径网站 - MkDocs配置
 site_name: AI 学习路径导航
 site_description: 最全面的AI学习资源库 - 从入门到精通，涵盖各大模型与工具
-site_url: https://fishtea.gitee.io/aiweb
-repo_url: https://gitee.com/fishtea/aiweb
+site_url: https://aiweb.vercel.app
+repo_url: https://github.com/fishtea/aiweb
 repo_name: fishtea/aiweb
+edit_uri: ""
 
 theme:
   name: material
   language: zh
   palette:
-    primary: indigo
-    accent: deep purple
+    # 白天模式
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: 切换深色模式
+    # 夜间模式
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: 切换浅色模式
   features:
     - navigation.instant
+    - navigation.instant.prefetch
     - navigation.tracking
     - navigation.sections
     - navigation.indexes
     - navigation.top
+    - navigation.footer
     - search.suggest
     - search.highlight
-    - content.tabs.link
+    - search.share
     - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - header.autohide
+    - announce.dismiss
   icon:
-    logo: material/robot
+    logo: material/bookshelf
     repo: fontawesome/brands/github
 
 extra:
   social:
     - icon: fontawesome/brands/github
+      link: https://github.com/fishtea/aiweb
+    - icon: fontawesome/brands/gitlab
       link: https://gitee.com/fishtea/aiweb
-  copyright: AI 学习路径导航 | 每日更新
+  generator: true
+  copyright: >
+    <a href="https://github.com/fishtea/aiweb">AI 学习路径导航</a> |
+    每日自动更新 | 中英文资源全翻译为中文
+
+extra_css:
+  - assets/custom.css
 
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.details
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - admonition
   - attr_list
   - def_list
@@ -45,9 +76,13 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+      toc_depth: 3
 
 plugins:
-  - search
+  - search:
+      lang:
+        - zh
+        - en
 
 nav:
   - 🏠 首页: index.md
