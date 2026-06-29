@@ -72,7 +72,8 @@ const sidebar = [
       { text: 'Hugging Face', link: '/工具专区/HuggingFace/' },
       { text: 'PyTorch', link: '/工具专区/PyTorch/' },
       { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
-      { text: 'Ollama', link: '/工具专区/Ollama/' }
+      { text: 'Ollama', link: '/工具专区/Ollama/' },
+      { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' }
     ]
   },
   {
@@ -82,7 +83,8 @@ const sidebar = [
       { text: '总览', link: '/AIAgent实践/' },
       { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
       { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
-      { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' }
+      { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
+      { text: '📋 实际应用案例', link: '/AIAgent实践/实际应用案例/' }
     ]
   }
 ]
