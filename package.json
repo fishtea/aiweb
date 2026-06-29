@@ -1,0 +1,9 @@
+{
+  "name": "aiweb",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "uv pip install --system mkdocs mkdocs-material && uv run python3 -m mkdocs build",
+    "dev": "uv run python3 -m mkdocs serve"
+  }
+}
