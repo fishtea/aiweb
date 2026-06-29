@@ -31,7 +31,9 @@ const sidebar = [
       { text: 'RAG 检索增强', link: '/进阶学习/RAG检索增强/' },
       { text: 'Agent 智能体', link: '/进阶学习/Agent智能体/' },
       { text: '提示词工程', link: '/进阶学习/提示词工程/' },
-      { text: '模型评估与基准', link: '/进阶学习/模型评估与基准/' }
+      { text: '模型评估与基准', link: '/进阶学习/模型评估与基准/' },
+      { text: 'Embedding 与向量数据库', link: '/进阶学习/Embedding与向量数据库/' },
+      { text: 'LLM 应用架构', link: '/进阶学习/LLM应用架构/' }
     ]
   },
   {

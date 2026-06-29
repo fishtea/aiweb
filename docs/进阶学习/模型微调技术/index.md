@@ -186,6 +186,99 @@ trainer.train()
 
 ---
 
+## 6. 2026年微调工具与最佳实践
+
+2026年，LLM微调生态发生了显著变化：开源工具链日趋成熟、硬件门槛进一步降低、微调方法从单一的LoRA/QLoRA演进为丰富的参数高效技术组合。
+
+> **核心趋势：** 从"能不能微调"转向"如何高效、低成本地微调"——2026年的标杆是单卡消费者GPU即可完成7B模型的领域适配。
+
+### 6.1 主流微调框架对比（2026）
+
+| 框架 | 核心优势 | 适用场景 | 独特技术 |
+|------|---------|---------|---------|
+| **LLaMA Factory** | 零代码WebUI、支持100+模型、最全方法集 | 团队快速实验、多方法对比 | LoRA/QLoRA/DoRA/PiSSA/GaLore/ORPO/KTO |
+| **Unsloth** | 速度提升2倍、显存降低80%、Triton内核优化 | 资源受限环境（如Colab免费版） | 自定义注意力Kernel、支持Llama 4/Mistral/Qwen |
+| **Axolotl** | YAML配置、多GPU扩展（FSDP/DeepSpeed） | 大规模微调、可复现实验 | ReLoRA、GPTQ、xFormers、FlashAttention |
+| **Torchtune** | PyTorch原生、最小抽象、完全透明 | 研究者、需要完全控制的工程师 | 纯PyTorch实现、模块化配方 |
+
+**关键数据点：**
+- LLaMA Factory在GitHub已获得 **70,600+星标**，被亚马逊、NVIDIA、阿里云等组织采用（北航团队维护，ACL 2024发表）
+- Unsloth的LoRA训练速度相比标准PEFT提升 **170%**，vLLM推理集成后速度提升 **270%**
+- 微调一个7B模型的基本运行成本已降至 **不到5美元**（Spheron Network, 2026年3月数据）
+
+### 6.2 硬件门槛大幅降低
+
+借助 **QLoRA + 2bit量化**，微调一个大模型所需的最低VRAM已降至：
+
+| 模型大小 | 全参数(bf16) | LoRA(16bit) | QLoRA(4bit) | QLoRA(2bit) |
+|---------|-------------|-------------|-------------|-------------|
+| 7B | 120GB | 16GB | 6GB | **4GB** |
+| 14B | 240GB | 32GB | 12GB | **8GB** |
+| 70B | 1,200GB | 160GB | 48GB | **24GB** |
+
+> 💡 **这意味着：** 一台配备RTX 4090（24GB）的消费级电脑就可以微调70B模型（2bit QLoRA），这在2024年需要8张A100。
+
+Google Cloud官方建议（2026年6月更新）：LoRA vs QLoRA的选型权衡——
+- **QLoRA**：显存占用比LoRA低75%，支持更大的batch size和序列长度
+- **LoRA**：训练速度快66%，成本低40%
+- 对7B模型：1×A100 40G上，LoRA推荐batch size=2，QLoRA可达batch size=24
+
+### 6.3 LLaMA Factory 实战：5步完成微调
+
+**步骤1：安装**
+```bash
+git clone https://github.com/hiyouga/LlamaFactory.git
+cd LlamaFactory
+pip install -e .
+# 可选：FlashAttention-2、DeepSpeed依赖
+```
+**环境要求：** Python 3.11+、PyTorch 2.6+、CUDA 11.6+（推荐12.2+）
+
+**步骤2：准备数据集** — 格式化为JSON指令-响应对，存入`/data`目录，在`dataset_info.json`注册。
+
+**步骤3：配置训练**
+- 方式A：LlamaBoard网页界面（`llamafactory-cli webui`）
+- 方式B：YAML配置文件
+
+**步骤4：运行训练**
+```bash
+llamafactory-cli train config.yaml
+```
+耗时：30分钟至7小时+（取决于模型大小和数据量）
+
+**步骤5：合并与部署**
+- 合并Adapter：`导出`选项卡或`llamafactory-cli export`
+- 部署：使用vLLM或SGLang工作进程的OpenAI风格API
+
+### 6.4 微调决策框架（2026更新版）
+
+> **黄金法则：** 先用Prompt + RAG + Tools解决，解决不了再微调。
+
+**适合微调的场景：**
+- ✅ 模型需要**稳定的特定风格/格式**（如法律文书、医学报告）
+- ✅ 领域专有知识**频繁出现且无法通过检索覆盖**（如内部代码库、专有术语）
+- ✅ 已经用评估集证明Prompt/RAG方案存在**系统性失败模式**
+
+**不适合微调的信号：**
+- ❌ 信息频繁变化 → 改用RAG
+- ❌ 行为不稳定但偶尔正确 → 先改进Prompt和检索
+- ❌ 没有可靠的评估数据集 → 先建立评估集
+- ❌ 需要快速迭代 → 用Runtime技术（Prompt、Tools、输出校验）
+
+### 6.5 2026年新增微调方法速览
+
+| 方法 | 提出时间 | 核心思想 | 与LoRA对比优势 |
+|------|---------|---------|--------------|
+| **DoRA** (Weight-Decomposed LoRA) | 2024末 | 将权重分解为方向和幅度，分别微调 | 更接近全参数微调的学习模式 |
+| **PiSSA** (Principal Submatrix Adaptation) | 2025 | 对权重矩阵的主子矩阵进行适应 | 收敛更快，性能更稳定 |
+| **GaLore** (Gradient Low-Rank Projection) | 2025 | 在梯度空间做低秩投影 | 可节省50%+训练显存 |
+| **LoRA+** | 2025 | 对Adapter矩阵使用不同学习率 | 训练更稳定，减少调参 |
+
+### 6.6 重要提醒：OpenAI微调服务变更
+从 **2026年5月7日**起，新组织无法在OpenAI创建微调任务。现有活跃客户可创建至2027年1月6日。建议将微调模型视为**需维护的生产工件**——跟踪基座模型生命周期，保留评估集用于替换测试，了解迁移路径。
+
+---
+
 ## 🔗 参考资料
 
 - [How to Fine-Tune LLMs in 2024 with Hugging Face - Philschmid](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
@@ -193,3 +286,8 @@ trainer.train()
 - [LoRA Hyperparameters Guide - Unsloth](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide)
 - [Implementing LoRA From Scratch - Daily Dose of Data Science](https://www.dailydoseofds.com/implementing-lora-from-scratch-for-fine-tuning-llms)
 - [A Beginners Guide to Fine Tuning LLM Using LoRA - Zohaib.me](https://zohaib.me/a-beginners-guide-to-fine-tuning-llm-using-lora)
+- [LLaMA Factory: 2026年大语言模型微调完整指南 - Jenova](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)
+- [Fine-Tuning LLMs in 2026: LoRA, QLoRA, Unsloth - Towards AI](https://pub.towardsai.net/fine-tuning-llms-in-2026-lora-qlora-unsloth-and-everything-in-between-929eaf94aea2)
+- [LLM Fine-Tuning - BentoML Inference Handbook](https://bentoml.com/llm/model-preparation/llm-fine-tuning)
+- [使用 LoRA 和 QLoRA 调整 LLM 的建议 - Google Cloud](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-garden/lora-qlora?hl=zh-cn)
+- [LLM微调技术：从LoRA到QLoRA的演进 - 腾讯云](https://cloud.tencent.com/developer/article/2611321)
