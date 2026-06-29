@@ -14,6 +14,7 @@ const sidebar = {
   '/初级知识/': [
     {
       text: '初级知识',
+      collapsed: false,
       items: [
         { text: '总览', link: '/初级知识/' },
         { text: '人工智能入门', link: '/初级知识/人工智能入门/' },
@@ -26,6 +27,7 @@ const sidebar = {
   '/进阶学习/': [
     {
       text: '进阶学习',
+      collapsed: false,
       items: [
         { text: '总览', link: '/进阶学习/' },
         { text: '模型微调技术', link: '/进阶学习/模型微调技术/' },
@@ -39,6 +41,7 @@ const sidebar = {
   '/高级知识/': [
     {
       text: '高级知识',
+      collapsed: false,
       items: [
         { text: '总览', link: '/高级知识/' },
         { text: '模型训练与优化', link: '/高级知识/模型训练与优化/' },
@@ -51,6 +54,7 @@ const sidebar = {
   '/模型专区/': [
     {
       text: '模型专区',
+      collapsed: false,
       items: [
         { text: '总览', link: '/模型专区/' },
         { text: 'GPT 系列', link: '/模型专区/GPT系列/' },
@@ -67,6 +71,7 @@ const sidebar = {
   '/工具专区/': [
     {
       text: '工具专区',
+      collapsed: false,
       items: [
         { text: '总览', link: '/工具专区/' },
         { text: 'LangChain', link: '/工具专区/LangChain/' },
@@ -83,6 +88,7 @@ const sidebar = {
   '/AIAgent实践/': [
     {
       text: 'AI Agent 实践',
+      collapsed: false,
       items: [
         { text: '总览', link: '/AIAgent实践/' },
         { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
