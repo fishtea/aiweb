@@ -8,17 +8,17 @@
 
 <!-- RESOURCES_START -->
 
-- **[Optimum+ONNX Runtime - 让您的拥抱脸... - 拥抱脸文档](https://hugging-face.cn/blog/optimum-onnxruntime-training)**
-  - 它支持超参数搜索、混合精度训练以及多 GPU 分布式训练等功能。 ORTTrainer 使 AI 开发人员能够在训练 Transformers 模型时组合 ONNX Runtime 和其他第三方加速技术，从而进一步加速训练并充分发挥硬件的性能。
+- **[迁移多工作进程CPU/GPU 训练 | TensorFlow 核心](https://www.tensorflow.org/guide/migrate/multi_worker_cpu_gpu_training?hl=zh-cn)**
+  - 本指南演示了如何将多工作进程分布式训练工作流从TensorFlow ・ 将训练分布到多个工作进程之间。 进行分布式训练 ・ 使用GPU(“使用多个GPU”部分)
 
-- **[2025-06光通信-备](https://www.researching.cn/ArticlePdf/m00064/2025/51/6/250050.pdf)**
-  - 无 法 满 足 许 多 大 模 型 的 训 练 需 求 。 因 此 大 模 型 分 布 式 训 练Distributed Model TrainingDMT技 术 应运而生。所示每层计算完成后层与层间所有对应的 GPU. 250050⁃02. 王冬柔 等 面向大模型分布式训练的光组网技术综述.
+- **[迁移单工作进程多GPU 训练 | TensorFlow Core](https://www.tensorflow.org/guide/migrate/mirrored_strategy?hl=zh-cn)**
+  - 使用Keras 在一台机器上进行分布式训练教程 · 使用自定义训练循环在一台机器上进行分布式训练教程 · 使用TensorFlow 进行分布式训练指南 · 使用多个GPU 指南 · 优化多GPU 单 ...
 
-- **[chatgpt5x.com/digest/2024/0814/大模型分布式高效训练技术综述](https://chatgpt5x.com/digest/2024/0814/大模型分布式高效训练技术综述/)**
-  - 这涉及设计和部署大量的GPU或专门的AI加速器、连接这些设备的高性能网络，以及能够处理庞大数据集和模型检查点的分布式存储系统。NVIDIA GPU已成为分布式LLM训练的重要组成部分，因为它们具有处理并行计算的卓越能力。
+- **[速度为单双GPU1.6倍，kaggleGPU(ddp模式)加速pytorch攻略](https://cloud.tencent.com/developer/article/2221941)**
+  - 本文将以一个图片分类模型为例，演示在accelerate的帮助下使用pytorch编写一套可以在cpu/单GPU/多GPU(DDP)模式/TPU 下通用的训练代码。
 
 <!-- RESOURCES_END -->
 
 ---
 
-*最后更新：2026-06-29 09:29:13*
+*最后更新：2026-06-29 09:38:29*

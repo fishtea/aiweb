@@ -8,14 +8,20 @@
 
 <!-- RESOURCES_START -->
 
-- **[普通话大语言模型初学者指南](https://www.piax.org/en/gpts/large-language-model-beginner-guide-from-introduction-to-abandonment/SguG46Im)**
-  - 通过为普通话使用者量身定制的简单说明，了解大语言模型的基础知识。用简单的术语解释什么是大语言模型 (LLM)。作为初学者，我如何开始学习法学硕士？ LLM 新用户面临哪些常见挑战？
+- **[happy-llm,📚 从零开始构建大模型,下载happy-llm的源码_GitHub_帮酷](https://github.com/datawhalechina/happy-llm)**
+  - 📚 从零开始构建大模型。通过在 GitHub 上创建帐户来为 datawhalechina/happy-llm 开发做出贡献。
 
-- **[学习法学硕士（基础模型）的综合指南](https://medium.com/@srechakra/a-comprehensive-guide-to-learning-llms-foundational-models-4f2e6d9eae77)**
-  - 学习大型语言模型。以下是所有资源的打印友好视图。N-gram 语言模型 — 初学者。使用 Python 用 n-gram 生成句子 — YouTube。
+- **[大型语言模型简介 |机器学习 |谷歌开发者](https://developers.google.com/machine-learning/crash-course/llm)**
+  - 本课程模块概述了语言模型和大语言模型 (LLM)，涵盖了 token、n-gram、Transformer、自注意力、蒸馏、微调和提示工程等概念。
+
+- **[法学硕士初学者指南 – 什么是大语言模型及其工作原理？](https://www.freecodecamp.org/news/a-beginners-guide-to-large-language-models/)**
+  - 2024年8月15日——这些都是引导AI产生特定输出的提示。使用 Meta 的 llama-3-70b-instruct，您可以围绕本文提到的应用程序构建各种工具。根据您的用例调整提示，然后您就可以开始了！ ⚡️·在本文中，我们探索了大型语言模型的世界，提供了对它们的工作方式和训练过程的高级理解。
+
+- **[从头开始构建大型语言模型 |多元视野](https://www.pluralsight.com/resources/blog/ai-and-data/how-build-large-language-model)**
+  - 2025 年 3 月 7 日 - 通过了解基础知识、构建变压器、训练模型和实施迁移学习，了解如何创建大型语言模型 (LLM)。
 
 <!-- RESOURCES_END -->
 
 ---
 
-*最后更新：2026-06-29 09:29:13*
+*最后更新：2026-06-29 09:38:29*

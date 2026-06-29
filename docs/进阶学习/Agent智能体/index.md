@@ -8,26 +8,20 @@
 
 <!-- RESOURCES_START -->
 
-- **[LLM 代理解释：2025 年完整指南](https://www.getdynamiq.ai/post/llm-agents-explained-complete-guide-in-2025)**
-  - 2025 年 6 月 19 日 - 了解 LLM 代理是什么、它们如何工作以及如何在支持、编码、数据分析和医疗保健等实际任务中使用它们。
+- **[25 分钟内从零到您的第一个 AI 代理（无需编码）- YouTube](https://www.youtube.com/watch?v=EH5jx5qPabU)**
+  - 下载免费的 AI 代理资源：https://clickhubspot.com/39c59b 来自 Futurepedia 的更多内容：加入发展最快的 AI 教育平台！
 
-- **[基于法学硕士的代理实践：面向普通观众的教程 |技术Rxiv](https://www.techrxiv.org/doi/full/10.36227/techrxiv.176369788.84013646/v1)**
-  - 2025 年 11 月 21 日 - Shuyue Hu、Siyue Ren、Yang Chen 等人。基于法学硕士的代理实践：面向普通受众的教程。技术Rxiv。 2025 年 11 月 21 日。
+- **[构建您的第一个法学硕士代理申请 | NVIDIA 技术博客](https://developer.nvidia.com/blog/building-your-first-llm-agent-application/)**
+  - 在构建大型语言模型 (LLM) 代理应用程序时，您需要四个关键组件：代理核心、内存模块、代理工具和规划模块。
 
-- **[使用 LangChain 构建 RAG 代理 - LangChain 文档](https://python.langchain.com/docs/tutorials/agents)**
-  - RAG 链：一个两步实施，每个查询使用单个 LLM 调用。对于简单查询来说，这是一种快速有效的方法。本教程使用 Lilian Weng 的 LLM Powered Autonomous Agents 博客文章作为示例。
+- **[什么是人工智能代理？ |国际商业机器公司](https://www.ibm.com/think/topics/ai-agents)**
+  - 人工智能 (AI) 代理是指能够代表用户或其他系统自主执行任务的系统或程序。什么是多代理系统？教程：crewAI 多代理呼叫分析。
 
-- **[Agno开发教程系列（四）：多Agent协作系统（上）—— Team...](https://juejin.cn/post/7577202452800225280)**
-  - 本教程是Agno框架系列教程的第四篇，将深入讲解如何通过Team机制构建多Agent协作系统，让多个专业化的AI Agent像真实团队一样高效协作完成复杂任务。 目录.
-
-- **[Harness多Agent系统Token优化：五步Token Transformation... | 123AI](https://www.123ai.org/post/harness-multi-agent-token-optimization.html)**
-  - 2. 加上下文继承，多Agent互相不知道对方做了什么. 3. 加质量规则，AI会自欺.多Agent系统怎么省Token.
-
-- **[Google 开源多 Agent 编排系统 Scion：实现 AI 助手并行协作](https://jimo.studio/blog/google-open-sources-scion-enabling-parallel-multi-agent-collaboration/)**
-  - 随着大语言模型的快速发展，单一 AI Agent 的能力已取得长足进步，但在复杂任务场景下，单兵作战的模式往往面临效率瓶颈。Scion 是 Google 内部真实使用的多 Agent 编排系统，现已向开发者开放。
+- **[Anthropic发文分享“如何高效构建Agent”，从简单到复杂带你体会Agent...](https://developer.volcengine.com/articles/7451506254054162486)**
+  - Agent 系统的基本模块是经过增强的 LLM，如检索、工具和记忆。 我们的当前模型可以主动使用这些能力——生成自己的搜索查询、选择适当的工具并确定保留哪些信息。
 
 <!-- RESOURCES_END -->
 
 ---
 
-*最后更新：2026-06-29 09:29:13*
+*最后更新：2026-06-29 09:38:29*

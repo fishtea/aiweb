@@ -8,20 +8,23 @@
 
 <!-- RESOURCES_START -->
 
-- **[RAG 教程：检索增强生成初学者指南](https://www.singlestore.com/blog/a-guide-to-retrieval-augmented-generation-rag/)**
-  - 2025 年 1 月 17 日 · RAG 是一种专门的模型，集成了检索和生成过程，以提高大型语言模型 (LLM) 的性能。什么是检索增强... · 检索增强...
+- **[【2025版】 Huggingface入门+实战教程！呼吸吃透变形金刚...](https://www.bilibili.com/video/BV11VagzKE4E/?spm_id_from=333.788.recommend_more_video.6)**
+  - 投稿。 【2025版】Huggingface入门+实战教程！ 呼吸吃透变压器、BERT、LLM大模型、Agent、langchain、RAG！
 
-- **[从头开始开发 RAG 应用程序的端到端教程](https://medium.com/data-science-collective/from-data-to-dialogue-development-of-a-retrieval-augmented-generation-rag-chatbot-for-fitness-b9fbaf818ace)**
-  - 2025 年 3 月 18 日 · 在这篇文章中，我将引导您完成专为 Fitness Passport 设计的检索增强生成 (RAG) 系统的简单实现。
+- **[github.com-junglezhao-all-in-rag_-_2025-08-02_16-54-04 :junglezhao...](https://archive.org/details/github.com-junglezhao-all-in-rag_-_2025-08-02_16-54-04)**
+  - 全 RAG 徽标。 项目简介 Stars GitHub forks Python Online Reading。 项目展示1． [x] 图RAG架构设计2. [x] 图数据建模与准备3． [x] Milvus 索引构建4。 [x]智能查询路由与搜索策略。
 
-- **[什么是 RAG（检索增强生成）？ - IBM](https://www.ibm.com/think/topics/retrieval-augmented-generation)**
-  - RAG 是一种通过将人工智能 (AI) 模型与外部知识库连接来优化其性能的架构。
+- **[DeNA LLM 研究第 4 部分：RAG 架构与最新趋势](https://jangwook.net/zh/blog/zh/dena-llm-study-part4-rag/)**
+  - 本文基于 DeNA 研究数据，整理了完整的 RAG 架构、混合搜索策略、重排序技术，以及 GraphRAG 和 Agentic RAG 等最新发展方向。RAGFlow 博客：2025 年的 RAG。高级 RAG 变体解释。终极 RAG 蓝图 2025/2026。
 
-- **[25种RAG... - 53AI-AI知识库|大模型知识库|大模型训练|智能体开发](https://www.53ai.com/news/RAG/2025050832164.html)**
-  - 25种RAG架构大揭秘：AI项目如何选型？ 发布日期：2025-05-08 08:20:07 浏览次数： 1976.使用FAISS或Weaviate等向量数据库存储分块的法律文件。 标准RAG保持架构简洁：检索→生成，没有多余的装饰。
+- **[检索增强生成 (RAG) - DeepLearning.AI](https://learn.deeplearning.ai/courses/retrieval-augmented-generation/information)**
+  - 2025 年 9 月 30 日 - 在本课程中，您将学习如何设计和实现 RAG 系统的每个部分，从检索器和向量数据库到大型语言模型和评估平台。您将了解基本原理并应用关键技术......
+
+- **[什么是 RAG？检索增强生成指南 |数据营](https://www.datacamp.com/blog/what-is-retrieval-augmented-generation-rag)**
+  - 2024 年 1 月 5 日 - 了解检索增强生成 (RAG) 的工作原理、为什么它可以减少 LLM 幻觉，以及如何使用矢量数据库和现代框架构建 RAG 管道
 
 <!-- RESOURCES_END -->
 
 ---
 
-*最后更新：2026-06-29 09:29:13*
+*最后更新：2026-06-29 09:38:29*
