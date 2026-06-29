@@ -1,33 +1,156 @@
-# Claude系列
+# Claude 系列
 
-> Anthropic Claude系列模型学习资源
-
----
-
-## 资源列表
-
-<!-- RESOURCES_START -->
-
-- **[Claude Code 的最佳实践 - Claude Code Docs](https://code.claude.com/docs/en/best-practices)**
-  - 充分利用 Claude 代码的技巧和模式，从配置环境到跨并行会话进行扩展。为 Claude 提供一种验证其... · 管理您的会话的方法
-
-- **[克劳德代码学习路径：实用入门指南](https://medium.com/@dan.avila7/claude-code-learning-path-a-practical-guide-to-getting-started-fcc601550476)**
-  - 2025 年 10 月 30 日 · 将 Claude Code 与 Google Cloud Vertex AI 连接的分步指南。在本教程中，我将向您展示如何将 Claude Code 连接到...
-
-- **[克劳德代码入门：研究人员的设置指南](https://paulgp.substack.com/p/getting-started-with-claude-code)**
-  - 2026 年 3 月 29 日 · 本系列是继 2025 年 12 月与 Ben Golub 合作的早期马库斯学院迷你系列之后，该系列的重点是利用法学硕士进行理论经济学……
-
-- **[Anthropic 学院：Claude API 开发指南 \ Anthropic](https://www.anthropic.com/learn/build-with-claude)**
-  - 学习使用 Claude 的 API 构建应用程序。查找使用我们的 AI 功能进行开发的详细文档、集成指南、代码示例和最佳实践。
-
-- **[开始使用克劳德 - 人类](https://docs.anthropic.com/en/docs/get-started)**
-  - 对 Claude 进行第一次 API 调用并构建一个简单的网络搜索助手。从 Anthropic 控制台获取 API 密钥并将其设置为环境变量
-
-- **[Claude API 入门：您需要了解的一切 - Kolena](https://www.kolena.com/guides/getting-started-with-claude-api-everything-you-need-to-know/)**
-  - 快速教程：Anthropic Claud Python 和 TypeScript SDK 入门。让我们浏览一个快速教程，展示如何使用 Anthropic API 与 Claude 一起构建应用程序。
-
-<!-- RESOURCES_END -->
+> Anthropic 开发的 Claude 系列模型，以"合宪法 AI"（Constitutional AI）为核心方法论，在安全性、长上下文处理和细致理解方面树立了行业标杆。
 
 ---
 
-*最后更新：2026-06-29 09:38:29*
+## 发展历程
+
+| 版本 | 发布时间 | 关键特性 |
+|-----|---------|---------|
+| Claude 1 | 2023.03 | 首批合宪法 AI 模型 |
+| Claude 2 | 2023.07 | 100K 上下文、代码能力提升 |
+| Claude 3 Haiku | 2024.03 | 轻量快速、高性价比 |
+| Claude 3 Sonnet | 2024.03 | 平衡性能与速度 |
+| Claude 3 Opus | 2024.03 | 最强版本、深度推理 |
+| Claude 3.5 Sonnet | 2024.06 | 全面超越 Opus 的性价比之王 |
+| Claude 3.5 Haiku | 2024.10 | 速度最快的智能模型 |
+| Claude 3.5 Opus | 2024.10 | 全新巅峰 |
+
+---
+
+## 模型家族对比
+
+| 特性 | Haiku（轻量） | Sonnet（均衡） | Opus（旗舰） |
+|-----|-------------|---------------|-------------|
+| 速度 | ⚡ 极快 | 快速 | 标准 |
+| 推理能力 | 良好 | 优秀 | 卓越 |
+| 代码能力 | 良好 | 优秀 | 卓越 |
+| 成本 | 低 | 中等 | 高 |
+| 适用场景 | 实时对话、简单任务 | 日常使用、开发辅助 | 复杂推理、研究分析 |
+
+---
+
+## 合宪法 AI（Constitutional AI）
+
+### 核心理念
+Claude 采用 **合宪法 AI** 方法，通过一套价值观准则（宪法）来指导模型行为，而非仅依赖大量人工反馈。
+
+### 实现方式
+1. **监督阶段**：使用宪法准则对模型输出进行自我批评和修订
+2. **RLHF 阶段**：基于宪法原则训练偏好模型，而非纯人工偏好
+
+### 优势
+- 减少对大量人工标注的依赖
+- 行为准则透明、可审查
+- 在帮助性与安全性之间取得更好平衡
+
+---
+
+## 200K 上下文窗口
+
+Claude 3.5 系列支持 **200,000 token** 上下文窗口，可处理：
+
+- 整本《三体》三部曲
+- 数百页技术文档
+- 完整代码仓库
+- 长时间对话历史
+
+### 实际应用
+
+```python
+# 分析长文档示例
+import anthropic
+
+client = anthropic.Anthropic(api_key="your-key")
+
+with open("长文档.pdf", "rb") as f:
+    document = f.read()
+
+response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=4000,
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "document", "source": {"type": "base64", "media_type": "application/pdf", "data": document}},
+                {"type": "text", "text": "请总结这份文档的核心论点并提供关键证据。"}
+            ]
+        }
+    ]
+)
+
+print(response.content[0].text)
+```
+
+---
+
+## 核心优势
+
+- **安全性领先**：合宪法 AI 让 Claude 更谨慎、更少有害输出
+- **长上下文处理**：200K token 窗口，行业顶级
+- **细致理解**：擅长解析复杂指令和微妙语境
+- **拒绝机制**：面对不确定时，倾向承认而非编造
+- **代码能力**：Claude 3.5 Sonnet 编程能力与 GPT-4o 相当甚至更优
+
+## 局限
+
+- **创意自由度较低**：安全约束有时会限制创意产出
+- **不支持多模态输入**（截至当前版本）
+- **API 可用地区有限**：部分区域需特殊方式访问
+- **无插件/工具生态**：不像 GPTs 有丰富的第三方扩展
+
+---
+
+## API 使用
+
+### 消息 API
+
+```python
+import anthropic
+
+client = anthropic.Anthropic(api_key="your-key")
+
+message = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    system="你是专业的 Python 开发导师。",
+    messages=[
+        {"role": "user", "content": "解释一下 Python 装饰器的工作原理。"}
+    ]
+)
+
+print(message.content[0].text)
+```
+
+### 流式响应
+
+```python
+with client.messages.stream(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "写一首关于 AI 的诗"}]
+) as stream:
+    for text in stream.text_stream:
+        print(text, end="", flush=True)
+```
+
+---
+
+## 应用场景
+
+- **长文档分析**：论文审阅、合同审查、报告总结
+- **代码审查**：大型代码库的理解与优化
+- **内容审核**：安全合规的内容过滤
+- **教育辅导**：耐心细致的知识讲解
+- **写作辅助**：高质量的写作与润色
+
+---
+
+## 下一步
+
+- 访问 [Anthropic Console](https://console.anthropic.com) 获取 API Key
+- 阅读 Claude 提示工程指南
+- 体验 Claude.ai 网页版对比不同版本
+- 研究合宪法 AI 论文了解更多理论细节

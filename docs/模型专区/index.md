@@ -1,20 +1,78 @@
-# 模型专区
+# 模型专区概览
 
-> 各主流AI模型的详细学习指南与资源汇总
-
----
-
-## 子分类
-
-- **[GPT系列](GPT系列/index.md)** — OpenAI GPT系列模型学习资源
-- **[Claude系列](Claude系列/index.md)** — Anthropic Claude系列模型学习资源
-- **[LLaMA系列](LLaMA系列/index.md)** — Meta LLaMA系列开源模型学习资源
-- **[DeepSeek](DeepSeek/index.md)** — 深度求索DeepSeek系列模型学习资源
-- **[Gemini系列](Gemini系列/index.md)** — Google Gemini系列多模态模型学习资源
-- **[Qwen系列](Qwen系列/index.md)** — 阿里通义千问Qwen系列学习资源
-- **[StableDiffusion](StableDiffusion/index.md)** — Stable Diffusion图像生成模型学习资源
-- **[Mixtral系列](Mixtral系列/index.md)** — Mistral AI Mixtral系列模型学习资源
+> 探索主流大语言模型与生成式 AI 模型家族，了解各自的技术特点、优势与适用场景。
 
 ---
 
-*该分类下的资源每日自动更新中...*
+## 什么是模型专区？
+
+模型专区系统梳理了当前 AI 领域最具影响力的模型家族。无论你是初学者还是进阶开发者，都能在这里找到适合学习与使用的模型。
+
+---
+
+## 主流模型家族一览
+
+| 模型家族 | 开发商 | 代表模型 | 核心优势 | 适合场景 |
+|---------|--------|---------|---------|---------|
+| **GPT 系列** | OpenAI | GPT-4o, GPT-4 | 综合能力强、生态成熟 | 通用对话、编程、推理 |
+| **Claude 系列** | Anthropic | Claude 3.5 Sonnet | 长上下文、安全性高 | 长文档分析、内容创作 |
+| **LLaMA 系列** | Meta | LLaMA 3.1 405B | 开源、可本地部署 | 学术研究、微调、自托管 |
+| **Gemini 系列** | Google | Gemini 2.0 Flash | 原生多模态、超长上下文 | 多模态任务、Google 生态 |
+| **DeepSeek** | 深度求索 | DeepSeek-R1 | 推理能力强、成本低 | 数学推理、编程、中文任务 |
+| **Qwen 系列** | 阿里巴巴 | Qwen2.5 72B | 中文优秀、数学编程强 | 中文场景、企业应用 |
+| **Mixtral 系列** | Mistral AI | Mixtral 8x22B | MoE 架构、推理高效 | 高效推理、边缘部署 |
+| **Stable Diffusion** | Stability AI | SDXL, SD3 | 文生图开源标杆 | 图像生成、设计创作 |
+
+---
+
+## 如何选择模型？
+
+### 按任务类型选择
+
+| 任务类型 | 推荐模型 | 理由 |
+|---------|---------|------|
+| 日常对话与写作 | Claude 3.5 Sonnet、GPT-4o | 表达自然、理解力强 |
+| 编程与代码生成 | GPT-4o、DeepSeek-Coder | 代码能力突出 |
+| 数学与逻辑推理 | DeepSeek-R1、GPT-4o | 推理链完整 |
+| 长文档分析 (100K+) | Gemini 1.5 Pro、Claude 3.5 | 超长上下文窗口 |
+| 中文内容处理 | Qwen2.5、DeepSeek | 中文语料训练充分 |
+| 图像生成 | Stable Diffusion SDXL | 开源、可定制 |
+| 本地私有化部署 | LLaMA 3、Qwen2.5、Mixtral | 开源、社区支持强 |
+| 成本敏感场景 | DeepSeek-V3、Mixtral 8x7B | 高性价比 |
+
+### 闭源 vs 开源
+
+**闭源模型**（GPT-4o、Claude、Gemini）：
+- 即开即用，无需部署
+- 质量稳定，持续更新
+- 受 API 定价和速率限制
+
+**开源模型**（LLaMA、Qwen、Mixtral、DeepSeek）：
+- 完全可控，可本地部署
+- 可微调定制
+- 无数据隐私风险
+- 需要自行管理基础设施
+
+---
+
+## 模型技术趋势
+
+1. **MoE（混合专家）架构**：Mixtral、DeepSeek-V3 等模型采用稀疏专家路由，同等计算量下获得更强性能
+2. **超长上下文**：Gemini 1.5 Pro 支持 100 万 token，Claude 支持 200K token
+3. **推理增强**：DeepSeek-R1 等模型通过强化学习提升推理能力
+4. **多模态融合**：模型从纯文本向图文音视频全方位感知演进
+5. **开源生态繁荣**：LLaMA 带动新一轮开源浪潮，社区适配层出
+
+---
+
+## 学习路径建议
+
+1. **入门**：从 GPT 和 Claude 开始，了解大模型的基本能力
+2. **深入**：研究 LLaMA 和 Qwen 的开源实现，理解模型架构
+3. **进阶**：学习 Mixtral 和 DeepSeek 的 MoE 架构与推理技术
+4. **应用**：掌握 Stable Diffusion 进行图像生成
+5. **探索**：持续关注各模型更新，在实践中积累经验
+
+---
+
+> **下一站**：选择你感兴趣的模型家族，开始深入学习吧！
