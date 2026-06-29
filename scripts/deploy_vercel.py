@@ -13,7 +13,7 @@ files = []
 for root, dirs, fnames in os.walk(SITE_DIR):
     for f in sorted(fnames):
         path = os.path.join(root, f)
-        rel = os.path.relpath(path, SITE_DIR)
+        rel = os.path.relpath(path, SITE_DIR).replace(os.sep, "/")
         with open(path, "rb") as fh:
             raw = fh.read()
         files.append({

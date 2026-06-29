@@ -11,7 +11,7 @@ def deploy():
     for root, dirs, fnames in os.walk(site_dir):
         for f in sorted(fnames):
             path = os.path.join(root, f)
-            rel = os.path.relpath(path, site_dir)
+            rel = os.path.relpath(path, site_dir).replace(os.sep, "/")
             with open(path, "rb") as fh:
                 raw = fh.read()
             files.append({
