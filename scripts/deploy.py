@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Vercel 部署脚本 - 将 site/ 目录部署到 Vercel
+Vercel 部署脚本 - 将 VitePress 静态产物部署到 Vercel
 供 cron job 调用，无依赖（只用了 Python 标准库）
 """
 import os, sys, json, base64, urllib.request, time
 
 TOKEN = "vcp_6KidUE1T9ECwrPNYPAoX2WO7cacGW0b8DF2SugUGloKNDp7pjt4OPkc5"
 PROJECT_ID = "prj_NDWaVIdrgb5aOQdyKUW8XZxC2sk2"
-SITE_DIR = "site"
+SITE_DIR = os.path.join("docs", ".vitepress", "dist")
 ALIAS = "aiweb-lemon.vercel.app"
 
 def deploy():
@@ -15,7 +15,7 @@ def deploy():
     site_dir = os.path.join(project_root, SITE_DIR)
 
     if not os.path.isdir(site_dir):
-        print(f"❌ {SITE_DIR}/ 目录不存在，请先运行 mkdocs build")
+        print(f"❌ {SITE_DIR}/ 目录不存在，请先运行 npm run build")
         sys.exit(1)
 
     # 收集所有文件

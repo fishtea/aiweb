@@ -3,7 +3,7 @@
 import sys, os, json, base64, urllib.request, urllib.error
 
 TOKEN_FILE = "/tmp/vercel_token.txt"
-SITE_DIR = os.path.expanduser("~/aiweb/site")
+SITE_DIR = os.path.expanduser("~/aiweb/docs/.vitepress/dist")
 PROJECT_ID = "prj_zHZb5irlWL16XXIOd6EEenYmMOt8"
 
 with open(TOKEN_FILE) as f:

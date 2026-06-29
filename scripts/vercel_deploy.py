@@ -5,7 +5,7 @@ import os, json, base64, urllib.request, urllib.error, sys
 def deploy():
     token = os.environ["VERCEL_TOKEN"]
     project_id = os.environ.get("VERCEL_PROJECT_ID", "prj_zHZb5irlWL16XXIOd6EEenYmMOt8")
-    site_dir = "site"
+    site_dir = "docs/.vitepress/dist"
 
     files = []
     for root, dirs, fnames in os.walk(site_dir):

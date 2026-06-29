@@ -20,25 +20,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 安装 uv
-        uses: astral-sh/setup-uv@v5
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
         with:
-          enable-cache: true
-
-      - name: 安装 Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+          node-version: 20
+          cache: npm
 
       - name: 构建站点
         run: |
-          uv sync
-          uv run mkdocs build
+          npm install
+          npm run build
 
       - name: 上传 Pages 产物
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: docs/.vitepress/dist
 
   deploy:
     needs: build

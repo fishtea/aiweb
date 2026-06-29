@@ -1,6 +1,6 @@
 #!/bin/bash
 # AI 学习路径导航 - 完全部署脚本
-# 1. 采集资源 → 2. 构建网站 → 3. 推送 Gitee
+# 1. 采集资源 → 2. 构建网站 → 3. 推送 Git
 set -e
 
 cd "$(dirname "$0")/.."
@@ -21,22 +21,21 @@ echo ""
 
 # 第2步：构建网站
 echo "=== 第2步：构建静态网站 ==="
-python3 -m mkdocs build --clean
+npm run build
 rm -rf website/*
-cp -r site/* website/
+cp -r docs/.vitepress/dist/* website/
 echo "✅ 网站构建完成"
 echo ""
 
-# 第3步：推送到 Gitee
-echo "=== 第3步：推送到 Gitee ==="
+# 第3步：推送到 Git
+echo "=== 第3步：推送到 Git ==="
 git add -A
 git commit -m "每日更新 ${TIMESTAMP}"
-git push origin main
+git push origin master
 echo "✅ 推送完成"
 echo ""
 
 echo "=========================================="
 echo "  部署完成！"
-echo "  Gitee: https://gitee.com/fishtea/aiweb"
-echo "  Pages: https://fishtea.gitee.io/aiweb"
+echo "  Vercel: https://aiweb-lemon.vercel.app/"
 echo "=========================================="
