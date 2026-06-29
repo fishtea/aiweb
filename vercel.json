@@ -1,0 +1,5 @@
+{
+  "buildCommand": "python3 -m mkdocs build",
+  "outputDirectory": "site",
+  "installCommand": "uv pip install --system mkdocs mkdocs-material"
+}
