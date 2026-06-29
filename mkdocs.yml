@@ -9,18 +9,19 @@ edit_uri: ""
 theme:
   name: material
   language: zh
+  font: false  # 禁用 Google Fonts，改用 CSS 中定义的微软雅黑
   palette:
     # 白天模式
     - scheme: default
-      primary: teal
-      accent: cyan
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/weather-night
         name: 切换深色模式
     # 夜间模式
     - scheme: slate
-      primary: teal
-      accent: cyan
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/weather-sunny
         name: 切换浅色模式
@@ -69,9 +70,6 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.tasklist:
       custom_checkbox: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - admonition
   - attr_list
   - def_list

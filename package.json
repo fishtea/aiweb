@@ -1,9 +1,0 @@
-{
-  "name": "aiweb",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "build": "uv sync && uv run python3 -m mkdocs build",
-    "dev": "uv run python3 -m mkdocs serve"
-  }
-}
