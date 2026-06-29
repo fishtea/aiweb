@@ -10,94 +10,82 @@ const nav = [
   { text: 'AI Agent 实践', link: '/AIAgent实践/' }
 ]
 
-const sidebar = {
-  '/初级知识/': [
-    {
-      text: '初级知识',
-      collapsed: false,
-      items: [
-        { text: '总览', link: '/初级知识/' },
-        { text: '人工智能入门', link: '/初级知识/人工智能入门/' },
-        { text: '机器学习基础', link: '/初级知识/机器学习基础/' },
-        { text: '深度学习入门', link: '/初级知识/深度学习入门/' },
-        { text: '大语言模型基础', link: '/初级知识/大语言模型基础/' }
-      ]
-    }
-  ],
-  '/进阶学习/': [
-    {
-      text: '进阶学习',
-      collapsed: false,
-      items: [
-        { text: '总览', link: '/进阶学习/' },
-        { text: '模型微调技术', link: '/进阶学习/模型微调技术/' },
-        { text: 'RAG 检索增强', link: '/进阶学习/RAG检索增强/' },
-        { text: 'Agent 智能体', link: '/进阶学习/Agent智能体/' },
-        { text: '提示词工程', link: '/进阶学习/提示词工程/' },
-        { text: '模型评估与基准', link: '/进阶学习/模型评估与基准/' }
-      ]
-    }
-  ],
-  '/高级知识/': [
-    {
-      text: '高级知识',
-      collapsed: false,
-      items: [
-        { text: '总览', link: '/高级知识/' },
-        { text: '模型训练与优化', link: '/高级知识/模型训练与优化/' },
-        { text: 'AI 安全与对齐', link: '/高级知识/AI安全与对齐/' },
-        { text: '多模态模型', link: '/高级知识/多模态模型/' },
-        { text: '模型架构研究', link: '/高级知识/模型架构研究/' }
-      ]
-    }
-  ],
-  '/模型专区/': [
-    {
-      text: '模型专区',
-      collapsed: false,
-      items: [
-        { text: '总览', link: '/模型专区/' },
-        { text: 'GPT 系列', link: '/模型专区/GPT系列/' },
-        { text: 'Claude 系列', link: '/模型专区/Claude系列/' },
-        { text: 'LLaMA 系列', link: '/模型专区/LLaMA系列/' },
-        { text: 'DeepSeek', link: '/模型专区/DeepSeek/' },
-        { text: 'Gemini 系列', link: '/模型专区/Gemini系列/' },
-        { text: 'Qwen 系列', link: '/模型专区/Qwen系列/' },
-        { text: 'Stable Diffusion', link: '/模型专区/StableDiffusion/' },
-        { text: 'Mixtral 系列', link: '/模型专区/Mixtral系列/' }
-      ]
-    }
-  ],
-  '/工具专区/': [
-    {
-      text: '工具专区',
-      collapsed: false,
-      items: [
-        { text: '总览', link: '/工具专区/' },
-        { text: 'LangChain', link: '/工具专区/LangChain/' },
-        { text: 'AutoGPT', link: '/工具专区/AutoGPT/' },
-        { text: 'ComfyUI', link: '/工具专区/ComfyUI/' },
-        { text: 'vLLM', link: '/工具专区/vLLM/' },
-        { text: 'Hugging Face', link: '/工具专区/HuggingFace/' },
-        { text: 'PyTorch', link: '/工具专区/PyTorch/' },
-        { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
-        { text: 'Ollama', link: '/工具专区/Ollama/' }
-      ]
-    }
-  ],
-  '/AIAgent实践/': [
-    {
-      text: 'AI Agent 实践',
-      collapsed: false,
-      items: [
-        { text: '总览', link: '/AIAgent实践/' },
-        { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
-        { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
-        { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' }
-      ]
-    }
-  ]
-}
+const sidebar = [
+  {
+    text: '初级知识',
+    collapsed: false,
+    items: [
+      { text: '总览', link: '/初级知识/' },
+      { text: '人工智能入门', link: '/初级知识/人工智能入门/' },
+      { text: '机器学习基础', link: '/初级知识/机器学习基础/' },
+      { text: '深度学习入门', link: '/初级知识/深度学习入门/' },
+      { text: '大语言模型基础', link: '/初级知识/大语言模型基础/' }
+    ]
+  },
+  {
+    text: '进阶学习',
+    collapsed: false,
+    items: [
+      { text: '总览', link: '/进阶学习/' },
+      { text: '模型微调技术', link: '/进阶学习/模型微调技术/' },
+      { text: 'RAG 检索增强', link: '/进阶学习/RAG检索增强/' },
+      { text: 'Agent 智能体', link: '/进阶学习/Agent智能体/' },
+      { text: '提示词工程', link: '/进阶学习/提示词工程/' },
+      { text: '模型评估与基准', link: '/进阶学习/模型评估与基准/' }
+    ]
+  },
+  {
+    text: '高级知识',
+    collapsed: false,
+    items: [
+      { text: '总览', link: '/高级知识/' },
+      { text: '模型训练与优化', link: '/高级知识/模型训练与优化/' },
+      { text: 'AI 安全与对齐', link: '/高级知识/AI安全与对齐/' },
+      { text: '多模态模型', link: '/高级知识/多模态模型/' },
+      { text: '模型架构研究', link: '/高级知识/模型架构研究/' }
+    ]
+  },
+  {
+    text: '模型专区',
+    collapsed: false,
+    items: [
+      { text: '总览', link: '/模型专区/' },
+      { text: 'GPT 系列', link: '/模型专区/GPT系列/' },
+      { text: 'Claude 系列', link: '/模型专区/Claude系列/' },
+      { text: 'LLaMA 系列', link: '/模型专区/LLaMA系列/' },
+      { text: 'DeepSeek', link: '/模型专区/DeepSeek/' },
+      { text: 'Gemini 系列', link: '/模型专区/Gemini系列/' },
+      { text: 'Qwen 系列', link: '/模型专区/Qwen系列/' },
+      { text: 'Stable Diffusion', link: '/模型专区/StableDiffusion/' },
+      { text: 'Mixtral 系列', link: '/模型专区/Mixtral系列/' }
+    ]
+  },
+  {
+    text: '工具专区',
+    collapsed: false,
+    items: [
+      { text: '总览', link: '/工具专区/' },
+      { text: 'LangChain', link: '/工具专区/LangChain/' },
+      { text: 'AutoGPT', link: '/工具专区/AutoGPT/' },
+      { text: 'ComfyUI', link: '/工具专区/ComfyUI/' },
+      { text: 'vLLM', link: '/工具专区/vLLM/' },
+      { text: 'Hugging Face', link: '/工具专区/HuggingFace/' },
+      { text: 'PyTorch', link: '/工具专区/PyTorch/' },
+      { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
+      { text: 'Ollama', link: '/工具专区/Ollama/' }
+    ]
+  },
+  {
+    text: 'AI Agent 实践',
+    collapsed: false,
+    items: [
+      { text: '总览', link: '/AIAgent实践/' },
+      { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
+      { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
+      { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' }
+    ]
+  }
+]
 
 export default defineConfig({
   lang: 'zh-CN',
