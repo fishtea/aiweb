@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# Site build
+site/
+
+# MkDocs cache
+.cache/
+
+# Environment
+.env
+.venv/
+venv/
+
+# macOS
+.DS_Store

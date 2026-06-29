@@ -1,0 +1,92 @@
+# AI学习路径网站 - MkDocs配置
+site_name: AI 学习路径导航
+site_description: 最全面的AI学习资源库 - 从入门到精通，涵盖各大模型与工具
+site_url: https://fishtea.gitee.io/aiweb
+repo_url: https://gitee.com/fishtea/aiweb
+repo_name: fishtea/aiweb
+
+theme:
+  name: material
+  language: zh
+  palette:
+    primary: indigo
+    accent: deep purple
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+  icon:
+    logo: material/robot
+    repo: fontawesome/brands/github
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://gitee.com/fishtea/aiweb
+  copyright: AI 学习路径导航 | 每日更新
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - 🏠 首页: index.md
+  - 📚 初级知识:
+    - 初级知识/index.md
+    - 人工智能入门: 初级知识/人工智能入门/index.md
+    - 机器学习基础: 初级知识/机器学习基础/index.md
+    - 深度学习入门: 初级知识/深度学习入门/index.md
+    - 大语言模型基础: 初级知识/大语言模型基础/index.md
+  - 🔧 进阶学习:
+    - 进阶学习/index.md
+    - 模型微调技术: 进阶学习/模型微调技术/index.md
+    - RAG检索增强: 进阶学习/RAG检索增强/index.md
+    - Agent智能体: 进阶学习/Agent智能体/index.md
+    - 提示词工程: 进阶学习/提示词工程/index.md
+    - 模型评估与基准: 进阶学习/模型评估与基准/index.md
+  - 🧠 高级知识:
+    - 高级知识/index.md
+    - 模型训练与优化: 高级知识/模型训练与优化/index.md
+    - AI安全与对齐: 高级知识/AI安全与对齐/index.md
+    - 多模态模型: 高级知识/多模态模型/index.md
+    - 模型架构研究: 高级知识/模型架构研究/index.md
+  - 🤖 模型专区:
+    - 模型专区/index.md
+    - GPT系列: 模型专区/GPT系列/index.md
+    - Claude系列: 模型专区/Claude系列/index.md
+    - LLaMA系列: 模型专区/LLaMA系列/index.md
+    - DeepSeek: 模型专区/DeepSeek/index.md
+    - Gemini系列: 模型专区/Gemini系列/index.md
+    - Qwen系列: 模型专区/Qwen系列/index.md
+    - Stable Diffusion: 模型专区/StableDiffusion/index.md
+    - Mixtral系列: 模型专区/Mixtral系列/index.md
+  - 🛠️ 工具专区:
+    - 工具专区/index.md
+    - LangChain: 工具专区/LangChain/index.md
+    - AutoGPT: 工具专区/AutoGPT/index.md
+    - ComfyUI: 工具专区/ComfyUI/index.md
+    - vLLM: 工具专区/vLLM/index.md
+    - HuggingFace: 工具专区/HuggingFace/index.md
+    - PyTorch: 工具专区/PyTorch/index.md
+    - TensorFlow: 工具专区/TensorFlow/index.md
+    - Ollama: 工具专区/Ollama/index.md
