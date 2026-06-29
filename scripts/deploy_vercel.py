@@ -16,7 +16,11 @@ for root, dirs, fnames in os.walk(SITE_DIR):
         rel = os.path.relpath(path, SITE_DIR)
         with open(path, "rb") as fh:
             raw = fh.read()
-        files.append({"file": rel, "data": base64.b64encode(raw).decode()})
+        files.append({
+            "file": rel,
+            "data": base64.b64encode(raw).decode(),
+            "encoding": "base64"
+        })
 
 print(f"Files: {len(files)}, Total: {sum(len(f['data']) for f in files)/1024/1024:.1f} MB")
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # AI 学习路径导航 - 完全部署脚本
-# 1. 采集资源 → 2. 构建网站 → 3. 推送 Git
+# 1. 采集资源 → 2. 构建网站 → 3. 部署 Vercel → 4. 推送 Git
 set -e
 
 cd "$(dirname "$0")/.."
@@ -27,10 +27,20 @@ cp -r docs/.vitepress/dist/* website/
 echo "✅ 网站构建完成"
 echo ""
 
-# 第3步：推送到 Git
-echo "=== 第3步：推送到 Git ==="
+# 第3步：部署到 Vercel
+echo "=== 第3步：部署到 Vercel ==="
+python3 scripts/deploy.py
+echo "✅ Vercel 部署完成"
+echo ""
+
+# 第4步：推送到 Git
+echo "=== 第4步：推送到 Git ==="
 git add -A
-git commit -m "每日更新 ${TIMESTAMP}"
+if git diff --cached --quiet; then
+  echo "没有需要提交的源码变更"
+else
+  git commit -m "每日更新 ${TIMESTAMP}"
+fi
 git push origin master
 echo "✅ 推送完成"
 echo ""

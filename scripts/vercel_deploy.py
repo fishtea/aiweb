@@ -14,7 +14,11 @@ def deploy():
             rel = os.path.relpath(path, site_dir)
             with open(path, "rb") as fh:
                 raw = fh.read()
-            files.append({"file": rel, "data": base64.b64encode(raw).decode()})
+            files.append({
+                "file": rel,
+                "data": base64.b64encode(raw).decode(),
+                "encoding": "base64"
+            })
 
     payload = json.dumps({
         "files": files,
