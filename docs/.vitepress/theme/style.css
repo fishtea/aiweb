@@ -218,14 +218,9 @@
 
 /* ── Feature 卡片区 ────────────────────────────────────────── */
 .VPFeatures {
-  padding-top: 8px !important;
-  padding-bottom: 64px !important;
+  padding: 20px 0 48px 0 !important;  /* 左右清零由container控制，保留上下间距 */
   position: relative;
   z-index: 1;
-}
-
-.VPFeatures {
-  padding: 0 !important;   /* 清除 VitePress 自带的左右 padding，统一由 container 控制 */
 }
 
 .VPFeatures .container {
