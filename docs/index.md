@@ -49,8 +49,8 @@ features:
 
 <section class="home-section">
   <div class="home-panel">
-    <h2>自动化内容管线</h2>
-    <p>目标是每天抓取不同来源的 AI 内容，将英文资料翻译成中文，再生成 Markdown 文档并自动发布为网站。首页优先展示学习路径、模型资料、工具教程和 Agent 实例，方便后续持续扩容。</p>
+    <h2>📊 知识库概览</h2>
+    <p>持续自动化采集 AI 前沿内容，英文资料翻译为中文，沉淀为结构化文档并自动发布。覆盖学习路径、主流模型、热门工具与 Agent 实战，随内容增长持续扩展。</p>
     <div class="metric-grid">
       <div class="metric"><strong>35+</strong><span>已整理教程文档</span></div>
       <div class="metric"><strong>6</strong><span>核心学习分类</span></div>
