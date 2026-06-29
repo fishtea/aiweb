@@ -97,13 +97,15 @@
 .VPHero {
   position: relative;
   z-index: 1;
-  max-width: 1200px !important;
   padding-top: 72px !important;
   padding-bottom: 72px !important;
 }
 
-/* ★ 关键修复：强制 Hero 使用双列 Flex 布局，避免图片遮挡文字 */
+/* 双列布局 + 保留居中 */
 .VPHero .container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
