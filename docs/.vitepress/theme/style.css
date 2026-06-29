@@ -396,7 +396,16 @@
 }
 
 /* ── 自定义 Home Section 面板 ──────────────────────────────── */
-/* 与 .VPFeatures .container 完全对齐：同 max-width + 同 padding */
+
+/* 关键：home 页的 vp-doc container 默认有 max-width ~688px，
+   必须撑满，让 .home-section 自己控制宽度 */
+.VPHome .vp-doc.container {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 与 .VPFeatures .container 完全对齐：max-width 1200px + padding 0 24px */
 .home-section {
   max-width: 1200px;
   margin: 0 auto;
