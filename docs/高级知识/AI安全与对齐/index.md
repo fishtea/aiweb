@@ -107,6 +107,20 @@ RLHF 是 OpenAI 提出的主流对齐方法，包含三个阶段：
 | Constitutional AI | 最高 40.8% | 9.8% |
 | IterAlign | 13.5% | 保持 |
 
+### 4.1 从 RLHF 到 DPO 与 GRPO
+
+对齐方法在 2024-2025 年发生重要演进：
+
+| 方法 | 核心思想 | 优势 | 局限 |
+|------|---------|------|------|
+| **RLHF (PPO)** | 训练奖励模型 + PPO 在线优化 | 效果上限高 | 训练不稳定、需在线采样、成本高 |
+| **DPO** | 直接从偏好对优化策略，无需奖励模型 | 简单稳定、离线训练 | 依赖偏好数据质量 |
+| **KTO** | 只需"好/坏"单点反馈而非成对比较 | 数据更易获取 | 略逊于 DPO |
+| **Constitutional AI / RLAIF** | 用 AI 反馈替代人类反馈 | 可扩展、成本低 | 依赖评判模型质量 |
+| **GRPO (RLVR)** | 用可验证奖励（如数学答案）做 RL | 产生推理能力、无需奖励模型 | 需可验证任务 |
+
+> 趋势：偏好对齐主流转向 DPO（简单稳定），推理能力培养转向 RLVR（可验证奖励）。RLHF/PPO 仍在顶级闭源模型中使用，但开源社区已普遍采用更轻量的替代方案。
+
 ---
 
 ## 5. AI 安全的挑战与未来
@@ -137,6 +151,8 @@ RLHF 是 OpenAI 提出的主流对齐方法，包含三个阶段：
 - [Constitutional AI Paper Review - Medium](https://medium.com/mlearning-ai/paper-review-constituional-ai-training-llms-using-principles-16c68cfffaef)
 - [Inverse Constitutional AI - Harvard](https://dash.harvard.edu/bitstreams/8d79fa6f-a4fc-4cd5-931d-23214597c41d/download)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -147,7 +163,4 @@ RLHF 是 OpenAI 提出的主流对齐方法，包含三个阶段：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

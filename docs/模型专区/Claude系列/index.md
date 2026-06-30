@@ -50,6 +50,15 @@
 - **Haiku 4.5**（2025.10）：达到 Sonnet 4.5 90% 的性能，但成本仅为 1/5。
 - **Opus 4.1**（2025.08）：安全网模型，慢但可靠，能捕捉其他模型遗漏的关键错误。
 
+### Claude 的差异化能力
+
+- **超长上下文处理**：200K 窗口配合"上下文记忆"优化，可在长文档中保持高召回，适合代码库分析、法律合同审查。
+- **Agentic Coding**：Claude Code（CLI）和 Agent SDK 让 Claude 能自主读写文件、运行命令、执行多步工程任务，SWE-Bench 表现长期领先。
+- **MCP（Model Context Protocol）**：Anthropic 主导的开放协议，让模型标准化接入外部工具和数据源，已成为 Agent 生态基础设施（见 [实际应用案例](/AIAgent实践/实际应用案例/)）。
+- **宪法 AI 与安全**：通过 Constitutional AI 训练，在拒绝率和无害性上长期领先，适合对安全敏感的企业场景。
+
+> 2025 年底 OpenAI 与 Anthropic 联合创立 Agentic AI Foundation（归属 Linux 基金会），将 MCP、AGENTS.md 等协议标准化，推动 Agent 互操作。
+
 ---
 
 ## 如何使用
@@ -103,6 +112,8 @@ print(message.content[0].text)
 - [Claude Models Comparison (Gradually AI)](https://www.gradually.ai/en/claude-models)
 - [Claude 3 Opus/Sonnet/Haiku 探索 (Medium)](https://damiandabrowski.medium.com/exploring-the-claude-3-opus-sonnet-and-haiku-models-adbf9c74acaa)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -113,7 +124,4 @@ print(message.content[0].text)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

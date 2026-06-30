@@ -83,6 +83,19 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
 | 语音识别 | Whisper, Bark |
 | 分类/嵌入 | BERT, RoBERTa, E5 |
 
+### 模型选型的实用经验
+
+面对 Hub 上的百万级模型，选型比"找最强"更重要：
+
+- **看下载量与点赞数**：高下载量通常意味着社区验证过，但要注意是否被官方/组织账号维护。
+- **看更新时间**：NLP/CV 领域迭代快，半年未更新的模型可能已被超越。
+- **看 Model Card 质量**：官方模型卡通常包含训练数据、评估方法、已知局限，信息越全越可信。
+- **基准要交叉看**：不要只信单一榜单，结合 MTEB、Open LLM Leaderboard、CCKM 等多源对比。
+- **小模型优先**：先用 7B 以下模型验证流程，再决定是否升级到更大模型。
+- **关注许可证**：部分模型限非商用，企业部署前务必确认 license。
+
+> 经验：Hub 上"同名不同版本"很多（base/instruct/chat/turbo/quantized），选错版本会导致效果天差地别。优先选 `-Instruct` 版本做对话任务。
+
 ---
 
 ## Spaces — 应用托管
@@ -166,6 +179,8 @@ huggingface-cli login
 - [Master Hugging Face (Sunny Savita YouTube)](https://www.youtube.com/watch?v=SPNaP4ik9a4)
 - [Learn HuggingFace in 1 hour (Amit Thinks YouTube)](https://www.youtube.com/watch?v=b665B04CWkI)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -176,7 +191,4 @@ huggingface-cli login
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

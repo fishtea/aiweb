@@ -14,6 +14,19 @@
 | Mistral Large | 2024.02 | 未公开 | 未公开 | N/A (Dense) | 32K |
 | Mistral Nemo | 2024.07 | 12B | 12B | N/A (Dense) | 128K |
 | Mistral Small 3 | 2025.01 | 24B | 24B | N/A (Dense) | 32K |
+| Magistral | 2025.06 | 24B / 405B | — | 推理增强 | 256K |
+| Mistral Medium 3 | 2025.05 | ~70B | — | Dense | 128K |
+
+### Mistral 的推理与 Agent 转向
+
+2025 年 Mistral AI 开始补齐推理模型和 Agent 能力：
+
+- **Magistral**（2025.06）：基于 Mistral Small 3 和 Large 2 的推理模型，引入思维链推理，在数学和编程上显著提升，256K 上下文。
+- **Mistral Medium 3**（2025.05）：主打高性价比，性能接近闭源旗舰但成本更低，企业可本地部署。
+- **Codestral**：代码专用模型，支持 80+ 编程语言，适合 IDE 补全和 Agent 编码。
+- **MCP 与函数调用**：Mistral 模型原生支持函数调用和结构化输出，逐步融入 Agent 生态。
+
+> Mistral 的定位是"欧洲的开源旗舰 + 合规友好"，适合受 GDPR 等法规约束、希望数据留在欧洲的企业。
 
 ---
 
@@ -147,6 +160,8 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 - [Mixtral Architecture Video](https://www.youtube.com/watch?v=5I9Ujj8nV20)
 - [HuggingFace Mixtral 8x7B](https://huggingface.co/mistralai/Mixtral-8x7B-v0.1)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -157,7 +172,4 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

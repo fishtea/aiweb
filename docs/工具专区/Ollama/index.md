@@ -142,6 +142,17 @@ ollama create mymodel -f Modelfile
 # PARAMETER top_p 0.9
 ```
 
+### 与 Agent 框架集成
+
+Ollama 的 OpenAI 兼容 API 让本地模型能无缝接入 Agent 生态：
+
+- **LangChain / LangGraph**：用 `ChatOpenAI(base_url="http://localhost:11434/v1")` 即可替换云端模型。
+- **函数调用**：Ollama 已支持工具调用（tool calling），可构建本地 Agent。
+- **RAG**：配合 Chroma/Qdrant 等本地向量库，实现完全离线的知识库问答。
+- **隐私场景**：医疗、法律、金融等敏感数据全程不出本机。
+
+> 适合本地 Agent 的模型：Qwen3（思考模式可控）、Llama 3.1/4、DeepSeek-R1 蒸馏版（推理）。注意本地模型的函数调用稳定性弱于 GPT/Claude，需加强参数校验和重试。
+
 ---
 
 ## 模型管理与硬件需求
@@ -217,6 +228,8 @@ docker run -d -p 3000:8080 \
 - [Install LLM Locally with Ollama (Adventures in CRE)](https://www.adventuresincre.com/how-to-install-llm-locally)
 - [Getting Started with Ollama (Mistwire)](https://mistwire.com/getting-started-running-local-llms-with-ollama)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -227,7 +240,4 @@ docker run -d -p 3000:8080 \
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

@@ -47,6 +47,18 @@
 - **时间旅行:** 回溯到任何历史状态分支重试
 - **错误容忍:** 内置容错机制
 
+### Agent 架构演进：从 ReAct 到 LangGraph
+
+LangChain 生态的 Agent 设计经历了明显代际更替：
+
+| 代际 | 代表 | 特点 |
+|------|------|------|
+| 早期 AgentExecutor | `create_react_agent` + AgentExecutor | 基于 ReAct 提示词，循环固定 |
+| Tool Calling Agent | `create_tool_calling_agent` | 依赖模型原生函数调用，更稳定 |
+| LangGraph Agent | `create_agent` / 自定义图 | 显式状态图，可控循环、检查点、人机协作 |
+
+> 建议：新项目直接从 LangGraph 开始，AgentExecutor 已逐步被标记为遗留。LangGraph 的图结构让 Agent 的循环、分支、中断、恢复都变得显式可调试。
+
 ---
 
 ## LangGraph — Agent 编排
@@ -139,6 +151,8 @@ print(response.content)
 - [LangChain Official Site](https://www.langchain.com/langgraph)
 - [LangGraph Tutorial for Beginners (DataCamp)](https://www.youtube.com/watch?v=UklCxmEvz2w)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -149,7 +163,4 @@ print(response.content)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

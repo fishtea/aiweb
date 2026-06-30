@@ -151,6 +151,23 @@ mp_fp16 = MixedPrecision(
 | **Flash Attention** | IO-aware 精确注意力，最高 220+ TFLOPS | 需要 Ampere+ GPU |
 | **梯度检查点** | 用计算换内存，仅保留部分激活 | 约 20% 训练时间增加 |
 
+### 6. 训练范式演进：预训练后训练与强化学习
+
+2024-2025 年，大模型训练从"预训练 + SFT + RLHF"三段式，演进为更精细的多阶段后训练：
+
+| 阶段 | 目标 | 方法 |
+|------|------|------|
+| 预训练 | 学习语言和世界知识 | 自回归下一 token 预测 |
+| SFT | 学会遵循指令 | 指令-响应监督微调 |
+| 偏好优化 | 对齐人类偏好 | DPO / KTO / SimPO（替代复杂 PPO） |
+| 推理强化学习 | 学会"思考" | GRPO / RLVR（可验证奖励强化学习） |
+
+- **DPO 取代 PPO 趋势**：DPO 无需奖励模型和在线采样，稳定性更高，已成为多数开源模型偏好优化首选。
+- **RLVR 与推理能力**：DeepSeek-R1 用"可验证奖励"（数学题有标准答案）做强化学习，让模型自发涌现长思维链，证明推理能力可通过 RL 涌现而非纯靠 SFT。
+- **蒸馏推理能力**：将大推理模型的思维链蒸馏到小模型，让 7B 模型也能做复杂推理。
+
+> 启示：R1 的成功让社区重新审视"纯 RL 能否产生推理"，推动了 2025 年推理模型的爆发。训练范式正向"预训练 → SFT → 推理 RL → 蒸馏"演进。
+
 ---
 
 ## 🔗 参考资料
@@ -160,6 +177,8 @@ mp_fp16 = MixedPrecision(
 - [Everything about Distributed Training and Efficient Finetuning](https://sumanthrh.com/post/distributed-and-efficient-finetuning)
 - [FSDP Mixed Precision Training - YouTube](https://www.youtube.com/watch?v=-caN92JtKqA)
 - [Amazon SageMaker Mixed Precision Training](https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-core-features-v2-mixed-precision.html)
+
+---
 
 ## 精选资源
 
@@ -171,7 +190,4 @@ mp_fp16 = MixedPrecision(
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

@@ -144,84 +144,39 @@ MMLU-Pro 是 MMLU 的增强版本，主要改进：
 - **提示词敏感性从 4-5% 降低到 2%**，评估更稳定
 - **思维链（CoT）在 MMLU-Pro 上比直接回答效果更好**
 
+### 6. 从静态基准到动态评估
+
+静态基准（MMLU、HumanEval）面临"基准污染"和"刷榜"问题，2025-2026 评估方法向动态化演进：
+
+| 方法 | 思路 | 解决的问题 |
+|------|------|-----------|
+| LiveBench / LMArena | 持续更新新题，防止训练数据泄漏 | 基准污染、刷榜 |
+| LMSYS Chatbot Arena | 真实用户盲测对战，Elo 评分 | 与人类偏好对齐 |
+| LLM-as-a-Judge | 用强模型给被测模型打分 | 人工评估成本高 |
+| Agentic 基准 | 评估多步任务成功率（SWE-Bench、OSWorld） | 单轮问答不代表 Agent 能力 |
+| 动态对抗集 | 自动生成针对模型弱点的测试 | 暴露盲区 |
+
+### 7. 评估的常见陷阱
+
+- **基准污染**：测试题混入训练数据，分数虚高 → 用 LiveBench 等动态基准。
+- **刷榜优化**：模型针对公开榜单过拟合 → 关注 Arena 真实对战和自建评估集。
+- **只看平均分**：平均分掩盖长尾失败 → 分析分任务、分难度、分人群表现。
+- **忽视方差**：单次跑分有随机性 → 报告标准差，多次运行取均值。
+- **基准≠业务**：榜单第一不等于你的场景最好 → 必须建业务评估集。
+
+> 经验：不要只看模型厂商的官方跑分。一个针对你业务场景的 50 条人工评估集，比任何公开榜单都更有参考价值。
+
 ---
 
-## 4. 2026 年最新进展
+## 🔗 参考资料
 
-### 4.1 评测体系的三大支柱
+- [LLM Eval Harness Guide - Morphllm](https://www.morphllm.com/llm-eval-harness)
+- [EleutherAI - Evaluating LLMs](https://www.eleuther.ai/projects/large-language-model-evaluation)
+- [LM Evaluation Harness GitHub](https://github.com/EleutherAI/lm-evaluation-harness)
+- [MMLU-Pro Paper](https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/mmlu_pro/README.md)
+- [NVIDIA NeMo LM Harness Evaluation](https://docs.nvidia.com/nemo/microservices/25.8.0/evaluate/evaluation-types/lm-harness.html)
 
-2026 年权威的 LLM 评测体系由三类方法构成：
-
-| 类型 | 代表 | 特点 |
-|------|------|------|
-| **静态基准测试** | MMLU-Pro, HumanEval, GSM8K | 可复现、横向对比 |
-| **动态人类偏好评估** | Arena AI (原 Chatbot Arena), MT-Bench | 反映真实使用体验 |
-| **垂直场景专项评测** | GPQA Diamond, SWE-Bench, MedQA | 决定落地适配性 |
-
-最佳实践：**综合使用三类方法**，优先参考 Arena AI 人类偏好榜 + 与自身场景匹配的垂直基准。
-
-### 4.2 主流基准现状（2026）
-
-| 基准 | 测试内容 | 2026 年状态 |
-|------|---------|------------|
-| **MMLU** | 57 学科选择题 | ⚠️ 饱和 >90%，顶级模型间无区分度 |
-| **MMLU-Pro** | 更难版本 | 接近饱和 |
-| **GPQA Diamond** | 博士级科学问题 | ✅ 仍能区分 60-90% 区间 |
-| **HLE** | 新基准 | ✅ 未饱和，最高 50.7%（Grok 4） |
-| **HumanEval** | Python 代码生成 | ⚠️ 饱和 + 数据污染 |
-| **SWE-Bench Verified** | 真实 GitHub Issue | ✅ 编程 Agent 黄金标准（注意脚手架偏差 25pp+） |
-| **LiveCodeBench** | 持续新题 | ✅ 最抗污染 |
-| **IFEval** | 复杂指令遵循 | ✅ 对 RAG/Agent/结构化输出至关重要 |
-| **Arena AI Elo** | 人类盲测投票 | ✅ 最贴近实际使用体验 |
-
-### 4.3 2026 年榜单格局
-
-截至 2026 年初，各赛道领跑模型：
-
-| 场景 | 领跑模型 | 关键分数 |
-|------|---------|---------|
-| 综合知识 | Claude Opus 4.6, Gemini 3 Pro, GPT-5 系列 | MMLU-Pro 前三 |
-| 博士级推理 | Grok 4 | HLE 50.7%（最高） |
-| 编程/Agent | GLM-5.1 | SWE-Bench Pro 58.4%（超越 GPT-5.4 和 Claude Opus 4.6） |
-| 指令遵循 | Kimi K2.5 | IFEval 94.0 |
-| 计算机使用 | GPT-5.4 | OSWorld 75%（超越人类专家基线） |
-| 中文场景 | DeepSeek, Qwen 系列 | C-Eval 领先 |
-
-> 据 Arena AI 官方数据，**排名前 10 的模型 Elo 分差不超过 50 分**，说明顶级模型的实际能力差距正在收窄，场景匹配度和 API 成本逐渐成为选型决定性因素。
-
-### 4.4 单基准选型的三大陷阱
-
-1. **饱和（Saturation）**——顶级模型 MMLU 同刷 90%+，2% 差距是噪音
-2. **数据污染（Contamination）**——旧基准被爬入训练集，HumanEval 问题最严重
-3. **脚手架依赖（Scaffold Dependence）**——SWE-Bench 评分因评估框架不同可差 25 个百分点
-
-### 4.5 模型路由：2026 年架构新范式
-
-> **不要选一个模型**——按任务复杂度、延迟、成本进行路由。
-
-- 简单查询走轻量模型 → 复杂推理走旗舰模型
-- 成本降低 **50-80%** 同时保持质量
-- 路由分类器：小型模型，50-100ms 决策
-
-### 4.6 2026 年评测工具生态
-
-| 工具 | 特点 |
-|------|------|
-| **Arena AI**（原 Chatbot Arena） | 融资 1.5 亿美元，推出企业级 AI 评估服务 |
-| **DeepEval** | 14+ LLM 指标，Agent 级评测（工具正确性、步骤效率、计划遵循） |
-| **Patronus AI** | 多模态评测，91% 人类判断一致率 |
-| **Future AGI** | 全栈生产级，RAG 指标 + 格式验证 + 合规检查 |
-| **LangSmith** | LangChain深度集成，详细工作流追踪 |
-
-### 4.7 2026 年趋势总结
-
-1. **单基准分数不再重要**——场景匹配度比榜单排名更关键
-2. **Arena AI 争议升温**——基于主观偏好的评估是否科学？Vibes-based 评估受到质疑
-3. **自定义 Eval 成为标配**——构建 100-200 条真实业务测试集，比任何公开基准都更有价值
-4. **模型路由取代单一选型**——按任务 routing 可降本 50-80%
-5. **EU AI Act 合规驱动评估**——高风险场景必须有正式评估文档
-
-> 来源参考：[大模型测评完全指南 2026](https://segmentfault.com/a/1190000047645758)、[LLM Benchmarks 2026: Which Model for Which Job](https://datavlab.ai/post/llm-benchmarks-2026-which-model-for-which-job)、[LLM Evaluation 2026 - FutureAGI](https://futureagi.substack.com/p/llm-evaluation-frameworks-metrics)、[AI 下半场，LLM Benchmark 要补全什么？](https://finance.sina.com.cn/tech/roll/2026-03-09/doc-inhqkhiq9940891.shtml)、[Which LLM to Choose 2026](https://iternal.ai/llm-selection-guide)
+---
 
 ## 精选资源
 
@@ -233,6 +188,4 @@ MMLU-Pro 是 MMLU 的增强版本，主要改进：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：自动更新*
+*资源区块更新时间：2026-06-30 11:37:40*

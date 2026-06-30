@@ -130,11 +130,83 @@ system_message = """
 
 ---
 
+## ⚙️ Agent 循环的工程实现
+
+理解函数调用 Agent 的最小可运行循环，是构建可靠 Agent 的基础。核心是一个"模型决策 → 代码执行 → 回传观察"的循环：
+
+```python
+import json
+from openai import OpenAI
+
+client = OpenAI()
+
+# 1. 定义真实可执行的工具函数
+def get_weather(location: str) -> dict:
+    return {"location": location, "temp": 26, "weather": "晴"}
+
+TOOLS_MAP = {"get_weather": get_weather}
+
+# 2. 定义工具 schema（供模型识别）
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "get_weather",
+        "description": "获取指定城市的当前天气",
+        "parameters": {
+            "type": "object",
+            "properties": {"location": {"type": "string"}},
+            "required": ["location"],
+        },
+    },
+}]
+
+# 3. Agent 循环（带步数上限防失控）
+def run_agent(user_query: str, max_steps: int = 5):
+    messages = [
+        {"role": "system", "content": "你是一个天气助手，遇到不确定的天气就调用工具。"},
+        {"role": "user", "content": user_query},
+    ]
+    for step in range(max_steps):
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini", messages=messages, tools=tools
+        )
+        msg = resp.choices[0].message
+        messages.append(msg)
+        if not msg.tool_calls:           # 模型不再调用工具 → 输出最终答案
+            return msg.content
+        for call in msg.tool_calls:      # 执行每个工具调用
+            args = json.loads(call.function.arguments)
+            fn = TOOLS_MAP[call.function.name]
+            result = fn(**args)
+            messages.append({             # 回传工具观察结果
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": json.dumps(result, ensure_ascii=False),
+            })
+    return "已达到最大步数，任务未完成。"
+
+print(run_agent("北京今天热吗？"))
+```
+
+这个循环体现了 Agent 的三个工程要点：**步数上限**防失控、**工具结果回传**让模型基于事实继续、**终止条件**靠"模型不再调用工具"判断。
+
+### 多工具场景的工具检索
+
+当工具数量从几个增长到几十上百个，全部塞进上下文会浪费 token 且降低选择准确率。解法：
+
+- **工具检索（Tool Retrieval）**：用 Embedding 把工具描述向量化，按用户问题动态检索 top-k 工具再注入。
+- **工具分层**：常用工具常驻，长尾工具按需加载。
+- **MCP 协议**：通过 Model Context Protocol 统一管理外部工具和数据源，实现工具的即插即用。
+
+---
+
 ## 📚 参考来源
 
 - [Prompt Engineering Guide — Function Calling in AI Agents](https://www.promptingguide.ai/agents/function-calling)
 - [OpenAI API — Function Calling Guide](https://developers.openai.com/api/docs/guides/function-calling)
 - [OpenAI Function Calling - AI Agents SDK (YouTube)](https://www.youtube.com/watch?v=NT_ApmD_JPo)
+
+---
 
 ## 精选资源
 
@@ -146,7 +218,4 @@ system_message = """
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

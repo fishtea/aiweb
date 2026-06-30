@@ -194,6 +194,20 @@ graph.add_conditional_edges(
 | 生产级复杂编排 | LangGraph |
 | 想自己控制一切 | 自定义 Agent 框架 |
 
+### 多 Agent 协作的核心模式
+
+抛开具体框架，多 Agent 系统的协作关系可归纳为几种经典模式：
+
+| 模式 | 说明 | 适用场景 |
+|------|------|----------|
+| **流水线（Pipeline）** | Agent 依次处理，上一个的输出是下一个的输入 | 写作→编辑→校对 |
+| **路由分发（Router）** | 一个调度 Agent 把任务分给最合适的专家 Agent | 客服按意图分流 |
+| **辩论/投票（Debate）** | 多个 Agent 各自作答再投票，取共识 | 高准确率要求的事实问答 |
+| **主管-工人（Supervisor-Worker）** | 主管拆解任务派发，工人执行后汇报 | 复杂研究、报告生成 |
+| **层级（Hierarchical）** | 多层管理，上层规划下层执行 | 大型自动化运营 |
+
+> 关键权衡：多 Agent 能提升质量和分工，但每多一个 Agent 就多一轮 LLM 调用，成本和延迟成倍上升。生产中要警惕"为了多 Agent 而 Agent"——很多时候单 Agent + 好的提示词就够了。
+
 ---
 
 ## 📚 参考来源
@@ -202,6 +216,8 @@ graph.add_conditional_edges(
 - [CrewAI Multi-Agent Tutorial — MLWorks (YouTube)](https://www.youtube.com/watch?v=viH5CDG4vWM)
 - [AutoGen vs CrewAI vs LangGraph 2025 Comparison (YouTube)](https://www.youtube.com/watch?v=8HqeY5v0ohM)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
+
+---
 
 ## 精选资源
 
@@ -213,7 +229,4 @@ graph.add_conditional_edges(
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

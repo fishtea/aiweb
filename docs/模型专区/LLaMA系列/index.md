@@ -12,7 +12,24 @@
 | LLaMA 2 | 2023.07 | 7B/13B/70B | 2T tokens | 4K |
 | LLaMA 3 | 2024.04 | 8B/70B | 15T tokens | 8K |
 | LLaMA 3.1 | 2024.07 | 8B/70B/405B | 15T+ tokens | 128K |
-| LLaMA 4 | 2025.04 | 尚未详细公开 | — | — |
+| LLaMA 4 | 2025.04 | Scout/Maverick/Heron | 22T+ tokens | 10M(Scout)/1M |
+
+### LLaMA 4 — 原生多模态 MoE
+
+LLaMA 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
+
+| 模型 | 架构 | 激活参数 | 上下文 | 定位 |
+|------|------|---------|--------|------|
+| LLaMA 4 Scout | MoE，17B 激活 | 17B | **10M** | 超长上下文，单 H100 可运行 |
+| LLaMA 4 Maverick | MoE，17B 激活 | 17B | 1M | 旗舰级，对标 GPT-4o/Claude |
+| LLaMA 4 Heron | 更大 MoE | — | — | 顶级推理 |
+
+- **原生多模态**：早期融合文本与视觉 token，无需单独视觉适配器。
+- **iRoPE 架构**：交替注意力机制支持超长上下文外推，Scout 达 10M token。
+- **训练数据 22T+ tokens**，多语言覆盖更广，中文能力较 LLaMA 3 显著提升。
+- **开源许可延续**，但超大规模应用仍需 Meta 授权。
+
+> 局限：LLaMA 4 发布初期基准表现引发争议（Meta 承认评测版本配置问题），实际能力以官方更新为准。中文场景建议优先对比 Qwen3、DeepSeek。
 
 ---
 
@@ -120,6 +137,8 @@ ollama run llama3.1:405b
 - [The Llama 3 Herd of Models (arXiv:2407.21783)](https://arxiv.org/abs/2407.21783)
 - [Towards Data Science — Deep Dive into LLaMA 3](https://towardsdatascience.com/deep-dive-into-llama-3-by-hand-%EF%B8%8F-6c6b23dc92b2)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -130,7 +149,4 @@ ollama run llama3.1:405b
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

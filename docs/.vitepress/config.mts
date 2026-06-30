@@ -2,12 +2,100 @@ import { defineConfig } from 'vitepress'
 
 const nav = [
   { text: '首页', link: '/' },
-  { text: '初级知识', link: '/初级知识/' },
-  { text: '进阶学习', link: '/进阶学习/' },
-  { text: '高级知识', link: '/高级知识/' },
-  { text: '模型专区', link: '/模型专区/' },
-  { text: '工具专区', link: '/工具专区/' },
-  { text: 'AI Agent 实践', link: '/AIAgent实践/' }
+  {
+    text: '初级知识',
+    items: [
+      { text: '总览', link: '/初级知识/' },
+      { text: 'AI 学习路线图', link: '/初级知识/AI学习路线图/' },
+      { text: '人工智能入门', link: '/初级知识/人工智能入门/' },
+      { text: '数学基础', link: '/初级知识/数学基础/' },
+      { text: 'Python 与数据处理基础', link: '/初级知识/Python与数据处理基础/' },
+      { text: '数据与特征工程', link: '/初级知识/数据与特征工程/' },
+      { text: '机器学习基础', link: '/初级知识/机器学习基础/' },
+      { text: '模型训练与评估基础', link: '/初级知识/模型训练与评估基础/' },
+      { text: '深度学习入门', link: '/初级知识/深度学习入门/' },
+      { text: '自然语言处理基础', link: '/初级知识/自然语言处理基础/' },
+      { text: '计算机视觉基础', link: '/初级知识/计算机视觉基础/' },
+      { text: '生成式 AI 基础', link: '/初级知识/生成式AI基础/' },
+      { text: '大语言模型基础', link: '/初级知识/大语言模型基础/' },
+      { text: '提示词入门', link: '/初级知识/提示词入门/' },
+      { text: 'AI 伦理安全与隐私', link: '/初级知识/AI伦理安全与隐私/' }
+    ]
+  },
+  {
+    text: '进阶学习',
+    items: [
+      { text: '总览', link: '/进阶学习/' },
+      { text: '模型微调技术', link: '/进阶学习/模型微调技术/' },
+      { text: 'RAG 检索增强', link: '/进阶学习/RAG检索增强/' },
+      { text: 'Agent 智能体', link: '/进阶学习/Agent智能体/' },
+      { text: '提示词工程', link: '/进阶学习/提示词工程/' },
+      { text: '模型评估与基准', link: '/进阶学习/模型评估与基准/' },
+      { text: 'Embedding 与向量数据库', link: '/进阶学习/Embedding与向量数据库/' },
+      { text: 'LLM 应用架构', link: '/进阶学习/LLM应用架构/' }
+    ]
+  },
+  {
+    text: '高级知识',
+    items: [
+      { text: '总览', link: '/高级知识/' },
+      { text: '模型训练与优化', link: '/高级知识/模型训练与优化/' },
+      { text: 'AI 安全与对齐', link: '/高级知识/AI安全与对齐/' },
+      { text: '多模态模型', link: '/高级知识/多模态模型/' },
+      { text: '模型架构研究', link: '/高级知识/模型架构研究/' },
+      { text: '数据工程与合成数据', link: '/高级知识/数据工程与合成数据/' }
+    ]
+  },
+  {
+    text: '模型专区',
+    items: [
+      { text: '总览', link: '/模型专区/' },
+      { text: 'GPT 系列', link: '/模型专区/GPT系列/' },
+      { text: 'Claude 系列', link: '/模型专区/Claude系列/' },
+      { text: 'LLaMA 系列', link: '/模型专区/LLaMA系列/' },
+      { text: 'DeepSeek', link: '/模型专区/DeepSeek/' },
+      { text: 'Gemini 系列', link: '/模型专区/Gemini系列/' },
+      { text: 'Qwen 系列', link: '/模型专区/Qwen系列/' },
+      { text: 'Stable Diffusion', link: '/模型专区/StableDiffusion/' },
+      { text: 'Mixtral 系列', link: '/模型专区/Mixtral系列/' },
+      { text: '开源模型部署选型', link: '/模型专区/开源模型部署选型/' }
+    ]
+  },
+  {
+    text: '工具专区',
+    items: [
+      { text: '总览', link: '/工具专区/' },
+      { text: 'LangChain', link: '/工具专区/LangChain/' },
+      { text: 'LlamaIndex', link: '/工具专区/LlamaIndex/' },
+      { text: 'AutoGPT', link: '/工具专区/AutoGPT/' },
+      { text: 'ComfyUI', link: '/工具专区/ComfyUI/' },
+      { text: 'vLLM', link: '/工具专区/vLLM/' },
+      { text: 'Hugging Face', link: '/工具专区/HuggingFace/' },
+      { text: 'PyTorch', link: '/工具专区/PyTorch/' },
+      { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
+      { text: 'Ollama', link: '/工具专区/Ollama/' },
+      { text: '部署运维', link: '/工具专区/部署运维/' },
+      { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' }
+    ]
+  },
+  {
+    text: 'AI Agent 实践',
+    items: [
+      { text: '总览', link: '/AIAgent实践/' },
+      { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
+      { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
+      { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
+      { text: 'Agent 评估与可观测性', link: '/AIAgent实践/Agent评估与可观测性/' },
+      { text: '📋 实际应用案例', link: '/AIAgent实践/实际应用案例/' }
+    ]
+  },
+  {
+    text: '知识库',
+    items: [
+      { text: '使用指南', link: '/知识库/' },
+      { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' }
+    ]
+  }
 ]
 
 const sidebar = [

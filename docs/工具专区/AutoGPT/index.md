@@ -144,6 +144,20 @@ python -m autogpt
 | 敏感数据处理 | ⭐⭐ | 安全风险需注意 |
 | 生产级应用 | ⭐ | 不够稳定，建议 LangGraph |
 
+### 自主 Agent 的演进与反思
+
+AutoGPT 作为先驱验证了"LLM 自主循环"的可行性，但也暴露了第一代自主 Agent 的通病：
+
+| 第一代问题（2023） | 2025-2026 的解法 |
+|------|------|
+| 容易陷入循环不收敛 | LangGraph 显式状态图 + 步数上限 |
+| 成本不可控 | 模型路由、token 预算、缓存 |
+| 工具调用脆弱 | 模型原生函数调用 + schema 校验 |
+| 长任务记忆丢失 | 检查点持久化 + 外部记忆（向量库） |
+| 缺乏可观测性 | LangSmith/Langfuse 全链路追踪 |
+
+> 启示：自主 Agent 从"能跑起来"到"能稳定生产"，核心不是模型变强了，而是工程化（状态管理、护栏、可观测性）成熟了。AutoGPT 的价值在于它最早暴露了这些问题，为后续框架指明了方向。
+
 ---
 
 **参考资料：**
@@ -151,6 +165,8 @@ python -m autogpt
 - [Building Autonomous AI Agents 2025 Guide (Facebook/Medium)](https://medium.com/@Micheal-Lanham/building-the-future-your-guide-to-autonomous-ai-agents-in-2025-fb690ebc1caa)
 - [Top AI Agent Tools 2025 (YouTube)](https://www.youtube.com/watch?v=agZMp2PMydQ)
 - [AutoGPT GitHub](https://github.com/Significant-Gravitas/AutoGPT)
+
+---
 
 ## 精选资源
 
@@ -162,7 +178,4 @@ python -m autogpt
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

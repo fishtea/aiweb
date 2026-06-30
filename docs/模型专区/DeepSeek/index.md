@@ -13,6 +13,7 @@
 | DeepSeek-R1 | 2025.01 | 671B | 37B | 基于 V3 的推理增强模型 |
 | DeepSeek-V3.1 | 2025.03 | 671B | 37B | V3 增强版 |
 | DeepSeek-R1-0528 | 2025.05 | 671B | 37B | R1 增强版 |
+| DeepSeek-V3.2-Exp | 2025.09 | 671B | 37B | 架构实验版，稀疏注意力 |
 | DeepSeek-V4 | 2026 | — | — | 新旗舰 |
 
 ---
@@ -41,6 +42,17 @@
 ### 3. Multi-Token Prediction (MTP)
 
 DeepSeek-V3 在训练中引入多 Token 预测目标：模型同时预测下一个 token 和后多个 token，增强对长期依赖的理解能力。
+
+### 4. DeepSeek 对开源生态的影响
+
+DeepSeek 的意义超越单一模型，它重新定义了"开源 + 极致性价比"的路线：
+
+- **R1 蒸馏系列**将推理能力下沉到 1.5B-70B 小模型，让消费级硬件也能跑推理模型，带动了本地部署热潮。
+- **MLA + 辅助损失免费 MoE** 被后续多个开源模型借鉴，降低了大模型推理的显存门槛。
+- **训练成本透明化**（V3 约 $5.5M）打破了"大模型只能巨头玩"的叙事，推动中小团队参与。
+- 其推理链（`<think>` 标签）输出风格成为行业事实标准之一，被众多蒸馏模型沿用。
+
+> 局限提醒：DeepSeek 在中文、代码、数学推理上表现突出，但部分国际知识和英文长尾不如 GPT/Claude；内容合规策略较严格，敏感话题可能拒答。
 
 ---
 
@@ -135,6 +147,8 @@ vllm serve deepseek-ai/DeepSeek-V3
 - [DeepSeek-R1 Model Architecture (Towards AI)](https://pub.towardsai.net/deepseek-r1-model-architecture-853fefac7050)
 - [DeepSeek-R1 Model Architecture (Founders Creative)](https://www.founderscreative.org/model-architecture-behind-deepseek-r1)
 
+---
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
@@ -145,7 +159,4 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*
