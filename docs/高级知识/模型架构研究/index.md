@@ -150,3 +150,18 @@ Mamba 由 Albert Gu 和 Tri Dao 于 2023 年 12 月提出（arXiv:2312.00752）�
 - [Mixture-of-Mamba - Hugging Face Blog](https://huggingface.co/blog/Kseniase/mixtureofmamba)
 - [The Transformer Architecture Is Being Replaced - Towards AI](https://pub.towardsai.net/the-transformer-architecture-is-being-replaced-what-47-000-hours-of-training-data-revealed-e483c5ad7c6c)
 - [Frontiers of AI Research 2025 - FTI Consulting](https://www.fticonsulting.com/insights/articles/frontiers-ai-research-2025)
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

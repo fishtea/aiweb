@@ -146,16 +146,6 @@ MMLU-Pro 是 MMLU 的增强版本，主要改进：
 
 ---
 
-## 🔗 参考资料
-
-- [LLM Eval Harness Guide - Morphllm](https://www.morphllm.com/llm-eval-harness)
-- [EleutherAI - Evaluating LLMs](https://www.eleuther.ai/projects/large-language-model-evaluation)
-- [LM Evaluation Harness GitHub](https://github.com/EleutherAI/lm-evaluation-harness)
-- [MMLU-Pro Paper](https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/mmlu_pro/README.md)
-- [NVIDIA NeMo LM Harness Evaluation](https://docs.nvidia.com/nemo/microservices/25.8.0/evaluate/evaluation-types/lm-harness.html)
-
----
-
 ## 4. 2026 年最新进展
 
 ### 4.1 评测体系的三大支柱
@@ -232,3 +222,17 @@ MMLU-Pro 是 MMLU 的增强版本，主要改进：
 5. **EU AI Act 合规驱动评估**——高风险场景必须有正式评估文档
 
 > 来源参考：[大模型测评完全指南 2026](https://segmentfault.com/a/1190000047645758)、[LLM Benchmarks 2026: Which Model for Which Job](https://datavlab.ai/post/llm-benchmarks-2026-which-model-for-which-job)、[LLM Evaluation 2026 - FutureAGI](https://futureagi.substack.com/p/llm-evaluation-frameworks-metrics)、[AI 下半场，LLM Benchmark 要补全什么？](https://finance.sina.com.cn/tech/roll/2026-03-09/doc-inhqkhiq9940891.shtml)、[Which LLM to Choose 2026](https://iternal.ai/llm-selection-guide)
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：自动更新*

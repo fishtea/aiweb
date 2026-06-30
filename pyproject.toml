@@ -2,4 +2,7 @@
 name = "aiweb"
 version = "1.0.0"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+  "ddgs>=9.0.0",
+  "deep-translator>=1.11.4",
+]

@@ -190,3 +190,18 @@ with open('model.tflite', 'wb') as f:
 - [TensorFlow for Machine Learning Beginner's Guide 2025](https://www.technaureus.com/blog-detail/tensorflow-for-machine-learning-a-beginners-guide)
 - [TensorFlow Full Course 2025 (Simplilearn)](https://www.youtube.com/watch?v=1saRltqot8c)
 - [TensorFlow 2.0 Quick Start Guide (Packt)](https://www.packtpub.com/en-us/product/tensorflow-20-quick-start-guide-9781789530759)
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

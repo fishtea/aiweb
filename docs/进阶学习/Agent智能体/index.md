@@ -281,16 +281,16 @@ AutoGen 由微软研究院开发，强调模块化和易用性：
 - [2025年中国AI Agent年度最佳实践应用榜单 - 头豹研究院](https://www.fxbaogao.com/detail/5038572)  
 - [2025年最好的Agent智能体推荐 - 百度千帆社区](https://qianfan.cloud.baidu.com/qianfandev/topic/686932)
 
----
+## 精选资源
 
-## 🔗 参考资料
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-- [LangChain AI Agents: Complete Implementation Guide 2025](https://www.digitalapplied.com/blog/langchain-ai-agents-guide-2025)
-- [Getting Started with ReAct AI Agents using LangChain - YouTube](https://www.youtube.com/watch?v=W7TZwB-KErw)
-- [Introducing LangChain Agents: 2024 Tutorial - Bright Inventions](https://brightinventions.pl/blog/introducing-langchain-agents-tutorial-with-example)
-- [Using LangChain Tools to Build an AI Agent - IBM](https://www.ibm.com/think/tutorials/using-langchain-tools-to-build-an-ai-agent)
-- [Learn to Build AI Agents with LangChain - Reddit](https://www.reddit.com/r/LangChain/comments/1f6jknc/learn_how_to_build_ai_agents_react_agent_from/)
-- [2025年构建人工智能体的五大框架 - CSDN](https://openvela.csdn.net/694a6a975b9f5f317819f072.html)
-- [2025年中国AI Agent年度最佳实践应用榜单 - 头豹研究院](https://www.fxbaogao.com/detail/5038572)
-- [2025年最好的Agent智能体推荐 - 百度千帆社区](https://qianfan.cloud.baidu.com/qianfandev/topic/686932)
-- [多模态智能体开发指南2025 - betteryeah.com](https://www.betteryeah.com/blog/multimodal-ai-agent-development-guide-2025)
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：自动更新*

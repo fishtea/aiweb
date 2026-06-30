@@ -137,16 +137,6 @@ English: "How much does this cost?" → French:
 
 ---
 
-## 🔗 参考资料
-
-- [Prompt Engineering Guide - DAIR.AI](https://www.promptingguide.ai)
-- [Ultimate Guide to Prompt Engineering 2026 - Lakera AI](https://www.lakera.ai/blog/prompt-engineering-guide)
-- [Best practices for prompt engineering with the OpenAI API](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
-- [Prompt Engineering Techniques - K2View](https://www.k2view.com/blog/prompt-engineering-techniques)
-- [Advanced 2026 Guide to Prompt Engineering - YouTube](https://www.youtube.com/watch?v=qBlX6FhDm2E)
-
----
-
 ## 5. 2026 年最新进展
 
 ### 5.1 提示词工程的进化：从灵感到结构
@@ -218,3 +208,17 @@ English: "How much does this cost?" → French:
 2026 年提示词工程的前沿——不仅要设计问什么，还要设计模型如何理解上下文。通过 RAG、摘要、结构化输入等技术引导模型更准确地输出，LLM-as-a-Judge 等自我评估模式也正在兴起。
 
 > 来源参考：[IBM 2026 Prompt Engineering Guide](https://www.ibm.com/cn-zh/think/prompt-engineering)、[2026后端开发者提示词实战](https://www.cnblogs.com/ljbguanli/p/20130505)、[K2View Top 6 Techniques 2026](https://www.k2view.com/blog/prompt-engineering-techniques)、[结构化提示词进化 - 知乎](https://zhuanlan.zhihu.com/p/2002315607635412900)
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：自动更新*

@@ -279,21 +279,6 @@ llamafactory-cli train config.yaml
 
 ---
 
-## 🔗 参考资料
-
-- [How to Fine-Tune LLMs in 2024 with Hugging Face - Philschmid](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
-- [Efficient Fine-Tuning with LoRA for LLMs - Databricks Blog](https://www.databricks.com/blog/efficient-fine-tuning-lora-guide-llms)
-- [LoRA Hyperparameters Guide - Unsloth](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide)
-- [Implementing LoRA From Scratch - Daily Dose of Data Science](https://www.dailydoseofds.com/implementing-lora-from-scratch-for-fine-tuning-llms)
-- [A Beginners Guide to Fine Tuning LLM Using LoRA - Zohaib.me](https://zohaib.me/a-beginners-guide-to-fine-tuning-llm-using-lora)
-- [LLaMA Factory: 2026年大语言模型微调完整指南 - Jenova](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)
-- [Fine-Tuning LLMs in 2026: LoRA, QLoRA, Unsloth - Towards AI](https://pub.towardsai.net/fine-tuning-llms-in-2026-lora-qlora-unsloth-and-everything-in-between-929eaf94aea2)
-- [LLM Fine-Tuning - BentoML Inference Handbook](https://bentoml.com/llm/model-preparation/llm-fine-tuning)
-- [使用 LoRA 和 QLoRA 调整 LLM 的建议 - Google Cloud](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-garden/lora-qlora?hl=zh-cn)
-- [LLM微调技术：从LoRA到QLoRA的演进 - 腾讯云](https://cloud.tencent.com/developer/article/2611321)
-
----
-
 ## 7. 2026 年最新进展
 
 ### 7.1 核心原则：什么时候该微调？
@@ -360,3 +345,17 @@ llamafactory-cli train config.yaml
 5. **框架趋同**：LLaMA Factory 成为功能最全的开源选择
 
 > 来源参考：[Fine-Tuning LLMs in 2026: When RAG Isn't Enough](https://bigdataboutique.com/blog/fine-tuning-llms-when-rag-isnt-enough)、[LLaMA Factory 2026 Guide](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)、[LoRA & QLoRA 2026 Guide](https://www.meta-intelligence.tech/en/insight-lora-finetuning)、[Spheron 2026 Fine-tune Guide](https://www.spheron.network/blog/how-to-fine-tune-llm-2026)、[腾讯云 LoRA→QLoRA 演进](https://cloud.tencent.com/developer/article/2611321)
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：自动更新*

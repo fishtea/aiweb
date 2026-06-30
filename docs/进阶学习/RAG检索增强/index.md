@@ -237,14 +237,16 @@ RAGAS 是 2025 年主流的无参考评估框架，核心指标包括：
 
 **来源：** [检索增强生成（RAG）当前技术路线与前沿进展](https://yonglun.me/rag101)
 
----
+## 精选资源
 
-## 🔗 参考资料
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-- [RAG Tutorial: Architecture, Implementation, and Production Guide - Glukhov](https://www.glukhov.org/rag)
-- [RAG Architecture Explained: 2026 Guide - ORQ.AI](https://orq.ai/blog/retrieval-augmented-generation-for-knowledge-intensive-nlp-tasks)
-- [RAG and Generative AI - Microsoft Learn](https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview)
-- [检索增强生成（RAG）当前技术路线与前沿进展 - yonglun.me](https://yonglun.me/rag101)
-- [2025年GitHub上十大RAG框架深度解析 - 53AI](https://www.53ai.com/news/RAG/2025053068710.html)
-- [RAG 2025 最新综述深度解读 - 知乎专栏](https://zhuanlan.zhihu.com/p/1981157339932402521)
-- [什么是 RAG 检索增强生成 - Elastic](https://www.elastic.co/cn/what-is/retrieval-augmented-generation)
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：自动更新*

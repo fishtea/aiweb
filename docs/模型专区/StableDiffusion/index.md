@@ -149,3 +149,18 @@ image.save("cat.png")
 - [Flux vs SD3 Comparison (YouTube)](https://www.youtube.com/watch?v=hSnepsdGzdo)
 - [SDXL vs Flux Comparison (Facebook)](https://www.facebook.com/groups/stablediffusion/posts/1433531040645700)
 - [Diffusion Models Overview (Medium)](https://medium.com/diffusion-doodles/the-myriad-of-diffusion-models-f0907ee6cc6b)
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*
