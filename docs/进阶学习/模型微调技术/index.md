@@ -279,24 +279,72 @@ llamafactory-cli train config.yaml
 
 ---
 
-## 🔗 参考资料
+## 7. 2026 年最新进展
 
-- [How to Fine-Tune LLMs in 2024 with Hugging Face - Philschmid](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
-- [Efficient Fine-Tuning with LoRA for LLMs - Databricks Blog](https://www.databricks.com/blog/efficient-fine-tuning-lora-guide-llms)
-- [LoRA Hyperparameters Guide - Unsloth](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide)
-- [Implementing LoRA From Scratch - Daily Dose of Data Science](https://www.dailydoseofds.com/implementing-lora-from-scratch-for-fine-tuning-llms)
-- [A Beginners Guide to Fine Tuning LLM Using LoRA - Zohaib.me](https://zohaib.me/a-beginners-guide-to-fine-tuning-llm-using-lora)
-- [LLaMA Factory: 2026年大语言模型微调完整指南 - Jenova](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)
-- [Fine-Tuning LLMs in 2026: LoRA, QLoRA, Unsloth - Towards AI](https://pub.towardsai.net/fine-tuning-llms-in-2026-lora-qlora-unsloth-and-everything-in-between-929eaf94aea2)
-- [LLM Fine-Tuning - BentoML Inference Handbook](https://bentoml.com/llm/model-preparation/llm-fine-tuning)
-- [使用 LoRA 和 QLoRA 调整 LLM 的建议 - Google Cloud](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-garden/lora-qlora?hl=zh-cn)
-- [LLM微调技术：从LoRA到QLoRA的演进 - 腾讯云](https://cloud.tencent.com/developer/article/2611321)
+### 7.1 核心原则：什么时候该微调？
 
----
+2026 年业界达成共识：**大多数团队不应该微调**。正确的顺序是 **Prompt → RAG → Fine-tune → Distill**。微调是给模型"塑形"（form），而非"喂知识"（facts）——知识注入应靠 RAG，微调解决的是输出结构、语调风格、领域术语等行为问题。
 
-## 精选资源
+### 7.2 决策框架
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+| 失败类型 | 稳定信号 | 变化信号 |
+|---------|---------|---------|
+| 知识限制 | 继续预训练（极少用） | **RAG** |
+| 行为限制 | **微调（LoRA/QLoRA）** | Prompt Engineering + Few-shot |
+
+- **知识+变化**：RAG 是银弹
+- **行为+稳定**：微调值回票价（固定输出 schema、引用格式、拒绝措辞）
+- **行为+变化**：用 Prompt，别把不稳定偏好写进权重
+
+### 7.3 PEFT 技术对比（2026 年版）
+
+| 技术 | 说明 | 适用场景 |
+|------|------|---------|
+| **LoRA** | 注意力/MLP 层插入低秩适配器，训练 0.1–1% 参数 | 大多数场景的工作马 |
+| **QLoRA** | 基础模型量化到 4-bit，适配器保持高精度 | 单 GPU 微调 70B 模型 |
+| **DoRA** | 将权重更新分解为幅度和方向 | LoRA 的增量优化 |
+| **PiSSA** | 用 SVD 初始化适配器矩阵，与全量微调等价性更好 | 需要更接近全量微调质量的场景 |
+
+### 7.4 工具链整合（2026）
+
+| 类型 | 工具 |
+|------|------|
+| 训练框架 | Unsloth（LoRA 加速 170%）、Axolotl、Hugging Face TRL |
+| 多适配器服务 | **vLLM、LoRAX、SGLang**——一个基础模型动态加载多个适配器，多租户 SaaS 的唯一经济方案 |
+| 全功能平台 | **LLaMA Factory**（70,600+ GitHub 星标），Day-0 支持 Qwen3、Gemma 3，独家支持 DoRA、KTO、ORPO |
+
+### 7.5 硬件门槛（2026 年数据）
+
+| 方法 | 位数 | 7B | 14B | 70B |
+|------|------|-----|------|------|
+| 全参数 (bf16) | 32 | 120GB | 240GB | 1,200GB |
+| LoRA/Freeze | 16 | 16GB | 32GB | 160GB |
+| QLoRA | 4 | **6GB** | 12GB | 48GB |
+
+2026 年单 GPU（消费级）可微调 7B 模型，成本从 2024 年的数百美元降至 **$5–20** 一次。
+
+### 7.6 偏好优化（超越 SFT）
+
+对于语调、拒绝模式等偏好对齐，SFT 不适合——应使用隐式奖励方法：
+
+| 方法 | 数据要求 | 使用场景 |
+|------|---------|---------|
+| **DPO** | 成对偏好排名 | 工作马——无需奖励模型 |
+| **ORPO** | 小数据集 | 将 SFT + 偏好优化合并为一步 |
+| **KTO** | 二元点赞/踩 | 容易从产品中收集 |
+| **RFT** (OpenAI) | 可验证的奖励函数 | 数学、代码、结构化提取 |
+
+选择方法的黄金法则：**看你有什么数据**。除非有研究团队，不要碰完整 RLHF。
+
+### 7.7 2026 年趋势总结
+
+1. **PEFT 已成主流**，LoRA/QLoRA 是绝对主力
+2. **多适配器路由**是生产级部署标准架构
+3. **单 GPU 微调 70B 模型**已可行（QLoRA 4-bit）
+4. **评估先行**——没有书面 Eval 之前不要微调
+5. **框架趋同**：LLaMA Factory 成为功能最全的开源选择
+
+> 来源参考：[Fine-Tuning LLMs in 2026: When RAG Isn't Enough](https://bigdataboutique.com/blog/fine-tuning-llms-when-rag-isnt-enough)、[LLaMA Factory 2026 Guide](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)、[LoRA & QLoRA 2026 Guide](https://www.meta-intelligence.tech/en/insight-lora-finetuning)、[Spheron 2026 Fine-tune Guide](https://www.spheron.network/blog/how-to-fine-tune-llm-2026)、[腾讯云 LoRA→QLoRA 演进](https://cloud.tencent.com/developer/article/2611321)
 
 ## 精选资源
 
@@ -308,5 +356,6 @@ llamafactory-cli train config.yaml
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:11:39*
+*资源区块更新时间：2026-06-30 11:11:09*
+*资源区块更新时间：自动更新*
