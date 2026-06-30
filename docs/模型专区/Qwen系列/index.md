@@ -136,3 +136,22 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-7B-Instruct")
 - [Qwen2.5-VL 发布公告](https://qwen.ai/blog?id=qwen2.5-vl)
 - [Qwen2.5 技术报告解读 (Medium)](https://medium.com/@amanatulla1606/qwen2-5-technical-report-47c538fc4569)
 - [Qwen2.5-Max 分析 (Medium)](https://medium.com/@amanatulla1606/qwen2-5-technical-report-47c538fc4569)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

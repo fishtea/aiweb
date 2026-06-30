@@ -144,3 +144,17 @@
 > - Shareuhack: GitHub Trending Weekly 2026-06-17
 > - ByteByteGo: Top AI GitHub Repositories in 2026
 > - AskGlitch: Trending AI GitHub Repos — May 2026
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*

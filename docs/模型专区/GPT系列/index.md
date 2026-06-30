@@ -94,3 +94,22 @@ print(completion.choices[0].message.content)
 - [GPT-4 Technical Report (arXiv:2303.08774)](https://arxiv.org/abs/2303.08774)
 - [Evolution of GPT Models (Medium)](https://medium.com/@vipul.koti333/evolution-of-gpt-models-gpt-1-to-gpt-4-0238ee07a29b)
 - [GPT-4 Peer Review (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10795998)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

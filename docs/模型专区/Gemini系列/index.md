@@ -109,3 +109,22 @@ Google Cloud 用户可通过 **Vertex AI** 访问 Gemini 系列，享受企业�
 - [Google Cloud Gemini Enterprise Agent Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/google-models)
 - [Unveiling Google's Gemini 2.0 (ResearchGate)](https://www.researchgate.net/publication/387089907_Unveiling_Google's_Gemini_20_A_Comprehensive_Study_of_its_Multimodal_AI_Design_Advanced_Architecture_and_Real-World_Applications)
 - [Gemini 2.5 Technical Report (Medium)](https://medium.com/@adnanmasood/googles-gemini-2-5-technical-report-a-new-paradigm-of-autonomous-multimodal-systems-44e37c2d4358)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

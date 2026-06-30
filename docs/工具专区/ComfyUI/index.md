@@ -143,3 +143,22 @@ ComfyUI 拥有庞大的自定义节点社区，推荐值得关注的节点包：
 - [ComfyUI Absolute Beginner Guide (Winbush YouTube)](https://www.youtube.com/watch?v=6dXpgL1-YdM)
 - [ComfyUI Reddit Getting Started 2025](https://www.reddit.com/r/StableDiffusion/comments/1icbucd/getting_started_with_comfyui_2025)
 - [ComfyUI GitHub](https://github.com/comfyanonymous/ComfyUI)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

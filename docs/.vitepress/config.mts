@@ -16,10 +16,20 @@ const sidebar = [
     collapsed: false,
     items: [
       { text: '总览', link: '/初级知识/' },
+      { text: 'AI 学习路线图', link: '/初级知识/AI学习路线图/' },
       { text: '人工智能入门', link: '/初级知识/人工智能入门/' },
+      { text: '数学基础', link: '/初级知识/数学基础/' },
+      { text: 'Python 与数据处理基础', link: '/初级知识/Python与数据处理基础/' },
+      { text: '数据与特征工程', link: '/初级知识/数据与特征工程/' },
       { text: '机器学习基础', link: '/初级知识/机器学习基础/' },
+      { text: '模型训练与评估基础', link: '/初级知识/模型训练与评估基础/' },
       { text: '深度学习入门', link: '/初级知识/深度学习入门/' },
-      { text: '大语言模型基础', link: '/初级知识/大语言模型基础/' }
+      { text: '自然语言处理基础', link: '/初级知识/自然语言处理基础/' },
+      { text: '计算机视觉基础', link: '/初级知识/计算机视觉基础/' },
+      { text: '生成式 AI 基础', link: '/初级知识/生成式AI基础/' },
+      { text: '大语言模型基础', link: '/初级知识/大语言模型基础/' },
+      { text: '提示词入门', link: '/初级知识/提示词入门/' },
+      { text: 'AI 伦理安全与隐私', link: '/初级知识/AI伦理安全与隐私/' }
     ]
   },
   {
@@ -44,7 +54,8 @@ const sidebar = [
       { text: '模型训练与优化', link: '/高级知识/模型训练与优化/' },
       { text: 'AI 安全与对齐', link: '/高级知识/AI安全与对齐/' },
       { text: '多模态模型', link: '/高级知识/多模态模型/' },
-      { text: '模型架构研究', link: '/高级知识/模型架构研究/' }
+      { text: '模型架构研究', link: '/高级知识/模型架构研究/' },
+      { text: '数据工程与合成数据', link: '/高级知识/数据工程与合成数据/' }
     ]
   },
   {
@@ -59,7 +70,8 @@ const sidebar = [
       { text: 'Gemini 系列', link: '/模型专区/Gemini系列/' },
       { text: 'Qwen 系列', link: '/模型专区/Qwen系列/' },
       { text: 'Stable Diffusion', link: '/模型专区/StableDiffusion/' },
-      { text: 'Mixtral 系列', link: '/模型专区/Mixtral系列/' }
+      { text: 'Mixtral 系列', link: '/模型专区/Mixtral系列/' },
+      { text: '开源模型部署选型', link: '/模型专区/开源模型部署选型/' }
     ]
   },
   {
@@ -68,6 +80,7 @@ const sidebar = [
     items: [
       { text: '总览', link: '/工具专区/' },
       { text: 'LangChain', link: '/工具专区/LangChain/' },
+      { text: 'LlamaIndex', link: '/工具专区/LlamaIndex/' },
       { text: 'AutoGPT', link: '/工具专区/AutoGPT/' },
       { text: 'ComfyUI', link: '/工具专区/ComfyUI/' },
       { text: 'vLLM', link: '/工具专区/vLLM/' },
@@ -75,6 +88,7 @@ const sidebar = [
       { text: 'PyTorch', link: '/工具专区/PyTorch/' },
       { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
       { text: 'Ollama', link: '/工具专区/Ollama/' },
+      { text: '部署运维', link: '/工具专区/部署运维/' },
       { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' }
     ]
   },
@@ -86,7 +100,16 @@ const sidebar = [
       { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
       { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
       { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
+      { text: 'Agent 评估与可观测性', link: '/AIAgent实践/Agent评估与可观测性/' },
       { text: '📋 实际应用案例', link: '/AIAgent实践/实际应用案例/' }
+    ]
+  },
+  {
+    text: '知识库',
+    collapsed: true,
+    items: [
+      { text: '使用指南', link: '/知识库/' },
+      { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' }
     ]
   }
 ]

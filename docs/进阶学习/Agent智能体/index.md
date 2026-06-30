@@ -137,3 +137,22 @@ config = {"configurable": {"thread_id": "conversation-1"}}
 - [Introducing LangChain Agents: 2024 Tutorial - Bright Inventions](https://brightinventions.pl/blog/introducing-langchain-agents-tutorial-with-example)
 - [Using LangChain Tools to Build an AI Agent - IBM](https://www.ibm.com/think/tutorials/using-langchain-tools-to-build-an-ai-agent)
 - [Learn to Build AI Agents with LangChain - Reddit](https://www.reddit.com/r/LangChain/comments/1f6jknc/learn_how_to_build_ai_agents_react_agent_from/)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

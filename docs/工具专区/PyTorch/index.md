@@ -191,3 +191,22 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 - [NTU PyTorch Tutorial PDF](https://speech.ee.ntu.edu.tw/~hylee/GenAI-ML/2025-fall-course-data/Pytorch%20Tutorial.pdf)
 - [Learn PyTorch in 5 Projects (freeCodeCamp)](https://www.youtube.com/watch?v=E0bwEAWmVEM)
 - [Best Resources to Learn PyTorch 2025 (Reddit)](https://www.reddit.com/r/learnmachinelearning/comments/1j5trra/best_resources_to_learn_pytorch_in_2025)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

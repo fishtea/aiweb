@@ -134,3 +134,22 @@ vllm serve deepseek-ai/DeepSeek-V3
 - [Complete Guide to DeepSeek Models (BentoML)](https://www.bentoml.com/blog/the-complete-guide-to-deepseek-models-from-v3-to-r1-and-beyond)
 - [DeepSeek-R1 Model Architecture (Towards AI)](https://pub.towardsai.net/deepseek-r1-model-architecture-853fefac7050)
 - [DeepSeek-R1 Model Architecture (Founders Creative)](https://www.founderscreative.org/model-architecture-behind-deepseek-r1)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

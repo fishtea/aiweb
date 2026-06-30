@@ -136,3 +136,22 @@ RLHF 是 OpenAI 提出的主流对齐方法，包含三个阶段：
 - [Helpful, Harmless, Honest? Sociotechnical Limits of AI Alignment - PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12137480)
 - [Constitutional AI Paper Review - Medium](https://medium.com/mlearning-ai/paper-review-constituional-ai-training-llms-using-principles-16c68cfffaef)
 - [Inverse Constitutional AI - Harvard](https://dash.harvard.edu/bitstreams/8d79fa6f-a4fc-4cd5-931d-23214597c41d/download)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*

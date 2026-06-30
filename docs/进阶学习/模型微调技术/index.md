@@ -291,3 +291,22 @@ llamafactory-cli train config.yaml
 - [LLM Fine-Tuning - BentoML Inference Handbook](https://bentoml.com/llm/model-preparation/llm-fine-tuning)
 - [使用 LoRA 和 QLoRA 调整 LLM 的建议 - Google Cloud](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-garden/lora-qlora?hl=zh-cn)
 - [LLM微调技术：从LoRA到QLoRA的演进 - 腾讯云](https://cloud.tencent.com/developer/article/2611321)
+
+---
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+## 精选资源
+
+> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+
+<!-- RESOURCES_START -->
+
+*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+
+<!-- RESOURCES_END -->
+
+*资源区块更新时间：2026-06-30 10:42:21*
+*资源区块更新时间：2026-06-30 10:25:06*
