@@ -48,6 +48,19 @@ for epoch in range(n_epochs):
 | **TorchInductor** | 生成 CUDA/CPU 优化内核 |
 | **DTensor** | 分布式张量，简化模型并行 |
 | **torch.export** | 模型导出到标准格式 |
+| **FlexAttention** | 灵活定义注意力变体，兼顾性能与定制 |
+| **TorchTitan / FSDP2** | 大模型预训练与分布式训练框架 |
+
+### PyTorch 在 LLM 时代的地位
+
+PyTorch 几乎是 LLM 研究与训练的事实标准：
+
+- **HuggingFace Transformers** 默认后端，几乎所有开源 LLM 都提供 PyTorch 权重。
+- **训练框架**：Megatron-LM、Torchtitan、DeepSpeed、FSDP2 都基于 PyTorch 构建分布式训练。
+- **微调**：PEFT、TRL、Unsloth、LLaMA Factory 等 LoRA 微调链路均依赖 PyTorch。
+- **研究友好**：动态图让论文复现和架构实验（Mamba、MoE、新注意力）极其方便。
+
+> 注：PyTorch 在"推理部署"环节相对薄弱，生产推理更多交给 vLLM、SGLang、TensorRT 等专用引擎。典型分工是 PyTorch 训练 → 导出 → 推理引擎部署。
 
 ---
 
@@ -198,15 +211,10 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-## 精选资源
-
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
-
 <!-- RESOURCES_START -->
 
 *暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

@@ -96,6 +96,17 @@ model.evaluate(x_test, y_test, verbose=2)
 | **调试** | ⚠️ 可调试性一般 | ✅ Python 原生的调试体验 |
 | **LLM 生态** | ⚠️ 较少 | ✅ HuggingFace + PyTorch 为主 |
 
+### Keras 3 — 多后端统一
+
+2024 年起 Keras 升级为 **Keras 3**，支持多后端，重新定位了 TF 的角色：
+
+- **多后端**：同一套代码可在 TensorFlow、PyTorch、JAX 后端上运行，降低框架锁定。
+- **JAX 后端**：在分布式训练和 XLA 编译上性能突出，适合大规模模型。
+- **PyTorch 后端**：让 Keras 高级 API 能直接调用 PyTorch 生态模型。
+- **KerasHub**：提供预训练 LLM（Gemma、Llama 等）的高级 API，简化微调和推理。
+
+> 趋势：TensorFlow/Keras 的核心价值仍在于"端到端平台 + 移动/边缘部署"，但在 LLM 训练研究上已让位于 PyTorch。选型上，做传统 ML 部署和移动端选 TF，做大模型选 PyTorch。
+
 ---
 
 ## 如何开始
@@ -197,15 +208,10 @@ with open('model.tflite', 'wb') as f:
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-## 精选资源
-
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
-
 <!-- RESOURCES_START -->
 
 *暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

@@ -139,6 +139,23 @@ client = OpenAI(base_url="http://localhost:8000/v1", api_key="dummy")
 | **Disaggregated Prefill/Decode** | 分离预填充和解码阶段 |
 | **Multi-LoRA** | 同时服务多个 LoRA 适配器 |
 | **Structured Output** | xgrammar / guidance 支持 |
+| **Reasoning Model 支持** | DeepSeek-R1、Qwen3 等思考模型的原生支持与 `reasoning_tokens` 计费 |
+| **MCP / Agent 工具调用** | 配合 OpenAI 兼容 API 暴露函数调用能力 |
+
+### 推理加速技术对比
+
+理解 vLLM 的加速原理，有助于在不同场景选对优化手段：
+
+| 技术 | 解决的瓶颈 | 效果 | 代价 |
+|------|-----------|------|------|
+| PagedAttention | KV 缓存显存碎片 | 吞吐 14-24× | 实现复杂 |
+| Continuous Batching | 请求间 GPU 空闲 | 提升并发吞吐 | 调度开销 |
+| Prefix Caching | 重复前缀重复计算 | 降低 TTFT、省 token | 额外显存 |
+| Chunked Prefill | 长上下文阻塞解码 | 降低排队延迟 | 实现复杂 |
+| Speculative Decoding | 自回归逐 token 生成慢 | 2-3× 解码加速 | 需草稿模型 |
+| Disaggregated Prefill | Prefill 与 Decode 抢资源 | 资源隔离、吞吐提升 | 多节点部署 |
+
+> 选型提示：单机低并发优先 Prefix Caching + Chunked Prefill；高并发服务化优先 Continuous Batching + PagedAttention；对延迟极敏感可叠加 Speculative Decoding。
 
 ---
 
@@ -172,15 +189,10 @@ client = OpenAI(base_url="http://localhost:8000/v1", api_key="dummy")
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-## 精选资源
-
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
-
 <!-- RESOURCES_START -->
 
 *暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

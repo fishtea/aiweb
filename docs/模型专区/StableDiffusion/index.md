@@ -15,6 +15,18 @@
 | SD 3.0 | 2024.03 | **MMDiT** | 800M-8B | 架构转型为 Diffusion Transformer |
 | SD 3.5 | 2024.10 | MMDiT | 8B | 改进版 |
 | FLUX.1 | 2024.08 | Diffusion Transformer | 12B | Black Forest Labs 开发，社区新宠 |
+| SD 3.5 Large Turbo | 2024.10 | MMDiT | 8B | 4 步快速生成 |
+| FLUX.2 | 2025.07 | Flow Matching | 12B+ | 多模态提示，更强调文本渲染 |
+
+### 扩散模型演进要点
+
+| 趋势 | 说明 |
+|------|------|
+| 从 U-Net 到 DiT | SD3/FLUX 用 Transformer 替代 U-Net，扩展性更强 |
+| Rectified Flow / Flow Matching | 更直的采样路径，更少步数即可出图 |
+| 文本渲染突破 | FLUX.2、Ideogram 等大幅改善图中文字准确性 |
+| 速度优化 | Turbo/Lightning 蒸馏版 4-8 步出图，接近实时 |
+| ControlNet / IPAdapter | 精确控制构图、姿态、风格、角色一致性 |
 
 ---
 
@@ -156,15 +168,10 @@ image.save("cat.png")
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-## 精选资源
-
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
-
 <!-- RESOURCES_START -->
 
 *暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

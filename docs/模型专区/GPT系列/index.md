@@ -1,6 +1,6 @@
 # GPT 系列 — OpenAI
 
-> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族，从 2018 年的 GPT-1 发展到 2025 年的 GPT-4o / GPT-4.5，彻底改变了自然语言处理格局。
+> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族，从 2018 年的 GPT-1 发展到 2025 年的 GPT-4o / GPT-4.5 与 o 系列推理模型，彻底改变了自然语言处理格局。
 
 ---
 
@@ -14,9 +14,15 @@
 | GPT-3.5 | 2022.03 | 175B | InstructGPT 的 RLHF 微调版本，ChatGPT 的基础 |
 | GPT-4 | 2023.03 | 未公开 (~1.8T) | 多模态（图像+文本），推理能力大幅飞跃 |
 | GPT-4o | 2024.05 | 未公开 | 原生多模态，实时语音交互，速度提升 |
+| o1 (preview) | 2024.09 | 未公开 | 首个推理模型，通过 RL 学会\"思考\"再回答 |
+| o1 正式版 | 2024.12 | 未公开 | 推理能力大幅提升，竞赛级数学/编程 |
+| o3-mini | 2025.01 | 未公开 | 低成本推理模型，支持函数调用 |
 | GPT-4.5 | 2025.02 | 未公开 | 更强的世界知识和情感智能 |
+| o3 / o4-mini | 2025.04 | 未公开 | 推理 + 工具调用 + 多模态，o4-mini 性价比极高 |
+| GPT-5 | 2025.08 | 未公开 | 统一推理与对话，自动决定思考深度 |
+| GPT-5.1 | 2026.04 | 未公开 | 编码与 Agent 能力增强，更长持续操作 |
 
-> **核心架构:** 所有 GPT 模型均基于 Decoder-only Transformer。GPT-4 增加了多模态视觉输入能力，GPT-4o 实现了原生多模态（语音+文本+图像）端到端处理。
+> **核心架构:** 所有 GPT 模型均基于 Decoder-only Transformer。GPT-4 增加了多模态视觉输入能力，GPT-4o 实现了原生多模态（语音+文本+图像）端到端处理。o 系列在基座模型上叠加了大规模强化学习训练的"内部思维链"，回答前先生成隐藏的推理过程。GPT-5 进一步统一了"快思考"与"慢思考"——模型自主判断问题难度，简单问题快速直答，复杂问题自动展开推理。
 
 ---
 
@@ -46,6 +52,76 @@
 
 ---
 
+## o 系列 — 推理模型（Reasoning Models）
+
+o 系列是 OpenAI 在 2024-2025 年推出的**推理增强模型线**，与传统 GPT 模型形成互补。其核心区别在于：模型在输出最终答案前，会先在隐藏的"思维链"（chain-of-thought）中进行多步推理，再给出结论。
+
+### 为什么需要推理模型
+
+| 任务类型 | 传统 GPT-4o | o 系列模型 |
+|---------|------------|-----------|
+| 日常对话、写作、翻译 | ✅ 更快、更自然 | ⚠️ 思考时间长，略显刻板 |
+| 竞赛数学（AIME） | 部分正确 | ✅ 接近满分 |
+| 复杂编程（Codeforces） | 中等水平 | ✅ 竞赛级表现 |
+| 多步逻辑推理 | 容易出错 | ✅ 显著更强 |
+| 科学研究问题（GPQA） | 中等 | ✅ 博士级表现 |
+
+### o 系列演进
+
+| 模型 | 发布 | 关键特性 |
+|------|------|---------|
+| **o1-preview / o1-mini** | 2024.09 | 首次引入隐藏思维链，擅长编程和数学 |
+| **o1 正式版** | 2024.12 | AIME 2024 准确率 83.3%（preview 仅 13.4%），达到竞赛选手水平 |
+| **o3-mini** | 2025.01 | 低成本推理模型，首次在推理模型中支持函数调用和结构化输出 |
+| **o3 / o4-mini** | 2025.04 | 支持多模态输入和工具调用；o4-mini 以极低成本达到 o1 级推理能力 |
+
+> **生产建议：** o 系列模型适合需要深度推理、代码生成或复杂规划的场景；对延迟敏感、以对话为主的任务，GPT-4o 仍是更经济的选择。从 o3-mini 起已支持函数调用，可与 Agent 框架结合使用。
+
+### 使用方式
+
+```python
+from openai import OpenAI
+
+client = OpenAI(api_key="your-api-key")
+
+# 推理模型用法与普通模型一致，但会增加 reasoning_effort 参数
+completion = client.chat.completions.create(
+    model="o4-mini",
+    reasoning_effort="medium",  # low / medium / high，控制思考深度
+    messages=[
+        {"role": "user", "content": "证明根号 2 是无理数。"}
+    ]
+)
+
+print(completion.choices[0].message.content)
+```
+
+> 推理模型会消耗更多 token（用于隐藏的推理过程），在计费和延迟评估时需要额外考虑。API 响应中可读取 `usage.completion_tokens_details.reasoning_tokens` 查看推理 token 消耗。
+
+---
+
+## GPT-5 与统一推理范式
+
+GPT-5（2025.08）标志着 OpenAI 从"对话模型 + 推理模型双线"转向"单一模型自适应推理"：
+
+- **思考模式自适应**：模型自行判断问题难度，简单对话快速直答，复杂推理自动展开思维链，无需用户手动选择 `reasoning_effort`。
+- **Codex 与 Agent 增强**：GPT-5 及 GPT-5.1（2026.04）强化了多步骤编码、工具编排和长时任务执行能力，可在一个会话中持续操作数十步。
+- **多模态原生**：统一处理文本、图像、音频，减少模态切换开销。
+- **指令遵循与安全**：后训练阶段引入更多真实场景偏好数据，减少越狱和有害输出。
+
+### 选择建议
+
+| 场景 | 推荐 |
+|------|------|
+| 日常对话、写作、翻译 | GPT-5（默认快速模式）或 GPT-4o |
+| 复杂推理、数学、竞赛编程 | GPT-5（深度思考）或 o4-mini |
+| Agent 多步工具编排 | GPT-5.1 / GPT-5 |
+| 成本敏感的大规模调用 | GPT-4o-mini / o4-mini |
+
+> 趋势：模型间"会不会推理"的边界正在消失，差异化更多体现在成本、延迟、上下文长度和 Agent 稳定性上。
+
+---
+
 ## 如何使用
 
 ### 通过 ChatGPT（网页/App）
@@ -70,6 +146,33 @@ completion = client.chat.completions.create(
 
 print(completion.choices[0].message.content)
 ```
+
+### 结构化输出（Structured Outputs）
+
+OpenAI 在 2024 年 8 月推出 Structured Outputs，通过 JSON Schema 约束模型输出，保证返回严格符合指定格式，可靠性接近 100%：
+
+```python
+from pydantic import BaseModel
+
+class Step(BaseModel):
+    explanation: str
+    output: str
+
+class MathReasoning(BaseModel):
+    steps: list[Step]
+    final_answer: str
+
+completion = client.beta.chat.completions.parse(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "解方程 8x + 7 = -23"}],
+    response_format=MathReasoning,  # 模型输出会被约束为该结构
+)
+
+result = completion.choices[0].message.parsed  # 直接得到 Python 对象
+print(result.final_answer)
+```
+
+> **适用场景：** 需要从非结构化文本中提取结构化数据、保证 Agent 工具调用参数格式正确、生成可被程序直接消费的 JSON 输出。这是构建可靠 Agent 系统的关键能力。
 
 ---
 
@@ -101,15 +204,10 @@ print(completion.choices[0].message.content)
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-## 精选资源
-
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
-
 <!-- RESOURCES_START -->
 
 *暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*

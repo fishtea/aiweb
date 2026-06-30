@@ -81,6 +81,7 @@ features:
     <h2>最新更新</h2>
     <p>自动生成内容会持续追加到对应栏目，首页保留最近的站点级更新记录。</p>
     <ul class="update-list">
+      <li><time>2026-06-30</time><span>知识迭代：为模型专区（GPT/Claude/DeepSeek/Gemini/Qwen/LLaMA/Mixtral/SD）、工具专区（LangChain/vLLM/Ollama/HuggingFace/ComfyUI/AutoGPT/PyTorch/TensorFlow/LlamaIndex/部署运维）、进阶学习（RAG/提示词/Agent/评估/微调）、高级知识（架构/训练/安全/多模态/数据）和 Agent 实践补充进阶章节与工程经验。</span></li>
       <li><time>2026-06-30</time><span>重构采集逻辑：新增统一分类配置、结构化资源库、精选资源区块重建和每日采集报告，避免文章被无限追加成链接列表。</span></li>
       <li><time>2026-06-30</time><span>补齐初级知识体系：新增 AI 学习路线图、数学基础、Python 与数据处理、数据与特征工程、模型训练评估、NLP、CV、生成式 AI、提示词入门、AI 伦理安全与隐私。</span></li>
       <li><time>2026-06-29</time><span>补充 7 篇专题文档：Embedding 与向量数据库、LLM 应用架构、数据工程与合成数据、开源模型部署选型、LlamaIndex、部署运维、Agent 评估与可观测性。</span></li>

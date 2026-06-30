@@ -68,6 +68,19 @@
 - **2022：ChatGPT 发布** — 将 AI 带入大众视野。
 - **2023–2026：GPT-4、LLaMA、Claude 等模型持续涌现**，AI 能力不断提升。
 
+### 2024-2026 关键节点补充
+
+| 时间 | 事件 | 意义 |
+|------|------|------|
+| 2024.09 | OpenAI o1 发布 | 推理模型开端，LLM 学会"先思考再回答" |
+| 2025.01 | DeepSeek-R1 开源 | 证明推理能力可通过 RL 涌现，性价比震动行业 |
+| 2025.04 | LLaMA 4 发布 | 开源转向原生多模态 MoE |
+| 2025.08 | GPT-5 发布 | 统一对话与推理，自适应思考深度 |
+| 2025.12 | Agentic AI Foundation 成立 | OpenAI+Anthropic 推动 Agent 协议标准化（MCP/AGENTS.md） |
+| 2026 | Agent 从 PoC 走向生产 | 企业级 Agent 部署成主流，安全与可观测性成焦点 |
+
+> 趋势：AI 发展重心正从"模型能力"（2020-2024）转向"系统化应用"（2025-2026）。单模型榜单竞争趋缓，Agent 工程、数据治理、安全合规和成本控制成为新的核心议题。
+
 ---
 
 ## 🔬 AI 的主要分支
@@ -108,12 +121,12 @@
 ## 🎯 学习建议
 
 ### 零基础入门推荐课程
-1. **[AI For Everyone — Andrew Ng (Coursera / DeepLearning.AI)](https://www.coursera.org/learn/ai-for-everyone)**  
+1. **[AI For Everyone — Andrew Ng (Coursera / DeepLearning.AI)](https://www.coursera.org/learn/ai-for-everyone)**
    - ⭐ 4.8 分 · 250 万+ 学员 · 约 6 小时
    - 无需编程、无需数学基础
    - 课程包含 4 个模块：什么是 AI / 构建 AI 项目 / 在组织中引入 AI / AI 与社会
 
-2. **[Introduction to Artificial Intelligence — IBM (Coursera)](https://www.coursera.org/learn/introduction-to-ai)**  
+2. **[Introduction to Artificial Intelligence — IBM (Coursera)](https://www.coursera.org/learn/introduction-to-ai)**
    - ⭐ 4.8 分 · 90 万+ 学员
    - 4 个模块：AI 简介与应用 / AI 概念与术语 / AI 与商业转型 / AI 伦理
    - 含动手实验和最终项目
@@ -144,15 +157,10 @@
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
 
-## 精选资源
-
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
-
 <!-- RESOURCES_START -->
 
 *暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-06-30 11:37:40*
