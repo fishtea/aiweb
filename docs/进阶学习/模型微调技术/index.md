@@ -346,6 +346,83 @@ llamafactory-cli train config.yaml
 
 > 来源参考：[Fine-Tuning LLMs in 2026: When RAG Isn't Enough](https://bigdataboutique.com/blog/fine-tuning-llms-when-rag-isnt-enough)、[LLaMA Factory 2026 Guide](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)、[LoRA & QLoRA 2026 Guide](https://www.meta-intelligence.tech/en/insight-lora-finetuning)、[Spheron 2026 Fine-tune Guide](https://www.spheron.network/blog/how-to-fine-tune-llm-2026)、[腾讯云 LoRA→QLoRA 演进](https://cloud.tencent.com/developer/article/2611321)
 
+---
+
+## 8. LLaMA Factory：2026年最全微调工具深入指南
+
+### 8.1 框架概况
+
+**来源：** [LLaMA Factory：2026年大语言模型微调完整指南](https://www.jenova.ai/zh/resources/llama-factory-complete-guide-to-llm-fine-tuning)
+
+LLaMA Factory 是微调领域最广泛采用的开源框架之一（ACL 2024发表，北航团队维护）：
+
+- **GitHub**：70,600+ ⭐，8,600+ 复刻
+- **采用者**：亚马逊、NVIDIA、阿里云
+- **零代码微调**：CLI + LlamaBoard 网页界面
+- **100+ 模型架构支持**：LLaMA、Qwen3、DeepSeek、Gemma、Mistral、Phi 等
+- **多种训练方法**：SFT、RLHF（PPO）、DPO、KTO、ORPO、持续预训练
+
+### 8.2 独有技术优势
+
+LLaMA Factory 在参数高效微调方法覆盖面上领先同类工具：
+
+| 方法 | LLaMA Factory | FastChat | LitGPT | LMFlow |
+|------|:---:|:---:|:---:|:---:|
+| **DoRA** | ✓ | — | — | — |
+| **LoRA+** | ✓ | — | — | — |
+| **PiSSA** | ✓ | — | — | — |
+| **KTO** | ✓ | — | — | — |
+| **ORPO** | ✓ | — | — | — |
+| **GaLore** | ✓ | — | — | — |
+
+### 8.3 模型支持时效性
+
+| 级别 | 模型 |
+|------|------|
+| **Day 0（当天）** | Qwen3, Qwen2.5-VL, Gemma 3, GLM-4.1V, InternLM 3, MiniCPM-o-2.6 |
+| **Day 1（次日）** | Llama 3/4, GLM-4, Mistral Small, PaliGemma2 |
+
+### 8.4 加速与优化
+
+- **Unsloth 集成**：LoRA 训练速度提升 170%
+- **FlashAttention-2**：注意力计算加速
+- **KTransformers**：2× RTX 4090 + CPU 协同微调 1,000B+ 模型
+- **vLLM 集成**：推理速度提升 270%
+- **NVIDIA DGX Spark 官方支持**（2026年2月发布）
+
+### 8.5 5步微调流程
+
+**步骤1：安装**
+```bash
+git clone https://github.com/hiyouga/LlamaFactory.git
+cd LlamaFactory
+pip install -e .
+```
+要求：Python 3.11+、PyTorch 2.6+、CUDA 11.6+（推荐 12.2+）
+
+**步骤2：数据准备** — 格式化为 JSON 指令-响应对，存入 `/data` 目录，在 `dataset_info.json` 注册
+
+**步骤3：配置训练**
+- 方式 A：LlamaBoard 网页界面（`llamafactory-cli webui`）
+- 方式 B：YAML 配置文件 → `llamafactory-cli train config.yaml`
+
+**步骤4：运行训练** — 耗时 30 分钟至 7 小时+（取决于模型大小和数据量）
+
+**步骤5：合并与部署**
+- 合并 Adapter：`llamafactory-cli export`
+- 生产部署：使用 vLLM 或 SGLang 工作进程的 OpenAI 风格 API
+
+### 8.6 硬件需求参考
+
+| 方法 | 7B | 14B | 70B |
+|------|-----|------|------|
+| 全参数 (bf16) | 120GB | 240GB | 1,200GB |
+| LoRA/Freeze | 16GB | 32GB | 160GB |
+| QLoRA (4-bit) | **6GB** | 12GB | 48GB |
+| QLoRA (2-bit) | **4GB** | 8GB | 24GB |
+
+> 2026年微调成本已大幅下降：7B 模型单次微调约 **$5 以下**（Spheron Network 数据）。Google Cloud 官方建议（2026年6月更新）：QLoRA 显存比 LoRA 低 75%，但 LoRA 训练速度快 66%、成本低 40%。
+
 ## 精选资源
 
 > 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。

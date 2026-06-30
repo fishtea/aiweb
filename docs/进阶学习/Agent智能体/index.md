@@ -277,9 +277,102 @@ AutoGen 由微软研究院开发，强调模块化和易用性：
 - **生态化更明显**：Agent 市场兴起，像装 App 一样选择行业插件
 - **人才需求爆发**：提示工程和 Agent 设计能力成为核心竞争力
 
-**来源：**  
-- [2025年中国AI Agent年度最佳实践应用榜单 - 头豹研究院](https://www.fxbaogao.com/detail/5038572)  
-- [2025年最好的Agent智能体推荐 - 百度千帆社区](https://qianfan.cloud.baidu.com/qianfandev/topic/686932)
+**来源：**  \n- [2025年中国AI Agent年度最佳实践应用榜单 - 头豹研究院](https://www.fxbaogao.com/detail/5038572)  \n- [2025年最好的Agent智能体推荐 - 百度千帆社区](https://qianfan.cloud.baidu.com/qianfandev/topic/686932)
+
+---
+
+## 10. 2026年AI Agent框架全景对比
+
+2026年被称为"智能体应用爆发之年"，Agent框架生态呈现多元化的繁荣景象。以下综合JetBrains PyCharm Blog和LangChain官方的权威评测，梳理主流框架的技术定位与选型建议。
+
+### 10.1 什么是AI Agent？（2026定义）
+
+**来源：** [Top Agentic Frameworks for Building Applications 2026 - JetBrains PyCharm Blog](https://blog.jetbrains.com/pycharm/2026/06/top-agentic-frameworks-for-building-applications-2026/)
+
+AI Agent遵循 **PRAR循环**：
+- **Perceive（感知）** — 观察环境、用户输入、系统状态、工具、记忆
+- **Reason（推理）** — 使用LLM或混合逻辑规划并决策行动
+- **Act（行动）** — 执行行动（调用工具、更新记忆、触发工作流）
+- **Reflect（反思）** — 评估结果并调整未来行为
+
+> *"与传统的LLM和聊天机器人不同，Agent不需要持续的用户输入……它们是主动的，基于设定的规则和参数自主工作以实现目标。"*
+
+### 10.2 三种核心编排范式（2026）
+
+| 范式 | 描述 | 优势 | 局限 |
+|------|------|------|------|
+| **图式编排（Graph-Based）** | Agent和工具作为有向图节点，流程预定义 | 确定性强、易调试、生产级可靠 | 前期设计多、创造性空间小 |
+| **角色式编排（Role-Based）** | Agent被分配特定角色（如"规划者""研究员"），通过消息协作 | 直觉化、原型快、模仿人类团队 | 执行路径难强制、可复现性差 |
+| **链式编排（Chain-Based/Adaptive）** | Agent在动态链/循环中自主决定下一步 | 灵活、适合创造性任务 | 可预测性低、治理难 |
+
+### 10.3 十大Agent框架深度对比（2026）
+
+**来源：**  \n- [Top Agentic Frameworks for Building Applications 2026 - JetBrains](https://blog.jetbrains.com/pycharm/2026/06/top-agentic-frameworks-for-building-applications-2026/)  \n- [The best AI agent frameworks in 2026 - LangChain](https://www.langchain.com/resources/ai-agent-frameworks)
+
+| 框架 | 编排方式 | 多Agent | 记忆 | 人机协作 | 开源 | 最佳场景 |
+|------|---------|---------|------|---------|------|---------|
+| **LangChain** | 链式 | 部分 | 中 | 有限-中等 | MIT | 快速LLM应用原型 |
+| **LangGraph** | 图式 | 强 | 强 | 强 | MIT | 生产级Agent工作流 |
+| **LlamaIndex Workflows** | 事件驱动 | 有限 | 强 | 中 | MIT | 知识密集型Agent |
+| **Haystack** | 流水线式 | 中 | 强 | 中 | 开源 | 生产RAG与上下文AI |
+| **CrewAI** | 角色式 | 强 | 轻量 | 有限 | MIT | 任务导向Agent团队 |
+| **AutoGen** | 角色式 | 强 | 中 | 有限 | MIT | 对话式多Agent |
+| **Semantic Kernel** | 规划式 | 中 | 中 | 强 | MIT | 企业AI(微软栈) |
+| **Microsoft Agent Framework** | 图式 | 强 | 强 | 强 | MIT | 微软统一框架 |
+| **OpenAI Agents SDK** | 图式(托管) | 是 | 托管 | 强 | MIT | 托管Agent应用 |
+| **Google ADK** | 图式(托管) | 是 | 强 | 强 | Apache 2.0 | GCP原生团队 |
+
+### 10.4 各框架深度解析
+
+#### LangChain（⭐ ~134k）
+- **定位**：基于链的LLM应用框架，可快速原型Agent功能
+- **核心优势**：1,000+集成（模型、向量数据库、文档加载器、API），一行代码切换模型提供商
+- **生产准备度**：抽象层需要谨慎管理，建议搭配LangSmith使用
+- **最佳场景**：工具增强聊天机器人、LLM后端服务、快速原型
+
+#### LangGraph
+- **定位**：有状态多参与者系统的图式编排，构建于LangChain之上
+- **核心优势**：确定性工作流、原生状态管理、通过中断机制实现优秀的人机协作
+- **最佳场景**：自主客户支持、AI驱动的DevOps、多步决策引擎
+
+#### CrewAI（⭐ ~49k）
+- **定位**：基于角色的多Agent编排，每个Agent有特定人设、目标和背景故事
+- **生态**：支持网络抓取、PostgreSQL、MongoDB、Qdrant、Weaviate、MCP
+- **注意事项**：社区报告显示执行追踪不够准确、异步执行和流式输出的痛点。免费版限制50次执行/月
+- **最佳场景**：多角色协作任务的快速原型
+
+#### Microsoft Agent Framework（⭐ ~9.6k）
+- **定位**：AutoGen + Semantic Kernel的统一继任者（2025年10月宣布），Python和.NET已GA（2026年4月3日）
+- **核心特性**：带类型安全路由、检查点、人机协作的图式工作流；原生MCP支持；A2A协议适配器（beta）
+- **最佳场景**：微软技术栈团队的企业应用
+
+#### LlamaIndex Workflows
+- **定位**：以检索为中心、数据优先，从数据出发构建Agent行为
+- **核心优势**：高级文档索引、强长期记忆
+- **局限**：不适合复杂动作编排；多Agent能力有限
+- **最佳场景**：研究助手、知识库Agent、企业文档智能
+
+### 10.5 框架选型决策树
+
+```
+你要构建什么？
+├── 简单工具调用聊天机器人 → LangChain
+├── 生产级复杂Agent工作流 → LangGraph
+├── 多Agent角色协作 → CrewAI / AutoGen
+├── 知识密集/文档处理 → LlamaIndex Workflows / Haystack
+├── 企业微软技术栈 → Microsoft Agent Framework
+├── GCP原生项目 → Google ADK
+├── 托管/快速部署 → OpenAI Agents SDK
+└── TypeScript项目 → Mastra
+```
+
+### 10.6 2026年Agent开发趋势
+
+1. **MCP（Model Context Protocol）成为行业标准**：主流框架均原生支持MCP，实现工具发现的标准化
+2. **可观测性成为标配**：LangSmith、LangFuse等追踪工具与框架深度集成
+3. **人机协作（HITL）成为生产级必备**：关键步骤的人工审批与中断恢复
+4. **多Agent编排成熟化**：从实验阶段进入生产级可靠性的关键一年
+5. **框架趋同但仍有分化**：LangChain/LangGraph生态最完整，微软统一框架对微软栈用户最有吸引力
 
 ## 精选资源
 
