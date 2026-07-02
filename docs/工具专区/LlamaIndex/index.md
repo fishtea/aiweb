@@ -68,7 +68,57 @@ LlamaIndex 是面向 LLM 数据接入、索引、检索和 Agent 工作流的开
 
 ---
 
-## 资料整理状态
+## 2026年LlamaIndex最新进展
+
+### LlamaCloud 更名为 LlamaParse
+
+2026 年 2 月，LlamaIndex 宣布将其企业平台 **LlamaCloud** 更名为 **LlamaParse**，标志着产品战略从通用云平台转向以文档解析为核心的 Agent 工作流自动化。官方声明称："过去一年，我们的企业平台已演变为真正意义上的 Agent 文档处理平台，LlamaParse 是核心。更名反映了这一演进，并聚焦于我们最擅长的领域：强大的文档解析和以文档为中心的 Agent 工作流。"
+
+### LlamaAgents Builder 新增文件上传
+
+LlamaAgents Builder（自然语言驱动的 Agent 文档工作流构建器）现已支持**文件上传**功能。用户可以提供示例文档作为上下文，创建更贴合实际场景的应用。这意味着非开发者可以通过上传 PDF、发票、合同等文件，直接向 Builder 描述需求，自动构建定制化的文档处理 Agent。
+
+**LlamaAgents 竞赛**同期举办：使用 LlamaParse 的 Agent 标签页构建处理杂乱 PDF、发票或监管文件的文档 Agent，最佳作品获 $200 奖金。
+
+### AgentWorkflow：事件驱动的多 Agent 编排
+
+LlamaIndex 推出了 **AgentWorkflow**——一个事件驱动的多 Agent 编排系统，核心特性：
+
+- **灵活 Agent 类型**：FunctionAgent（函数式）、ReActAgent（推理-行动循环）
+- **内置状态管理**：自动管理 Agent 间的状态传递和上下文
+- **实时监控**：可视化工作流执行过程
+- **Human-in-the-Loop**：人工审核和干预能力
+- 从简单助手到复杂多 Agent 系统均可构建
+
+### 2026年 LlamaIndex vs LangChain 定位
+
+两个框架在 2026 年的功能已大幅趋同，但设计哲学仍截然不同：
+
+| 维度 | LlamaIndex | LangChain |
+|------|-----------|-----------|
+| **核心定位** | 数据图书馆员——为模型连接私有数据 | 编排者——构建 Agent 工作流 |
+| **2026 年最强项** | 高级 RAG & 数据索引（精度手术刀） | Agent 工作流 & 工具调用（瑞士军刀） |
+| **编排风格** | 事件驱动（Workflows API） | 声明式/命令式（LCEL）+ 图（LangGraph） |
+| **学习曲线** | 中等（聚焦数据场景） | 陡峭（抽象层次多、生态庞大） |
+| **企业级能力** | LlamaParse 文档解析 + Agentic RAG | LangSmith 可观测性 + Deep Agents 长运行 |
+
+**2026 年"高手"模式**：大部分资深开发者**不选边站**——用 LlamaIndex 做检索层（找到事实），用 LangChain/LangGraph 做编排层（决定拿事实做什么）。两者互补使用是最佳实践。
+
+### 推荐学习路径
+
+1. **入门**：从 LlamaIndex 开始——"Chat with PDF"场景直觉、见效快
+2. **进阶/求职导向**：掌握 LangChain + LangGraph——$150k+ AI 工程岗位的核心要求
+3. **三月路线**：第 1 月 LlamaIndex RAG → 第 2 月 LangChain 基础 → 第 3 月 LangGraph 深度
+
+### 参考来源
+
+- [LlamaIndex Newsletter 2026-02-24](https://www.llamaindex.ai/blog/llamaindex-newsletter-2026-02-24)
+- [LangChain vs LlamaIndex: Which One Should You Learn in 2026?](https://medium.com/codetodeploy/langchain-vs-llamaindex-which-one-should-you-learn-in-2026-62f18aa1a66f)
+- [Introducing AgentWorkflow (YouTube)](https://www.youtube.com/watch?v=MmiveeGxfX0)
+
+---
+
+## 精选资源
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 

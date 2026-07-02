@@ -153,7 +153,101 @@ print(response.content)
 
 ---
 
-## 资料整理状态
+## 2026年LangChain/LangGraph生产实战
+
+### LangChain vs LangGraph：何时用哪个
+
+2026 年生产环境中的明确分工已形成：
+
+**LangChain (LCEL) 适合：**
+- 线性 RAG 管道（检索 → 组装上下文 → 生成）
+- 简单的 1-2 工具调用 Agent
+- 快速原型验证——可读的管道语法、内建流式/批处理/异步
+- 利用 1000+ 预建集成，无需手写 PDF 加载器、FAISS 包装器等
+
+**LangGraph 适合：**
+- **状态化多步 Agent**：条件分支、循环、多轮推理
+- **Human-in-the-Loop**：审批、中断、恢复（一行代码实现）
+- **持久化会话**：跨会话状态保持和检查点
+- **错误恢复**：工具调用失败时的结构化重试和回退
+
+> 来自 Kalvium Labs 2026 年实践数据：12 个 Agent 项目中 8 个以 LangChain 起步，其中 4 个因状态管理成为瓶颈而**重写为 LangGraph**。LangChain 给你循环，LangGraph 给你循环周围的基础设施。
+
+### LangGraph 三大优势
+
+以代码为例说明：
+
+```python
+from langgraph.graph import StateGraph, END
+from typing import TypedDict, Annotated
+from operator import add
+
+class AgentState(TypedDict):
+    messages: Annotated[list, add]   # 追加而非替换
+    error_count: int
+
+def should_continue(state: AgentState) -> str:
+    last_message = state["messages"][-1]
+    if not hasattr(last_message, "tool_calls") or not last_message.tool_calls:
+        return "end"
+    if state["error_count"] >= 3:    # 错误上限保护
+        return "end"
+    return "tools"
+
+graph = StateGraph(AgentState)
+# ... 添加节点和边 ...
+graph.add_conditional_edges("agent", should_continue, {"tools": "tools", "end": END})
+```
+
+**1. 类型化的显式状态** — `AgentState` 精确定义追踪内容，可在任意检查点检查。
+
+**2. 一等公民的条件边** — `should_continue` 是可测试的纯函数，可按错误计数、标志位、模式等分支。
+
+**3. Human-in-the-Loop（一行代码）** — 原生中断/恢复 + 持久化状态：
+```python
+from langgraph.checkpoint.memory import MemorySaver
+app = graph.compile(checkpointer=MemorySaver(), interrupt_before=["tools"])
+```
+
+### 2026 AI Agent 框架全景
+
+根据 LangChain 官方 2026 年 6 月发布的框架评估：
+
+| 框架 | 类型 | 开源 | 最适合 |
+|------|------|------|--------|
+| **LangChain + LangGraph** | LLM 应用框架 + Agent 运行时 | MIT | 快速原型 + 精确的多 Agent 编排 |
+| **Deep Agents** | Agent 执行器 | MIT | 长时间运行的编程/研究工作流 |
+| **CrewAI** | 多 Agent 编排 | MIT | 基于角色的 Agent 快速原型 |
+| **Microsoft Agent Framework** | 多 Agent 编排 | MIT | AutoGen + Semantic Kernel 统一继任者 |
+| **LlamaIndex Workflows** | Agent 工作流 | MIT | 文档密集、数据驱动的管道 |
+| **Google ADK** | Agent 开发框架 | Apache 2.0 | GCP 原生团队 |
+| **OpenAI Agents SDK** | 多 Agent SDK | MIT | 轻量级、低抽象的 OpenAI 助手 |
+| **Mastra** | TypeScript Agent 框架 | 部分开源 | TypeScript 团队构建生产 Agent |
+
+### LangChain 2026 关键数字
+
+- **~134k GitHub Stars**，1000+ 预建集成
+- **LangSmith**：框架无关的可观测性平台，支持追踪、评估、部署和自动化问题优先级排序（LangSmith Engine）
+- **MCP/A2A 协议**支持：模型上下文协议和 Agent-to-Agent 通信
+
+### 生产落地警示
+
+LangChain 的抽象层在快速原型时高效，但在生产环境中需要谨慎管理：
+- 状态通过可变字典传递时，条件逻辑最终散落在不可测试的 if-else 树中（有团队到 400 行后才承认框架不再有帮助）
+- 中段会话中断需要 200+ 行自定义轮询 + 信号机制
+- 类型化错误处理缺失——第 7 步工具失败时需手动构建重试、退避和反馈逻辑
+
+> **选型建议**：新项目直接从 LangGraph 起步，LangChain 的 AgentExecutor 已被标记为遗留。搭配 LangSmith 做全链路可观测，Deep Agents 处理长期运行 Agent。框架选择的核心原则：**"抽象只有加速正确决策时才有用——掩盖故障模式的抽象，调试时间远超搭建时间。"**
+
+### 参考来源
+
+- [The Best AI Agent Frameworks in 2026 - LangChain](https://www.langchain.com/resources/ai-agent-frameworks)
+- [LangGraph vs LangChain: Which We Deploy in Production (2026)](https://www.kalviumlabs.ai/blog/langgraph-vs-langchain-production)
+- [AI Agent Frameworks 2026: Production-Tested Ranking - Alice Labs](https://alicelabs.ai/en/insights/best-ai-agent-frameworks-2026)
+
+---
+
+## 精选资源
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
