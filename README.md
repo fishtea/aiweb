@@ -178,6 +178,14 @@ docs/.vitepress/dist/
 python scripts/deploy.py
 ```
 
+如果已经批量修改了多个 Markdown 文档，推荐使用一键发布脚本：
+
+```bash
+python scripts/publish.py -m "docs: update tutorials"
+```
+
+该脚本会按顺序执行文档体检、VitePress 构建、Vercel 部署、Git 提交和推送。它不会重新采集外部资料，只发布当前工作区中的文档更新。
+
 ## 常用维护命令
 
 采集候选学习资料：
@@ -196,6 +204,12 @@ python scripts/render_resources.py
 
 ```bash
 python scripts/audit_docs.py
+```
+
+批量发布当前文档改动：
+
+```bash
+python scripts/publish.py -m "docs: batch update"
 ```
 
 补齐配置中定义但缺失的栏目页或专题页：
