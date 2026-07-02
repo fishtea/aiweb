@@ -88,28 +88,16 @@ print(accuracy_score(y_test, pred))
 - [PyTorch](/工具专区/PyTorch/)
 - [TensorFlow](/工具专区/TensorFlow/)
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[使用Python进行数据分析](https://geeksforgeeks.org/data-analysis/data-analysis-with-python)**
-  - 来源：`geeksforgeeks.org` · 质量分：11 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - NumPy 数组 存储相同数据类型的元素并支持多个维度。 切片 允许访问数组中的一系列元素。 Pandas 是一个用于处理结构化（关系或标记）数据的 Python 库。 Series 是一个一维标记数组，能够保存任何数据类型（整数、字符串、浮点数等）。 DataFrame 是一种具有行和列的二维标记数据结构，类似于表格或电子表格。 * ****info():**** 显示数据集结构、列名称、数据类型和非空值。 分组和聚合基于列对数据进行...
-
-- **[使用 Python 探索和分析数据 - 培训 |微软学习](https://learn.microsoft.com/en-us/training/modules/explore-analyze-data-with-python)**
-  - 来源：`learn.microsoft.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 不再支持该浏览器。升级到 Microsoft Edge 以利用最新功能、安全更新和技术支持。 # 使用 Python 探索和分析数据。数据探索和分析是数据科学的核心。数据科学家需要使用 Python 等编程语言的技能来探索、可视化和操作数据。在本模块中，您将学习： * 常见的数据探索和分析任务。 * 如何使用 NumPy、Pandas 和 Matplotlib 等 Python 包来分析数据。 * 有一些 Python 编程经验。 ##...
-
-- **[第 8 章 Pandas 入门 - 交互的Python：数据分析入门](https://shixiangwang.github.io/pybook/08-pandas-intro)**
-  - 来源：`shixiangwang.github.io` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - ## 8.1 Pandas 简介¶. ## 8.2 Pandas 的数据结构¶. ### 8.2.1 Series¶. In [1]: import pandas as pd In [2]: import numpy as np In [4]: {'0':0, '1':1, '2': 2} Out[4]: {'0': 0, '1': 1, '2': 2} In [5]: np.arange(3) Out[5]: array([0, 1,...
-
-- **[第 12 章 Pandas 进阶 - 交互的Python：数据分析入门](https://shixiangwang.github.io/pybook/12-advanced-pandas)**
-  - 来源：`shixiangwang.github.io` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - * 12.1 深入研究 Pandas 数据结构。 ### 12.1.1 回顾¶. In [1]: import numpy as np In [2]: a = np.arange(9) In [3]: a Out[3]: array([0, 1, 2, 3, 4, 5, 6, 7, 8]) In [4]: b = np.arange(9).reshape((3, 3)) In [5]: b Out[5]: array([[0, 1, 2...
+- 后台候选资料：4 条，覆盖 3 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

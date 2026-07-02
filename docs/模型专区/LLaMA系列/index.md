@@ -139,28 +139,16 @@ ollama run llama3.1:405b
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[Llama 指南 — Meta 面向工程师的开源法学硕士 (2026) |我的工程之路](https://myengineeringpath.dev/tools/llama-guide)**
-  - 来源：`myengineeringpath.dev` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 本 **Llama 指南** 涵盖了 GenAI 工程师从下载模型权重到运行生产级开源 LLM 部署所需的一切。您将了解如何比较 Llama 3.1、3.2 和 3.3、如何使用 Ollama 和 llama.cpp 在本地运行模型、如何使用 LoRA 和 QLoRA 进行微调，以及如何使用 vLLM 或文本生成推理进行大规模托管。本指南适合谁。开源法学硕士在 2024 年跨越了一个门槛，改变了人工智能部署的经济性。 Llama 3.1...
-
-- **[Llama 4 教程：完整的初级到高级指南 - GPT Prompt Coder](https://gptpromptcoder.com/llama-4-tutorial)**
-  - 来源：`gptpromptcoder.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # Meta Llama 4 *教程中心*。世界上下载次数最多的开源人工智能模型系列。 Scout 拥有所有开放权重模型中最长的上下文窗口 — 1000 万个令牌。您需要的一切：模型解释、如何使用 Ollama 在本地运行、API 访问、实际用例以及解锁 Llama 开放权重优势的提示技术。 Llama 4 Scout·Llama 4 Maverick·10M 令牌上下文·开放重量免费·MoE 架构·本地运行·Ollama 支持·单 H...
-
-- **[llama.cpp 2026 指南：本地 AI 推理和设置 - WeavAI 博客](https://weavai.app/blog/en/2026/04/24/llama-cpp-2026-guide-local-ai-inference-setup)**
-  - 来源：`weavai.app` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # llama.cpp 2026 指南：本地 AI 推理和设置。想要在自己的计算机上免费运行大型语言模型，而不花一毛钱或依赖云吗？这个由 Georgi Gerganov 开发的 C++ 框架是完全免费和开源的，允许您仅使用标准笔记本电脑 CPU 运行 Llama 3、Mistral、Qwen 和 Gemma 等主流 LLM。它目前是 GitHub 上最受好评的本地 AI 推理框架之一（超过 75,000 颗星）。如果您更喜欢无需安装的 ...
-
-- **[本地部署开源大模型的完整教程：LangChain + Streamlit+ Llama](https://developer.aliyun.com/article/1260444)**
-  - 来源：`developer.aliyun.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 想在本地电脑运行Llama大模型？本教程运用LangChain与GGML量化技术，提供从环境配置到Streamlit界面构建的完整步骤与源码，助您在普通硬件上快速搭建
+- 后台候选资料：4 条，覆盖 4 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

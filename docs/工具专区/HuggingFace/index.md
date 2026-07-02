@@ -181,28 +181,16 @@ huggingface-cli login
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[模型·抱脸](https://huggingface.co/learn/llm-course/zh-CN/chapter2/3)**
-  - 来源：`huggingface.co` · 质量分：14 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # LLM Course. and get access to the augmented documentation experience. # 模型. 在本节中，我们将更详细地了解如何创建和使用模型。我们将使用 `AutoModel` 类，当你希望从 checkpoint 实例化任何模型时，使用它非常方便。. `AutoModel` 类及其所有的相关类其实就是对库中可用的各种模型的简单包装。它是一个智能的包装，因为它可以自动猜测你的...
-
-- **[微调预训练模型 · Hugging Face](https://huggingface.co/docs/transformers/zh/training)**
-  - 来源：`huggingface.co` · 质量分：12 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # Transformers. and get access to the augmented documentation experience. # 微调预训练模型. 使用预训练模型有许多显著的好处。它降低了计算成本，减少了碳排放，同时允许您使用最先进的模型，而无需从头开始训练一个。🤗 Transformers 提供了涉及各种任务的成千上万的预训练模型。当您使用预训练模型时，您需要在与任务相关的数据集上训练该模型。这种操作被称为微调，...
-
-- **[快速上手·抱脸](https://huggingface.co/docs/transformers/zh/quicktour)**
-  - 来源：`huggingface.co` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # Transformers. 快来使用 🤗 Transformers 吧！无论你是开发人员还是日常用户，这篇快速上手教程都将帮助你入门并且向你展示如何使用 pipeline() 进行推理，使用 AutoClass 加载一个预训练模型和预处理器，以及使用 PyTorch 或 TensorFlow 快速训练一个模型。如果你是一个初学者，我们建议你接下来查看我们的教程或者课程，来更深入地了解在这里介绍到的概念。. ## Pipeline. ...
-
-- **[什么是抱脸？ 2026 年人工智能中心指南 - Metacto](https://metacto.com/blogs/what-is-hugging-face-a-guide-to-the-ai-community-and-its-tools)**
-  - 来源：`metacto.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - #什么是抱脸？人工智能社区及其工具指南。 2026 年 Hugging Face 指南：Hub、Transformers 库、Spaces、推理提供程序、smolagents 和 MCP。与metacto 的 Hugging Face 专家交谈，将此人工智能生态系统集成到您的产品中。 * 添加了“什么是 Hugging Face？” * 用 **Inference Providers**（与 OpenAI 兼容的网关路由到 Groq、T...
+- 后台候选资料：4 条，覆盖 2 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

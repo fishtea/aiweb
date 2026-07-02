@@ -2,7 +2,7 @@
 
 AI 学习路径导航是一个基于 VitePress 构建、部署在 Vercel 的中文 AI 学习知识库网站。项目把 AI 入门、进阶实践、高级专题、主流模型、开发工具和 AI Agent 实战内容整理成结构化文档，适合按学习路线查阅，也适合通过站内搜索快速定位知识点。
 
-站点内容以 `docs/` 目录中的 Markdown 文档为核心，由 VitePress 生成静态网站。项目还包含资源采集与渲染脚本，用于维护外部精选资源、更新报告和文档体检结果。
+站点内容以 `docs/` 目录中的 Markdown 文档为核心，由 VitePress 生成静态网站。项目包含资源采集、候选资料入库、中文整理状态渲染、更新报告和文档体检脚本。采集结果不会直接作为站外链接列表发布到教程页。
 
 ## 内容覆盖
 
@@ -180,19 +180,19 @@ python scripts/deploy.py
 
 ## 常用维护命令
 
-采集和更新外部学习资源：
+采集候选学习资料：
 
 ```bash
 python scripts/collect.py
 ```
 
-重新渲染专题页中的资源区块：
+重新渲染专题页中的资料整理状态区块：
 
 ```bash
 python scripts/render_resources.py
 ```
 
-检查文档结构与资源区块：
+检查文档结构与资料整理状态区块：
 
 ```bash
 python scripts/audit_docs.py

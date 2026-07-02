@@ -149,28 +149,16 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[DeepSeek,下载deepseek-site的源码_GitHub_帮酷 中文官网、DeepSeek网页版、API调用和本地部署教程 | 最全使用指南~【2025年10月更新】轻松使用DeepSeek网页版，快速稳定、不卡顿，支持DeepSeek R1、V3以及ChatGPT 4o、o1、o3多种功能。本指南提供全面的DeepSeek使用说明，包含DeepSeek官网平替、DeepSeek网页版、API使用、DeepSeek本地配置教程，助您轻松使用DeepSeek和ChatGPT ~ · GitHub](https://github.com/deepseek-free/deepseek-site)**
-  - 来源：`github.com` · 质量分：12 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - ## 导航菜单。我们会阅读每一条反馈，并非常认真地对待您的意见。 # 已保存的搜索。 ## 使用保存的搜索更快地过滤结果。 # deepseek-free/deepseek-site. ## 文件夹和文件。 |名称 | |名称 |最后提交消息 |最后提交日期|。 |最新提交历史记录 246 次提交 246 次提交 | | |。 ## 最新提交。 ## 存储库文件导航。 # 深度搜索 | 中文官网、DeepSeek网页版、API调用和本地...
-
-- **[DeepSeek AI：通过教育部和强化学习推进开源法学硕士 | DeepSeek-R1 和 V3 说明](https://inferless.com/learn/the-ultimate-guide-to-deepseek-models)**
-  - 来源：`inferless.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 资源/学习/deepseek 模型的终极指南。 # DeepSeek 模型终极指南。与世界分享。在开源大型语言模型 (LLM) 的快速发展中，DeepSeek 模型代表了该领域的重大进步。 DeepSeek 开发了适合自然语言处理、编码和数学推理领域各种应用的多种模型。 1. **DeepSeek-R1**：DeepSeek-R1是他们最新的第一代推理模型，在基准测试中与OpenAI的o1相匹配。 3. **DeepSeek LLM**...
-
-- **[Deepseek API 调用教程，图文讲解](https://apifox.com/apiskills/deepseek-api-debugging)**
-  - 来源：`apifox.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # Deepseek API 调用教程，图文讲解. 登录 Deepseek 开放平台后，注册用户可免费获赠 10 元 tokens，并创建 API Key 保存至安全位置。通过 Apifox 集成 Deepseek API，可快速完成 API 调试。配置环境变量后，将 Deepseek 提供的 cURL 导入 Apifox，并设置 Authorization 为 Bearer {{API\_KEY}}。随后，切换至正式环境发送请求，根据...
-
-- **[教程：开始在 Foundry 模型中使用 DeepSeek-R1 - Microsoft Foundry |微软学习](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/tutorials/get-started-deepseek-r1)**
-  - 来源：`learn.microsoft.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 教程：开始使用 Microsoft Foundry Models 中的 DeepSeek-R1 推理模型。在本教程中，您将了解如何在 Microsoft Foundry 中部署和使用 DeepSeek 推理模型。不过，该内容也适用于较新的 DeepSeek-R1-0528 推理模型。在本教程中，您将部署 DeepSeek-R1 推理模型，使用代码以编程方式发送推理请求，并解析推理输出以了解模型如何得出答案。您在本教程中执行的步骤是：...
+- 后台候选资料：4 条，覆盖 4 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

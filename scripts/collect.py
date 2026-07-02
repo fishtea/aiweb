@@ -450,8 +450,9 @@ def write_report(added: list[dict], total_seen: int, task_count: int) -> None:
         f"- 搜索结果：{total_seen}",
         f"- 新增资源：{len(added)}",
         f"- 资源库：`data/resources.json`",
+        "- 发布策略：本报告只记录采集统计，不直接发布原始搜索结果链接；候选资料需阅读、去重、核验和中文归纳后再进入教程正文。",
         "",
-        "## 新增资源",
+        "## 新增候选资料概览",
         "",
     ]
     if not added:
@@ -460,11 +461,14 @@ def write_report(added: list[dict], total_seen: int, task_count: int) -> None:
         for (category, topic), items in sorted(by_topic.items()):
             lines.append(f"### {category} / {topic}")
             lines.append("")
-            for item in sorted(items, key=lambda r: r.get("score", 0), reverse=True):
-                title = item.get("title") if item.get("provider") == "github_api" else item.get("title_cn") or item.get("title")
-                lines.append(f"- **[{title}]({item['url']})**")
-                provider = item.get("provider") or "unknown"
-                lines.append(f"  - 来源：`{item['source_domain']}` · 信息源：`{provider}` · 质量分：{item['score']}")
+            domains = sorted({item.get("source_domain", "unknown") for item in items})
+            providers = sorted({item.get("provider", "unknown") for item in items})
+            scores = [int(item.get("score", 0)) for item in items]
+            lines.append(f"- 新增候选资料：{len(items)} 条")
+            lines.append(f"- 信息源：{', '.join(providers)}")
+            lines.append(f"- 覆盖域名：{', '.join(domains[:8])}{' 等' if len(domains) > 8 else ''}")
+            lines.append(f"- 质量分范围：{min(scores)} - {max(scores)}")
+            lines.append("- 下一步：阅读候选资料，抽取稳定事实、方法步骤、实现路径和注意事项，再更新对应正文。")
             lines.append("")
     report.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
     print(f"Report: {report}")

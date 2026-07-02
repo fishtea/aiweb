@@ -207,28 +207,16 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[code-of-learn-deep-learning-with-pytorch,这是《用 PyTorch 学习深度学习》一书的代码,下载code-of-learn-deep-learning-with-pytorch的源码_GitHub_帮酷](https://github.com/L1aoXingyu/code-of-learn-deep-learning-with-pytorch)**
-  - 来源：`github.com` · 质量分：12 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - ## 导航菜单。 # 搜索代码、存储库、用户、问题、拉取请求... # 提供反馈。我们会阅读每一条反馈，并非常认真地对待您的意见。 # 已保存的搜索。 ## 使用保存的搜索更快地过滤结果。要查看所有可用的限定符，请参阅我们的文档。 # L1aoXingyu/学习代码-with-pytorch 深度学习。 ## 文件夹和文件。 |名称 | |名称 |最后提交消息 |最后提交日期|。 |最新提交历史77 次提交 77 次提交 | | |。 ...
-
-- **[GitHub - datawhalechina/thorough-pytorch: PyTorch入门教程，在线阅读地址：https://datawhalechina.github.io/thorough-pytorch/ · GitHub](https://github.com/datawhalechina/thorough-pytorch)**
-  - 来源：`github.com` · 质量分：12 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - ## Navigation Menu. # Search code, repositories, users, issues, pull requests... # Provide feedback. We read every piece of feedback, and take your input very seriously. # Saved searches. ## Use saved searches to filter ...
-
-- **[PyTorch 教程：从零到专业的 7 个步骤 \[2026\] - 技术内幕](https://tech-insider.org/pytorch-tutorial-deep-learning-complete-guide-2026)**
-  - 来源：`tech-insider.org` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 如何开始使用 PyTorch 2：从张量到部署的完整深度学习教程 (2026)。 PyTorch 已在 2026 年巩固了其作为主导深度学习框架的地位，为 Meta、Tesla 和 OpenAI 等公司的从尖端研究模型到生产 AI 系统的一切提供支持。随着 PyTorch 2.11 于 2026 年 3 月发布，该框架不断发展，具有强大的功能，例如用于边缘部署的 **torch.compile**、**ExecuTorch**，以及...
-
-- **[PyTorch官方教程中文版](https://pytorch123.com/)**
-  - 来源：`pytorch123.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - ## 教程介绍. PyTorch是一个基于Torch的Python开源机器学习库，用于自然语言处理等应用程序。它主要由Facebookd的人工智能小组开发，不仅能够 实现强大的GPU加速，同时还支持动态神经网络，这一点是现在很多主流框架如TensorFlow都不支持的。 PyTorch提供了两个高级功能： 1.具有强大的GPU加速的张量计算（如Numpy） 2.包含自动求导系统的深度神经网络 除了Facebook之外，Twitter、G...
+- 后台候选资料：4 条，覆盖 3 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

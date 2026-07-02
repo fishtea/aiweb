@@ -208,28 +208,16 @@ print(run_agent("北京今天热吗？"))
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[AI Agent框架探秘：拆解OpenHands（12）--- 函数调用 - 博客园](https://cnblogs.com/rossiXYZ/p/19684479)**
-  - 来源：`cnblogs.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # AI Agent框架探秘：拆解 OpenHands（12）--- Function call. 大模型本质上是一个文本生成器，它不能直接操作系统、调用 API、访问数据库。所有这些能力都需要额外的工程实现。Agent 工具使用模式是突破大语言模型（LLM）固有局限、实现 Agent 与现实世界交互的核心架构范式，其本质是让 LLM 从单纯的文本生成器转变为具备感知、推理和行动能力的智能体，核心依托 ReAct 循环中模型对工具调用时...
-
-- **[深入理解Agent：从0实现function call - 百度智能云千帆社区](https://qianfan.cloud.baidu.com/qianfandev/topic/685449)**
-  - 来源：`qianfan.cloud.baidu.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 深入理解Agent：从0实现函数调用。 源代码已经上传github：github.com/astordu/age.... ##一、场景。 1.我们首先定义一个获取天气的函数（属于Tools中的一个，这里用于演示，不做真实调用）：。 response = client.chat.completions.create(. return response.choices[0].message.base_url="https://api.d...
-
-- **[Agent设计模式——第 5 章：工具使用（函数调用）-腾讯云开发者社区-腾讯云](https://cloud.tencent.com/developer/article/2581252)**
-  - 来源：`cloud.tencent.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - import os, getpass import asyncio import Nest_asyncio from Typing import List from dotenv import load_dotenv importlogging from langchain_google_genai import ChatGoogleGenerativeAI from langchain_core.prompts import Chat...
-
-- **[如何使用函数调用和 GPT-5 构建 AI 代理 |走向数据科学](https://towardsdatascience.com/how-to-build-an-ai-agent-with-function-calling-and-gpt-5)**
-  - 来源：`towardsdatascience.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 如何使用函数调用和 GPT-5 构建 AI 代理。人工智能代理如何工作：分步指南。人工智能代理形成一个系统，该系统使用大型语言模型来计划、推理并采取步骤与环境进行交互，使用模型推理中建议的工具来解决特定任务。在函数调用中，每个工具都被定义为一个代码函数（例如，用于获取最新天气预报的天气 API）以及一个 JSON 架构，该架构指定函数的参数并指示 LLM 何时以及如何为给定任务调用该函数。在这篇文章中，我将演示如何使用函数调用来使用...
+- 后台候选资料：4 条，覆盖 4 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

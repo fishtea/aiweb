@@ -230,28 +230,16 @@ docker run -d -p 3000:8080 \
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[GitHub - datawhalechina/handy-ollama: 动手学Ollama，CPU玩转大模型部署，在线阅读地址：https://datawhalechina.github.io/handy-ollama/ · GitHub](https://github.com/datawhalechina/handy-ollama)**
-  - 来源：`github.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - ## 导航菜单。 ## 使用保存的搜索更快地过滤结果。 # datawhalechina/handy-ollama. ## 最新提交。 ## 存储库文件导航。 **热忱欢迎感兴趣的或者同学开发者们提出问题或者提交pull request，让我们一起完善这个项目！**。 | 4.1 Ollama API 使用指南 | 调用规则、参数说明 | ✅|。 | 4.2 Python 中使用Ollama API | Python 调用 | ✅|。 ...
-
-- **[完整的 Ollama 教程 (2026) – 通过 CLI、云和 Python 获得法学硕士 - DEV 社区](https://dev.to/proflead/complete-ollama-tutorial-2026-llms-via-cli-cloud-python-3m97)**
-  - 来源：`dev.to` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 完整 Ollama 教程 (2026) 的封面图片 – 通过 CLI、云和 Python 获得法学硕士。 # 完整的 Ollama 教程 (2026) – 通过 CLI、云和 Python 获得法学硕士。 Ollama 已成为本地运行大型语言模型 (LLM) 的标准。在本教程中，我想向您展示有关 Ollama 应该了解的最重要的事情。 Ollama 是一个开源平台，用于完全在本地计算机上运行和管理大语言模型 (LLM) 包。 Ollam...
-
-- **[奥拉马设置 2026 |本地法学硕士指南 - SitePoint](https://sitepoint.com/ollama-setup-guide-2026)**
-  - 来源：`sitepoint.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # Ollama 设置指南：2026 年像专业人士一样运行本地法学硕士。## 如何设置 Ollama 进行本地法学硕士开发。本指南将引导您完成完全运行的 Ollama 安装、硬件的优化配置、自定义模型配置文件以及与 Python 项目、IDE 和聊天前端的集成点。其架构将 llama.cpp 推理包装在简单的命令行和 REST API 层后面，抽象出模型量化、GPU 内存分配和模型文件管理的复杂性。在本指南结束时，您将拥有完全运行的 O...
-
-- **[使用 Ollama 在本地部署 AI 大模型： 安装、部署和 API 调用的分步指南](https://apifox.com/apiskills/ollama-deploy)**
-  - 来源：`apifox.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 使用 Ollama 在本地部署 AI 大模型： 安装、部署和 API 调用的分步指南. 使用 Ollama 在本地部署 AI 大模型： 安装、部署和 API 调用的教程。. 本文来介绍一下怎么下载 Ollama 并部署 AI 大模型（DeepSeek-R1、Llama 3.2 等）。通过 Ollama 这一开源的大语言模型服务工具，你就可以在自己的电脑上跑其它开源的 AI 模型。接下来，我们将分步骤说明如何完成下载和安装，以便你能够...
+- 后台候选资料：4 条，覆盖 4 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

@@ -149,28 +149,16 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-7B-Instruct")
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[通义千问Qwen完整指南：如何快速部署和优化你的AI大模型_邹岩讳Sally-CSDN-OPC开发者社区](https://opc.csdn.net/6a2bd14af874c425c69ff39c.html)**
-  - 来源：`opc.csdn.net` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # logo CSDN-OPC开发者社区. ## 登录社区云. ### CSDN-OPC开发者社区. # 通义千问Qwen完整指南：如何快速部署和优化你的AI大模型. ### 邹岩讳Sally. 【免费下载链接】Qwen The official repo of Qwen (通义千问) chat & pretrained large language model proposed by Alibaba Cloud. 【免费下载链接】Qw...
-
-- **[您应该使用哪种 Qwen 型号？ Qwen3.6、Qwen3.5-Omni ...](https://yingtu.ai/en/blog/qwen-model-guide-2026)**
-  - 来源：`yingtu.ai` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 2026 年 Qwen 模型路线指南，按 API、开放权重、多模式和编码工作流程区分 Qwen3.6 Max Preview、Plus、Flash、27B、35B-A3B、Qwen3.5-Omni 和 Qwen3-Coder-Plus。截至 2026 年 5 月 8 日，在比较模型名称之前选择 Qwen 路线：从 Qwen3.6-Plus 开始，用于稳定的通用 API 工作；当延迟或成本很重要时，从 Qwen3.6-Flash 开始；从...
-
-- **[终极指南 - 2026 年最佳 Qwen 车型](https://siliconflow.com/articles/en/the-best-qwen-models-in-2025)**
-  - 来源：`siliconflow.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - 我们对 2026 年最佳 Qwen 模型的综合指南。从尖端推理能力到多模态理解和专门的编码任务，这些模型代表了 Qwen 在大语言模型方面的创新巅峰——帮助开发人员和企业通过 SiliconFlow 等服务利用先进的人工智能。我们对 2026 年的三大推荐是 Qwen3-235B-A22B、Qwen3-Coder-480B-A35B-Instruct 和 Qwen/QwQ-32B，每一个都因其卓越的功能、多功能性以及突破人工智能推理和理...
-
-- **[Qwen3 - 如何运行和微调](https://unsloth.ai/docs/models/tutorials/qwen3-how-to-run-and-fine-tune)**
-  - 来源：`unsloth.ai` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 🌠Qwen3 - 如何运行和微调。学习使用 Unsloth + 我们的 Dynamic 2.0 量化在本地运行和微调 Qwen3。 Qwen 的新 Qwen3 模型在推理、指令遵循、代理功能和多语言支持方面提供了最先进的进步。运行并微调最新模型：**Qwen-2507**。所有上传均使用 Unsloth Dynamic 2.0 实现 SOTA 5-shot MMLU 和 KL Divergence 性能，这意味着您可以以最小的精度损...
+- 后台候选资料：4 条，覆盖 4 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*

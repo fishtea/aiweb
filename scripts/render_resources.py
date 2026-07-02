@@ -49,37 +49,27 @@ def select_resources(resources: list[dict], category: str, topic: str) -> list[d
 
 def render_block(resources: list[dict]) -> str:
     lines = [
-        "## 精选资源",
+        "## 资料整理状态",
         "",
-        "> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。",
+        "> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。",
         "",
         START,
         "",
     ]
     if not resources:
         lines.extend([
-            "*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*",
+            "*暂无候选资料。后续采集会先进入 `data/resources.json`，不会直接改写正文。*",
             "",
         ])
     else:
-        for item in resources:
-            title = escape_link_label(item.get("title_cn") or item.get("title") or "未命名资源")
-            summary = clean_markdown_text(item.get("summary_cn") or item.get("summary") or "暂无摘要。")
-            url = item.get("url", "")
-            source = item.get("source_domain", "unknown")
-            score = item.get("score", 0)
-            first_seen = item.get("first_seen", "")
-            provider = item.get("provider") or ", ".join(item.get("providers") or [])
-            verified_at = item.get("verified_at", "")
-            lines.append(f"- **[{title}]({url})**")
-            meta = f"来源：`{source}` · 质量分：{score} · 首次采集：{first_seen}"
-            if provider:
-                meta += f" · 信息源：`{provider}`"
-            if verified_at:
-                meta += f" · 已验证：{verified_at[:10]}"
-            lines.append(f"  - {meta}")
-            lines.append(f"  - {summary[:220]}{'...' if len(summary) > 220 else ''}")
-            lines.append("")
+        source_count = len({item.get("source_domain", "unknown") for item in resources})
+        latest_seen = max((item.get("last_seen") or item.get("first_seen") or "" for item in resources), default="")
+        lines.extend([
+            f"- 后台候选资料：{len(resources)} 条，覆盖 {source_count} 个来源域名。",
+            f"- 最近采集日期：{latest_seen or '未知'}。",
+            "- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。",
+            "",
+        ])
     lines.extend([
         END,
         "",
@@ -97,6 +87,7 @@ def replace_resource_block(content: str, block: str) -> str:
         resource_heading_positions = [
             before.find("\n## 精选资源"),
             before.find("\n## 资源列表"),
+            before.find("\n## 资料整理状态"),
         ]
         valid_positions = [pos for pos in resource_heading_positions if pos >= 0]
         if valid_positions:

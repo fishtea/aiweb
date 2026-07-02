@@ -68,28 +68,16 @@ LlamaIndex 是面向 LLM 数据接入、索引、检索和 Agent 工作流的开
 
 ---
 
-## 精选资源
+## 资料整理状态
 
-> 该区块由采集脚本根据资源库自动重建，只保留当前专题最相关的精选链接；正文教程不会被自动覆盖。
+> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
 
 <!-- RESOURCES_START -->
 
-- **[Llamaindex RAG 教程 |国际商业机器公司](https://ibm.com/think/tutorials/llamaindex-rag)**
-  - 来源：`ibm.com` · 质量分：13 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # Llamaindex RAG 教程。检索增强生成 (RAG) 是一种使用大型语言模型 (LLM) 和生成人工智能的流行技术，将信息检索与语言生成相结合。在本教程中，您将使用 Python 构建一个 RAG 应用程序，该应用程序使用 LlamaIndex 从 PDF 文档中提取信息并回答问题。您将解析 PDF 文档，将其插入 Llama 矢量存储索引，然后创建一个查询引擎来回答用户查询。虽然您可以从多种工具中进行选择，但本教程将引导您...
-
-- **[如何开始使用 LlamaIndex](https://oneuptime.com/blog/post/2026-02-02-llamaindex-getting-started/view)**
-  - 来源：`oneuptime.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 如何开始使用 LlamaIndex。关于如何开始使用 LlamaIndex 构建人工智能应用程序的综合指南。 LlamaIndex 是一个数据框架，旨在将大型语言模型 (LLM) 与您的私有数据连接起来。无论您是想构建一个回答有关文档的问题的聊天机器人，在您的知识库上创建一个语义搜索引擎，还是开发可以对复杂数据集进行推理的人工智能代理，LlamaIndex 都可以提供实现这一目标的构建块。本指南将引导您了解开始使用 LlamaInd...
-
-- **[LlamaIndex 完整指南：法学硕士的 RAG 和数据工作流程](https://galileo.ai/blog/llamaindex-complete-guide-rag-data-workflows-llms)**
-  - 来源：`galileo.ai` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - # 用于生产 AI 系统的完整 LlamaIndex 教程。用于生产 RAG 系统的 Master LlamaIndex。构建可靠的检索增强生成管道，避免幻觉，并充满信心地部署人工智能。当您将大型语言模型连接到您的专有数据时，您将立即面临挑战：不一致的检索质量、漂移的准确性以及破坏用户信任的幻觉。检索增强生成 (RAG) 在真实文档中提供答案，但构建可靠的管道需要仔细的数据处理和及时的设计。您将发现 LlamaIndex 何时适合您的需...
-
-- **[LlamaIndex 通讯 2026-01-27](https://llamaindex.ai/blog/llamaindex-newsletter-2026-01-27)**
-  - 来源：`llamaindex.ai` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
-  - * 文档。如果您尚未探索 LlamaParse，请务必注册 并与我们联系 讨论您的特定企业用例。 → 注册这里。 全公告。 * **改进的 n8n 集成：** LlamaParse、LlamaExtract 和 LlamaParse Index 的完全稳定的节点，以及两项新服务（LlamaClassify 和 LlamaSheets），以及用于无缝文档工作流程自动化的完整设置指南。 GitHub 存储库。 * 以 Experian 为特...
+- 后台候选资料：4 条，覆盖 4 个来源域名。
+- 最近采集日期：2026-07-02。
+- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-02 11:56:59*
+*资源区块更新时间：2026-07-02 12:09:15*
