@@ -1,6 +1,6 @@
 # 🔥 GitHub 热门 AI 项目（每周更新）
 
-> **更新周期**: 截至 2025-07-26（2026 年 6 月第 3 周数据）
+> **更新周期**: 截至 2026-07-02（原周榜保留，追加当前热门 AI 项目观察）
 >
 > 数据来源：GitHub Trending、OSS Insight、Shareuhack、ByteByteGo 等社区汇总。
 
@@ -137,10 +137,58 @@
 
 ---
 
+## 🧭 2026-07-02 追加：热门 AI 项目观察清单
+
+> 说明：下表使用 GitHub API 在 2026-07-02 读取的仓库 star、fork 和最近 push 时间。它不是严格的“本周增长榜”，更适合作为当前高热度 AI 项目雷达。
+
+| 项目 | Stars | Forks | 最近活跃 | 类别 | 为什么值得关注 |
+|------|-------|-------|----------|------|----------------|
+| [n8n-io/n8n](https://github.com/n8n-io/n8n) | 194,831 | 58,998 | 2026-07-02 | AI 工作流自动化 | 自托管工作流平台，AI 节点和 400+ 集成让它成为“低代码 Agent 编排层” |
+| [microsoft/markitdown](https://github.com/microsoft/markitdown) | 162,158 | 11,443 | 2026-06-24 | 文档转 Markdown | 把 Office、PDF、网页等资料转换成 LLM 友好格式，是 RAG 和研究 Agent 的高频前处理工具 |
+| [langgenius/dify](https://github.com/langgenius/dify) | 147,294 | 23,197 | 2026-07-02 | Agentic Workflow 平台 | 面向生产的 Agent 工作流开发平台，适合企业快速搭建应用、评估和运营 |
+| [open-webui/open-webui](https://github.com/open-webui/open-webui) | 143,736 | 20,741 | 2026-07-01 | AI 应用界面 | Ollama/OpenAI 兼容生态中的主流自托管 Web UI，适合私有化模型入口 |
+| [comfyanonymous/ComfyUI](https://github.com/comfyanonymous/ComfyUI) | 119,072 | 13,944 | 2026-07-02 | 多模态生成工作流 | 节点式图像/视频生成后端与 UI，适合把创意流程做成可复用工作流 |
+| [browser-use/browser-use](https://github.com/browser-use/browser-use) | 102,023 | 11,322 | 2026-07-02 | 浏览器 Agent | 让 Agent 操作网页完成在线任务，是 Web 自动化 Agent 的代表项目 |
+| [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) | 87,936 | 11,115 | 2026-06-29 | MCP 工具生态 | 提供大量 MCP Server，让 Agent 标准化连接文件、数据库、浏览器、SaaS 等外部系统 |
+| [vllm-project/vllm](https://github.com/vllm-project/vllm) | 85,066 | 18,793 | 2026-07-02 | LLM 推理服务 | 高吞吐推理引擎，是开源大模型服务化和 Agent 后端部署的关键基础设施 |
+| [All-Hands-AI/OpenHands](https://github.com/All-Hands-AI/OpenHands) | 79,039 | 10,054 | 2026-07-02 | 编程 Agent | 开源 AI 软件工程 Agent，覆盖读代码、改代码、跑命令、提交变更等开发闭环 |
+| [unclecode/crawl4ai](https://github.com/unclecode/crawl4ai) | 70,683 | 7,260 | 2026-07-01 | LLM 友好爬虫 | 为 RAG、研究 Agent 和网页理解场景提供结构化抓取能力 |
+| [mem0ai/mem0](https://github.com/mem0ai/mem0) | 59,874 | 6,941 | 2026-07-01 | Agent 记忆层 | 面向 AI Agent 的长期记忆层，解决多轮任务中的用户偏好、历史事实和经验复用 |
+| [microsoft/autogen](https://github.com/microsoft/autogen) | 59,413 | 8,944 | 2026-04-15 | 多 Agent 框架 | Microsoft 的 Agentic AI 编程框架，适合研究多智能体协作和工具编排 |
+| [crewAIInc/crewAI](https://github.com/crewAIInc/crewAI) | 54,726 | 7,672 | 2026-07-01 | 多 Agent 协作 | 用角色、任务和团队组织 Agent，适合内容生产、研究、销售运营等分工明确的流程 |
+| [langchain-ai/langgraph](https://github.com/langchain-ai/langgraph) | 36,252 | 6,065 | 2026-07-01 | Agent 状态图 | 用图结构构建可恢复、可中断、可观测的 Agent，是生产级 Agent 编排的重要方向 |
+| [huggingface/lerobot](https://github.com/huggingface/lerobot) | 25,426 | 4,960 | 2026-07-01 | 机器人 AI | Hugging Face 机器人学习项目，把模型、数据集和真实设备训练流程连接起来 |
+
+### 追加解读
+
+| 趋势 | 代表项目 | 判断 |
+|------|----------|------|
+| **Agent 从聊天框走向工作流** | Dify, n8n, LangGraph | 热门项目不再只做对话，而是强调状态、工具、审批、回放和部署 |
+| **浏览器与网页数据成为 Agent 基础能力** | browser-use, Crawl4AI, MarkItDown | 搜索、阅读、抓取、转换文档是研究 Agent 和运营 Agent 的底层能力 |
+| **MCP 正在成为工具连接层** | modelcontextprotocol/servers | Agent 不再为每个工具写私有适配器，而是通过标准协议连接外部系统 |
+| **编程 Agent 进入开源竞争期** | OpenHands, AutoGen, CrewAI | 从“代码补全”进入“读仓库、改代码、跑测试、开 PR”的端到端开发流程 |
+| **推理与界面仍是刚需基础设施** | vLLM, Open WebUI, ComfyUI | 真正落地的 AI 应用需要稳定推理服务、可用界面和可复用生成工作流 |
+
+### 项目选型建议
+
+| 目标 | 优先关注 |
+|------|----------|
+| 快速做企业 AI 应用 | Dify, n8n, Open WebUI |
+| 做生产级 Agent 编排 | LangGraph, AutoGen, CrewAI |
+| 做研究/网页采集 Agent | browser-use, Crawl4AI, MarkItDown |
+| 做代码开发 Agent | OpenHands, AutoGen |
+| 做私有化模型服务 | vLLM, Open WebUI |
+| 做多模态创意工作流 | ComfyUI |
+| 做长期个性化助手 | mem0 |
+| 做机器人 Agent | LeRobot |
+
+---
+
 > **参考来源**
 >
 > - GitHub Trending: https://github.com/trending?since=weekly
 > - OSS Insight: https://ossinsight.io/trending/ai
+> - GitHub API: https://api.github.com/repos/{owner}/{repo}
 > - Shareuhack: GitHub Trending Weekly 2026-06-17
 > - ByteByteGo: Top AI GitHub Repositories in 2026
 > - AskGlitch: Trending AI GitHub Repos — May 2026
