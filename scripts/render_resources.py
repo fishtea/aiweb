@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -14,6 +15,24 @@ DATA_FILE = PROJECT_ROOT / "data" / "resources.json"
 START = "<!-- RESOURCES_START -->"
 END = "<!-- RESOURCES_END -->"
 tz = timezone(timedelta(hours=8))
+
+
+def clean_markdown_text(text: str) -> str:
+    text = text or ""
+    while "![" in text:
+        start = text.find("![")
+        end = text.find(")", start)
+        if end < 0:
+            text = text[:start]
+            break
+        text = f"{text[:start]} {text[end + 1:]}"
+    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def escape_link_label(text: str) -> str:
+    return clean_markdown_text(text).replace("[", "\\[").replace("]", "\\]")
 
 
 def load_resources() -> list[dict]:
@@ -44,14 +63,21 @@ def render_block(resources: list[dict]) -> str:
         ])
     else:
         for item in resources:
-            title = item.get("title_cn") or item.get("title") or "未命名资源"
-            summary = item.get("summary_cn") or item.get("summary") or "暂无摘要。"
+            title = escape_link_label(item.get("title_cn") or item.get("title") or "未命名资源")
+            summary = clean_markdown_text(item.get("summary_cn") or item.get("summary") or "暂无摘要。")
             url = item.get("url", "")
             source = item.get("source_domain", "unknown")
             score = item.get("score", 0)
             first_seen = item.get("first_seen", "")
+            provider = item.get("provider") or ", ".join(item.get("providers") or [])
+            verified_at = item.get("verified_at", "")
             lines.append(f"- **[{title}]({url})**")
-            lines.append(f"  - 来源：`{source}` · 质量分：{score} · 首次采集：{first_seen}")
+            meta = f"来源：`{source}` · 质量分：{score} · 首次采集：{first_seen}"
+            if provider:
+                meta += f" · 信息源：`{provider}`"
+            if verified_at:
+                meta += f" · 已验证：{verified_at[:10]}"
+            lines.append(f"  - {meta}")
             lines.append(f"  - {summary[:220]}{'...' if len(summary) > 220 else ''}")
             lines.append("")
     lines.extend([
@@ -68,9 +94,16 @@ def replace_resource_block(content: str, block: str) -> str:
         before = content[:content.index(START)]
         after = content[content.index(END) + len(END):]
         before = before.rstrip()
-        if before.endswith("## 精选资源") or before.endswith("## 资源列表"):
-            before = before.rsplit("\n## ", 1)[0].rstrip()
-        return f"{before}\n\n{block}{after.lstrip()}"
+        resource_heading_positions = [
+            before.find("\n## 精选资源"),
+            before.find("\n## 资源列表"),
+        ]
+        valid_positions = [pos for pos in resource_heading_positions if pos >= 0]
+        if valid_positions:
+            heading_pos = min(valid_positions)
+            before = before[:heading_pos].rstrip()
+        after = re.sub(r"^\s*(\*资源区块更新时间：.*\*\s*)+", "", after.lstrip())
+        return f"{before}\n\n{block}{after}"
     return f"{content.rstrip()}\n\n---\n\n{block}"
 
 

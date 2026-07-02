@@ -162,8 +162,22 @@ ComfyUI 拥有庞大的自定义节点社区，推荐值得关注的节点包：
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[工作流程 - ComfyUI](https://docs.comfy.org/zh/development/core-concepts/workflow)**
+  - 来源：`docs.comfy.org` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - > Fetch the complete documentation index at: </llms.txt>. > Use this file to discover all available pages before exploring further. ComfyUI home pagelight logodark logo. 开始使用内置节点开发支持Registry API ReferenceCloud API 参考文档. ...
+
+- **[ComfyUI 初学者教程 2026：第一个快速工作流程](https://aitoolranked.com/blog/comfyui-tutorial-beginners-2026-complete-guide)**
+  - 来源：`aitoolranked.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 掌握基于节点的 AI 图像工作流程、安装和高级技术，无需任何编码经验。用户无需代码即可连接视觉块来构建图像生成工作流程。该平台支持 1,000 多个自定义节点包，并通过其可视化界面启用修复、LoRA 集成和 SDXL 模型使用等先进技术。 **ComfyUI 是用于 Stable Diffusion 的基于节点的图形界面，允许用户通过连接视觉块而不是编写代码来构建自定义 AI 图像工作流程。** 每个节点执行特定功能，如加载模型、编码文...
+
+- **[ComfyUI 工作流基础教程 |维基百科](https://comfyui-wiki.com/zh/interface/workflow)**
+  - 来源：`comfyui-wiki.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ### OpenMOSS 发布 MOVA - 开源音视频同步生成模型. # ComfyUI 工作流基础概念以及如何使用. ## 什么是工作流（Workflow）？. 工作流是 ComfyUI 中最核心的概念，简单来说就是由多个节点（Node）连接组成的图形化界面，用来描述 AI 绘图的整个处理过程。就像搭建乐高积木一样，我们通过组合不同功能的节点，来实现各种 AI 绘图效果。. ComfyUI 的生态非常丰富，图像、视频、音频、3D等等...
+
+- **[小白也能听懂的ComfyUI工作流搭建教程！节点连线整理技巧+复杂工作流解构 | AI绘画和SD应用落地的最佳载体！从思路到实操，一口气讲明白！_哔哩哔哩_bilibili](https://bilibili.com/video/BV19f421q7EU)**
+  - 来源：`bilibili.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 小白也能听懂的ComfyUI工作流搭建教程！节点连线整理技巧+复杂工作流解构 | AI绘画和SD应用落地的最佳载体！从思路到实操，一口气讲明白！. comfyui工作流搭建：文生图、图生图、反推、换脸、放大、裁剪等多节点融合一个工作流教程. 【全100集】B站最详细StableDiffusion+Comfyui全套保姆级教程——秋叶零基础入门到精通，全程干货无废话，允许白嫖，拿走不谢！（附SD安装包. ComfyUI劝退贴！入坑有门...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*

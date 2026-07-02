@@ -168,8 +168,22 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[Mistral AI 模型指南 2026：使用哪一个？ - 普里斯特伦](https://pristren.com/blog/mistral-models-guide)**
+  - 来源：`pristren.com` · 质量分：12 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - Mistral AI 模型指南 2026：使用哪一个？ Mistral AI 提供从高效 7B 型号到具有 GPT-4o 竞争力的旗舰型号的一系列产品，所有价格均远低于 OpenAI。 #mistral-ai#mixtral#moe#llm-comparison#european-ai。 1. 01米斯特拉尔型号阵容。 Mistral AI 打造了业内最具成本竞争力的车型阵容之一。 Mistral Large 在大多数基准测试中与 GP...
+
+- **[混合|快速工程指南<!-- -->](https://promptingguide.ai/models/mixtral)**
+  - 来源：`promptingguide.ai` · 质量分：11 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - Mixtral 8x7B 是一种稀疏专家混合 (SMoE) 语言模型 由 Mistral AI 发布（在新选项卡中打开）。 Mixtral 具有与 Mistral 7B（在新选项卡中打开） 类似的架构，但主要区别在于 Mixtral 8x7B 中的每一层均由 8 个前馈块组成（即，据报道，Mixtral 的性能优于 Llama 2 80B，推理速度快 6 倍，匹配或优于 Llama 2 80B） GPT-3.5（在新选项卡中打开） Mi...
+
+- **[Mixtral — NVIDIA NeMo 框架用户指南](https://docs.nvidia.com/nemo-framework/user-guide/25.07/llms/mixtral.html)**
+  - 来源：`docs.nvidia.com` · 质量分：11 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - Mistral AI 的第二个主要模型 Mixtral-8x7B 于 2023 年 12 月发布，是第一个高性能开源 (Apache 2.0) 稀疏专家混合模型 (SMoE) 之一。与 Mistral 7B 相比，Mixtral 的 SMoE 实现的关键区别特征是包含一个路由器网络，该网络通过一组两组参数（专家）（可能有八个参数）引导代币。在以下文档页面中，我们使用术语“mixtral”和“mixtral\_8x22b”分别指 Mixt...
+
+- **[Mistral AI 模型 - Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-mistral.html)**
+  - 来源：`docs.aws.amazon.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 米斯特拉尔人工智能模型。本节介绍 Mistral AI 模型的请求参数和响应字段。使用 InvokeModel 和 InvokeModelWithResponseStream（流）操作对 Mistral AI 模型进行推理调用。要在推理操作中使用模型，您需要模型的模型 ID。要获取模型 ID，请参阅 Amazon Bedrock 中支持的基础模型。要检查特定 Mistral AI 模型是否支持某项功能，请参阅。请参阅使用 AWS 开...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*

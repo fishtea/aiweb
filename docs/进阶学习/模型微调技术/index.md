@@ -429,10 +429,22 @@ pip install -e .
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[炼石成丹：大语言模型微调实战系列（二）模型微调篇 | 亚马逊AWS官方博客](https://aws.amazon.com/cn/blogs/china/practical-series-on-fine-tuning-large-language-models-part-two)**
+  - 来源：`aws.amazon.com` · 质量分：15 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - LLaMA-Factory 涵盖了模型训练的各个阶段（预训练、指令监督微调 SFT、奖励模型训练、PPO、DPO、ORPO 训练），不同的训练方法（全参数微调、部分参数微调、LoRA、QLoRA）和不同的使用方式（CLI、WebUI、Python），支持多种大语言模型，包括国内的百川、ChatGLM3、GLM-4、Qwen2、Yi 等，以及海外的主流模型 Llama3、Phi 等。本文也将主要围绕 SageMaker 和 LLaMA-F...
+
+- **[LLMForEverybody/03-第三章-扭矩/大模型扭矩之Adapters（三）QLoRA.md at main · luhengshiwo/LLMForEverybody · GitHub](https://github.com/luhengshiwo/LLMForEverybody/blob/main/03-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%BE%AE%E8%B0%83/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E4%B9%8BAdapters%EF%BC%88%E4%B8%89%EF%BC%89QLoRA.md)**
+  - 来源：`github.com` · 质量分：12 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## Navigation Menu. # Search code, repositories, users, issues, pull requests... You signed in with another tab or window. Reload to refresh your session. You switched accounts on another tab or window. * Notifications Y...
+
+- **[LLM微调技术：从LoRA到QLoRA的演进-腾讯云开发者社区-腾讯云](https://cloud.tencent.com/developer/article/2611321)**
+  - 来源：`cloud.tencent.com` · 质量分：11 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - **摘要：** 本文深入探讨了2025年大语言模型（LLM）微调技术的最新进展，从经典的全参数微调到高效的参数高效微调技术，重点分析了LoRA及其衍生技术的演进历程。通过分析GitHub上最新的开源项目和研究成果，本文系统梳理了各种微调技术的原理、实现和应用，并提供了完整的实践指南和性能评估. 微调是将预训练大语言模型适配到特定任务的关键步骤。在早期，LLM微调主要采用全参数微调方式，需要微调整个模型的所有参数。然而，随着模型规模的不断...
+
+- **[微调本地法学硕士 2026 |实用指南 - SitePoint](https://sitepoint.com/fine-tune-local-llms-2026)**
+  - 来源：`sitepoint.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 如何在 2026 年微调本地法学硕士：实用指南。在 VRAM 需求减少、工具链成熟以及许可基础模型目录不断增加的推动下，微调本地 LLM 的能力已成为 2026 年个人开发者和小型团队的现实选择。曾经只有资金充足的实验室才能使大型语言模型适应特定领域的任务，而 QLoRA 的改进和 Unsloth 等统一框架现在可以在单个 12 GB 消费级 GPU 上微调 8B 参数模型。本指南将介绍整个工作流程：确定微调是否是正确的方法、准备数...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：自动更新*
+*资源区块更新时间：2026-07-02 11:56:59*

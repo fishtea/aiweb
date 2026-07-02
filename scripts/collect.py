@@ -13,13 +13,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+from urllib import error, request
+from urllib.parse import parse_qs, quote_plus, urlencode, urlparse, urlunparse
 
 from content_config import BLOCKED_DOMAINS, CATEGORIES, TRUSTED_DOMAINS
 from render_resources import main as render_resources
@@ -28,6 +30,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 DATA_FILE = DATA_DIR / "resources.json"
 REPORT_DIR = PROJECT_ROOT / "docs" / "知识库" / "更新报告"
+DEFAULT_TAVILY_API_KEY = "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"
 tz = timezone(timedelta(hours=8))
 NOW = datetime.now(tz)
 TODAY = NOW.strftime("%Y-%m-%d")
@@ -41,6 +44,23 @@ class SearchTask:
     query: str
     tags: list[str]
     level: str
+
+
+@dataclass(frozen=True)
+class SearchCandidate:
+    title: str
+    url: str
+    summary: str
+    provider: str
+    provider_score: float | None = None
+
+
+@dataclass(frozen=True)
+class UrlValidation:
+    ok: bool
+    status: int | None
+    final_url: str
+    error: str = ""
 
 
 def normalize_domain(netloc: str) -> str:
@@ -83,6 +103,12 @@ def normalize_url(url: str) -> str:
         return ""
 
 
+def dedupe_key(url: str) -> str:
+    parsed = urlparse(url)
+    path = (parsed.path.rstrip("/") or "/").lower()
+    return f"{normalize_domain(parsed.netloc)}{path}"
+
+
 def source_domain(url: str) -> str:
     return normalize_domain(urlparse(url).netloc)
 
@@ -100,6 +126,21 @@ def save_resources(resources: list[dict]) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     resources.sort(key=lambda r: (r.get("category", ""), r.get("topic", ""), r.get("score", 0), r.get("first_seen", "")), reverse=True)
     DATA_FILE.write_text(json.dumps(resources, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def upgrade_resource_metadata(resources: list[dict]) -> None:
+    for item in resources:
+        url = item.get("url", "")
+        if url and not item.get("dedupe_key"):
+            item["dedupe_key"] = dedupe_key(url)
+        provider = item.get("provider") or "legacy"
+        item["provider"] = provider
+        providers = set(item.get("providers") or [])
+        providers.add(provider)
+        item["providers"] = sorted(p for p in providers if p)
+        item.setdefault("provider_score", None)
+        item.setdefault("verified_at", "")
+        item.setdefault("verify_status", None)
 
 
 def needs_translation(text: str) -> bool:
@@ -133,22 +174,144 @@ def translate_text(text: str) -> str:
         return text
 
 
-def search_resources(query: str, max_results: int) -> list[dict]:
+def json_request(url: str, *, method: str = "GET", payload: dict | None = None, headers: dict | None = None, timeout: int = 30) -> dict:
+    body = None
+    request_headers = {"User-Agent": "aiweb-resource-collector/1.0"}
+    request_headers.update(headers or {})
+    if payload is not None:
+        body = json.dumps(payload).encode("utf-8")
+        request_headers.setdefault("Content-Type", "application/json")
+    req = request.Request(url, data=body, method=method, headers=request_headers)
+    with request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def search_ddgs(task: SearchTask, max_results: int) -> list[SearchCandidate]:
     try:
         from ddgs import DDGS
 
         with DDGS() as ddgs:
             return [
-                {
-                    "title": r.get("title", "").strip(),
-                    "url": r.get("href", "").strip(),
-                    "summary": r.get("body", "").strip(),
-                }
-                for r in ddgs.text(query, max_results=max_results)
+                SearchCandidate(
+                    title=r.get("title", "").strip(),
+                    url=r.get("href", "").strip(),
+                    summary=r.get("body", "").strip(),
+                    provider="ddgs",
+                )
+                for r in ddgs.text(task.query, max_results=max_results)
             ]
     except Exception as exc:
-        print(f"[WARN] search failed for {query!r}: {exc}", file=sys.stderr)
+        print(f"[WARN] ddgs search failed for {task.query!r}: {exc}", file=sys.stderr)
         return []
+
+
+def search_tavily(task: SearchTask, max_results: int) -> list[SearchCandidate]:
+    api_key = os.getenv("TAVILY_API_KEY", DEFAULT_TAVILY_API_KEY).strip()
+    if not api_key:
+        return []
+    try:
+        data = json_request(
+            "https://api.tavily.com/search",
+            method="POST",
+            payload={
+                "api_key": api_key,
+                "query": task.query,
+                "max_results": max_results,
+                "search_depth": "basic",
+                "include_answer": False,
+                "include_raw_content": False,
+            },
+            headers={"Authorization": f"Bearer {api_key}"},
+        )
+        return [
+            SearchCandidate(
+                title=(r.get("title") or "").strip(),
+                url=(r.get("url") or "").strip(),
+                summary=(r.get("content") or "").strip(),
+                provider="tavily",
+                provider_score=r.get("score"),
+            )
+            for r in data.get("results", [])
+        ]
+    except Exception as exc:
+        print(f"[WARN] tavily search failed for {task.query!r}: {exc}", file=sys.stderr)
+        return []
+
+
+def search_github(task: SearchTask, max_results: int) -> list[SearchCandidate]:
+    if task.topic != "GitHub热门项目" and "GitHub" not in task.tags:
+        return []
+    token = os.getenv("GITHUB_TOKEN", "").strip()
+    headers = {"Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    try:
+        query = "topic:artificial-intelligence stars:>1000"
+        url = (
+            "https://api.github.com/search/repositories?"
+            f"q={quote_plus(query)}&sort=stars&order=desc&per_page={max(1, min(max_results, 20))}"
+        )
+        data = json_request(url, headers=headers)
+        candidates = []
+        for repo in data.get("items", []):
+            summary = repo.get("description") or ""
+            summary = f"{summary} Stars: {repo.get('stargazers_count', 0)}; Forks: {repo.get('forks_count', 0)}; Language: {repo.get('language') or 'unknown'}."
+            candidates.append(
+                SearchCandidate(
+                    title=repo.get("full_name", "").strip(),
+                    url=repo.get("html_url", "").strip(),
+                    summary=summary.strip(),
+                    provider="github_api",
+                    provider_score=float(repo.get("stargazers_count", 0)),
+                )
+            )
+        return candidates
+    except Exception as exc:
+        print(f"[WARN] github search failed for {task.query!r}: {exc}", file=sys.stderr)
+        return []
+
+
+PROVIDERS = {
+    "tavily": search_tavily,
+    "ddgs": search_ddgs,
+    "github": search_github,
+}
+
+
+def parse_providers(raw: str | None) -> list[str]:
+    configured = raw or os.getenv("AIWEB_SEARCH_PROVIDERS") or "tavily,ddgs,github"
+    providers = []
+    for name in (p.strip().lower() for p in configured.split(",")):
+        if name and name in PROVIDERS and name not in providers:
+            providers.append(name)
+    return providers or ["ddgs"]
+
+
+def search_resources(task: SearchTask, max_results: int, providers: list[str]) -> list[SearchCandidate]:
+    candidates: list[SearchCandidate] = []
+    for provider in providers:
+        results = PROVIDERS[provider](task, max_results)
+        candidates.extend(results)
+    return candidates
+
+
+def validate_url(url: str, timeout: int = 8) -> UrlValidation:
+    headers = {"User-Agent": "aiweb-resource-collector/1.0"}
+    for method in ("HEAD", "GET"):
+        try:
+            req = request.Request(url, method=method, headers=headers)
+            with request.urlopen(req, timeout=timeout) as resp:
+                final_url = normalize_url(resp.geturl()) or url
+                return UrlValidation(ok=200 <= resp.status < 400, status=resp.status, final_url=final_url)
+        except error.HTTPError as exc:
+            if method == "HEAD" and exc.code in {403, 405, 429}:
+                continue
+            return UrlValidation(ok=200 <= exc.code < 400, status=exc.code, final_url=url, error=str(exc))
+        except Exception as exc:
+            if method == "HEAD":
+                continue
+            return UrlValidation(ok=False, status=None, final_url=url, error=str(exc))
+    return UrlValidation(ok=False, status=None, final_url=url, error="validation failed")
 
 
 def keyword_score(title: str, summary: str, tags: list[str]) -> int:
@@ -164,7 +327,7 @@ def keyword_score(title: str, summary: str, tags: list[str]) -> int:
     return score
 
 
-def quality_score(url: str, title: str, summary: str, tags: list[str]) -> int:
+def quality_score(url: str, title: str, summary: str, tags: list[str], candidate: SearchCandidate) -> int:
     domain = source_domain(url)
     score = TRUSTED_DOMAINS.get(domain, 0)
     if any(domain == d or domain.endswith(f".{d}") for d in TRUSTED_DOMAINS):
@@ -174,6 +337,10 @@ def quality_score(url: str, title: str, summary: str, tags: list[str]) -> int:
         score += 1
     if len(title) < 8:
         score -= 2
+    if candidate.provider in {"tavily", "github_api"}:
+        score += 1
+    if candidate.provider_score is not None and candidate.provider_score > 0:
+        score += 1
     return max(score, 0)
 
 
@@ -205,15 +372,21 @@ def build_tasks(categories: list[str] | None, topics: list[str] | None) -> list[
     return tasks
 
 
-def merge_candidate(existing: dict | None, task: SearchTask, candidate: dict) -> tuple[dict, bool]:
-    url = normalize_url(candidate.get("url", ""))
+def merge_candidate(existing: dict | None, task: SearchTask, candidate: SearchCandidate, verify_urls: bool) -> tuple[dict, bool]:
+    url = normalize_url(candidate.url)
     if not url or is_blocked(url):
         return {}, False
-    title = candidate.get("title", "").strip()
-    summary = candidate.get("summary", "").strip()
+    validation = validate_url(url) if verify_urls else UrlValidation(ok=True, status=None, final_url=url)
+    if not validation.ok:
+        return {}, False
+    url = normalize_url(validation.final_url) or url
+    if not url or is_blocked(url):
+        return {}, False
+    title = candidate.title.strip()
+    summary = candidate.summary.strip()
     if not title:
         return {}, False
-    score = quality_score(url, title, summary, task.tags)
+    score = quality_score(url, title, summary, task.tags, candidate)
     if score < 2:
         return {}, False
 
@@ -221,6 +394,16 @@ def merge_candidate(existing: dict | None, task: SearchTask, candidate: dict) ->
         existing["last_seen"] = TODAY
         existing["seen_count"] = int(existing.get("seen_count", 1)) + 1
         existing["score"] = max(int(existing.get("score", 0)), score)
+        existing["dedupe_key"] = existing.get("dedupe_key") or dedupe_key(url)
+        existing["verified_at"] = NOW_STR if verify_urls else existing.get("verified_at", "")
+        existing["verify_status"] = validation.status if verify_urls else existing.get("verify_status")
+        providers = set(existing.get("providers") or [])
+        providers.add(existing.get("provider") or "")
+        providers.add(candidate.provider)
+        existing["providers"] = sorted(p for p in providers if p)
+        existing["provider"] = existing.get("provider") or candidate.provider
+        if candidate.provider_score is not None:
+            existing["provider_score"] = max(float(existing.get("provider_score") or 0), float(candidate.provider_score))
         if len(summary) > len(existing.get("summary", "")):
             existing["summary"] = summary
             existing["summary_cn"] = translate_text(summary)
@@ -229,8 +412,9 @@ def merge_candidate(existing: dict | None, task: SearchTask, candidate: dict) ->
     item = {
         "url": url,
         "source_domain": source_domain(url),
+        "dedupe_key": dedupe_key(url),
         "title": title,
-        "title_cn": translate_text(title),
+        "title_cn": title if candidate.provider == "github_api" else translate_text(title),
         "summary": summary,
         "summary_cn": translate_text(summary),
         "category": task.category,
@@ -238,6 +422,11 @@ def merge_candidate(existing: dict | None, task: SearchTask, candidate: dict) ->
         "tags": task.tags,
         "level": task.level,
         "score": score,
+        "provider": candidate.provider,
+        "providers": [candidate.provider],
+        "provider_score": candidate.provider_score,
+        "verified_at": NOW_STR if verify_urls else "",
+        "verify_status": validation.status,
         "first_seen": TODAY,
         "last_seen": TODAY,
         "seen_count": 1,
@@ -272,9 +461,10 @@ def write_report(added: list[dict], total_seen: int, task_count: int) -> None:
             lines.append(f"### {category} / {topic}")
             lines.append("")
             for item in sorted(items, key=lambda r: r.get("score", 0), reverse=True):
-                title = item.get("title_cn") or item.get("title")
+                title = item.get("title") if item.get("provider") == "github_api" else item.get("title_cn") or item.get("title")
                 lines.append(f"- **[{title}]({item['url']})**")
-                lines.append(f"  - 来源：`{item['source_domain']}` · 质量分：{item['score']}")
+                provider = item.get("provider") or "unknown"
+                lines.append(f"  - 来源：`{item['source_domain']}` · 信息源：`{provider}` · 质量分：{item['score']}")
             lines.append("")
     report.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
     print(f"Report: {report}")
@@ -286,32 +476,46 @@ def main() -> None:
     parser.add_argument("--topic", action="append", help="Limit collection to a topic. Can be repeated.")
     parser.add_argument("--max-results", type=int, default=5, help="Search results per query.")
     parser.add_argument("--workers", type=int, default=8, help="Parallel search workers.")
+    parser.add_argument("--providers", help="Comma-separated providers: tavily,ddgs,github. Defaults to AIWEB_SEARCH_PROVIDERS or tavily,ddgs,github.")
+    parser.add_argument("--skip-url-verify", action="store_true", help="Skip URL reachability validation before saving candidates.")
     parser.add_argument("--no-render", action="store_true", help="Only update data/resources.json, do not render docs blocks.")
     args = parser.parse_args()
 
     tasks = build_tasks(args.category, args.topic)
+    providers = parse_providers(args.providers)
+    verify_urls = not args.skip_url_verify
     resources = load_resources()
+    upgrade_resource_metadata(resources)
     by_url = {r.get("url"): r for r in resources if r.get("url")}
+    by_key = {r.get("dedupe_key") or dedupe_key(r.get("url", "")): r for r in resources if r.get("url")}
     added: list[dict] = []
     total_seen = 0
 
     print(f"=== AI 学习资源采集 [{NOW_STR}] ===")
     print(f"任务数: {len(tasks)}")
+    print(f"信息源: {', '.join(providers)}")
+    print(f"URL验证: {'开启' if verify_urls else '跳过'}")
+    if not tasks:
+        save_resources(resources)
+        print("没有匹配的采集任务，仅完成资源库元数据检查。")
+        return
 
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        future_map = {executor.submit(search_resources, task.query, args.max_results): task for task in tasks}
+        future_map = {executor.submit(search_resources, task, args.max_results, providers): task for task in tasks}
         for future in as_completed(future_map):
             task = future_map[future]
             results = future.result()
             total_seen += len(results)
             print(f"  [{task.category}/{task.topic}] {task.query[:48]} -> {len(results)}")
             for raw in results:
-                url = normalize_url(raw.get("url", ""))
-                existing = by_url.get(url)
-                item, is_new = merge_candidate(existing, task, raw)
+                url = normalize_url(raw.url)
+                key = dedupe_key(url) if url else ""
+                existing = by_url.get(url) or by_key.get(key)
+                item, is_new = merge_candidate(existing, task, raw, verify_urls)
                 if not item:
                     continue
                 by_url[item["url"]] = item
+                by_key[item["dedupe_key"]] = item
                 if is_new:
                     resources.append(item)
                     added.append(item)

@@ -120,8 +120,22 @@ print(message.content[0].text)
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[Anthropic Academy：Claude API 开发指南](https://anthropic.com/learn/build-with-claude)**
+  - 来源：`anthropic.com` · 质量分：14 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 开始构建开发人员文档。 * 查看我们的模型比较表。 * 参见 Claude 4 的定价。 * 通过提示缓存优化 API 使用。 * 使用 Amazon Bedrock API 在 Amazon 上构建。 * 使用 Vertex AI API 在 Google 上构建。 * 使用文件 API 上传和管理文件。 * 将 MCP 与 Claude Code 结合使用。 * 安装克劳德代码。 * 探索 Anthropic 的 Claude Co...
+
+- **[Claude Code 教程 2026：完整的初学者指南（安装、命令、计划模式）| NX代码](https://nxcode.io/resources/news/claude-code-tutorial-beginners-guide-2026)**
+  - 来源：`nxcode.io` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - Claude Code 教程 2026：完整的初学者指南（安装、命令、计划模式）。 * **终端原生，而不是聊天机器人**：Claude Code 直接在本地文件上运行，索引整个项目结构，并通过权限系统进行操作，您可以在其中批准每个文件更改和命令执行。 * **复杂任务的计划模式**：告诉 Claude 在进行更改之前计划其方法 - 它分析问题，概述步骤，显示推理，并在执行之前等待您的批准。 * **Sonnet 占 80%，Opus ...
+
+- **[使用 Claude API 进行构建 - Anthropic Skilljar](https://anthropic.skilljar.com/claude-with-the-anthropic-api)**
+  - 来源：`anthropic.skilljar.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 使用 Claude API 进行构建。 ## 这门综合课程涵盖了使用 Claude API 处理人类模型的全部内容。这个综合视频课程教授开发人员如何使用 Anthropic API 将 Claude AI 集成到应用程序中。您正在登录以访问人择课程材料。这个独立的平台使我们能够提供交互式学习体验，跟踪您的进度，并确保您能够以有组织的方式访问所有课程资源。这些数据有助于我们了解您在课程中的进展情况，并允许我们为您提供结业证书。所有数据...
+
+- **[Claude API：如何获取密钥并使用 API - Zapier](https://zapier.com/blog/claude-api)**
+  - 来源：`zapier.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # Claude API：如何获取密钥并使用 API。带有《克劳德》制作者 Anthropic 标志的英雄形象。以下是如何获取 Claude API 密钥的简短版本。 1. 创建一个 Anthropic 开发者帐户并添加至少 5 美元的积分。 2. 打开您的帐户设置，单击“**API 密钥**”，然后单击“**创建密钥**”。 3. 为您的密钥命名并单击“**添加**”。如果你的人工智能应用程序正在做这些，你不需要更好的提示：你需要克劳...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*

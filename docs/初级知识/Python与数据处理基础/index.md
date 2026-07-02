@@ -94,11 +94,22 @@ print(accuracy_score(y_test, pred))
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[使用Python进行数据分析](https://geeksforgeeks.org/data-analysis/data-analysis-with-python)**
+  - 来源：`geeksforgeeks.org` · 质量分：11 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - NumPy 数组 存储相同数据类型的元素并支持多个维度。 切片 允许访问数组中的一系列元素。 Pandas 是一个用于处理结构化（关系或标记）数据的 Python 库。 Series 是一个一维标记数组，能够保存任何数据类型（整数、字符串、浮点数等）。 DataFrame 是一种具有行和列的二维标记数据结构，类似于表格或电子表格。 * ****info():**** 显示数据集结构、列名称、数据类型和非空值。 分组和聚合基于列对数据进行...
+
+- **[使用 Python 探索和分析数据 - 培训 |微软学习](https://learn.microsoft.com/en-us/training/modules/explore-analyze-data-with-python)**
+  - 来源：`learn.microsoft.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 不再支持该浏览器。升级到 Microsoft Edge 以利用最新功能、安全更新和技术支持。 # 使用 Python 探索和分析数据。数据探索和分析是数据科学的核心。数据科学家需要使用 Python 等编程语言的技能来探索、可视化和操作数据。在本模块中，您将学习： * 常见的数据探索和分析任务。 * 如何使用 NumPy、Pandas 和 Matplotlib 等 Python 包来分析数据。 * 有一些 Python 编程经验。 ##...
+
+- **[第 8 章 Pandas 入门 - 交互的Python：数据分析入门](https://shixiangwang.github.io/pybook/08-pandas-intro)**
+  - 来源：`shixiangwang.github.io` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## 8.1 Pandas 简介¶. ## 8.2 Pandas 的数据结构¶. ### 8.2.1 Series¶. In [1]: import pandas as pd In [2]: import numpy as np In [4]: {'0':0, '1':1, '2': 2} Out[4]: {'0': 0, '1': 1, '2': 2} In [5]: np.arange(3) Out[5]: array([0, 1,...
+
+- **[第 12 章 Pandas 进阶 - 交互的Python：数据分析入门](https://shixiangwang.github.io/pybook/12-advanced-pandas)**
+  - 来源：`shixiangwang.github.io` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - * 12.1 深入研究 Pandas 数据结构。 ### 12.1.1 回顾¶. In [1]: import numpy as np In [2]: a = np.arange(9) In [3]: a Out[3]: array([0, 1, 2, 3, 4, 5, 6, 7, 8]) In [4]: b = np.arange(9).reshape((3, 3)) In [5]: b Out[5]: array([[0, 1, 2...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-07-02 11:56:59*

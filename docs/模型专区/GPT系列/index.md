@@ -206,8 +206,22 @@ print(result.final_answer)
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[2026 年 OpenAI 模型完整指南：从 GPT-5.2 到……](https://aicomparison.ai/openai-models-guide)**
+  - 来源：`aicomparison.ai` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 探索 2026 GPT-5.2、GPT-4o、API 定价、推理和多模式模型中的所有 OpenAI 模型。选择最适合您的用例的型号。
+
+- **[2026 年最佳 ChatGPT 模型：每个 GPT 模型排名和比较](https://stob.ai/blog/best-chatgpt-model-2026-guide)**
+  - 来源：`stob.ai` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 我们根据上下文窗口、推理、速度和成本对所有 10 个 GPT 模型（GPT-5.5、GPT-5 pro、o3、GPT-4.1 等）进行排名，以便您可以为您的用例选择最佳模型。 。如果您想要 GPT-5 系列中的**低成本生产模型**，请使用 **GPT-5 mini** 或 **GPT-5 nano**，具体取决于任务实际需要的推理量。如果您想要一个没有推理步骤的**长上下文模型**，**GPT-4.1**仍然具有强大的地位。 。 ##...
+
+- **[ChatGPT 模型解释：完整比较指南 (2026)](https://ai-toolbox.co/chatgpt-models/chatgpt-models-explained-complete-comparison-2026)**
+  - 来源：`ai-toolbox.co` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 要深入了解 Instant、Thinking 和 Pro 如何映射到 GPT-5.x 模型，请参阅我们的 ChatGPT 推理模式指南。 > **AI Toolbox** 添加了文件夹、全文搜索和四种格式的批量导出到 ChatGPT，这样您就可以将 GPT-5.3 即时草稿与 GPT-5.4 Thinking 研究线程和 GPT-5.5 专业工作流程分开。要重点深入了解并排的三种模式（Instant、Thinking 和 Pro），包括...
+
+- **[每个 ChatGPT 模型的比较：版本、定价和使用哪个 (2026)](https://teamai.com/blog/large-language-models-llms/understanding-different-chatgpt-models)**
+  - 来源：`teamai.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - Claude vs ChatGPT vs Gemini：2026 年头对头比较 了解 Gemini 模型：Google AI 系列的简明英语指南(2026) 如何使用 AI 自动化团队的工作流程：分步指南 面向团队的 AI 工作空间：优点、功能以及如何选择一个 (2026) AI 模型经济学：按预算和规模进行选择(2026) 复杂推理的最佳 AI 模型比较：Opus、GPT-5.4、Gemini 以及哪些模型可以用于复杂推理2026 2...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*

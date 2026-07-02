@@ -92,11 +92,22 @@
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[Amazing-Feature-Engineering/特征工程和特征选择简短指南.md at master · ashishpatel26/Amazing-Feature-Engineering · GitHub](https://github.com/ashishpatel26/Amazing-Feature-Engineering/blob/master/A%20Short%20Guide%20for%20Feature%20Engineering%20and%20Feature%20Selection.md)**
+  - 来源：`github.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 特征工程和特征选择简短指南。特征工程和选择是将数据转换为最佳方式的艺术/科学，其中涉及领域专业知识、直觉和数学的优雅融合。本指南是初学者的简明参考，提供了最简单但广泛使用的特征工程和选择技术。 ### 0.1 什么是机器学习。机器学习领域试图回答这样的问题：“我们如何构建能够随着经验自动改进的计算机系统，以及支配所有学习过程的基本法则是什么？” - 卡内基梅隆大学。狭义地说，在数据挖掘背景下，机器学习（ML）是让计算机从历史数据中学...
+
+- **[什么是“数据清洗” 和 “特征工程”？ - steve.z - 博客园](https://cnblogs.com/zxhoo/p/19696226)**
+  - 来源：`cnblogs.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - Steve | 博客园 :: 首页 :: 新随笔 :: 联系 :: 订阅) 订阅 :: 管理 | | |. | 公告 | 什么是“数据清洗” 和 “特征工程”？Posted on 2026-03-10 12:26 steve.z 阅读(24) 评论(0) 收藏) 举报 在训练机器学习模型的过程中，**数据清洗** 和 **特征工程** 是两个关键步骤，它们分别涉及不同的任务和目标。 数据清洗（Data Cleaning） 数据清洗是指对...
+
+- **[【机器学习】特征工程快速入门](https://blog.csdn.net/ueke1/article/details/137190577)**
+  - 来源：`blog.csdn.net` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 数据清洗（data learning）是数据预处理的一个步骤，指的是对原始数据进行处理和筛选，以去除无用、重复、错误、缺失或不一致的数据，从而获得干净、可靠、一致
+
+- **[特征工程系列：数据清洗-腾讯云开发者社区-腾讯云](https://cloud.tencent.com/developer/article/1478305)**
+  - 来源：`cloud.tencent.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## 特征工程系列：数据清洗. 特征工程又包含了Data PreProcessing（数据预处理）、Feature Extraction（特征提取）、Feature Selection（特征选择）和Feature construction（特征构造）等子问题，本章内容主要讨论数据预处理的方法及实现。. 数据清洗(Data cleaning)– 对数据进行重新审查和校验的过程，目的在于删除重复信息、纠正存在的错误，并提供数据一致性。. #...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-07-02 11:56:59*

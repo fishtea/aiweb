@@ -255,8 +255,22 @@ Pipeline：低成本检索 top 20-50 → 用更强模型重排序 → 选 top 3-
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[检索增强生成 (RAG) - DeepLearning.AI](https://deeplearning.ai/courses/retrieval-augmented-generation)**
+  - 来源：`deeplearning.ai` · 质量分：11 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - * **适用于实际应用的 RAG**：了解检索和生成如何协同工作，以及如何设计每个组件以构建可靠、灵活的 RAG 系统。在本课程中，您将学习如何设计和实现 RAG 系统的每个部分，从检索器和向量数据库到大型语言模型和评估平台。本课程由 AI 工程师和教育家 Zain Hasan 教授，为您提供**设计、构建和评估可投入生产的 RAG 系统的实践经验和概念理解。**。您将学习为您的用例选择正确的架构，使用 Wea​​viate 等矢量数据...
+
+- **[2026 RAG 全景：从大模型基座到Agent 记忆中枢 - 腾讯云](https://cloud.tencent.com/developer/article/2654878)**
+  - 来源：`cloud.tencent.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## 2026 RAG 全景：从大模型基座到 Agent 记忆中枢——万字长文吃透全栈落地. ### 为什么你必须搞懂 RAG. 而检索增强生成（RAG，Retrieval-Augmented Generation），就是这场“应用落地战”里最核心的武器。RAG能让大模型在生产环境真正用起来！！！. 你可能在无数地方见过 RAG 这个词，但很多讲解要么只停在“向量检索+大模型生成”这层皮，要么铺天盖地的英文论文让人望而却步。这篇文章的目...
+
+- **[OpenRAG与主流RAG框架对比分析：2026年技术选型指南_服务器_程序猿李巡天-AtomGit开源社区](https://gitcode.csdn.net/69ba965b0a2f6a37c5986027.html)**
+  - 来源：`gitcode.csdn.net` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # logo AtomGit开源社区. ### AtomGit开源社区. ### 程序猿李巡天. 723人浏览 · 2026-03-18 20:10:23. 程序猿李巡天 · 2026-03-18 20:10:23 发布. 本文将深入剖析OpenRAG的架构设计与核心特性，并将其与LangChain、LlamaIndex、Haystack等主流框架进行多维度对比，为技术团队的RAG选型提供系统性参考。. 项目试图解决企业在构建RAG系统...
+
+- **[超越 Naive RAG：构建代理 RAG 的分步指南...](https://medium.com/@vkrishnan9074/beyond-naive-rag-a-step-by-step-guide-to-building-agentic-rag-in-2026-fceddd989c74)**
+  - 来源：`medium.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 超越 Naive RAG：2026 年构建代理 RAG 的分步指南。但是，如果您尝试从简单的周末聊天机器人转向复杂的生产级自主代理，您可能会遇到两堵巨大的墙：**延迟**和**成本**。针对每个用户的查询将 100 页的手册发送到上下文窗口中不仅效率低下，而且还很糟糕。截至 2026 年初，高流量应用程序在经济上仍然不可持续。 “naive RAG”时代已成为 2024 年的遗迹。在本指南中，我们将深入探讨现代解决方案。我们将探讨上...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：自动更新*
+*资源区块更新时间：2026-07-02 11:56:59*

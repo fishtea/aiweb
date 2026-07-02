@@ -170,8 +170,22 @@ image.save("cat.png")
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[ComfyUI 中的稳定 Diffusion 3.5 工作流程教程 |维基百科](https://comfyui-wiki.com/en/tutorial/advanced/stable-diffusion-3-5-comfyui-workflow)**
+  - 来源：`comfyui-wiki.com` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # ComfyUI 中的稳定扩散 3.5 工作流程教程。 Stable Diffusion 3.5是最新的AI图像生成模型，提供多种强大的模型变体。本教程整理了以下资源，主要是关于如何在ComfyUI中使用Stable Diffusion 3.5：。 * 稳定的Diffusion 3.5 FP16版本ComfyUI相关工作流程。 * 稳定的 Diffusion 3.5 FP8 版本 ComfyUI 相关工作流程（低 VRAM 解决方案）...
+
+- **[解锁令人惊叹的视觉效果：稳定扩散工作流程的分步指南 - ComfyUI.org](https://comfyui.org/en/stable-diffusion-workflow-guide)**
+  - 来源：`comfyui.org` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ### 工作流程。解锁令人惊叹的图像：基于 Flux.1 的文本到图像生成的分步指南。转变您的图像：SUPIR-8K 壁纸级升级分步指南。让您的图像栩栩如生：利用声波扩散和 NTCosyVoice 进行人工智能驱动的视频生成。 “释放艺术潜力：深入探讨 Flux.1 和 Florence-2 工作流程”。从脚本到屏幕：宫崎风格故事板的分步指南。通过稳定的 Cascade 和 CLIP Vision 解锁高质量图像生成。剪切变得简单：Co...
+
+- **[稳定扩散教程 2026：10 分钟内免费制作 AI 艺术（分步）](https://aitoolranked.com/blog/stable-diffusion-tutorial)**
+  - 来源：`aitoolranked.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 稳定扩散教程 2026：免费 AI 图像生成 [指南]。学习安装、快速工程、模型微调以及创造令人惊叹的人工智能艺术的先进技术。 。 Stable Diffusion 是一款开源 AI 图像生成器，可根据文本提示创建图像。 3.5 版本采用具有 25 亿个参数的 MMDiT-X 架构，而 SDXL 和 SD1.5 因其广泛的模型生态系统和较低的硬件要求而仍然受欢迎。 ### 稳定扩散 3.5 有哪些新功能？ **Stable Diff...
+
+- **[Stable Diffusion 2026：型号规格和 VRAM 硬件指南](https://aitoolsdevpro.com/ai-tools/stable-diffusion-guide)**
+  - 来源：`aitoolsdevpro.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # Stable Diffusion 2026：型号规格和 VRAM 硬件指南。在快速发展的生成人工智能领域，**稳定扩散**仍然是开放权重视觉合成无可争议的王者。当我们步入 2026 年时，Stability AI 和开源社区已经突破了可能的界限，从简单的文本到图像生成转变为复杂的视频工作流程、3D 资产创建和实时企业渲染。本综合指南涵盖了 2026 年 Stable Diffusion 的状态，包括最新模型 (SD4 / SDXL ...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*

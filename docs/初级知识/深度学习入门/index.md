@@ -192,11 +192,22 @@
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[basic_Machine_Learning,机器学习和深度学习入门教程,下载basic_Machine_Learning的源码_GitHub_帮酷](https://github.com/DrDavidS/basic_Machine_Learning)**
+  - 来源：`github.com` · 质量分：16 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## Navigation Menu. # Search code, repositories, users, issues, pull requests... # Provide feedback. We read every piece of feedback, and take your input very seriously. # Saved searches. ## Use saved searches to filter ...
+
+- **[GitHub - Mikoto10032/DeepLearning: 深度学习入门教程, 优秀文章 ...](https://github.com/Mikoto10032/DeepLearning)**
+  - 来源：`github.com` · 质量分：16 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## 导航菜单。 # 搜索代码、存储库、用户、问题、拉取请求... # 提供反馈。我们会阅读每一条反馈，并非常认真地对待您的意见。 # 已保存的搜索。 ## 使用保存的搜索更快地过滤结果。要查看所有可用的限定符，请参阅我们的文档。 # Mikoto10032/深度学习。 ## 文件夹和文件。 |名称 | |名称 |最后提交消息 |最后提交日期|。 |最新提交历史记录 554 次提交 554 次提交 | | |。 |项目/lihang-c...
+
+- **[程序员的深度学习入门指南 | 亚马逊AWS官方博客](https://aws.amazon.com/cn/blogs/china/deep-learning-intro)**
+  - 来源：`aws.amazon.com` · 质量分：13 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 从另外的一个角度，我想让大家看看深度学习在市场上究竟有多么热门。从2011年到现在一共有140多家专注人工智能、深度学习相关的创业公司被收购。仅仅在2016年这种并购就发生了40多起。其中最疯狂的是就是Google，已经收购了 11 家人工智能创业公司，其中最有名的就是击败了李世石九段的 DeepMind。排名之后的就要数 Apple、Intel以及Twitter。以Intel 公司为例，仅在今年就已经收购了 3 家创业公司，Itsee...
+
+- **[第1章 深度学习入门 · 深度学习：Python教程](https://cnbeining.github.io/deep-learning-with-python-cn/1-introduction/ch1-welcome.html)**
+  - 来源：`cnbeining.github.io` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 第1章 深度学习入门. 深度学习的数学基础很精妙：但是一般用户不需要完全了解数学细节就可以抄起键盘开始编程。实用一点讲，深度学习并不复杂，带来的成效却很客观。教会你如何用深度学习：这就是本书的目的。. #### 1.1 深度学习：如何错误入门. #### 1.2 使用Python进行深度学习. 本书准备把传统的教学方式倒过来：直接教你怎么深度学习。如果你觉得这东西真厉害我要好好研究一下，再去研究理论细节。本书直接让你用深度学习写出能...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-07-02 11:56:59*

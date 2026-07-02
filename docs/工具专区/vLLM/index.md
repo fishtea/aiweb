@@ -191,8 +191,22 @@ client = OpenAI(base_url="http://localhost:8000/v1", api_key="dummy")
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[self-llm/models/Qwen2/04-Qwen2-7B-Instruct vLLM 部署调用.md at master · datawhalechina/self-llm · GitHub](https://github.com/datawhalechina/self-llm/blob/master/models/Qwen2/04-Qwen2-7B-Instruct%20vLLM%20%E9%83%A8%E7%BD%B2%E8%B0%83%E7%94%A8.md)**
+  - 来源：`github.com` · 质量分：15 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## 导航菜单。 # 搜索代码、存储库、用户、问题、拉取请求... # 提供反馈。我们会阅读每一条反馈，并非常认真地对待您的意见。 # 已保存的搜索。 ## 使用保存的搜索更快地过滤结果。要查看所有可用的限定符，请参阅我们的文档。 ## Files展开文件树。 ＃＃ 页脚。 # 04-Qwen2-7B-Instruct vLLM 部署调用.md。 ## 文件元数据和控件。 ## **vLLM 简介**。 然后创建名为 `model_do...
+
+- **[使用vLLM推理引擎创建模型服务 - 阿里云帮助文档](https://help.aliyun.com/zh/cap/user-guide/create-a-model-service-using-the-vllm-inference-engine)**
+  - 来源：`help.aliyun.com` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 使用vLLM推理引擎创建模型服务. Function AI的模型服务提供了一个全托管的大模型组件，允许用户快速部署和管理AI模型。vLLM 是一款为大语言模型（LLM）设计的高性能、高吞吐量的推理引擎。本文将指导您如何在Function AI中创建一个模型服务，并选用vLLM推理引擎来部署大语言模型。. ## 前提条件. （可选）如果您计划使用自定义模型，请提前准备好模型文件，并将模型存储在对象存储 OSS或打包成镜像。. ## 操...
+
+- **[如何使用 Docker 在生产环境中部署 vLLM (2026) |约塔实验室](https://yottalabs.ai/post/how-to-deploy-vllm-in-production-with-docker)**
+  - 来源：`yottalabs.ai` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 如何使用 Docker 在生产环境中部署 vLLM (2026)。使用官方 Docker 映像和 OpenAI 兼容 API 运行 vLLM，然后通过自动缩放、故障转移和多 GPU 服务在生产中对其进行扩展。 vLLM 是最容易入门的高性能推理服务器，也是生产中最容易出错的服务器之一。拉取“vllm/vllm-openai”映像并运行一个容器，您可以在几分钟内获得与 OpenAI 兼容的端点。本指南涵盖了两方面内容：为您提供服务的 ...
+
+- **[vLLM 生产部署：2026 年完整指南 - SitePoint](https://sitepoint.com/vllm-production-deployment-guide-2026)**
+  - 来源：`sitepoint.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 服务：服务：vllm：vllm：图像：vllm / vllm-openai：-图像：-：->容器名称：vllm服务器容器名称：-重新启动：除非停止重新启动：-部署：部署：资源：资源：保留：保留：设备：设备：-驱动程序：nvidia-驱动程序：计数：全部计数：功能：[gpu]功能：[]限制：限制：内存：64g内存：shm_size： "16g" shm_size: "16g" ipc: host ipc:volumes:volumes: ...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*

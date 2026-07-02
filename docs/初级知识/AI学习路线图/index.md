@@ -91,11 +91,22 @@
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[GitHub - tangyudi/Ai-Learn: 人工智能学习路线图，整理近200个实战案例与项目，免费提供配套教材，零基础入门，就业实战！包括：Python，数学，机器学习，数据分析，深度学习，计算机视觉，自然语言处理，PyTorch 张量流机器学习，深度学习数据分析数据挖掘数学数据科学人工智能pythontensorflowtensorflow2caffekeraspytorch算法 numpy pandas matplotlib seaborn nlp cv 等热门领域 · GitHub](https://github.com/tangyudi/Ai-learn)**
+  - 来源：`github.com` · 质量分：14 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## Navigation Menu. # Provide feedback. We read every piece of feedback, and take your input very seriously. # Saved searches. ## Use saved searches to filter your results more quickly. To see all available qualifiers, s...
+
+- **[初学者入门路线图 - AI 讨论 - DeepLearning.AI](https://community.deeplearning.ai/t/roadmap-to-get-started-as-a-beginner/689522)**
+  - 来源：`community.deeplearning.ai` · 质量分：9 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - 我想开始学习ai/ml并进入这个领域。我计划首先学习机器学习专业课程，然后学习 deeplearning.ai 网站上的 gen ai/nlp 路线图。是的，机器学习专业化是一个很好的起点。不管怎样，机器学习专业化是一个很好的开始。我没有具体的路线图可以分享，如果有的话，我认为它会与您已经找到的路线图相同。就 Coursera - deeplearning.ai 课程而言，肯定是从机器学习专业化开始，然后进行深度学习专业化，两者都是非常...
+
+- **[人工智能学习路线图：从基础到专家循序渐进（2026）| Coursera](https://coursera.org/resources/ai-learning-roadmap)**
+  - 来源：`coursera.org` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 人工智能学习路线图：从初学者到专家（2026）。通过结构化路线图在 2026 年开始学习 AI，该路线图将指导您从机器学习、NLP 等领域的核心概念到高级技能。通过实践项目培养就业所需的专业知识，并获得人工智能驱动的职业所需的基础。人工智能领域继续以惊人的速度发展，为愿意致力于结构化技能发展的学习者创造了前所未有的机会。通过遵循这种循序渐进的方法，您将建立在 2026 年及以后的人工智能驱动型经济中蓬勃发展所需的技术能力、实践经验和...
+
+- **[【2025版】最详细的人工智能学习路线梳理，从零基础到精通，精通收藏这篇就够了！_人工智能_派派百晓生-openvela](https://openvela.csdn.net/694a69945b9f5f317819eab4.html)**
+  - 来源：`openvela.csdn.net` · 质量分：6 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # logo openvela. ### openvela. openvela 【2025版】最详细的人工智能学习路线梳理，从零基础到精通，精通收藏这篇就够了！. # 【2025版】最详细的人工智能学习路线梳理，从零基础到精通，精通收藏这篇就够了！. 14619人浏览 · 2025-02-25 11:05:25. 派派百晓生 · 2025-02-25 11:05:25 发布. ### 1、学习路径图. ### 2、阶段 1：端到端的机器...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:11:39*
-*资源区块更新时间：2026-06-30 11:11:09*
-*资源区块更新时间：2026-06-30 10:42:21*
-*资源区块更新时间：2026-06-30 10:25:06*
+*资源区块更新时间：2026-07-02 11:56:59*

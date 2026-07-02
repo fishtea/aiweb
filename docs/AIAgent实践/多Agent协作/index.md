@@ -225,8 +225,22 @@ graph.add_conditional_edges(
 
 <!-- RESOURCES_START -->
 
-*暂无采集资源。后续运行 `python scripts/collect.py` 后会自动补充。*
+- **[AI-Coding-Guide-Zh/docs/openclaw/08-多代理协作指南.md at main](https://github.com/KimYx0207/AI-Coding-Guide-Zh/blob/main/docs/openclaw/08-%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%8C%87%E5%8D%97.md)**
+  - 来源：`github.com` · 质量分：13 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - ## 导航菜单。 # 提供反馈。我们会阅读每一条反馈，并非常认真地对待您的意见。 # 已保存的搜索。 ## 使用保存的搜索更快地过滤结果。 ## Files展开文件树。 ＃＃ 页脚。 ## 文件元数据和控件。 **本篇你将学会：**创建多个AI助手、配置分工协作、设置消息路由、管理代理间通信。 **v2026.6.1 复核补充**：多 Agent 不只是“多开几个会话”。新版继续强化中断工具调用、过时会话绑定、压缩切换、媒体交付重试、工...
+
+- **[多智能体协作入门：概念、模式与上手路径 - Wcowin's Blog](https://wcowin.work/develop/AI/multi-agent)**
+  - 来源：`wcowin.work` · 质量分：10 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - * 多智能体 vs 单 Agent：为什么需要协作. * 主流框架与平台（截至 2026 年 3 月）. > 本文介绍基于 LLM 的多智能体（Multi-Agent）协作是什么、与单 Agent 的差异、常见架构与应用场景，以及如何用 Dify、MetaGPT、LangGraph 等框架快速上手。**到了 2025–2026 年，多智能体开始从研究概念逐步进入更实际的工程讨论，但是否值得采用，仍然要看任务复杂度与协调成本。**. **...
+
+- **[【OpenClaw】 多 Agents 配置详细教程：从单兵作战到团队协作，掌握多 Agent 协作 #openclaw #obsidian_哔哩哔哩_bilibili](https://bilibili.com/video/BV1PTPQz5Er4)**
+  - 来源：`bilibili.com` · 质量分：8 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 【OpenClaw】 多 Agents 配置详细教程：从单兵作战到团队协作，掌握多 Agent 协作 #openclaw #obsidian. 【保姆级】OpenClaw 全网最细教学：安装→Skills实战→多Agent协作，1 小时全精通！. 我用 OpenClaw 打造 10 个 AI 员工，公司直接自动运转！. 🚀OpenClaw高级使用经验分享！2026年最强生产力！五分钟打造多Agent协作编程开发团队！模型容灾机制深度...
+
+- **[使用与 Amazon Bedrock Agents 的多代理协作](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html)**
+  - 来源：`docs.aws.amazon.com` · 质量分：7 · 首次采集：2026-07-02 · 信息源：`tavily` · 已验证：2026-07-02
+  - # 使用与 Amazon Bedrock Agents 的多代理协作。多代理协作使多个 Amazon Bedrock 代理能够协作规划和解决复杂任务。协作，您可以快速组建一个代理团队，可以分解任务，将特定任务分配给领域专家。通过多代理方法，您可以快速指定一名 Amazon Bedrock 代理作为主管，然后关联一个或多个代理。与主管合作的代理人。您可以使用这种分层协作模型来同步。主管代理已保存，您可以更新代理并关联其他协作者。主管代理使...
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-06-30 11:37:40*
+*资源区块更新时间：2026-07-02 11:56:59*
