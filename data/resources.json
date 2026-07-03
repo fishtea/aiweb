@@ -3574,6 +3574,62 @@
     "query": "Gemini API tutorial Python"
   },
   {
+    "url": "https://tinkerllm.com/blog/how-to-use-gemini-api-python",
+    "source_domain": "tinkerllm.com",
+    "dedupe_key": "tinkerllm.com/blog/how-to-use-gemini-api-python",
+    "title": "Gemini API Python Tutorial: Step-by-Step 2026 - tinkerllm.com",
+    "title_cn": "Gemini API Python 教程：分步 2026 -tinkerllm.com",
+    "summary": "May 10, 2026 · How to Use the Gemini API in Python (Step by Step) Install google-genai, make your first Gemini API call in Python, add system prompts, handle multi-turn chat, stream responses, and fix common errors.",
+    "summary_cn": "2026 年 5 月 10 日 · 如何在 Python 中使用 Gemini API（分步）安装 google-genai，在 Python 中进行第一个 Gemini API 调用，添加系统提示，处理多轮聊天，流式响应，并修复常见错误。",
+    "category": "模型专区",
+    "topic": "Gemini系列",
+    "tags": [
+      "Gemini",
+      "Google"
+    ],
+    "level": "reference",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Gemini API tutorial Python"
+  },
+  {
+    "url": "https://cloudinsight.cc/en/blog/gemini-api-python-tutorial",
+    "source_domain": "cloudinsight.cc",
+    "dedupe_key": "cloudinsight.cc/en/blog/gemini-api-python-tutorial",
+    "title": "Gemini API Python Tutorial: 2026 Complete Guide to Calling ...",
+    "title_cn": "Gemini API Python教程：2026完整调用指南...",
+    "summary": "Mar 21, 2026 · 2026 Gemini API Python integration complete tutorial. From SDK installation, API Key setup to implementing text generation and image understanding, with full code examples for beginners to quickly get started with Google Gemini development.",
+    "summary_cn": "2026年3月21日·2026 Gemini API Python集成完整教程。从SDK安装、API Key设置到实现文本生成和图像理解，都有完整的代码示例，供初学者快速上手Google Gemini开发。",
+    "category": "模型专区",
+    "topic": "Gemini系列",
+    "tags": [
+      "Gemini",
+      "Google"
+    ],
+    "level": "reference",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Gemini API tutorial Python"
+  },
+  {
     "url": "https://colab.research.google.com/github/google/generative-ai-docs/blob/main/site/en/gemini-api/docs/get-started/python.ipynb",
     "source_domain": "colab.research.google.com",
     "dedupe_key": "colab.research.google.com/github/google/generative-ai-docs/blob/main/site/en/gemini-api/docs/get-started/python.ipynb",
@@ -3628,6 +3684,90 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "Google Gemini tutorial 2026"
+  },
+  {
+    "url": "https://colab.research.google.com/github/google/generative-ai-docs/blob/main/site/en/tutorials/quickstart_colab.ipynb",
+    "source_domain": "colab.research.google.com",
+    "dedupe_key": "colab.research.google.com/github/google/generative-ai-docs/blob/main/site/en/tutorials/quickstart_colab.ipynb",
+    "title": "Gemini API Python quickstart - Google Colab",
+    "title_cn": "Gemini API Python 快速入门 - Google Colab",
+    "summary": "This tutorial shows you how to get started with the Gemini API using the Python SDK.",
+    "summary_cn": "本教程向您展示如何使用 Python SDK 开始使用 Gemini API。",
+    "category": "模型专区",
+    "topic": "Gemini系列",
+    "tags": [
+      "Gemini",
+      "Google"
+    ],
+    "level": "reference",
+    "score": 7,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Gemini API tutorial Python"
+  },
+  {
+    "url": "https://geeksforgeeks.org/artificial-intelligence/getting-started-with-google-gemini-with-python-api-integration-and-model-capabilities",
+    "source_domain": "geeksforgeeks.org",
+    "dedupe_key": "geeksforgeeks.org/artificial-intelligence/getting-started-with-google-gemini-with-python-api-integration-and-model-capabilities",
+    "title": "Getting Started with Google Gemini with Python: API ...",
+    "title_cn": "使用 Python 开始使用 Google Gemini：API ...",
+    "summary": "Jul 23, 2025 · Get started with the Gemini API: Python 1. Run the code in Google colab. Open Google Colab and create a new notebook and install the following dependency.The Python SDK for the Gemini API, is contained in the google-generative ai package. Install the dependency using pip.",
+    "summary_cn": "2025 年 7 月 23 日 · Gemini API 入门：Python 1. 在 Google colab 中运行代码。打开 Google Colab 并创建一个新笔记本并安装以下依赖项。Gemini API 的 Python SDK 包含在 google-generative ai 包中。使用 pip 安装依赖项。",
+    "category": "模型专区",
+    "topic": "Gemini系列",
+    "tags": [
+      "Gemini",
+      "Google"
+    ],
+    "level": "reference",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Gemini API tutorial Python"
+  },
+  {
+    "url": "https://pytutorial.com/using-google-gemini-api-in-python",
+    "source_domain": "pytutorial.com",
+    "dedupe_key": "pytutorial.com/using-google-gemini-api-in-python",
+    "title": "Using Google Gemini API in Python - PyTutorial",
+    "title_cn": "在 Python 中使用 Google Gemini API - PyTutorial",
+    "summary": "Nov 12, 2024 · Learn how to integrate and use the Google Gemini API with Python. Step-by-step instructions and code examples for seamless implementation.",
+    "summary_cn": "2024 年 11 月 12 日 · 了解如何将 Google Gemini API 与 Python 集成和使用。用于无缝实施的分步说明和代码示例。",
+    "category": "模型专区",
+    "topic": "Gemini系列",
+    "tags": [
+      "Gemini",
+      "Google"
+    ],
+    "level": "reference",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Gemini API tutorial Python"
   },
   {
     "url": "https://aicomparison.ai/openai-models-guide",
@@ -4313,6 +4453,64 @@
     "query": "AI 应用 部署 运维 监控"
   },
   {
+    "url": "https://cloud.tencent.com/developer/article/2582571",
+    "source_domain": "cloud.tencent.com",
+    "dedupe_key": "cloud.tencent.com/developer/article/2582571",
+    "title": "AI驱动下运维监控变革：2025AI技术如何重构IT监控产品运维效率？-腾讯...",
+    "title_cn": "AI驱动下运维监控变革：2025AI技术如何重构IT监控产品运维效率？-腾讯...",
+    "summary": "Oct 29, 2025 · 本文对比主流运维监控产品的AI能力，重点分析嘉为蓝鲸、Splunk等工具在智能运维、安全分析、网络监控等场景的应用优势。针对企业选型提供实用建议，包括信创合规、多云适配等关键考量因素，帮助企业精准选择AI运维监控解决方案，提升故障预测与业务保障能力。",
+    "summary_cn": "Oct 29, 2025 · 本文对比主流运维监控产品的AI能力，重点分析嘉为蓝鲸、Splunk等工具在智能运维、安全分析、网络监控等场景的应用优势。针对企业选型提供实用建议，包括信创合规、多云适配等关键考量因素，帮助企业精准选择AI运维监控解决方案，提升故障预测与业务保障能力。",
+    "category": "工具专区",
+    "topic": "部署运维",
+    "tags": [
+      "部署",
+      "运维",
+      "监控"
+    ],
+    "level": "tool",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI 应用 部署 运维 监控"
+  },
+  {
+    "url": "https://cnblogs.com/yangykaifa/p/19537505",
+    "source_domain": "cnblogs.com",
+    "dedupe_key": "cnblogs.com/yangykaifa/p/19537505",
+    "title": "AI驱动下运维监控变革：2025AI技巧如何重构IT监控产品运维效率？ - ya...",
+    "title_cn": "AI驱动下运维监控变革：2025AI技巧如何重构IT监控产品运维效率？ - ya...",
+    "summary": "Jan 27, 2026 · 在企业IT架构向分布式、多云、信创化转型的背景下，传统“人工排查+固定阈值监控”的模式已难以应对海量数据与复杂故障。AI手艺成为运维监控的核心突破口——从“被动告警”到“主动预测”，从“经验依赖”到“资料驱动”，AI正在重构运维效率。本文围绕“AI功能”，对比主流运维监控产品 ...",
+    "summary_cn": "Jan 27, 2026 · 在企业IT架构向分布式、多云、信创化转型的背景下，传统“人工排查+固定阈值监控”的模式已难以应对海量数据与复杂故障。AI手艺成为运维监控的核心突破口——从“被动告警”到“主动预测”，从“经验依赖”到“资料驱动”，AI正在重构运维效率。本文围绕“AI功能”，对比主流运维监控产品 ...",
+    "category": "工具专区",
+    "topic": "部署运维",
+    "tags": [
+      "部署",
+      "运维",
+      "监控"
+    ],
+    "level": "tool",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI 应用 部署 运维 监控"
+  },
+  {
     "url": "https://fiddler.ai/blog/llm-monitoring-the-key-to-successful-llm-deployments",
     "source_domain": "fiddler.ai",
     "dedupe_key": "fiddler.ai/blog/llm-monitoring-the-key-to-successful-llm-deployments",
@@ -4369,6 +4567,93 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "LLM application deployment monitoring"
+  },
+  {
+    "url": "https://aipxperts.com/blog/how-to-deploy-and-monitor-llm-applications-in-production",
+    "source_domain": "aipxperts.com",
+    "dedupe_key": "aipxperts.com/blog/how-to-deploy-and-monitor-llm-applications-in-production",
+    "title": "Deploy and Monitor LLM Applications in Production Guide",
+    "title_cn": "在生产中部署和监控 LLM 应用程序指南",
+    "summary": "Jun 3, 2026 · Learn how to deploy and monitor LLM applications in production with best practices for scalability, observability, security, performance, and reliability.",
+    "summary_cn": "2026 年 6 月 3 日 · 了解如何利用可扩展性、可观察性、安全性、性能和可靠性的最佳实践在生产中部署和监控 LLM 应用程序。",
+    "category": "工具专区",
+    "topic": "部署运维",
+    "tags": [
+      "部署",
+      "运维",
+      "监控"
+    ],
+    "level": "tool",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "LLM application deployment monitoring"
+  },
+  {
+    "url": "https://mljourney.com/how-to-deploy-llms-in-production-comprehensive-guide",
+    "source_domain": "mljourney.com",
+    "dedupe_key": "mljourney.com/how-to-deploy-llms-in-production-comprehensive-guide",
+    "title": "How to Deploy LLMs in Production: Comprehensive Guide",
+    "title_cn": "如何在生产中部署法学硕士：综合指南",
+    "summary": "Dec 15, 2024 · With effective monitoring and maintenance, your LLM deployment can adapt to changing requirements and deliver consistent value over time. This proactive approach minimizes downtime, enhances performance, and keeps your application running smoothly.",
+    "summary_cn": "2024 年 12 月 15 日 · 通过有效的监控和维护，您的 LLM 部署可以适应不断变化的需求并随着时间的推移提供一致的价值。这种主动方法可以最大限度地减少停机时间、增强性能并保持应用程序平稳运行。",
+    "category": "工具专区",
+    "topic": "部署运维",
+    "tags": [
+      "部署",
+      "运维",
+      "监控"
+    ],
+    "level": "tool",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "LLM application deployment monitoring"
+  },
+  {
+    "url": "https://cloud.tencent.com/developer/article/2574479",
+    "source_domain": "cloud.tencent.com",
+    "dedupe_key": "cloud.tencent.com/developer/article/2574479",
+    "title": "老杨跟几个大厂的朋友聊了一下AI在运维领域他们咋玩的",
+    "title_cn": "老杨跟几个大厂的朋友聊了一下AI在运维领域他们咋玩的",
+    "summary": "Oct 8, 2025 · AI技术正在重塑运维行业，自动化巡检、智能日志分析、故障预测等AI应用显著提升运维效率。机器学习实现92%异常检测准确率 ...",
+    "summary_cn": "Oct 8, 2025 · AI技术正在重塑运维行业，自动化巡检、智能日志分析、故障预测等AI应用显著提升运维效率。机器学习实现92%异常检测准确率 ...",
+    "category": "工具专区",
+    "topic": "部署运维",
+    "tags": [
+      "部署",
+      "运维",
+      "监控"
+    ],
+    "level": "tool",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI 应用 部署 运维 监控"
   },
   {
     "url": "https://emergingai.pro/blog/llm-serving-101-everything-about-llm-deployment-monitoring",
@@ -4454,6 +4739,35 @@
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-02",
+    "seen_count": 1,
+    "query": "LLM application deployment monitoring"
+  },
+  {
+    "url": "https://braintrust.dev/articles/best-llm-monitoring-tools-2026",
+    "source_domain": "braintrust.dev",
+    "dedupe_key": "braintrust.dev/articles/best-llm-monitoring-tools-2026",
+    "title": "Best LLM monitoring tools in 2026 (tested & reviewed)",
+    "title_cn": "2026 年最佳法学硕士监控工具（经过测试和审查）",
+    "summary": "May 6, 2026 · The best monitoring tools in 2026 for LLM applications include Braintrust (comprehensive monitoring, evaluation, and experimentation), Langfuse (open source), Maxim AI (quality-focused), and Datadog (enterprise infrastructure).",
+    "summary_cn": "May 6, 2026 · 2026年LLM申请的最佳监控工具包括Braintrust（全面监控、评估和实验）、Langfuse（开源）、Maxim AI（注重质量）和Datadog（企业基础设施）。",
+    "category": "工具专区",
+    "topic": "部署运维",
+    "tags": [
+      "部署",
+      "运维",
+      "监控"
+    ],
+    "level": "tool",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "LLM application deployment monitoring"
   },
@@ -4650,13 +4964,43 @@
     "score": 7,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.8010817,
-    "verified_at": "2026-07-02 11:37:25",
-    "verify_status": 308,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
+    "query": "vLLM 模型部署 教程"
+  },
+  {
+    "url": "https://blog.csdn.net/2401_85375151/article/details/151648892",
+    "source_domain": "blog.csdn.net",
+    "dedupe_key": "blog.csdn.net/2401_85375151/article/details/151648892",
+    "title": "vLLM 本地部署大模型完全指南：性能提升23倍的实战教程！_vllm教程-CS...",
+    "title_cn": "vLLM 本地部署大模型完全指南：性能提升23倍的实战教程！_vllm教程-CS...",
+    "summary": "Sep 13, 2025 · vLLM 通过 PagedAttention 和持续批处理技术实现内存效率提升和吞吐量最高23倍提升，支持多种量化格式和并行计算。 文章对比了 vLLM 与 Ollama、LM Studio 的优缺点，指出 vLLM 适合生产环境部署和高并发 API 服务，而 Ollama 和 LM Studio 更适合个人学习和快速验证。 _vllm教程",
+    "summary_cn": "Sep 13, 2025 · vLLM 通过 PagedAttention 和持续批处理技术实现内存效率提升和吞吐量最高23倍提升，支持多种量化格式和并行计算。 文章对比了 vLLM 与 Ollama、LM Studio 的优缺点，指出 vLLM 适合生产环境部署和高并发 API 服务，而 Ollama 和 LM Studio 更适合个人学习和快速验证。 _vllm教程",
+    "category": "工具专区",
+    "topic": "vLLM",
+    "tags": [
+      "vLLM",
+      "推理",
+      "部署"
+    ],
+    "level": "tool",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "vLLM 模型部署 教程"
   },
@@ -4869,8 +5213,8 @@
     "dedupe_key": "igmguru.com/blog/tensorflow-tutorial",
     "title": "TensorFlow Tutorial for Beginners [2026]",
     "title_cn": "TensorFlow 初学者教程 [2026]",
-    "summary": "Explore TensorFlow tutorial, a beginner-friendly guide and learn steps to build and train your first machine learning models with",
-    "summary_cn": "探索 TensorFlow 教程，这是一个适合初学者的指南，并了解构建和训练您的第一个机器学习模型的步骤",
+    "summary": "Apr 3, 2026 · Explore TensorFlow tutorial, a beginner-friendly guide and learn steps to build and train your first machine learning models with easy-to-follow examples.",
+    "summary_cn": "2026 年 4 月 3 日 · 探索 TensorFlow 教程，这是一份适合初学者的指南，并通过易于理解的示例学习构建和训练您的第一个机器学习模型的步骤。",
     "category": "工具专区",
     "topic": "TensorFlow",
     "tags": [
@@ -4882,14 +5226,15 @@
     "score": 8,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.78552294,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "TensorFlow tutorial 2026"
   },
   {
@@ -4911,13 +5256,43 @@
     "score": 7,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.4233394,
-    "verified_at": "2026-07-02 11:37:25",
-    "verify_status": 308,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
+    "query": "TensorFlow tutorial 2026"
+  },
+  {
+    "url": "https://nerdleveltech.com/tensorflow-2026-tutorial-mastering-tensorflow-219-with-gpus-and-beyond",
+    "source_domain": "nerdleveltech.com",
+    "dedupe_key": "nerdleveltech.com/tensorflow-2026-tutorial-mastering-tensorflow-219-with-gpus-and-beyond",
+    "title": "TensorFlow 2026 Tutorial: Mastering TensorFlow 2.19 with GPUs ...",
+    "title_cn": "TensorFlow 2026 教程：使用 GPU 掌握 TensorFlow 2.19 ...",
+    "summary": "Feb 25, 2026 · The 2026 release cycle brought TensorFlow 2.19.0, a stable, actively maintained version that cleaned up legacy code and prepared the ecosystem for the future of edge AI.",
+    "summary_cn": "2026 年 2 月 25 日 · 2026 年发布周期带来了 TensorFlow 2.19.0，这是一个稳定、积极维护的版本，它清理了遗留代码并为边缘 AI 的未来准备了生态系统。",
+    "category": "工具专区",
+    "topic": "TensorFlow",
+    "tags": [
+      "TensorFlow",
+      "Keras",
+      "ML框架"
+    ],
+    "level": "tool",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "TensorFlow tutorial 2026"
   },
@@ -5149,6 +5524,35 @@
     "query": "Ollama tutorial 2026"
   },
   {
+    "url": "https://bilibili.com/video/BV1oYLj6UEuT",
+    "source_domain": "bilibili.com",
+    "dedupe_key": "bilibili.com/video/bv1oylj6ueut",
+    "title": "2026最新版Ollama保姆级零基础教程，从下载安装、本地部署到完整实战...Ollama完整教程：本地LLM管理、WebUI对话、Python/Java客户端API应用 ...开源大模型Ollama本地部署全攻略：2026年免费跑Llama/DeepSeek/Qwen",
+    "title_cn": "2026最新版Ollama保姆级零基础教程，从下载安装、本地部署到完整实战...Ollama完整教程：本地LLM管理、WebUI对话、Python/Java客户端API应用 ...开源大模型Ollama本地部署全攻略：2026年免费跑Llama/DeepSeek/Qwen",
+    "summary": "May 16, 2026 · 2026最新版Ollama保姆级零基础教程，从下载安装、本地部署到完整实战上手，全程干货拆解，新手也能无痛入门，快速掌握AI本地大模型搭建与核心开发全部技能！共计45条视频，包括：1.什么是Ollama、2.Ollama下载及安装、3.Ollama支持的模型等，UP主更多精彩视频，请关注UP账号。 Jul 10, 2024 · 老牛同学在前面有关大模型应用的文章中，多次使用了 Ollama 来管理和部署本地大模型（包括： Qwen2 、 Llama3 、 Phi3 、 Gemma2 等），但对 Ollama 这个非常方便管理本地大模型的软件的介绍却很少。 目前，清华和智谱 AI 联合发布开源的 GLM4-9B 大模型也能支持 Ollama 进行本地部署了（本地部署 GLM-4-9B 清华 ... Jun 9, 2026 · 用Ollama在本地电脑上免费跑开源大模型，Llama 4、DeepSeek V3、Qwen 3全支持。从安装到API调用全流程拆解，附各模型显存需求表和实测速度对比，不用联网也能用顶级AI。",
+    "summary_cn": "May 16, 2026 · 2026最新版Ollama保姆级零基础教程，从下载安装、本地部署到完整实战上手，全程干货拆解，新手也能无痛入门，快速掌握AI本地大模型搭建与核心开发全部技能！共计45条视频，包括：1.什么是Ollama、2.Ollama下载及安装、3.Ollama支持的模型等，UP主更多精彩视频，请关注UP账号。 Jul 10, 2024 · 老牛同学在前面有关大模型应用的文章中，多次使用了 Ollama 来管理和部署本地大模型（包括： Qwen2 、 Llama3 、 Phi3 、 Gemma2 等），但对 Ollama 这个非常方便管理本地大模型的软件的介绍却很少。 目前，清华和智谱 AI 联合发布开源的 GLM4-9B 大模型也能支持 Ollama 进行本地部署了（本地部署 GLM-4-9B 清华 ... Jun 9, 2026 · 用Ollama在本地电脑上免费跑开源大模型，Llama 4、DeepSeek V3、Qwen 3全支持。从安装到API调用全流程拆解，附各模型显存需求表和实测速度对比，不用联网也能用顶级AI。",
+    "category": "工具专区",
+    "topic": "Ollama",
+    "tags": [
+      "Ollama",
+      "本地部署",
+      "LLM"
+    ],
+    "level": "tool",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Ollama 本地部署 大模型 教程"
+  },
+  {
     "url": "https://apifox.com/apiskills/ollama-deploy",
     "source_domain": "apifox.com",
     "dedupe_key": "apifox.com/apiskills/ollama-deploy",
@@ -5232,6 +5636,35 @@
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-02",
+    "seen_count": 1,
+    "query": "Ollama 本地部署 大模型 教程"
+  },
+  {
+    "url": "https://blog.csdn.net/qq_22017479/article/details/148834583",
+    "source_domain": "blog.csdn.net",
+    "dedupe_key": "blog.csdn.net/qq_22017479/article/details/148834583",
+    "title": "保姆级教程：Ollama本地化部署大模型从入门到精通，这一篇就够了！_ol...",
+    "title_cn": "保姆级教程：Ollama本地化部署大模型从入门到精通，这一篇就够了！_ol...",
+    "summary": "Jun 23, 2025 · 文章浏览阅读5.4w次，点赞212次，收藏311次。摘要 《终极Ollama实战指南》是一篇面向AI爱好者和开发者的本地大语言模型部署教程。文章详细介绍了Ollama这一简化本地大模型运行的开源工具，将其比作\"大模型领域的Docker\"。指南涵盖硬件要求检查、Windows系统安装步骤（包括NVIDIA驱动配置和安装验证 ...",
+    "summary_cn": "Jun 23, 2025 · 文章浏览阅读5.4w次，点赞212次，收藏311次。摘要 《终极Ollama实战指南》是一篇面向AI爱好者和开发者的本地大语言模型部署教程。文章详细介绍了Ollama这一简化本地大模型运行的开源工具，将其比作\"大模型领域的Docker\"。指南涵盖硬件要求检查、Windows系统安装步骤（包括NVIDIA驱动配置和安装验证 ...",
+    "category": "工具专区",
+    "topic": "Ollama",
+    "tags": [
+      "Ollama",
+      "本地部署",
+      "LLM"
+    ],
+    "level": "tool",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "Ollama 本地部署 大模型 教程"
   },
@@ -5486,14 +5919,15 @@
     "score": 9,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.91490877,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 2,
+    "last_seen": "2026-07-04",
+    "seen_count": 3,
     "query": "LangChain RAG agent tutorial"
   },
   {
@@ -5718,14 +6152,15 @@
     "score": 6,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.9203972,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "Hugging Face tutorial 2026"
   },
   {
@@ -5816,6 +6251,123 @@
     "query": "HuggingFace 模型 使用 教程"
   },
   {
+    "url": "https://geeksforgeeks.org/artificial-intelligence/hugging-face-tutorial",
+    "source_domain": "geeksforgeeks.org",
+    "dedupe_key": "geeksforgeeks.org/artificial-intelligence/hugging-face-tutorial",
+    "title": "Hugging Face Tutorial - GeeksforGeeks",
+    "title_cn": "拥抱脸部教程 - GeeksforGeeks",
+    "summary": "Apr 9, 2026 · Hugging Face is an open-source AI platform that provides pre-trained models, datasets and tools to build Natural Language Processing, computer vision, audio and generative AI applications. It helps developers to use AI models without training everything from scratch.",
+    "summary_cn": "2026 年 4 月 9 日 · Hugging Face 是一个开源人工智能平台，提供预训练模型、数据集和工具来构建自然语言处理、计算机视觉、音频和生成人工智能应用程序。它可以帮助开发人员使用人工智能模型，而无需从头开始训练一切。",
+    "category": "工具专区",
+    "topic": "HuggingFace",
+    "tags": [
+      "HuggingFace",
+      "Transformers",
+      "模型库"
+    ],
+    "level": "tool",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Hugging Face tutorial 2026"
+  },
+  {
+    "url": "https://developereducators.com/best/huggingface",
+    "source_domain": "developereducators.com",
+    "dedupe_key": "developereducators.com/best/huggingface",
+    "title": "200 Best Hugging Face Tutorial Videos on YouTube (2026)",
+    "title_cn": "YouTube 上 200 个最佳拥抱脸部教程视频 (2026)",
+    "summary": "Watch the top Hugging Face tutorials on YouTube, ranked by views from 200 videos. Beginner crash courses, advanced deep dives, and trending Hugging Face content — all free.",
+    "summary_cn": "观看 YouTube 上最热门的拥抱脸部教程，该教程按 200 个视频的观看次数排名。初学者速成课程、高级深度学习以及流行的 Hugging Face 内容 — 全部免费。",
+    "category": "工具专区",
+    "topic": "HuggingFace",
+    "tags": [
+      "HuggingFace",
+      "Transformers",
+      "模型库"
+    ],
+    "level": "tool",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Hugging Face tutorial 2026"
+  },
+  {
+    "url": "https://developereducators.com/roadmap/huggingface",
+    "source_domain": "developereducators.com",
+    "dedupe_key": "developereducators.com/roadmap/huggingface",
+    "title": "Learn Hugging Face: A Free YouTube Roadmap (2026)",
+    "title_cn": "学习拥抱脸部：免费的 YouTube 路线图 (2026)",
+    "summary": "A step-by-step Hugging Face roadmap built from the best YouTube videos — start with beginner crash courses, move through full courses, then advanced deep dives. 20 hand-sequenced videos, all free.",
+    "summary_cn": "根据最佳 YouTube 视频构建的分步拥抱面部路线图 - 从初学者速成课程开始，完成完整课程，然后进行高级深入探讨。 20 个手工排序视频，全部免费。",
+    "category": "工具专区",
+    "topic": "HuggingFace",
+    "tags": [
+      "HuggingFace",
+      "Transformers",
+      "模型库"
+    ],
+    "level": "tool",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "Hugging Face tutorial 2026"
+  },
+  {
+    "url": "https://github.com/OpenGithubs/weekly",
+    "source_domain": "github.com",
+    "dedupe_key": "github.com/opengithubs/weekly",
+    "title": "GitHub - OpenGithubs/weekly: Github精选开源项目周刊,每周一更新 · ...GitHub 每周精选：15 个爆火 AI 项目！ - 知乎AI 开源项目热度榜：精选 GitHub 仓库与工程深度解析 | NGJOO 恩筑AIGitHub热榜 - 知乎HotGit — GitHub 热门仓库追踪GitHub 排行榜 Top 200，热门开源项目推荐 | GitHub 中文社区",
+    "title_cn": "GitHub - OpenGithubs/weekly: Github精选开源项目周刊,每周一更新 · ...GitHub 每周精选：15 个爆火 AI 项目！ - 知乎AI 开源项目热度榜：精选 GitHub 仓库与工程深度解析 | NGJOO 恩筑AIGitHub热榜 - 知乎HotGit — GitHub 热门仓库追踪GitHub 排行榜 Top 200，热门开源项目推荐 | GitHub 中文社区",
+    "summary": "OpenGithub社区: 挖掘Github优质开源项目,帮助用户发现有趣、实用、流行、好玩的开源项目. •🤝社区任务:社区互动提升自身的开源项目⭐ •🌋热门仓库:最新的AI/ChatGPT/算法/工具...流行Github项目推荐 •📈趋势榜:Github每日/周/月实时榜单 See full list on github.com See full list on github.com 欢迎来到我们的 GitHub 每周精选！在这里，我们会为你挖掘 GitHub 上最热门、最受开发者追捧的开源项目！ 无论你是渴望灵感的新手，还是寻找效率工具的资深开发者，或者只是好奇开源世界都在流行什么，这份清单都… GitHub AI 开源项目每日热度榜（已收录 463+ 项目）：覆盖 LLM、Agent、RAG、多模态、世界模型等方向，按 Trending Score 排名并附中文技术概览。NGJOO AI 实验室分析。 Jun 21, 2026 · GitHub 热榜项目 - 日榜 (2026-04-29) 生成于：2026-04-29 统计摘要 共发现热门项目： 13 个 榜单类型：日榜 本期热点趋势总结 本期 GitHub 热榜反映出开发者生产力工具正经历从单纯的 AI 辅助向深度工作流闭环的范式迁徙。 16 hours ago · HotGit 每天自动追踪 GitHub Star、Fork、日增、周增、月增榜单，帮助开发者及时发现增长快、有潜力的开源项目。 面向AI编码代理的技能框架与开发方法论。 提供14个可组合技能，在完整开发周期中自动触发——从头脑风暴、计划编写、TDD测试驱动、子代理并行开发到代码审查与分支管理。 支持Claude Code、Codex、Gemini CLI、Cursor、OpenCode、GitHub Copilot等9+编码代理。",
+    "summary_cn": "OpenGithub社区: 挖掘Github优质开源项目,帮助用户发现有趣、实用、流行、好玩的开源项目. •🤝社区任务:社区互动提升自身的开源项目⭐ •🌋热门仓库:最新的AI/ChatGPT/算法/工具...流行Github项目推荐 •📈趋势榜:Github每日/周/月实时榜单 See full list on github.com See full list on github.com 欢迎来到我们的 GitHub 每周精选！在这里，我们会为你挖掘 GitHub 上最热门、最受开发者追捧的开源项目！ 无论你是渴望灵感的新手，还是寻找效率工具的资深开发者，或者只是好奇开源世界都在流行什么，这份清单都… GitHub AI 开源项目每日热度榜（已收录 463+ 项目）：覆盖 LLM、Agent、RAG、多模态、世界模型等方向，按 Trending Score 排名并附中文技术概览。NGJOO AI 实验室分析。 Jun 21, 2026 · GitHub 热榜项目 - 日榜 (2026-04-29) 生成于：2026-04-29 统计摘要 共发现热门项目： 13 个 榜单类型：日榜 本期热点趋势总结 本期 GitHub 热榜反映出开发者生产力工具正经历从单纯的 AI 辅助向深度工作流闭环的范式迁徙。 16 hours ago · HotGit 每天自动追踪 GitHub Star、Fork、日增、周增、月增榜单，帮助开发者及时发现增长快、有潜力的开源项目。 面向AI编码代理的技能框架与开发方法论。 提供14个可组合技能，在完整开发周期中自动触发——从头脑风暴、计划编写、TDD测试驱动、子代理并行开发到代码审查与分支管理。 支持Claude Code、Codex、Gemini CLI、Cursor、OpenCode、GitHub Copilot等9+编码代理。",
+    "category": "工具专区",
+    "topic": "GitHub热门项目",
+    "tags": [
+      "GitHub",
+      "开源",
+      "热门项目",
+      "AI项目"
+    ],
+    "level": "tool",
+    "score": 12,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "GitHub AI 热门项目 周榜"
+  },
+  {
     "url": "https://github.com/topics/artificial-intelligence-projects",
     "source_domain": "github.com",
     "dedupe_key": "github.com/topics/artificial-intelligence-projects",
@@ -5835,14 +6387,15 @@
     "score": 12,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.8660535,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "trending AI projects GitHub"
   },
   {
@@ -5895,14 +6448,15 @@
     "score": 12,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.78532547,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "GitHub AI 热门项目 周榜"
   },
   {
@@ -5925,14 +6479,15 @@
     "score": 9,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.86331123,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 2,
+    "last_seen": "2026-07-04",
+    "seen_count": 3,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6017,12 +6572,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 185244.0,
-    "verified_at": "2026-07-02 11:37:25",
+    "provider_score": 185310.0,
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 4,
+    "last_seen": "2026-07-04",
+    "seen_count": 6,
     "query": "GitHub AI 热门项目 周榜"
   },
   {
@@ -6077,12 +6632,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 164601.0,
-    "verified_at": "2026-07-02 11:37:25",
+    "provider_score": 164681.0,
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 2,
+    "last_seen": "2026-07-04",
+    "seen_count": 4,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6107,12 +6662,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 98336.0,
-    "verified_at": "2026-07-02 11:37:25",
+    "provider_score": 98441.0,
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 2,
+    "last_seen": "2026-07-04",
+    "seen_count": 4,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6137,12 +6692,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 94498.0,
-    "verified_at": "2026-07-02 11:37:25",
+    "provider_score": 94538.0,
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 2,
+    "last_seen": "2026-07-04",
+    "seen_count": 4,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6167,12 +6722,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 85399.0,
-    "verified_at": "2026-07-02 11:37:25",
+    "provider_score": 85657.0,
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 2,
+    "last_seen": "2026-07-04",
+    "seen_count": 4,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6202,6 +6757,126 @@
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-02",
+    "seen_count": 1,
+    "query": "trending AI projects GitHub"
+  },
+  {
+    "url": "https://ngjoo.com/trending",
+    "source_domain": "ngjoo.com",
+    "dedupe_key": "ngjoo.com/trending",
+    "title": "AI 开源项目热度榜：精选 GitHub 仓库与工程深度解析 | NGJOO 恩筑AI",
+    "title_cn": "AI 开源项目热度榜：精选 GitHub 仓库与工程深度解析 | NGJOO 恩筑AI",
+    "summary": "GitHub AI 开源项目每日热度榜（已收录 463+ 项目）：覆盖 LLM、Agent、RAG、多模态、世界模型等方向，按 Trending Score 排名并附中文技术概览。NGJOO AI 实验室分析。",
+    "summary_cn": "GitHub AI 开源项目每日热度榜（已收录 463+ 项目）：覆盖 LLM、Agent、RAG、多模态、世界模型等方向，按 Trending Score 排名并附中文技术概览。NGJOO AI 实验室分析。",
+    "category": "工具专区",
+    "topic": "GitHub热门项目",
+    "tags": [
+      "GitHub",
+      "开源",
+      "热门项目",
+      "AI项目"
+    ],
+    "level": "tool",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "GitHub AI 热门项目 周榜"
+  },
+  {
+    "url": "https://geeky-gadgets.com/trending-ai-projects-on-github",
+    "source_domain": "geeky-gadgets.com",
+    "dedupe_key": "geeky-gadgets.com/trending-ai-projects-on-github",
+    "title": "17 Trending AI Tools, Projects & Frameworks on GitHub ...",
+    "title_cn": "GitHub 上的 17 个热门人工智能工具、项目和框架...",
+    "summary": "Oct 21, 2025 · Explore 17 trending AI projects on GitHub, from video generation tools to NLP frameworks, shaping the future of artificial intelligence.",
+    "summary_cn": "2025 年 10 月 21 日 · 探索 GitHub 上的 17 个热门人工智能项目，从视频生成工具到 NLP 框架，塑造人工智能的未来。",
+    "category": "工具专区",
+    "topic": "GitHub热门项目",
+    "tags": [
+      "GitHub",
+      "开源",
+      "热门项目",
+      "AI项目"
+    ],
+    "level": "tool",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "trending AI projects GitHub"
+  },
+  {
+    "url": "https://ossinsight.io/trending/ai",
+    "source_domain": "ossinsight.io",
+    "dedupe_key": "ossinsight.io/trending/ai",
+    "title": "Trending AI Repositories on GitHub — Real-Time Rankings 2026",
+    "title_cn": "GitHub 上的热门人工智能存储库 — 2026 年实时排名",
+    "summary": "Trending AI Repositories on GitHub — 2026 Real-time rankings of the top AI open source projects across agent frameworks, LLM tools, MCP servers, coding agents, and more.",
+    "summary_cn": "GitHub 上的热门 AI 存储库 — 2026 年跨代理框架、LLM 工具、MCP 服务器、编码代理等顶级 AI 开源项目的实时排名。",
+    "category": "工具专区",
+    "topic": "GitHub热门项目",
+    "tags": [
+      "GitHub",
+      "开源",
+      "热门项目",
+      "AI项目"
+    ],
+    "level": "tool",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "trending AI projects GitHub"
+  },
+  {
+    "url": "https://tools.thetoolnerd.com/github-trends",
+    "source_domain": "tools.thetoolnerd.com",
+    "dedupe_key": "tools.thetoolnerd.com/github-trends",
+    "title": "Trending AI Projects on GitHub — TheToolNerd",
+    "title_cn": "GitHub 上的热门人工智能项目 — TheToolNerd",
+    "summary": "Discover the hottest open-source AI repositories on GitHub. Curated by use case: LLMs, OCR, Agents, Vision, Audio, and more.",
+    "summary_cn": "在 GitHub 上发现最热门的开源 AI 存储库。按用例策划：法学硕士、OCR、代理、视觉、音频等。",
+    "category": "工具专区",
+    "topic": "GitHub热门项目",
+    "tags": [
+      "GitHub",
+      "开源",
+      "热门项目",
+      "AI项目"
+    ],
+    "level": "tool",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "trending AI projects GitHub"
   },
@@ -6580,6 +7255,36 @@
     "query": "computer vision basics tutorial beginners"
   },
   {
+    "url": "https://coursera.org/learn/computer-vision-basics",
+    "source_domain": "coursera.org",
+    "dedupe_key": "coursera.org/learn/computer-vision-basics",
+    "title": "Computer Vision Basics | Coursera",
+    "title_cn": "计算机视觉基础知识 | Coursera",
+    "summary": "What you'll learnUnderstand what computer vision is and its goalsIdentify some of the key application areas of computer vision",
+    "summary_cn": "您将学到什么了解计算机视觉是什么及其目标确定计算机视觉的一些关键应用领域",
+    "category": "初级知识",
+    "topic": "计算机视觉基础",
+    "tags": [
+      "计算机视觉",
+      "图像",
+      "CNN",
+      "OCR"
+    ],
+    "level": "beginner",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "computer vision basics tutorial beginners"
+  },
+  {
     "url": "https://geeksforgeeks.org/computer-vision/computer-vision",
     "source_domain": "geeksforgeeks.org",
     "dedupe_key": "geeksforgeeks.org/computer-vision/computer-vision",
@@ -6599,14 +7304,15 @@
     "score": 5,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.66699636,
-    "verified_at": "2026-07-02 11:37:25",
-    "verify_status": 308,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "computer vision basics tutorial beginners"
   },
   {
@@ -6728,6 +7434,66 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "计算机视觉 入门 教程"
+  },
+  {
+    "url": "https://aqsazafar81.medium.com/computer-vision-roadmap-step-by-step-guide-6eb9a8c378e8",
+    "source_domain": "aqsazafar81.medium.com",
+    "dedupe_key": "aqsazafar81.medium.com/computer-vision-roadmap-step-by-step-guide-6eb9a8c378e8",
+    "title": "Computer Vision Roadmap- Step-by-Step Guide | Medium",
+    "title_cn": "计算机视觉路线图 - 分步指南 |中等的",
+    "summary": "Step 1: The Basics — What is Computer Vision? Let’s Start with the Basics. Computer Vision is like teaching computers to see and make sense of images and videos. Imagine giving eyes to your computer, and it can recognize objects, people, and even emotions! What you’ll learn",
+    "summary_cn": "第 1 步：基础知识——什么是计算机视觉？让我们从基础开始。计算机视觉就像教计算机观看并理解图像和视频。想象一下，给你的计算机赋予眼睛，它可以识别物体、人，甚至情绪！你将学到什么",
+    "category": "初级知识",
+    "topic": "计算机视觉基础",
+    "tags": [
+      "计算机视觉",
+      "图像",
+      "CNN",
+      "OCR"
+    ],
+    "level": "beginner",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "computer vision basics tutorial beginners"
+  },
+  {
+    "url": "https://projectpro.io/article/how-to-learn-computer-vision/515",
+    "source_domain": "projectpro.io",
+    "dedupe_key": "projectpro.io/article/how-to-learn-computer-vision/515",
+    "title": "How to Learn Computer Vision from Scratch in 2025?",
+    "title_cn": "2025年如何从零开始学习计算机视觉？",
+    "summary": "OpenCV Project for Beginners to Learn Computer Vision Basics.This beginner-level project will build your fundamentals of computer vision using Python and OpenCV. You will also learn to apply the OpenCV library for video processing, image detection, smoothing, etc.",
+    "summary_cn": "供初学者学习计算机视觉基础知识的 OpenCV 项目。这个初级项目将使用 Python 和 OpenCV 构建计算机视觉基础知识。您还将学习如何应用 OpenCV 库进行视频处理、图像检测、平滑等。",
+    "category": "初级知识",
+    "topic": "计算机视觉基础",
+    "tags": [
+      "计算机视觉",
+      "图像",
+      "CNN",
+      "OCR"
+    ],
+    "level": "beginner",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "computer vision basics tutorial beginners"
   },
   {
     "url": "https://github.com/PKU-TANGENT/nlp-tutorial",
@@ -7929,14 +8695,15 @@
     "score": 9,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.8127637,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 4,
+    "last_seen": "2026-07-04",
+    "seen_count": 5,
     "query": "机器学习 数学基础 入门"
   },
   {
@@ -7959,14 +8726,15 @@
     "score": 9,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.68723184,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "机器学习 数学基础 入门"
   },
   {
@@ -7989,14 +8757,15 @@
     "score": 9,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.86632514,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "math for machine learning beginners"
   },
   {
@@ -8049,15 +8818,106 @@
     "score": 7,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.8884594,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
+    "query": "math for machine learning beginners"
+  },
+  {
+    "url": "https://coursera.org/specializations/mathematics-machine-learning",
+    "source_domain": "coursera.org",
+    "dedupe_key": "coursera.org/specializations/mathematics-machine-learning",
+    "title": "Mathematics for Machine Learning Specialization",
+    "title_cn": "机器学习数学专业化",
+    "summary": "Offered by Imperial College London. Mathematics for Machine Learning. Learn about the prerequisite mathematics for applications in data ... Enroll for free.",
+    "summary_cn": "由伦敦帝国理工学院提供。机器学习数学。了解数据应用的必备数学知识...免费注册。",
+    "category": "初级知识",
+    "topic": "数学基础",
+    "tags": [
+      "数学",
+      "线性代数",
+      "概率",
+      "微积分"
+    ],
+    "level": "beginner",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "math for machine learning beginners"
+  },
+  {
+    "url": "https://microsoft.com/en-us/research/articles/book-recommendation-machine-learning-math",
+    "source_domain": "microsoft.com",
+    "dedupe_key": "microsoft.com/en-us/research/articles/book-recommendation-machine-learning-math",
+    "title": "成为机器学习大神，你不能不懂数学 - Microsoft Research",
+    "title_cn": "成为机器学习大神，你不能不懂数学 - Microsoft Research",
+    "summary": "September 25, 2024 - 编者按：如何自学机器学习？需要哪些数理基础？怎样从入门到进阶，成就大神之路？在这篇书单推荐中，微软亚洲研究院机器学习组研究员们从机器学习综述、算法优化、理论延展、数学基础四大方面入手，为大家提供...",
+    "summary_cn": "September 25, 2024 - 编者按：如何自学机器学习？需要哪些数理基础？怎样从入门到进阶，成就大神之路？在这篇书单推荐中，微软亚洲研究院机器学习组研究员们从机器学习综述、算法优化、理论延展、数学基础四大方面入手，为大家提供...",
+    "category": "初级知识",
+    "topic": "数学基础",
+    "tags": [
+      "数学",
+      "线性代数",
+      "概率",
+      "微积分"
+    ],
+    "level": "beginner",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "机器学习 数学基础 入门"
+  },
+  {
+    "url": "https://learn.microsoft.com/zh-cn/training/modules/fundamentals-machine-learning",
+    "source_domain": "learn.microsoft.com",
+    "dedupe_key": "learn.microsoft.com/zh-cn/training/modules/fundamentals-machine-learning",
+    "title": "机器学习概念简介 - Training | Microsoft Learn",
+    "title_cn": "机器学习概念简介- 培训 |微软学习",
+    "summary": "机器学习是大多数现代人工智能解决方案的基础。 熟悉机器学习所基于的核心概念是了解 AI 的重要基础。 · 完成本模块后，你将能够： · 介绍机器学习的核心概念 · 识别不同类型的机器学习 · 介绍训练和评估机器学习模型的注意事项 · 介绍深度学习的核心概念 · 添加 · 开始学习本模块之前，你应该具有： · 数学基础知识 ·",
+    "summary_cn": "机器学习是大多数现代人工智能解决方案的基础。 熟悉机器学习所基于的核心概念是了解 AI 的重要基础。 · 完成本模块后，你将能够： · 介绍机器学习的核心概念 · 识别不同类型的机器学习 · 介绍训练和评估机器学习模型的注意事项 · 介绍深度学习的核心概念 · 添加 · 开始学习本模块之前，你应该具有： · 数学基础知识 ·",
+    "category": "初级知识",
+    "topic": "数学基础",
+    "tags": [
+      "数学",
+      "线性代数",
+      "概率",
+      "微积分"
+    ],
+    "level": "beginner",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "机器学习 数学基础 入门"
   },
   {
     "url": "https://geeksforgeeks.org/machine-learning/machine-learning-mathematics",
@@ -8079,14 +8939,15 @@
     "score": 3,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.7636429,
-    "verified_at": "2026-07-02 11:37:25",
-    "verify_status": 308,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "math for machine learning beginners"
   },
   {
@@ -8425,17 +9286,18 @@
     "level": "beginner",
     "score": 12,
     "first_seen": "2026-06-30",
-    "last_seen": "2026-07-02",
-    "seen_count": 66,
+    "last_seen": "2026-07-04",
+    "seen_count": 69,
     "query": "AI beginner tutorial 2026",
     "dedupe_key": "youtube.com/watch",
     "provider": "legacy",
     "providers": [
+      "ddgs",
       "legacy",
       "tavily"
     ],
     "provider_score": 0.95618236,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200
   },
   {
@@ -8464,6 +9326,35 @@
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-02",
+    "seen_count": 1,
+    "query": "人工智能入门教程 2026"
+  },
+  {
+    "url": "https://ibm.com/think/machine-learning",
+    "source_domain": "ibm.com",
+    "dedupe_key": "ibm.com/think/machine-learning",
+    "title": "The 2026 Guide to Machine Learning | IBM",
+    "title_cn": "2026 年机器学习指南 |国际商业机器公司",
+    "summary": "January 5, 2026 - Leverage educational content like explainers, hands-on tutorials, videos, podcasts and much more crafted by IBM experts, covering all aspects of machine learning.",
+    "summary_cn": "2026 年 1 月 5 日 - 利用解释器、实践教程、视频、播客等由 IBM 专家精心制作的教育内容，涵盖机器学习的各个方面。",
+    "category": "初级知识",
+    "topic": "人工智能入门",
+    "tags": [
+      "入门",
+      "AI基础",
+      "教程"
+    ],
+    "level": "beginner",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "人工智能入门教程 2026"
   },
@@ -8584,6 +9475,93 @@
     "verify_status": null
   },
   {
+    "url": "https://coursiv.io/blog/how-to-learn-ai-2026",
+    "source_domain": "coursiv.io",
+    "dedupe_key": "coursiv.io/blog/how-to-learn-ai-2026",
+    "title": "How to Learn AI in 2026: Guide for Everyone | Coursiv Blog",
+    "title_cn": "2026 年如何学习人工智能：所有人指南 |课程博客",
+    "summary": "1 week ago - A beginner-friendly roadmap for learning AI in 2026, including practical tools, use cases, career skills, prompt basics, and safe ways to start.",
+    "summary_cn": "1 周前 - 适合初学者的 2026 年人工智能学习路线图，包括实用工具、用例、职业技能、提示基础知识和安全的入门方法。",
+    "category": "初级知识",
+    "topic": "人工智能入门",
+    "tags": [
+      "入门",
+      "AI基础",
+      "教程"
+    ],
+    "level": "beginner",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI beginner tutorial 2026"
+  },
+  {
+    "url": "https://openeuler.csdn.net/69ec385554b52172bc6fef9d.html",
+    "source_domain": "openeuler.csdn.net",
+    "dedupe_key": "openeuler.csdn.net/69ec385554b52172bc6fef9d.html",
+    "title": "收藏！2026 年版零门槛大模型学习路线，程序员 & 小白 AI 转型必看_人工智能_程序媛饺子-openEuler 社区",
+    "title_cn": "收藏！2026 年版零门槛大模型学习路线，程序员 & 小白 AI 转型必看_人工智能_程序媛饺子-openEuler 社区",
+    "summary": "April 25, 2026 - 核心包含：AI大模型全套系统化学习路线图（小白可直接照做）、精品学习书籍+电子文档、干货视频教程、可直接上手的实战项目+源码、2026大厂面试真题题库，一站式解决你的学习痛点，不用再到处搜集拼凑！",
+    "summary_cn": "April 25, 2026 - 核心包含：AI大模型全套系统化学习路线图（小白可直接照做）、精品学习书籍+电子文档、干货视频教程、可直接上手的实战项目+源码、2026大厂面试真题题库，一站式解决你的学习痛点，不用再到处搜集拼凑！",
+    "category": "初级知识",
+    "topic": "人工智能入门",
+    "tags": [
+      "入门",
+      "AI基础",
+      "教程"
+    ],
+    "level": "beginner",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "人工智能入门教程 2026"
+  },
+  {
+    "url": "https://cloud.tencent.com/developer/article/2610818",
+    "source_domain": "cloud.tencent.com",
+    "dedupe_key": "cloud.tencent.com/developer/article/2610818",
+    "title": "2026年AI学习完整指南：从入门到进阶的12个月通关路线图-腾讯云开发者社区-腾讯云",
+    "title_cn": "2026年AI学习完整指南：从入门到进阶的12个月通关路线图-腾讯云开发者社区-腾讯云",
+    "summary": "社区首页 >专栏 >2026年AI学习完整指南：从入门到进阶的12个月通关路线图 · 贺公子之数据科学与艺术关注 · 发布于 2025-12-31 09:50:16 · 发布于 2025-12-31 09:50:16 · 8.9K0 · 举报 · 概述 · 人工智能领域正经历前所未有的技术变革。2025年，多模态大模型实现了从\"拼接式融合\"到\"原生融合\"的跨越式发展，类脑计算与具身智能从实验室走向产业落地，而轻量化微调技术的成熟让大模型定制化的门槛大幅降低。对于想要进入AI领域的从业者和学习者而言，这既是最好的时代，也是最具挑战的时代——技术迭代速度加快，学习路径愈发清晰却也更加细分。 ·",
+    "summary_cn": "社区首页 >专栏 >2026年AI学习完整指南：从入门到进阶的12个月通关路线图 · 贺公子之数据科学与艺术关注 · 发布于 2025-12-31 09:50:16 · 发布于 2025-12-31 09:50:16 · 8.9K0 · 举报 · 概述 · 人工智能领域正经历前所未有的技术变革。2025年，多模态大模型实现了从\"拼接式融合\"到\"原生融合\"的跨越式发展，类脑计算与具身智能从实验室走向产业落地，而轻量化微调技术的成熟让大模型定制化的门槛大幅降低。对于想要进入AI领域的从业者和学习者而言，这既是最好的时代，也是最具挑战的时代——技术迭代速度加快，学习路径愈发清晰却也更加细分。 ·",
+    "category": "初级知识",
+    "topic": "人工智能入门",
+    "tags": [
+      "入门",
+      "AI基础",
+      "教程"
+    ],
+    "level": "beginner",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "人工智能入门教程 2026"
+  },
+  {
     "url": "https://aixploria.com/en/tutorials-video-ai-free-lessons",
     "source_domain": "aixploria.com",
     "title": "AI Video Tutorials: Free Courses for Learning the Best AI Tools | 2026",
@@ -8611,6 +9589,64 @@
     "provider_score": null,
     "verified_at": "",
     "verify_status": null
+  },
+  {
+    "url": "https://cnblogs.com/-1688/p/19428373",
+    "source_domain": "cnblogs.com",
+    "dedupe_key": "cnblogs.com/-1688/p/19428373",
+    "title": "2026年AI入门指南：四个学习平台的使用体验 - 速递信息 - 企业博客 - 博客园",
+    "title_cn": "2026年AI入门指南：四个学习平台的使用体验 - 速递信息 - 企业博客 - 博客园",
+    "summary": "人工智能正在成为一项越来越普及的技能，而良好的学习资源能帮助初学者更顺畅地入门。2026年，国内用户可接触到的AI学习平台更加丰富，各具特色。本文将围绕四个常见的网站，从课程体系、学习支持、使用体验等角度展开介绍，希望能够为您在AI学习的起步阶段提供一些实用的信息与建议。 AI入门前，必须了解的三条底层规律（来自慕课网手记） 在介绍平台前，你必须先理解AI学习的底层逻辑。 慕课网手记社区《写给零基础的AI通识课》给出了三",
+    "summary_cn": "人工智能正在成为一项越来越普及的技能，而良好的学习资源能帮助初学者更顺畅地入门。2026年，国内用户可接触到的AI学习平台更加丰富，各具特色。本文将围绕四个常见的网站，从课程体系、学习支持、使用体验等角度展开介绍，希望能够为您在AI学习的起步阶段提供一些实用的信息与建议。 AI入门前，必须了解的三条底层规律（来自慕课网手记） 在介绍平台前，你必须先理解AI学习的底层逻辑。 慕课网手记社区《写给零基础的AI通识课》给出了三",
+    "category": "初级知识",
+    "topic": "人工智能入门",
+    "tags": [
+      "入门",
+      "AI基础",
+      "教程"
+    ],
+    "level": "beginner",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "人工智能入门教程 2026"
+  },
+  {
+    "url": "https://coursiv.io/blog/how-to-learn-artificial-intelligence-free-2026",
+    "source_domain": "coursiv.io",
+    "dedupe_key": "coursiv.io/blog/how-to-learn-artificial-intelligence-free-2026",
+    "title": "How to Learn Artificial Intelligence for Free in 2026: A Step-by-Step Roadmap",
+    "title_cn": "2026 年如何免费学习人工智能：分步路线图",
+    "summary": "1 week ago - A beginner-friendly roadmap for learning AI in 2026, including practical tools, use cases, career skills, prompt basics, and safe ways to start.",
+    "summary_cn": "1 周前 - 适合初学者的 2026 年人工智能学习路线图，包括实用工具、用例、职业技能、提示基础知识和安全的入门方法。",
+    "category": "初级知识",
+    "topic": "人工智能入门",
+    "tags": [
+      "入门",
+      "AI基础",
+      "教程"
+    ],
+    "level": "beginner",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI beginner tutorial 2026"
   },
   {
     "url": "https://geeksforgeeks.org/data-analysis/data-analysis-with-python",
@@ -8998,6 +10034,35 @@
     "query": "人工智能 学习路线 零基础"
   },
   {
+    "url": "https://yun.itheima.com/subject/aimap/index.html",
+    "source_domain": "yun.itheima.com",
+    "dedupe_key": "yun.itheima.com/subject/aimap/index.html",
+    "title": "AI大模型开发学习路线图2026版-黑马程序员AI大模型开发技术路线",
+    "title_cn": "AI大模型开发学习路线图2026版-黑马程序员AI大模型开发技术路线",
+    "summary": "阶段一 AI大模型开发入门：掌握人工智能Python语言，掌握模型私有化方法，能够通过Python调用私有化部署API实现通用聊天机器人搭建 · 阶段二 大模型应用开发：掌握利用Python进行数据处理及数据统计分析，为数据建模奠定技术基础。同时通过Coze和Dify构建工作流和智能体开发，快速构建智能体。 · 阶段三 大模型核心开发技术：掌握机器学习、深度学习与NLP核心算法，能够解决模型构建和训练关键问题",
+    "summary_cn": "阶段一 AI大模型开发入门：掌握人工智能Python语言，掌握模型私有化方法，能够通过Python调用私有化部署API实现通用聊天机器人搭建 · 阶段二 大模型应用开发：掌握利用Python进行数据处理及数据统计分析，为数据建模奠定技术基础。同时通过Coze和Dify构建工作流和智能体开发，快速构建智能体。 · 阶段三 大模型核心开发技术：掌握机器学习、深度学习与NLP核心算法，能够解决模型构建和训练关键问题",
+    "category": "初级知识",
+    "topic": "AI学习路线图",
+    "tags": [
+      "路线图",
+      "入门",
+      "学习路径"
+    ],
+    "level": "beginner",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "人工智能 学习路线 零基础"
+  },
+  {
     "url": "https://geeksforgeeks.org/artificial-intelligence/roadmap-to-generative-ai-a-comprehensive-guide-for-beginners",
     "source_domain": "geeksforgeeks.org",
     "dedupe_key": "geeksforgeeks.org/artificial-intelligence/roadmap-to-generative-ai-a-comprehensive-guide-for-beginners",
@@ -9316,14 +10381,15 @@
     "score": 10,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.9184877,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "AI Agent 企业落地 案例"
   },
   {
@@ -9537,6 +10603,126 @@
     "query": "AI agent real world case studies"
   },
   {
+    "url": "https://creolestudios.com/real-world-ai-agent-case-studies",
+    "source_domain": "creolestudios.com",
+    "dedupe_key": "creolestudios.com/real-world-ai-agent-case-studies",
+    "title": "9 Real-World AI Agent Case Studies That Scaled Businesses Fast",
+    "title_cn": "9 个可快速扩展业务的真实 AI 代理案例研究",
+    "summary": "May 5, 2026 · Discover 9 real-world AI agent case studies where businesses boosted efficiency, reduced costs, and scaled faster with intelligent automation solutions.",
+    "summary_cn": "2026 年 5 月 5 日 · 了解 9 个真实的 AI 代理案例研究，其中企业通过智能自动化解决方案提高了效率、降低了成本并更快地扩展。",
+    "category": "AIAgent实践",
+    "topic": "实际应用案例",
+    "tags": [
+      "案例",
+      "落地",
+      "Agent",
+      "企业实践"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI agent real world case studies"
+  },
+  {
+    "url": "https://aimonk.com/agentic-ai-examples-enterprise-roi-case-studies",
+    "source_domain": "aimonk.com",
+    "dedupe_key": "aimonk.com/agentic-ai-examples-enterprise-roi-case-studies",
+    "title": "12 Agentic AI Examples With Measurable ROI: Enterprise Case ...",
+    "title_cn": "12 个具有可衡量投资回报率的代理人工智能示例：企业案例...",
+    "summary": "Apr 21, 2026 · Explore 12 agentic ai examples with verified ROI data from JPMorgan, Klarna, Walmart, and more. Real enterprise case studies from 2025-2026.",
+    "summary_cn": "2026 年 4 月 21 日 · 探索 12 个代理人工智能示例，其中包含来自摩根大通、Klarna、沃尔玛等公司的经过验证的 ROI 数据。 2025-2026 年真实企业案例研究。",
+    "category": "AIAgent实践",
+    "topic": "实际应用案例",
+    "tags": [
+      "案例",
+      "落地",
+      "Agent",
+      "企业实践"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI agent real world case studies"
+  },
+  {
+    "url": "https://sparkeighteen.com/blog/the-ai-agents-making-it-to-production-12-agentic-ai-case-studies-with-measurable-roi-from-2025-2026",
+    "source_domain": "sparkeighteen.com",
+    "dedupe_key": "sparkeighteen.com/blog/the-ai-agents-making-it-to-production-12-agentic-ai-case-studies-with-measurable-roi-from-2025-2026",
+    "title": "12 Agentic AI Case Studies with Proven ROI in 2025-2026",
+    "title_cn": "2025-2026 年 12 个代理人工智能案例研究，投资回报率已得到证实",
+    "summary": "Discover 12 real-world agentic AI case studies across customer service, finance, healthcare, HR, and supply chain with measurable ROI and business impact.",
+    "summary_cn": "探索 12 个真实世界的代理 AI 案例研究，涉及客户服务、财务、医疗保健、人力资源和供应链，具有可衡量的投资回报率和业务影响。",
+    "category": "AIAgent实践",
+    "topic": "实际应用案例",
+    "tags": [
+      "案例",
+      "落地",
+      "Agent",
+      "企业实践"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI agent real world case studies"
+  },
+  {
+    "url": "https://cubitrek.com/blog/ai-agents-use-cases-by-industry-25-real-world-examples",
+    "source_domain": "cubitrek.com",
+    "dedupe_key": "cubitrek.com/blog/ai-agents-use-cases-by-industry-25-real-world-examples",
+    "title": "AI Agents Use Cases by Industry: 25 Real-World Examples",
+    "title_cn": "按行业划分的 AI 代理用例：25 个真实示例",
+    "summary": "Apr 20, 2026 · 25 real-world AI agent use cases across healthcare, finance, retail, manufacturing, and more. See how industries deploy autonomous AI agents in 2026.",
+    "summary_cn": "2026 年 4 月 20 日 · 25 个真实世界的 AI 代理用例，涉及医疗保健、金融、零售、制造等领域。了解 2026 年各行业如何部署自主 AI 代理。",
+    "category": "AIAgent实践",
+    "topic": "实际应用案例",
+    "tags": [
+      "案例",
+      "落地",
+      "Agent",
+      "企业实践"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "AI agent real world case studies"
+  },
+  {
     "url": "https://github.com/KimYx0207/AI-Coding-Guide-Zh/blob/main/docs/openclaw/08-%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%8C%87%E5%8D%97.md",
     "source_domain": "github.com",
     "dedupe_key": "github.com/kimyx0207/ai-coding-guide-zh/blob/main/docs/openclaw/08-%e5%a4%9aagent%e5%8d%8f%e4%bd%9c%e6%8c%87%e5%8d%97.md",
@@ -9593,6 +10779,64 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://cloud.google.com/blog/topics/developers-practitioners/building-collaborative-ai-a-developers-guide-to-multi-agent-systems-with-adk",
+    "source_domain": "cloud.google.com",
+    "dedupe_key": "cloud.google.com/blog/topics/developers-practitioners/building-collaborative-ai-a-developers-guide-to-multi-agent-systems-with-adk",
+    "title": "Building Collaborative AI: A Developer's Guide to Multi-Agent ...",
+    "title_cn": "构建协作人工智能：多代理开发人员指南......",
+    "summary": "Nov 5, 2025 · Unlock the power of collaborative AI with Google's Agent Development Kit (ADK). This guide explores Multi-Agent Systems (MAS), ADK's agent types (LLM, Workflow, Custom), hierarchical structures, and communication mechanisms for building robust, scalable, and intelligent AI solutions.",
+    "summary_cn": "2025 年 11 月 5 日 · 使用 Google 代理开发套件 (ADK) 释放协作 AI 的力量。本指南探讨了多代理系统 (MAS)、ADK 的代理类型（LLM、工作流、自定义）、层次结构以及用于构建稳健、可扩展和智能 AI 解决方案的通信机制。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://dev.to/jiade/duo-agentxie-zuo-jia-gou-mo-shi-shi-zhan-cong-fen-ceng-gui-hua-dao-dong-tai-bian-pai-de-wan-zheng-zhi-nan-467a",
+    "source_domain": "dev.to",
+    "dedupe_key": "dev.to/jiade/duo-agentxie-zuo-jia-gou-mo-shi-shi-zhan-cong-fen-ceng-gui-hua-dao-dong-tai-bian-pai-de-wan-zheng-zhi-nan-467a",
+    "title": "多Agent协作架构模式实战：从分层规划到动态编排的完整指南 - DEV Com...",
+    "title_cn": "多Agent协作架构模式实战：从分层规划到动态编排的完整指南 - DEV Com...",
+    "summary": "Mar 2, 2026 · 单Agent能力再强，也有天花板。2026年，多Agent协作已从学术概念走向生产实践。本文从4种核心架构模式到代码实现，带你掌握多Agent系统的设计精髓。 一、为什么需要多Agent协作？ 1.1 单Agent的极限 单个AI Agent就像一个全栈工程师——什么都能做，但什么都不精。当任务复杂度超过一定阈值，单Agent ...",
+    "summary_cn": "Mar 2, 2026 · 单Agent能力再强，也有天花板。2026年，多Agent协作已从学术概念走向生产实践。本文从4种核心架构模式到代码实现，带你掌握多Agent系统的设计精髓。 一、为什么需要多Agent协作？ 1.1 单Agent的极限 单个AI Agent就像一个全栈工程师——什么都能做，但什么都不精。当任务复杂度超过一定阈值，单Agent ...",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "多Agent 协作 教程"
   },
   {
     "url": "https://bilibili.com/video/BV1PTPQz5Er4",
@@ -9682,6 +10926,35 @@
     "query": "multi agent collaboration tutorial"
   },
   {
+    "url": "https://developer.aliyun.com/article/1716578",
+    "source_domain": "developer.aliyun.com",
+    "dedupe_key": "developer.aliyun.com/article/1716578",
+    "title": "【保姆级教学】OpenClaw多Agent协作手册（持久/子Agent区分）+全平台...",
+    "title_cn": "【保姆级教学】OpenClaw多Agent协作手册（持久/子Agent区分）+全平台...",
+    "summary": "Mar 13, 2026 · 2026年，OpenClaw的多Agent玩法已从“单一角色使用”升级为“团队化协同”——很多用户已成功创建分工明确的Agent（如资讯收集、文章撰写、代码开发），但普遍卡在“协同断层”：Agent之间互相孤立，需手动复制粘贴数据完成协作，反而增加额外工作量。",
+    "summary_cn": "Mar 13, 2026 · 2026年，OpenClaw的多Agent玩法已从“单一角色使用”升级为“团队化协同”——很多用户已成功创建分工明确的Agent（如资讯收集、文章撰写、代码开发），但普遍卡在“协同断层”：Agent之间互相孤立，需手动复制粘贴数据完成协作，反而增加额外工作量。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "多Agent 协作 教程"
+  },
+  {
     "url": "https://cloud.tencent.com/developer/article/2638746",
     "source_domain": "cloud.tencent.com",
     "dedupe_key": "cloud.tencent.com/developer/article/2638746",
@@ -9709,6 +10982,122 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "多Agent 协作 教程"
+  },
+  {
+    "url": "https://blog.csdn.net/m0_59235945/article/details/155696734",
+    "source_domain": "blog.csdn.net",
+    "dedupe_key": "blog.csdn.net/m0_59235945/article/details/155696734",
+    "title": "【终极教程】多Agent分工协作（新手版）：从角色定义到任务分配，3步...",
+    "title_cn": "【终极教程】多Agent分工协作（新手版）：从角色定义到任务分配，3步...",
+    "summary": "Dec 8, 2025 · 【终极教程】多Agent分工协作（新手版）：从角色定义到任务分配，3步法手把手教会你！",
+    "summary_cn": "Dec 8, 2025 · 【终极教程】多Agent分工协作（新手版）：从角色定义到任务分配，3步法手把手教会你！",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "多Agent 协作 教程"
+  },
+  {
+    "url": "https://docs.agenticgokit.com/tutorials/getting-started/multi-agent-collaboration",
+    "source_domain": "docs.agenticgokit.com",
+    "dedupe_key": "docs.agenticgokit.com/tutorials/getting-started/multi-agent-collaboration",
+    "title": "Multi-Agent Collaboration Tutorial (15 minutes) | AgenticGoKit",
+    "title_cn": "多代理协作教程（15 分钟）|代理GoKit",
+    "summary": "Dec 23, 2025 · Multi-Agent Collaboration Tutorial (15 minutes) Overview Learn how to orchestrate multiple agents working together using different patterns. You'll explore collaborative, sequential, loop, and mixed orchestration modes using configuration-driven runners. Prerequisites Complete the 5-Minute Quickstart Basic understanding of AgenticGoKit concepts An LLM provider configured. Recommended for local ...",
+    "summary_cn": "2025 年 12 月 23 日 · 多代理协作教程（15 分钟）概述 了解如何使用不同模式协调多个代理一起工作。您将使用配置驱动的运行器探索协作、顺序、循环和混合编排模式。先决条件 完成 5 分钟快速入门 对 AgenticGoKit 概念有基本了解 已配置 LLM 提供商。推荐给当地...",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://machinelearningmastery.com/building-first-multi-agent-system-beginner-guide",
+    "source_domain": "machinelearningmastery.com",
+    "dedupe_key": "machinelearningmastery.com/building-first-multi-agent-system-beginner-guide",
+    "title": "Building Your First Multi-Agent System: A Beginner’s Guide",
+    "title_cn": "构建您的第一个多代理系统：初学者指南",
+    "summary": "Feb 8, 2025 · This is why a multi-agent system emerges: to allow several agents to work collaboratively towards shared goals. Multiple specialized individual agents work in a collaborative environment to finish individual tasks and achieve the shared, overarching goal. Structure-wise, multi-agent systems can be constructed in any way that preserves ...",
+    "summary_cn": "2025 年 2 月 8 日 · 这就是多智能体系统出现的原因：允许多个智能体协同工作以实现共同的目标。多个专门的个体代理在协作环境中工作，以完成单独的任务并实现共同的总体目标。从结构角度来看，多智能体系统可以以任何保留......的方式构建。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://genaiunplugged.substack.com/p/multi-agent-ai-collaboration-tutorial",
+    "source_domain": "genaiunplugged.substack.com",
+    "dedupe_key": "genaiunplugged.substack.com/p/multi-agent-ai-collaboration-tutorial",
+    "title": "Multi-Agent AI Collaboration Tutorial with MCP and Python",
+    "title_cn": "使用 MCP 和 Python 的多智能体 AI 协作教程",
+    "summary": "Nov 21, 2025 · Learn to build multi-agent AI systems where specialized agents collaborate through MCP. Complete tutorial with working code for researcher and writer agents.",
+    "summary_cn": "2025 年 11 月 21 日 · 学习构建多智能体人工智能系统，其中专业智能体通过 MCP 进行协作。包含适用于研究人员和作家代理的工作代码的完整教程。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
   },
   {
     "url": "https://handsonai.info/agentic-building-blocks/agents/capability-patterns/multi-agent-collaboration",
@@ -9765,6 +11154,35 @@
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-02",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/multi-agent-patterns",
+    "source_domain": "learn.microsoft.com",
+    "dedupe_key": "learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/multi-agent-patterns",
+    "title": "Multi-agent orchestration patterns and best practices",
+    "title_cn": "多代理编排模式和最佳实践",
+    "summary": "May 22, 2026 · Learn how to compose inline and connected agents, manage handoffs, and enforce guardrails to deliver modular, scalable workflows. Includes best practices for authoring agent instructions in multi-agent setups.",
+    "summary_cn": "2026 年 5 月 22 日 · 了解如何组成内联和连接的代理、管理交接以及实施护栏以提供模块化、可扩展的工作流程。包括在多代理设置中编写代理指令的最佳实践。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "multi agent collaboration tutorial"
   },
@@ -9845,13 +11263,43 @@
     "score": 9,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.6675167,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
+    "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://cnblogs.com/tlnshuju/p/19337753",
+    "source_domain": "cnblogs.com",
+    "dedupe_key": "cnblogs.com/tlnshuju/p/19337753",
+    "title": "AI Agent 之工具使用：从函数定义到实际应用 - 教程 - tlnshuju - 博...",
+    "title_cn": "AI Agent 之工具使用：从函数定义到实际应用 - 教程 - tlnshuju - 博...",
+    "summary": "Dec 11, 2025 · 函数调用技术是 Agent 使用工具的标准方式，通过结构化的格式实现 LLM 与工具的交互 我们从零构建了一个具备搜索、计算和时间查询能力的 ReAct Agent，展示了工具使用的完整流程 工具系统的扩展需要考虑错误处理、安全性和最佳实践等因素 6.2 未来发展趋势",
+    "summary_cn": "Dec 11, 2025 · 函数调用技术是 Agent 使用工具的标准方式，通过结构化的格式实现 LLM 与工具的交互 我们从零构建了一个具备搜索、计算和时间查询能力的 ReAct Agent，展示了工具使用的完整流程 工具系统的扩展需要考虑错误处理、安全性和最佳实践等因素 6.2 未来发展趋势",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "函数调用 Agent 教程"
   },
@@ -9914,6 +11362,35 @@
     "query": "function calling agent tutorial"
   },
   {
+    "url": "https://cnblogs.com/clnchanpin/p/19303272",
+    "source_domain": "cnblogs.com",
+    "dedupe_key": "cnblogs.com/clnchanpin/p/19303272",
+    "title": "ReAct 与 Function Call：两种主流 Agent 技术解析与实践 - 教程",
+    "title_cn": "ReAct 与 Function Call：两种主流 Agent 技术解析与实践 - 教程",
+    "summary": "Dec 3, 2025 · 2. 演进趋势 新一代 Agent 系统（如 AutoGPT）正融合两者优势： 任务规划：通过 ReAct 拆解复杂目标，生成执行流程 具体执行：使用 Function Call 调用预定义函数完成原子操作 长期追踪：结合记忆机制（Memory）管理多阶段任务状态 五、开发实践建议 1. 工具设计原则 原子化：每个工具仅实现单一功能（如 ...",
+    "summary_cn": "Dec 3, 2025 · 2. 演进趋势 新一代 Agent 系统（如 AutoGPT）正融合两者优势： 任务规划：通过 ReAct 拆解复杂目标，生成执行流程 具体执行：使用 Function Call 调用预定义函数完成原子操作 长期追踪：结合记忆机制（Memory）管理多阶段任务状态 五、开发实践建议 1. 工具设计原则 原子化：每个工具仅实现单一功能（如 ...",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "函数调用 Agent 教程"
+  },
+  {
     "url": "https://docs.bentoml.com/en/latest/examples/function-calling.html",
     "source_domain": "docs.bentoml.com",
     "dedupe_key": "docs.bentoml.com/en/latest/examples/function-calling.html",
@@ -9941,6 +11418,35 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://github.com/GiovanniPasq/agentic-rag-for-dummies",
+    "source_domain": "github.com",
+    "dedupe_key": "github.com/giovannipasq/agentic-rag-for-dummies",
+    "title": "GitHub - GiovanniPasq/agentic-rag-for-dummies: A modular ...",
+    "title_cn": "GitHub - GiovanniPasq/agentic-rag-for-dummies: 模块化的...",
+    "summary": "This repository demonstrates how to build an Agentic RAG (Retrieval-Augmented Generation) system using LangGraph with minimal code. Most RAG tutorials show basic concepts but lack guidance on building modular, agent-driven systems — this project bridges that gap by providing both learning materials and an extensible architecture.",
+    "summary_cn": "该存储库演示了如何使用 LangGraph 以最少的代码构建 Agentic RAG（检索增强生成）系统。大多数 RAG 教程都会展示基本概念，但缺乏构建模块化、代理驱动系统的指导 - 该项目通过提供学习材料和可扩展架构来弥补这一差距。",
+    "category": "AIAgent实践",
+    "topic": "RAGAgent实战",
+    "tags": [
+      "RAG",
+      "Agent",
+      "知识库"
+    ],
+    "level": "practice",
+    "score": 9,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "RAG agent tutorial"
   },
   {
     "url": "https://ai-sdk.dev/cookbook/guides/rag-chatbot",
@@ -10028,6 +11534,35 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "RAG Agent 实战"
+  },
+  {
+    "url": "https://dev.to/davidmalickdieng/how-to-build-a-strong-rag-agent-step-by-step-guideby-david-malick-dieng-2cdo",
+    "source_domain": "dev.to",
+    "dedupe_key": "dev.to/davidmalickdieng/how-to-build-a-strong-rag-agent-step-by-step-guideby-david-malick-dieng-2cdo",
+    "title": "How to Build a Strong RAG Agent (Step-by-Step Guide) by David ...",
+    "title_cn": "如何构建强大的 RAG 代理（分步指南）作者：David ...",
+    "summary": "Aug 26, 2025 · How to Build a Strong RAG Agent (Step-by-Step Guide) by David Malick Dieng Introduction Large Language Models (LLMs) are powerful, but they come with a well-known limitation: hallucinations — confidently making things up. That’s where Retrieval-Augmented Generation (RAG) comes in.",
+    "summary_cn": "2025 年 8 月 26 日 · 如何构建强大的 RAG 代理（分步指南） 作者：David Malick Dieng 简介 大型语言模型 (LLM) 很强大，但它们有一个众所周知的局限性：幻觉 - 自信地编造事情。这就是检索增强生成（RAG）的用武之地。",
+    "category": "AIAgent实践",
+    "topic": "RAGAgent实战",
+    "tags": [
+      "RAG",
+      "Agent",
+      "知识库"
+    ],
+    "level": "practice",
+    "score": 8,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "RAG agent tutorial"
   },
   {
     "url": "https://yun.itheima.com/course/1087.html",
@@ -10146,6 +11681,35 @@
     "query": "Agent 评估 可观测性"
   },
   {
+    "url": "https://arxiv.org/abs/2411.05285",
+    "source_domain": "arxiv.org",
+    "dedupe_key": "arxiv.org/abs/2411.05285",
+    "title": "[2411.05285] AgentOps: Enabling Observability of LLM AgentsTop LLM Observability Tools in 2026: A Pro Guide | MLflowAgent Observability: How to Monitor and Evaluate LLM Agents ...LLM Agent Evaluation Metrics in 2026: Tool Calling, Task ...",
+    "title_cn": "[2411.05285] AgentOps：实现 LLM Agents 的可观察性 2026 年顶级 LLM 可观察性工具：专业指南 | MLflowAgent可观察性：如何监控和评估LLM代理...2026年LLM代理评估指标：工具调用、任务...",
+    "summary": "Nov 8, 2024 · Large language model (LLM) agents have demonstrated remarkable capabilities across various domains, gaining extensive attention from academia and industry. However, these agents raise significant concerns on AI safety due to their autonomous and non-deterministic behavior, as well as continuous evolving nature . From a DevOps perspective, enabling observability in agents is necessary to ... May 23, 2026 · The top LLM observability tools in 2026 have matured significantly, but the gap between teams using production-grade monitoring and those flying blind is widening fast. 73% of enterprises require AI agent monitoring in production, yet 63.4% cite a lack of adequate observability tooling as a major barrier. Feb 26, 2026 · Production monitoring for LLM agents requires new observability tools. Learn how to trace, evaluate, and improve AI agents at scale. Jun 1, 2026 · Learn how to evaluate LLM agents end-to-end with tool calling, task completion, reasoning, trace-based evals, human review, and DeepEval code examples.",
+    "summary_cn": "2024年11月8日 · 大语言模型（LLM）代理在各个领域展现了卓越的能力，受到学术界和工业界的广泛关注。然而，由于这些代理的自主性和非确定性行为以及不断进化的性质，引起了人们对人工智能安全的严重担忧。从 DevOps 的角度来看，在代理中实现可观察性是必要的... May 23, 2026 · 2026 年顶级 LLM 可观察性工具已经显着成熟，但使用生产级监控的团队与盲目飞行的团队之间的差距正在迅速扩大。 73% 的企业需要在生产中进行人工智能代理监控，但 63.4% 的企业认为缺乏足够的可观察工具是主要障碍。 2026 年 2 月 26 日 · LLM 代理的生产监控需要新的可观察性工具。了解如何大规模跟踪、评估和改进 AI 代理。 2026 年 6 月 1 日 · 了解如何通过工具调用、任务完成、推理、基于跟踪的评估、人工审查和 DeepEval 代码示例来端到端评估 LLM 代理。",
+    "category": "AIAgent实践",
+    "topic": "Agent评估与可观测性",
+    "tags": [
+      "Agent",
+      "评估",
+      "可观测性"
+    ],
+    "level": "practice",
+    "score": 10,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "LLM agent evaluation observability"
+  },
+  {
     "url": "https://cloud.tencent.com/developer/article/2597944",
     "source_domain": "cloud.tencent.com",
     "dedupe_key": "cloud.tencent.com/developer/article/2597944",
@@ -10262,6 +11826,35 @@
     "query": "LLM agent evaluation observability"
   },
   {
+    "url": "https://mlflow.org/articles/top-llm-observability-tools-in-2026-a-pro-guide",
+    "source_domain": "mlflow.org",
+    "dedupe_key": "mlflow.org/articles/top-llm-observability-tools-in-2026-a-pro-guide",
+    "title": "Top LLM Observability Tools in 2026: A Pro Guide | MLflow",
+    "title_cn": "2026 年顶级 LLM 可观察性工具：专业指南 | ML流",
+    "summary": "May 23, 2026 · The top LLM observability tools in 2026 have matured significantly, but the gap between teams using production-grade monitoring and those flying blind is widening fast. 73% of enterprises require AI agent monitoring in production, yet 63.4% cite a lack of adequate observability tooling as a major barrier.",
+    "summary_cn": "2026 年 5 月 23 日 · 2026 年顶级 LLM 可观测性工具已经显着成熟，但使用生产级监控的团队与盲目飞行的团队之间的差距正在迅速扩大。 73% 的企业需要在生产中进行人工智能代理监控，但 63.4% 的企业认为缺乏足够的可观察工具是主要障碍。",
+    "category": "AIAgent实践",
+    "topic": "Agent评估与可观测性",
+    "tags": [
+      "Agent",
+      "评估",
+      "可观测性"
+    ],
+    "level": "practice",
+    "score": 6,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "LLM agent evaluation observability"
+  },
+  {
     "url": "https://blog.jetbrains.com/pycharm/2026/05/llm-evaluation-and-ai-observability-for-agent-monitoring",
     "source_domain": "blog.jetbrains.com",
     "dedupe_key": "blog.jetbrains.com/pycharm/2026/05/llm-evaluation-and-ai-observability-for-agent-monitoring",
@@ -10277,17 +11870,18 @@
       "可观测性"
     ],
     "level": "practice",
-    "score": 5,
+    "score": 6,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.92260116,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
-    "seen_count": 1,
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
     "query": "LLM agent evaluation observability"
   },
   {
@@ -10309,13 +11903,43 @@
     "score": 5,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.87807417,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-04 00:03:23",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
+    "last_seen": "2026-07-04",
+    "seen_count": 2,
+    "query": "LLM agent evaluation observability"
+  },
+  {
+    "url": "https://langfuse.com/blog/2024-07-ai-agent-observability-with-langfuse",
+    "source_domain": "langfuse.com",
+    "dedupe_key": "langfuse.com/blog/2024-07-ai-agent-observability-with-langfuse",
+    "title": "AI Agent Observability, Tracing & Evaluation with Langfuse",
+    "title_cn": "使用 Langfuse 进行 AI 代理的可观察性、追踪和评估",
+    "summary": "Feb 20, 2026 · What is AI Agent Observability? Observing agents means tracking and analyzing the performance, behavior, and interactions of AI agents. This includes real-time monitoring of multiple LLM calls, control flows, decision-making processes, and outputs to ensure agents operate efficiently and accurately. Langfuse is an open-source AI engineering platform that provides deep insights into metrics ...",
+    "summary_cn": "2026 年 2 月 20 日 · 什么是 AI 代理可观察性？观察代理意味着跟踪和分析人工智能代理的性能、行为和交互。这包括实时监控多个 LLM 呼叫、控制流、决策过程和输出，以确保代理高效、准确地运作。 Langfuse 是一个开源人工智能工程平台，可提供对指标的深入见解...",
+    "category": "AIAgent实践",
+    "topic": "Agent评估与可观测性",
+    "tags": [
+      "Agent",
+      "评估",
+      "可观测性"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
     "seen_count": 1,
     "query": "LLM agent evaluation observability"
   },

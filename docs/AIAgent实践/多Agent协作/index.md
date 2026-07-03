@@ -219,6 +219,74 @@ graph.add_conditional_edges(
 
 ---
 
+## 🆕 2026 最新进展
+
+### 2026：多 Agent 从研究概念走向生产实践
+
+2025-2026 年是多 Agent 系统的分水岭。根据 [多智能体协作入门：概念、模式与上手路径](https://wcowin.work/develop/AI/multi-agent) 的总结，多 Agent 已从学术概念进入实际工程讨论——**但是否值得采用，关键看任务复杂度和协调成本**。核心原则：小任务优先用单 Agent，复杂任务再上多智能体。
+
+### 三大新趋势
+
+#### 1. 扁平路由模型（OpenClaw）
+传统的层级管理模型（一个 Supervisor Agent 调度多个 Worker）不再是唯一选择。OpenClaw 采用的**扁平路由模型**让 Gateway 根据消息来源直接路由到对应 Agent，没有"管理者 Agent"：
+
+```
+消息源（Discord/Telegram/Slack）→ Gateway → 按 channel 路由 → 对应 Agent
+```
+
+每个 Agent 通过 `channel routing` 配置绑定到不同频道，各司其职——编程问题由编程 Agent 处理，生活问题由生活 Agent 处理。
+
+> 来源：[GitHub: OpenClaw 多Agent协作指南](https://github.com/KimYx0207/AI-Coding-Guide-Zh/blob/main/docs/openclaw/08-%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%8C%87%E5%8D%97.md)
+
+#### 2. Google ADK 多 Agent 系统
+Google 的 **Agent Development Kit (ADK)** 提供了三种 Agent 类型：
+
+| Agent 类型 | 说明 | 适用场景 |
+|-----------|------|---------|
+| LLM Agent | 纯 LLM 驱动的 Agent，支持工具调用 | 通用对话、问答 |
+| Workflow Agent | 预定义工作流，确定性执行 | 数据管道、审批流程 |
+| Custom Agent | 完全自定义逻辑 | 有特殊业务规则的场景 |
+
+ADK 支持层级结构（Hierarchical），上层 Agent 可委派子任务给下层 Agent，通过结构化的通信机制传递上下文和结果。
+
+> 来源：[Google Cloud: Building Collaborative AI — Multi-Agent Systems with ADK](https://cloud.google.com/blog/topics/developers-practitioners/building-collaborative-ai-a-developers-guide-to-multi-agent-systems-with-adk)
+
+#### 3. 协作架构四模式标准化
+
+2026 年，多 Agent 协作的架构模式已收敛为四种核心形态：
+
+| 模式 | 工作方式 | 典型框架 | 适用场景 |
+|------|---------|---------|---------|
+| **流水线（Pipeline）** | Agent 依次处理，前一个输出是后一个输入 | CrewAI Sequential | 写作→编辑→审核 |
+| **路由分发（Router）** | 调度 Agent 按意图分发到专家 Agent | Dify 工作流 | 客服系统 |
+| **辩论/投票（Debate）** | 多 Agent 独立作答，投票取共识 | AutoGen GroupChat | 高准确率问答 |
+| **层级管理（Hierarchical）** | 主管拆解任务、工人执行、主管汇总 | Google ADK, LangGraph | 复杂研究、报告生成 |
+
+### 2026 框架全景对比
+
+| 框架 | 最新定位 | 核心优势 | 2026 年重点 |
+|------|---------|---------|------------|
+| **LangGraph** | 生产级编排引擎 | 图结构、条件分支、状态持久化 | 复杂工作流的可靠性 |
+| **CrewAI** | 角色分工型 | 低代码、快速原型、高层 API | 业务编排、内容生产 |
+| **AutoGen** | 对话式协作 | 多 Agent 对话、灵活模式 | 微软生态集成 |
+| **Dify** | 可视化工作流 | 拖拽式编排，零代码入门 | 多 Agent 工作流 + RAG + MCP |
+| **MetaGPT** | 虚拟软件公司 | Code=SOP(Team)，从需求到代码 | 软件开发自动化 |
+| **ChatDev** | 研究导向 | 清华开源，模拟完整软件团队 | 教学研究 |
+| **OpenClaw** | 扁平路由 | 无中心调度，消息源路由 | 多平台 Agent 矩阵 |
+
+### 生产实践：成本与可靠性
+
+多 Agent 系统的最大挑战不是技术而是**成本**——每多一个 Agent 就多一轮 LLM 调用，延迟和 token 消耗成倍上升。2026 年的最佳实践：
+
+1. **混合模型策略**：复杂推理用强模型（GPT-4o/Claude），简单任务用轻模型（GPT-4o-mini/Haiku）
+2. **上下文压缩**：多 Agent 传递时对历史对话做摘要，避免上下文膨胀
+3. **步数上限**：每个 Agent 和整个编排流程都设硬上限，防止死循环
+4. **人工确认节点**：关键决策（如发邮件、修改数据库）前插人工审批
+
+> 来源：[DEV Community: 多Agent协作架构模式实战](https://dev.to/marufhassan/multi-agent-collaboration-architecture-patterns-a-practical-guide-from-hierarchical-planning-to-dynamic-orchestration-55gg)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -226,9 +294,9 @@ graph.add_conditional_edges(
 <!-- RESOURCES_START -->
 
 - 后台候选资料：4 条，覆盖 4 个来源域名。
-- 最近采集日期：2026-07-02。
+- 最近采集日期：2026-07-04。
 - 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-03 00:15:41*
+*资源区块更新时间：2026-07-04 00:07:49*

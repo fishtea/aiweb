@@ -196,13 +196,45 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 - **移动端支持不如 TensorFlow Lite**
 - **C++ API 不如 Python API 完善**
 
+## 2026 年最新进展：PyTorch 2.12
+
+根据 [PyTorch 官方教程](https://pytorch.org/tutorials/) 和 [PyTorch 官方博客](https://pytorch.org/blog/)，PyTorch 2.12 于 2026 年初发布，持续巩固其在深度学习研究与生产中的主导地位。
+
+### 1. PyTorch 2.12 核心更新
+
+| 特性 | 说明 |
+|------|------|
+| **torch.compile 持续优化** | 编译后推理速度相比 2.0 提升 40-50%，覆盖更多动态算子 |
+| **FlexAttention 稳定版** | 灵活自定义注意力变体（Flash Attention、稀疏注意力等），兼顾性能与定制 |
+| **TorchTitan 成熟** | Meta 官方大模型预训练框架，支持 Llama 4、Qwen 3 等主流架构的分布式训练 |
+| **torch.export 增强** | 模型导出到标准格式（ExecuTorch、TensorRT）更稳定，推理部署链路完善 |
+| **CUDA 12.6+ / cu130 支持** | 最新 GPU 架构原生支持，训练效率进一步提升 |
+
+### 2. PyTorch 在 2026 年 AI 生态中的地位
+
+| 领域 | PyTorch 角色 |
+|------|-------------|
+| **LLM 训练** | 事实标准。Megatron-LM、DeepSpeed、FSDP2 全栈基于 PyTorch |
+| **LLM 微调** | PEFT、TRL、Unsloth、LLaMA Factory 均依赖 PyTorch |
+| **AI 研究论文** | 超过 85% 的顶级会议论文（NeurIPS、ICML、ICLR）使用 PyTorch |
+| **多模态模型** | LLaVA、CLIP、Stable Diffusion 3 等均基于 PyTorch 实现 |
+| **边缘推理** | ExecuTorch 正在追赶 TensorFlow Lite 的移动端部署体验 |
+
+### 3. 2026 年学习路径推荐
+
+1. **基础入门**：完成 [PyTorch 60 分钟快速入门](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html)
+2. **进阶实操**：跟随 [Learn the Basics 系列](https://pytorch.org/tutorials/beginner/basics/intro.html)（Tensors → DataLoaders → Build Model → Autograd → Optimization → Save/Load）
+3. **torch.compile**：学习 `torch.compile(model)` 一行代码加速推理
+4. **分布式训练**：研究 TorchTitan 或 FSDP2 进行大模型训练
+5. **生产部署**：搭配 vLLM / TensorRT-LLM 或 ExecuTorch 部署模型
+
 ---
 
 **参考资料：**
 - [PyTorch Tutorial (GeeksForGeeks)](https://www.geeksforgeeks.org/deep-learning/pytorch-tutorial-2)
 - [UvA DL Notebooks — Introduction to PyTorch](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html)
-- [NTU PyTorch Tutorial PDF](https://speech.ee.ntu.edu.tw/~hylee/GenAI-ML/2025-fall-course-data/Pytorch%20Tutorial.pdf)
-- [Learn PyTorch in 5 Projects (freeCodeCamp)](https://www.youtube.com/watch?v=E0bwEAWmVEM)
+- [PyTorch 官方教程 — Learn the Basics](https://pytorch.org/tutorials/beginner/basics/intro.html)
+- [PyTorch 官方博客](https://pytorch.org/blog/)
 - [Best Resources to Learn PyTorch 2025 (Reddit)](https://www.reddit.com/r/learnmachinelearning/comments/1j5trra/best_resources_to_learn_pytorch_in_2025)
 
 ---
@@ -219,4 +251,4 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-03 00:15:41*
+*资源区块更新时间：2026-07-04 00:07:49*

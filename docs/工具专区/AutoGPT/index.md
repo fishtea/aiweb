@@ -160,11 +160,61 @@ AutoGPT 作为先驱验证了"LLM 自主循环"的可行性，但也暴露了第
 
 ---
 
+## 2026 年重大演进：AutoGPT Platform
+
+根据 [AutoGPT 官方文档](https://docs.agpt.co/) 和 [GitHub 仓库](https://github.com/Significant-Gravitas/AutoGPT)，AutoGPT 在 2026 年经历了从"单一命令行 Agent"到"完整 Agent 平台"的范式转型。
+
+### 1. AutoGPT Platform 架构
+
+新平台分为两大组件：
+
+| 组件 | 功能 |
+|------|------|
+| **AutoGPT Server** | 后端运行引擎，包含源码、基础设施和市场（Marketplace） |
+| **AutoGPT Frontend** | 可视化界面，含 Agent Builder、工作流管理、部署控制台 |
+
+### 2. 核心新功能
+
+- **Agent Builder（低代码代理构建器）**：通过拖拽 blocks 构建自动化工作流，无需编写代码
+- **Blocks 系统**：每个 block 代表一个原子动作（调用外部服务、数据处理、AI 决策等），用户可自定义
+- **Marketplace**：预构建 Agent 市场，一键部署常见场景
+- **云托管 Beta 版**：加入 waitlist 即可使用，无需自建基础设施
+- **一键安装脚本**：`curl -fsSL https://setup.agpt.co/install.sh -o install.sh && bash install.sh`
+
+### 3. 支持的模型（2026）
+
+AutoGPT Platform 现在支持主流 LLM 提供商，包括但不限于：
+
+- **Google DeepMind**: Gemini 3、2.5、2.0
+- **Anthropic**: Claude Opus、Sonnet、Haiku
+- **DeepSeek**: DeepSeek R1、V3
+- **Alibaba**: Qwen 3
+- **OpenAI**: GPT-5、GPT-4.1、O3
+- **Meta**: Llama 4、Llama 3
+- **Mistral**: Mistral Large、Medium、Small
+- **xAI**: Grok 4、Grok 3
+- **Moonshot AI**: Kimi K2
+- **Amazon**: Nova Pro、Lite、Micro
+- **Microsoft**: Phi-4、WizardLM 2
+- **Cohere**: Command A、Command R
+
+### 4. 许可模型更新
+
+| 组件 | 许可 |
+|------|------|
+| `autogpt_platform/` | Polyform Shield（开发中平台代码） |
+| 其余所有（classic、forge、benchmark、frontend 等） | MIT |
+
+> AutoGPT 从"命令行玩具"进化为"可托管的低代码 Agent 平台"，这在 2026 年是一个重要的转折点——它不再只是一个自主循环的演示，而是面向生产环境的完整平台。
+
+---
+
 **参考资料：**
 - [What Is AutoGPT? A 2025 Guide (Medium)](https://medium.com/lets-code-future/what-is-autogpt-a-2025-guide-for-developers-on-autonomous-ai-agents-187870d52603)
 - [Building Autonomous AI Agents 2025 Guide (Facebook/Medium)](https://medium.com/@Micheal-Lanham/building-the-future-your-guide-to-autonomous-ai-agents-in-2025-fb690ebc1caa)
-- [Top AI Agent Tools 2025 (YouTube)](https://www.youtube.com/watch?v=agZMp2PMydQ)
 - [AutoGPT GitHub](https://github.com/Significant-Gravitas/AutoGPT)
+- [AutoGPT 官方文档](https://docs.agpt.co/)
+- [AutoGPT Platform — Self-Hosting Guide](https://docs.agpt.co/platform/self-hosting/getting-started)
 
 ---
 
@@ -180,4 +230,4 @@ AutoGPT 作为先驱验证了"LLM 自主循环"的可行性，但也暴露了第
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-03 00:15:41*
+*资源区块更新时间：2026-07-04 00:07:49*

@@ -230,6 +230,96 @@ docker run -d -p 3000:8080 \
 
 ---
 
+## 2026 年生态概览：模型推荐与工具对比
+
+2026 年本地 LLM 生态已高度成熟，参考 [SegmentFault 选型指南](https://segmentfault.com/a/1190000047650440) 和 [Pinggy 2026 工具排行](https://pinggy.io/blog/top_5_local_llm_tools_and_models)：
+
+### 2026 年 Ollama 关键数据
+
+- **GitHub Stars**：165k（截至 2026 年 3 月），40,000+ 社区集成
+- **模型库**：200+ 模型，涵盖 Llama 4、Qwen 3.5、DeepSeek-R1/V3、Gemma 4、Kimi K2.6、GPT-OSS 等全部主流开源模型
+- **新能力**：原生 `ollama launch kimi` 命令支持 Kimi Agent 工作流；MLX 优化大幅提升 Apple Silicon 推理速度
+- **版本迭代**：约每两周一次更新，v0.17.x 系列（2026年3月）
+
+### 2026 年本地 Agent 任务模型推荐（OpenClaw 社区验证）
+
+| 推荐优先级 | 模型 | 优势 | 拉取命令 |
+|-----------|------|------|----------|
+| ⭐ 首推 | **Qwen3-Coder:32B** | 工具调用稳定性最佳，中文顶级，推理连贯 | `ollama pull qwen3-coder:32b` |
+| ⭐ 高性价比 | **GLM-4.7-Flash** | 30B 级中工具调用精度最高，"比同级 Qwen 更听话" | `ollama pull glm-4.7-flash` |
+| Agent 专用 | **GPT-OSS:20B** | OpenAI 首个开源模型，Agent 场景优化 | `ollama pull gpt-oss:20b` |
+| 通用标杆 | **Llama 3.3:70B** | Meta SOTA，通用性极强（需 48GB+ VRAM） | `ollama pull llama3.3:70b` |
+| 推理编码 | **DeepSeek-R1:32B** | 逻辑推理 + 编码专项 | `ollama pull deepseek-r1:32b` |
+
+### 2026 年本地 LLM 工具生态对比
+
+| 工具 | 定位 | 界面 | 适用人群 | 亮点 |
+|------|------|------|----------|------|
+| **Ollama** | 命令行 + REST API | CLI | 开发者/工程师 | 200+ 模型，OpenAI 兼容 API，165k Stars |
+| **LM Studio** | 图形界面 | GUI | 非技术用户 | 内置模型搜索，可视化参数调优 |
+| **text-generation-webui** | 功能丰富的 Web UI | Web | 高级用户 | 支持 GGUF/GPTQ/AWQ，插件扩展 |
+| **GPT4All** | 桌面应用 | Desktop | 入门用户 | 开箱即用，预配置模型 |
+| **Jan** | 离线 ChatGPT 替代 | GUI | 普通用户 | 100% 离线，Cortex 引擎 |
+| **LocalAI** | OpenAI API 替代 | REST API | DevOps/后端 | Docker 原生，多架构支持 |
+
+### 硬件选择建议
+
+| 显存/内存 | 推荐模型 | 体验评价 |
+|-----------|---------|---------|
+| 8–16GB | qwen3-coder:14b / glm-4.7-flash | 勉强可用，需优化 prompt |
+| 24–32GB | qwen3-coder:32b / glm-4.7 | **"甜蜜点"**，性能与资源消耗最佳平衡 |
+| 48GB+ | llama3.3:70b / qwen3:72b | 通用性顶级，接近闭源模型水平 |
+| Apple Silicon (M1 Max+) | Qwen / GLM 系列 | 对 Apple Silicon 优化优秀 |
+
+> **结论**：2026 年 Ollama 仍是本地 LLM 的事实标准。对 Agent 任务，Qwen3-Coder 和 GLM-4.7-Flash 是性价比最高的选择。如需图形界面，LM Studio 是首选补充。
+
+### 参考来源
+
+- [Ollama 选型指南：本地大模型运行工具全面解析（2026）— SegmentFault](https://segmentfault.com/a/1190000047650440)
+- [Top 5 Local LLM Tools and Models in 2026 — Pinggy](https://pinggy.io/blog/top_5_local_llm_tools_and_models)
+- [2026 年 OpenClaw 最佳 Ollama 本地模型推荐 — CSDN](https://aicoding.csdn.net/6a23e6b610ee7a33f278ab72.html)
+- [不想数据上传云端？2026年本地部署AI大模型完全指南 — 知乎](https://zhuanlan.zhihu.com/p/2015729095867138141)
+
+### v0.31.1: Gemma 4 Apple Silicon 大幅加速 (2026年6月30日)
+
+2026年6月30日，Ollama 发布 **v0.31.1**，核心亮点是 **Gemma 4 在 Apple Silicon 上推理速度提升近 90%**。
+
+**多 Token 预测（MTP）自动调优：**
+
+- Ollama 利用 Gemma 4 原生的多 token 预测能力，在 Apple Silicon 上自动调优草稿 token 数量（无需任何配置）。
+- 在编程 Agent 基准测试中，**tokens/秒生成速度平均提升约 90%**，且不改变模型输出质量。
+- 默认开启，对用户完全透明。
+
+**MLX 引擎更新：**
+
+- 收紧 Gemma 4 MoE 模型加载流程
+- 更新至最新 MLX 版本，新增小批量矩阵乘法内核
+- llama.cpp 后端更新至 build 9840
+- 统一并调优推测解码（speculative decoding）在 MLX runner 中的行为
+
+### v0.30.x 近期功能亮点
+
+| 版本 | 日期 | 关键变化 |
+|------|------|---------|
+| v0.30.11 | 6月25日 | `ollama launch` 支持 Claude Code/openCode 自动安装；Vulkan 混合显卡修复；推测解码统一调优 |
+| v0.30.12-rc0 | 6月29日 | 工具调用 JSON 解析增强（忽略字符串内花括号）；MLX 依赖更新 |
+| v0.31.1 | 6月30日 | Gemma 4 MTP Apple Silicon 加速 ~90%；MLX + llama.cpp 引擎更新 |
+
+**重要趋势：`ollama launch` 生态成形**
+
+`ollama launch` 命令正在成为 Ollama 生态的核心入口：
+- 支持 **Kimi K2.6 Agent 工作流**（`ollama launch kimi`）
+- 自动检测并安装 **Claude Code** / **openCode**
+- 模型漂移检测——Codex App UI 切换模型时自动适配
+- 这意味着 Ollama 正从"本地模型运行器"进化为"本地 Agent 运行时"
+
+### 参考来源
+- [Ollama v0.31.1 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.1)
+- [Ollama v0.30.11 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.30.11)
+- [Ollama 官方 GitHub](https://github.com/ollama/ollama)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -237,9 +327,9 @@ docker run -d -p 3000:8080 \
 <!-- RESOURCES_START -->
 
 - 后台候选资料：4 条，覆盖 4 个来源域名。
-- 最近采集日期：2026-07-02。
+- 最近采集日期：2026-07-04。
 - 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-03 00:15:41*
+*资源区块更新时间：2026-07-04 00:07:49*

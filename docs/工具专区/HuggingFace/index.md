@@ -181,6 +181,76 @@ huggingface-cli login
 
 ---
 
+## 2026 年重磅发布：smolagents 轻量级 Agent 框架
+
+[HuggingFace smolagents](https://huggingface.co/docs/smolagents/en/index) 是 HuggingFace 团队在 2025 年底推出的开源 Python Agent 框架，2026 年持续高速迭代，已成为构建 AI Agent 的最简路径之一。参考[官方文档](https://huggingface.co/docs/smolagents/en/index)和 [Morph 深度解析](https://www.morphllm.com/smolagents)。
+
+### 核心理念
+
+> 整个 Agent 循环的核心逻辑仅约 **1,000 行代码**，保持最小抽象，让开发者直面原始代码逻辑。
+
+### 关键特性
+
+| 特性 | 说明 |
+|------|------|
+| **CodeAgent（独有设计）** | Agent 直接生成并执行 Python 代码来调用工具和执行计算，而非传统 JSON/文本格式的工具调用。支持函数嵌套、循环、条件判断，天然具备可组合性 |
+| **安全沙箱** | 通过 [Modal](https://modal.com/)、[E2B](https://e2b.dev/)、[Blaxel](https://blaxel.ai) 或 Docker 提供安全的代码执行环境 |
+| **ToolCallingAgent** | 同时支持传统 JSON/文本工具调用模式，适合需要标准工具调用范式的场景 |
+| **模型无关** | 支持 HuggingFace Inference Providers、OpenAI、Anthropic、LiteLLM 集成，以及本地 Transformers/Ollama 推理 |
+| **模态无关** | 除文本外支持图像、视频、音频输入（参见 [Web Browser 教程](https://huggingface.co/docs/smolagents/en/examples/web_browser)） |
+| **工具无关** | 可使用 MCP Server 工具、LangChain 工具、甚至 Hub Space 作为工具 |
+| **Hub 深度集成** | 一键分享/加载 Agent 和工具到 Hub，以 Gradio Spaces 形式发布 |
+| **CLI 工具** | 内置 `smolagent` 和 `webagent` 命令行工具，无需写样板代码即可快速运行 Agent |
+
+### 快速上手
+
+```python
+from smolagents import CodeAgent, DuckDuckGoSearchTool, HfApiModel
+
+# 初始化 Agent
+agent = CodeAgent(
+    tools=[DuckDuckGoSearchTool()],
+    model=HfApiModel()
+)
+
+# 执行任务
+agent.run("How many seconds would it take a cheetah at top speed to run across the Golden Gate Bridge?")
+```
+
+Agent 会自动：搜索金门大桥长度 → 搜索猎豹最高速度 → 计算时间 → 返回结果。
+
+### 版本演进（2025末–2026）
+
+| 版本 | 重点更新 |
+|------|---------|
+| **v1.2.0** | 新增 OpenAI 服务器模型支持，大幅简化 Model 类设计，移除 torch 依赖将导入时间减半，增加 OpenTelemetry 可观测性支持 |
+| **v1.1.0** | `max_iterations` → `max_steps`，CodeAgent 缺失导入警告，DuckDuckGo 搜索工具支持 `max_results` 参数 |
+
+### smolagents vs 其他 Agent 框架
+
+| 对比维度 | smolagents | LangChain/LangGraph | CrewAI | AutoGen |
+|----------|-----------|---------------------|--------|---------|
+| 代码量 | ~1,000 行 | 数万行 | 中等 | 中等 |
+| 学习曲线 | 极低 | 中–高 | 低–中 | 中 |
+| 独特优势 | CodeAgent 设计，极致简洁 | 生产级 Checkpointing、多 Agent 编排 | 角色化 Agent | 对话式多 Agent |
+| 适用场景 | 快速原型、教学、轻量部署 | 复杂生产工作流 | 角色扮演式多 Agent | 对话驱动工作流 |
+| Hub 集成 | 原生深度集成 | 不适用 | 不适用 | 不适用 |
+
+### HuggingFace Agents Course
+
+2026 年 HuggingFace 还推出了免费的 [Agents Course](https://huggingface.co/learn/agents-course)，以 smolagents 为主线教学框架，涵盖 Code Agent、Tool Calling Agent、Retrieval Agent、多 Agent 编排、视觉 Agent 和 Web Browser Agent 等实战内容。
+
+> **结论**：smolagents 以极致简洁的设计降低了 Agent 开发门槛，特别适合快速原型和教学场景。对于需要生产级 Checkpointing、复杂多 Agent 编排的场景，LangGraph 仍是更成熟的选择。
+
+### 参考来源
+
+- [smolagents 官方文档 — HuggingFace](https://huggingface.co/docs/smolagents/en/index)
+- [Smolagents: HuggingFace's 1,000-Line Agent Framework — Morph](https://www.morphllm.com/smolagents)
+- [Introduction to smolagents — Agents Course](https://huggingface.co/learn/agents-course/unit2/smolagents/introduction)
+- [smolagents GitHub — huggingface/smolagents](https://github.com/huggingface/smolagents)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -193,4 +263,4 @@ huggingface-cli login
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-03 00:15:41*
+*资源区块更新时间：2026-07-04 00:07:49*

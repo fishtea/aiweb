@@ -149,6 +149,93 @@ KV Cache 是推理优化中最重要的概念。对于 Llama 3 70B（80 层、8 
 - [How to Deploy an LLM On-Premise (2026): GPU Sizing & vLLM](https://iternal.ai/how-to-deploy-llm-on-premise)
 - [Reducing LLM Inference Cost: A Practical Guide to Optimization & Inference Engineering](https://medium.com/@vyaswanth965/reducing-llm-inference-cost-a-practical-guide-to-optimization-inference-engineering-984022586def)
 
+### 2026年推理成本管理与弹性伸缩实战
+
+#### 云 vs 本地：2026年成本对照
+
+根据行业部署数据，本地 GPU 集群在全利用率下比云按需定价便宜 **8-18 倍**，但前提是 GPU 日均使用 > 4-5 小时：
+
+| 部署方式 | 月成本（70B 模型/中等流量） | 适用场景 |
+|---------|--------------------------|---------|
+| 云 API（GPT-4o/Claude） | $10K-50K+ | 低延迟启动、不固定流量、PoC |
+| 云 GPU 按需（H100×2） | $5K-10K | 中等流量、弹性需求 |
+| 云 GPU 预留（1年） | $3K-6K | 稳定流量、成本可控 |
+| 自建 H100×2 集群 | $2K-4K | 高利用率、数据主权 |
+| 自建消费级（3090/4090×4） | $1K-2K | 小模型推理、原型 |
+
+> **2026 年关键变化**：NVIDIA H200 / B200 上市后，H100 云实例价格下降 20-30%。对于 < 1000 万 token/月的低流量场景，云 API 仍是最经济的零运维选择。
+
+#### GPU 利用率优化
+
+GPU 利用率是推理成本的直接杠杆——每提升 10% 利用率≈成本降 10%：
+
+- **Continuous Batching**：利用率从 30-40% → 80-90%（vLLM 默认启用）
+- **Prefix Caching**：共享 System Prompt 场景下，TTFT 降低 50-80%，等效节省 GPU 时间
+- **量化**：FP8（H100）内存减半→同 GPU 承载 2× 并发请求
+- **Speculative Decoding**：低并发延迟敏感场景 2-3× 解码加速
+
+**实际案例**：一台 H100 运行 Llama 3 70B FP8 + vLLM Continuous Batching，典型并发 32 时月成本约 $1,500-2,500（自建摊销），同等能力云 API 约 $8,000-15,000。
+
+#### 弹性伸缩模式
+
+```
+                          ┌──────────────┐
+                          │  Load Balancer│
+                          │  (Nginx/Envoy)│
+                          └──────┬───────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              ▼                  ▼                  ▼
+    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+    │  Base Pool  │    │  Burst Pool │    │  Fallback   │
+    │  (常驻 2×H100)│   │ (竞价 GPU)  │    │  (小模型)    │
+    └─────────────┘    └─────────────┘    └─────────────┘
+```
+
+- **Base Pool（常驻池）**：处理基线流量，预留实例或自建。运行主模型（如 Llama 3 70B）。
+- **Burst Pool（弹性池）**：应对流量尖峰，使用竞价/Spot 实例（成本降低 60-70%）。由 KEDA/Prometheus 触发扩容。
+- **Fallback（降级链路）**：竞价实例不可用时，切换至小模型（如 Llama 3 8B）+ 缓存兜底。
+
+#### vLLM 生产监控指标
+
+vLLM 通过 `--enable-metrics` 暴露 Prometheus 端点，关键指标：
+
+| 指标 | 含义 | 告警阈值建议 |
+|------|------|------------|
+| `vllm:request_success_total` | 成功请求数 | —（趋势监控） |
+| `vllm:time_to_first_token_seconds` | 首 token 延迟 | P95 > 2s 告警 |
+| `vllm:time_per_output_token_seconds` | 每 token 生成延迟 | P95 > 50ms 告警 |
+| `vllm:num_requests_running` | 当前并发请求数 | > max_num_seqs × 0.8 |
+| `vllm:num_requests_waiting` | 排队请求数 | > 0 持续 30s |
+| `vllm:gpu_cache_usage_perc` | KV 缓存使用率 | > 90% 告警（即将 OOM） |
+| `vllm:prefix_cache_hit_rate` | 前缀缓存命中率 | < 30%（优化信号） |
+
+**Grafana Dashboard 推荐布局：**
+
+1. **延迟面板**：TTFT P50/P95/P99、TPOT（每 token 延迟）
+2. **吞吐面板**：请求数/秒、token/秒（输入+输出）
+3. **资源面板**：GPU 利用率、GPU 显存、KV 缓存使用率
+4. **质量面板**：错误率、超时率、缓存命中率
+
+#### NVIDIA NIM 与 vLLM 对比（2026年更新）
+
+| 维度 | vLLM | NVIDIA NIM |
+|------|------|-----------|
+| 开源 | ✅ Apache 2.0 | ❌ 专有许可 |
+| 模型支持 | 200+ 架构 | NVIDIA 优化模型 |
+| 性能 | 社区 SOTA | 企业级极致优化 |
+| 部署复杂度 | 中等（pip/Docker） | 低（容器一键） |
+| 多后端 | CUDA/ROCm/XPU/CPU | CUDA only |
+| 企业支持 | 社区/Anyscale/Red Hat | NVIDIA 企业支持 |
+| 适用场景 | 通用生产推理 | 企业 NVIDIA 全栈 |
+
+> **2026 年建议**：多数场景优先 vLLM（开源 + 多后端）；纯 NVIDIA 企业环境且需要 SLA 保障时选 NIM。
+
+### 参考来源
+- [LLM Deployment vLLM vs NIM: Cost & Performance Comparison (2026)](https://www.dataknobs.com/generative-ai/llm-deployment-vllm-nim.html)
+- [vLLM Metrics & Monitoring Documentation](https://docs.vllm.ai/en/latest/usage/metrics.html)
+- [NVIDIA NIM Official Documentation](https://developer.nvidia.com/nim)
+
 ---
 
 ## 资料整理状态
@@ -163,4 +250,4 @@ KV Cache 是推理优化中最重要的概念。对于 Llama 3 70B（80 层、8 
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-03 00:15:41*
+*资源区块更新时间：2026-07-04 00:07:49*
