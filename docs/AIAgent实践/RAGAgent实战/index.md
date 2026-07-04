@@ -245,6 +245,114 @@ Agentic RAG：检索 → 评估 → (不够则)细化检索词 → 再检索 →
 
 > 来源：[DEV Community: From Zero to Hero — Building Your First LangChain Agent with RAG](https://dev.to/vaib/from-zero-to-hero-building-your-first-langchain-agent-with-rag-1c8h)、[DEV Community: RAG in 2026 — A Practical Blueprint](https://dev.to/suraj_khaitan_f893c243958/-rag-in-2026-a-practical-blueprint-for-retrieval-augmented-generation-16pp)
 
+### 查询策略：检索质量的核心杠杆
+
+2026 年 RAG Agent 的一个关键认知是：**大多数弱 RAG 回答不是生成问题，而是检索问题**。一个模糊的用户查询往往需要多个检索策略来覆盖。以下是被生产实践证明有效的三种核心查询策略：
+
+| 策略 | 做法 | 为什么有效 | 适用场景 |
+|------|------|-----------|---------|
+| **查询扩展（Query Expansion）** | 将用户问题改写为多个同义变体，分别检索后合并 | 不同措辞命中不同词汇，提高召回 | 用户用词不精确的 FAQ |
+| **子问题分解（Sub-Query）** | 先问更高层次的问题确定领域，再向下检索 | 减少词汇不匹配，锚定检索方向 | 技术文档、法律条文检索 |
+| **假设文档嵌入（HyDE）** | 先生成一个假设回答，用该回答的 Embedding 检索 | 假设回答包含领域术语，提升精度 | 知识库稀疏的长尾问题 |
+
+**查询扩展的 Python 实现**：
+
+```python
+from langchain_core.prompts import ChatPromptTemplate
+
+query_expansion_prompt = ChatPromptTemplate.from_messages([
+    ("system", "你是一个查询扩展助手。请将用户的原始问题改写成3个不同的同义问法。"),
+    ("human", "原始问题：{question}\\n请输出互不相同的3个变体，每行一个。")
+])
+
+def expand_query(question: str, llm) -> list[str]:
+    response = llm.invoke(query_expansion_prompt.format(question=question))
+    variants = [v.strip() for v in response.content.split("\\n") if v.strip()]
+    return [question] + variants[:3]
+
+# 所有变体分别检索，结果去重合并
+all_results = []
+for q in expanded:
+    docs = retriever.get_relevant_documents(q)
+    all_results.extend(docs)
+# 按相关性去重排序
+unique_results = deduplicate_by_score(all_results)
+```
+
+> 来源：[DEV Community — RAG in 2026: A Practical Blueprint](https://dev.to/suraj_khaitan_f893c243958/-rag-in-2026-a-practical-blueprint-for-retrieval-augmented-generation-16pp)
+
+### 多源检索路由
+
+生产级 RAG Agent 很少只有一种数据源。当同时拥有向量数据库、关系型数据库和图数据库时，核心设计决策变成了：**如何将用户问题路由到正确的检索器？**
+
+```
+用户问题
+    ↓
+[路由决策层]
+    ├── 涉及数值 → 路由到 Text-to-SQL 检索器（查关系型数据库）
+    ├── 涉及概念 → 路由到向量检索器（查文档知识库）
+    ├── 涉及关系 → 路由到图检索器（查图数据库）
+    ├── 涉及实时性 → 路由到 Web Search
+    └── 通用问题 → 路由到综合检索器（多源融合）
+```
+
+两种主流路由模式：
+
+1. **规则路由**：用轻量级分类器或关键词规则判断意图
+   - "如果问题包含 '收入'、'利润' → 查询 SQL"
+   - "如果问题包含 '政策'、'规定' → 查询手册索引"
+
+2. **语义路由**：用 Embedding 或小模型判断问题与哪种检索器最匹配
+   - 预计算每个检索器的"代表性问题"的 Embedding
+   - 新问题与各检索器的 Embedding 做相似度匹配
+   - 选择相似度最高的检索器
+
+### 混合检索策略
+
+单一检索方式（纯向量搜索）在 2026 年已不满足生产需求。推荐**混合检索**架构——同时使用多种检索方式并融合结果：
+
+```python
+class HybridRetriever:
+    def __init__(self):
+        self.vector_retriever = VectorRetriever()   # 语义搜索
+        self.keyword_retriever = BM25Retriever()     # 关键词搜索
+        self.reranker = CohereRerank()               # 重排序
+
+    def retrieve(self, query: str, top_k: int = 10):
+        # 1. 并行检索：向量搜索 + 关键词搜索
+        vector_results = self.vector_retriever(query, k=20)
+        keyword_results = self.keyword_retriever(query, k=20)
+
+        # 2. 合并去重
+        all_results = merge_and_dedupe(
+            vector_results, keyword_results
+        )
+
+        # 3. 重排序：用更精确的模型重新排序
+        reranked = self.reranker.rerank(
+            query=query, documents=all_results[:30]
+        )
+
+        return reranked[:top_k]
+```
+
+**重排序（Reranking）** 是提升 RAG 质量性价比最高的"单一改动"——无需改索引、无需改分块策略，加一个 reranker 通常能提升 15-25% 的检索准确率。
+
+### 2026 RAG Agent 生产级检查清单
+
+| 层级 | 检查项 | 说明 |
+|------|--------|------|
+| **索引层** | 分块策略合理 | 512-1024 tokens + 200 tokens overlap |
+| **索引层** | 元数据完整 | doc_id, chunk_id, source_url, 层级路径 |
+| **检索层** | 混合检索 | 向量 + 关键词双重保障 |
+| **检索层** | 重排序 | 用 Cross-encoder 或 Cohere Rerank |
+| **检索层** | 查询扩展 | 单问题 → 多变体，提高召回 |
+| **路由层** | 多源路由 | 按查询类型分发到不同检索器 |
+| **生成层** | 引用标注 | 每个关键句必须有 [来源编号] 标记 |
+| **生成层** | 引用校验 | 后处理检查引用编号是否在检索结果中存在 |
+| **安全层** | 检索阈值 | 低相关性结果直接丢弃，不喂给 LLM |
+| **监控层** | 归因追踪 | 每个回答可追溯到具体文档片段 |
+
 ---
 
 ## 资料整理状态
@@ -259,4 +367,4 @@ Agentic RAG：检索 → 评估 → (不够则)细化检索词 → 再检索 →
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-04 00:07:49*
+*资源区块更新时间：2026-07-04 13:05:43*

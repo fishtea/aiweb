@@ -9287,7 +9287,7 @@
     "score": 12,
     "first_seen": "2026-06-30",
     "last_seen": "2026-07-04",
-    "seen_count": 69,
+    "seen_count": 70,
     "query": "AI beginner tutorial 2026",
     "dedupe_key": "youtube.com/watch",
     "provider": "legacy",
@@ -9297,7 +9297,7 @@
       "tavily"
     ],
     "provider_score": 0.95618236,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-04 09:06:26",
     "verify_status": 200
   },
   {
@@ -10868,6 +10868,35 @@
     "query": "多Agent 协作 教程"
   },
   {
+    "url": "https://ibm.com/think/tutorials/multi-agent-collaboration-call-analysis-watsonx-ai-crewai",
+    "source_domain": "ibm.com",
+    "dedupe_key": "ibm.com/think/tutorials/multi-agent-collaboration-call-analysis-watsonx-ai-crewai",
+    "title": "Multi-agent Collaboration for Customer Call Analysis using... | IBM",
+    "title_cn": "使用...进行客户呼叫分析的多代理协作国际商业机器公司",
+    "summary": "In this tutorial, we will demonstrate how a team of multiple artificial intelligence (AI) agents can collaborate to complete complex tasks and optimize workflows. We built a python application to explain the orchestration of specialized agents working within a multiagent architecture.",
+    "summary_cn": "在本教程中，我们将演示多个人工智能 (AI) 代理团队如何协作完成复杂任务并优化工作流程。我们构建了一个 Python 应用程序来解释在多代理架构中工作的专业代理的编排。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 7,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
     "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html",
     "source_domain": "docs.aws.amazon.com",
     "dedupe_key": "docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html",
@@ -11013,6 +11042,64 @@
     "query": "多Agent 协作 教程"
   },
   {
+    "url": "https://juejin.cn/post/7577202452800225280",
+    "source_domain": "juejin.cn",
+    "dedupe_key": "juejin.cn/post/7577202452800225280",
+    "title": "Agno开发教程系列（四）：多Agent协作系统（上）—— Team...",
+    "title_cn": "Agno开发教程系列（四）：多Agent协作系统（上）—— Team...",
+    "summary": "本教程是Agno框架系列教程的第四篇，将深入讲解如何通过Team机制构建多Agent协作系统，让多个专业化的AI Agent像真实团队一样高效协作完成复杂任务。 目录. 引言：为什么需要多Agent协作#引言为什么需要多agent协作.",
+    "summary_cn": "本教程是Agno框架系列教程的第四篇，将深入讲解如何通过Team机制构建多Agent协作系统，让多个专业化的AI Agent像真实团队一样高效协作完成复杂任务。 目录. 引言：为什么需要多Agent协作#引言为什么需要多agent协作.",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "多Agent 协作 教程"
+  },
+  {
+    "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/create-multi-agent-collaboration.html",
+    "source_domain": "docs.aws.amazon.com",
+    "dedupe_key": "docs.aws.amazon.com/bedrock/latest/userguide/create-multi-agent-collaboration.html",
+    "title": "Create multi-agent collaboration - Amazon Bedrock",
+    "title_cn": "创建多代理协作 - Amazon Bedrock",
+    "summary": "Creating a multi-agent collaboration comprises of the following steps: Create and deploy collaborator agents. Make sure to configure each collaborator agent to implement a specific task within the multi-agent collaboration work flow.",
+    "summary_cn": "创建多代理协作包括以下步骤： 创建和部署协作代理。确保配置每个协作者代理以在多代理协作工作流中实施特定任务。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
     "url": "https://docs.agenticgokit.com/tutorials/getting-started/multi-agent-collaboration",
     "source_domain": "docs.agenticgokit.com",
     "dedupe_key": "docs.agenticgokit.com/tutorials/getting-started/multi-agent-collaboration",
@@ -11093,6 +11180,122 @@
     ],
     "provider_score": null,
     "verified_at": "2026-07-04 00:03:23",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://jimo.studio/blog/from-chat-windows-to-multi-agent-console-a-paradigm-shift-in-ai-programming-collaboration",
+    "source_domain": "jimo.studio",
+    "dedupe_key": "jimo.studio/blog/from-chat-windows-to-multi-agent-console-a-paradigm-shift-in-ai-programming-collaboration",
+    "title": "从聊天窗口到多Agent控制台：一次AI编程协作范式的转移",
+    "title_cn": "从聊天窗口到多Agent控制台：一次AI编程协作范式的转移",
+    "summary": "从聊天窗口到多Agent控制台：一次AI编程协作范式的转移.多Agent协作的核心挑战. 面对这一痛点，更高效的协作模式应运而生。",
+    "summary_cn": "从聊天窗口到多Agent控制台：一次AI编程协作范式的转移.多Agent协作的核心挑战. 面对这一痛点，更高效的协作模式应运而生。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "多Agent 协作 教程"
+  },
+  {
+    "url": "https://m.php.cn/faq/2597590.html",
+    "source_domain": "m.php.cn",
+    "dedupe_key": "m.php.cn/faq/2597590.html",
+    "title": "Dify多Agent协同工作流设计与实践-人工智能-PHP中文网",
+    "title_cn": "Dify多Agent协同工作流设计与实践-人工智能-PHP中文网",
+    "summary": "dify多agent协同工作流设计与实践. 要在Dify中构建真正可落地的多Agent协同工作流，必须绕过“多个LLM节点简单串联”的误区，从任务拆解、角色定义、变量传递到异常熔断全部按生产级标准配置。",
+    "summary_cn": "dify多agent协同工作流设计与实践. 要在Dify中构建真正可落地的多Agent协同工作流，必须绕过“多个LLM节点简单串联”的误区，从任务拆解、角色定义、变量传递到异常熔断全部按生产级标准配置。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "多Agent 协作 教程"
+  },
+  {
+    "url": "https://ibm.github.io/ibmdotcom-tutorials/tutorials/projects/multiagent-collaboration-customer-call-analysis",
+    "source_domain": "ibm.github.io",
+    "dedupe_key": "ibm.github.io/ibmdotcom-tutorials/tutorials/projects/multiagent-collaboration-customer-call-analysis",
+    "title": "Multi-Agent Collaboration for Customer Call Analysis using...",
+    "title_cn": "使用...进行客户呼叫分析的多代理协作",
+    "summary": "In this tutorial, we will demonstrate how a team of multiple artificial intelligence (AI) agents can collaborate to complete complex tasks and optimize workflows. We built a python application to explain the orchestration of specialized agents working within a multiagent architecture.",
+    "summary_cn": "在本教程中，我们将演示多个人工智能 (AI) 代理团队如何协作完成复杂任务并优化工作流程。我们构建了一个 Python 应用程序来解释在多代理架构中工作的专业代理的编排。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "multi agent collaboration tutorial"
+  },
+  {
+    "url": "https://diamant-ai.com/tutorials/genai-agents-multi-agent-collaboration",
+    "source_domain": "diamant-ai.com",
+    "dedupe_key": "diamant-ai.com/tutorials/genai-agents-multi-agent-collaboration",
+    "title": "Multi-Agent Collaboration Tutorial | GenAI Agents | DiamantAI",
+    "title_cn": "多代理协作教程 | GenAI 代理 |钻石人工智能",
+    "summary": "AnalysisGenAI Agents. Multi-Agent Collaboration.This hands-on Jupyter notebook is part of GenAI Agents, a free open-source repository by Nir Diamant covering ai agents techniques with runnable code examples and detailed explanations.",
+    "summary_cn": "AnalysisGenAI 代理。多代理协作。这个实用的 Jupyter 笔记本是 GenAI Agents 的一部分，GenAI Agents 是 Nir ​​Diamant 的免费开源存储库，涵盖了人工智能代理技术以及可运行的代码示例和详细解释。",
+    "category": "AIAgent实践",
+    "topic": "多Agent协作",
+    "tags": [
+      "多Agent",
+      "协作",
+      "编排"
+    ],
+    "level": "practice",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
     "verify_status": 200,
     "first_seen": "2026-07-04",
     "last_seen": "2026-07-04",
@@ -11391,6 +11594,151 @@
     "query": "函数调用 Agent 教程"
   },
   {
+    "url": "https://tonybai.com/2026/03/18/why-ai-agents-act-stupid-manus-expert-pitfall-guide",
+    "source_domain": "tonybai.com",
+    "dedupe_key": "tonybai.com/2026/03/18/why-ai-agents-act-stupid-manus-expert-pitfall-guide",
+    "title": "为什么你的 AI Agent 总是像个智障？ 来自 Manus... | Tony Bai",
+    "title_cn": "为什么你的 AI 代理总是像个智障？来自 Manus... |托尼·白",
+    "summary": "如果你在过去一年里跟风写过 AI Agent（智能体），你大概率经历过这样的绝望时刻： 你兴致勃勃地给大模型挂载了二三十个精心编写的 Function Calling（函数调用）工具，...",
+    "summary_cn": "如果你在过去一年里跟风写过 AI Agent（智能体），你大概率经历过这样的绝望时刻： 你兴致勃勃地给大模型挂载了二三十个精心编写的 Function Calling（函数调用）工具，...",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://doc.afarensis.com/han-shu-diao-yong",
+    "source_domain": "doc.afarensis.com",
+    "dedupe_key": "doc.afarensis.com/han-shu-diao-yong",
+    "title": "函数调用 | Documentation",
+    "title_cn": "函数调用 |文档",
+    "summary": "函数调用. 连接大型语言模型到外部工具. 简介 Afarensis API允许开发者在API调用中描述函数，使得模型能够智能地选择输出包含参数的JSON对象，用以调用一个或多个函数。",
+    "summary_cn": "函数调用. 连接大型语言模型到外部工具. 简介 Afarensis API允许开发者在API调用中描述函数，使得模型能够智能地选择输出包含参数的JSON对象，用以调用一个或多个函数。",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://friendli.ai/blog/ai-agents-function-calling",
+    "source_domain": "friendli.ai",
+    "dedupe_key": "friendli.ai/blog/ai-agents-function-calling",
+    "title": "Friendli Tools Part 2: Function Calling—Building AI Agents with Slack...",
+    "title_cn": "Friendli Tools 第 2 部分：函数调用 - 使用 Slack 构建 AI 代理...",
+    "summary": "We will cover both types of tools with concrete examples in this tutorial. In addition, we will learn how to create a conversational function calling agent in Python with code examples.",
+    "summary_cn": "我们将在本教程中通过具体示例介绍这两种类型的工具。此外，我们还将通过代码示例学习如何在 Python 中创建会话函数调用代理。",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "function calling agent tutorial"
+  },
+  {
+    "url": "https://dheerajgopi.hashnode.dev/building-a-function-calling-agent-with-openai-assistant",
+    "source_domain": "dheerajgopi.hashnode.dev",
+    "dedupe_key": "dheerajgopi.hashnode.dev/building-a-function-calling-agent-with-openai-assistant",
+    "title": "Creating a Function Calling Agent with OpenAI",
+    "title_cn": "使用 OpenAI 创建函数调用代理",
+    "summary": "Tutorial for developing a function calling agent in python using OpenAI library.After executing the function, pass the return value of the function back to the LLM, and the LLM will provide us with a sensible response. So what is a function calling agent?",
+    "summary_cn": "使用OpenAI库在python中开发函数调用代理的教程。执行函数后，将函数的返回值传递回LLM，LLM将为我们提供合理的响应。那么什么是函数调用代理呢？",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "function calling agent tutorial"
+  },
+  {
+    "url": "https://promptingguide.ai/applications/function_calling",
+    "source_domain": "promptingguide.ai",
+    "dedupe_key": "promptingguide.ai/applications/function_calling",
+    "title": "Function Calling with LLMs | Prompt Engineering Guide",
+    "title_cn": "法学硕士的函数调用 |快速工程指南",
+    "summary": "Function calling is an important ability for building LLM-powered chatbots or agents that need to retrieve context for an LLM or interact with external tools by converting natural language into API calls. Functional calling enables developers to create",
+    "summary_cn": "函数调用是构建由 LLM 驱动的聊天机器人或代理的一项重要功能，这些聊天机器人或代理需要检索 LLM 的上下文或通过将自然语言转换为 API 调用来与外部工具交互。函数调用使开发人员能够创建",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 5,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "function calling agent tutorial"
+  },
+  {
     "url": "https://docs.bentoml.com/en/latest/examples/function-calling.html",
     "source_domain": "docs.bentoml.com",
     "dedupe_key": "docs.bentoml.com/en/latest/examples/function-calling.html",
@@ -11418,6 +11766,122 @@
     "last_seen": "2026-07-02",
     "seen_count": 1,
     "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://blog.csdn.net/gjy_sc/article/details/149749368",
+    "source_domain": "blog.csdn.net",
+    "dedupe_key": "blog.csdn.net/gjy_sc/article/details/149749368",
+    "title": "一文搞懂大模型、RAG、函数调用、Agent...",
+    "title_cn": "一文搞懂大模型、RAG、函数调用、Agent...",
+    "summary": "一文搞懂大模型、RAG、函数调用、Agent、知识库、向量数据库、知识图谱、AGI的概念和联系丨AI百科.",
+    "summary_cn": "一文搞懂大模型、RAG、函数调用、Agent、知识库、向量数据库、知识图谱、AGI的概念和联系丨AI百科.",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://help.apiyi.com/o3-o4-mini-function-calling-guide.html",
+    "source_domain": "help.apiyi.com",
+    "dedupe_key": "help.apiyi.com/o3-o4-mini-function-calling-guide.html",
+    "title": "o3/o4-mini 函数调用完全指南：如何发挥 o3/o4-mini...",
+    "title_cn": "o3/o4-mini 函数调用完全指南：如何发挥 o3/o4-mini...",
+    "summary": "o3/o4-mini 函数调用的革命性突破. 思维链原生工具调用. API易，新用户赠送 1美金欢迎试用体验. o3/o4-mini 函数调用 应用场景.",
+    "summary_cn": "o3/o4-mini 函数调用的革命性突破. 思维链原生工具调用. API易，新用户赠送 1美金欢迎试用体验. o3/o4-mini 函数调用 应用场景.",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://doc.allall.ai/439006356e0",
+    "source_domain": "doc.allall.ai",
+    "dedupe_key": "doc.allall.ai/439006356e0",
+    "title": "创建函数调用 - AllAll.AI",
+    "title_cn": "创建函数调用 - AllAll.AI",
+    "summary": "官方Function calling调用.列出模型. 创建聊天函数调用 (只能非流).",
+    "summary_cn": "官方Function calling调用.列出模型. 创建聊天函数调用 (只能非流).",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "函数调用 Agent 教程"
+  },
+  {
+    "url": "https://dheerajgopinath.medium.com/function-calling-agent-using-openai-assistant-72091be940d8",
+    "source_domain": "dheerajgopinath.medium.com",
+    "dedupe_key": "dheerajgopinath.medium.com/function-calling-agent-using-openai-assistant-72091be940d8",
+    "title": "Function Calling Agent using OpenAI Assistant | by Dheeraj... | Medium",
+    "title_cn": "使用 OpenAI Assistant 的函数调用代理 |通过 Dheeraj... |中等的",
+    "summary": "Implementing a function calling agent in Python using OpenAI assistant.",
+    "summary_cn": "使用 OpenAI 助手在 Python 中实现函数调用代理。",
+    "category": "AIAgent实践",
+    "topic": "函数调用Agent",
+    "tags": [
+      "函数调用",
+      "Agent",
+      "工具调用"
+    ],
+    "level": "practice",
+    "score": 2,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-04 09:06:26",
+    "verify_status": 200,
+    "first_seen": "2026-07-04",
+    "last_seen": "2026-07-04",
+    "seen_count": 1,
+    "query": "function calling agent tutorial"
   },
   {
     "url": "https://github.com/GiovanniPasq/agentic-rag-for-dummies",

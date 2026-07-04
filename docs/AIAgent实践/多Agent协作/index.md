@@ -262,6 +262,44 @@ ADK 支持层级结构（Hierarchical），上层 Agent 可委派子任务给下
 | **辩论/投票（Debate）** | 多 Agent 独立作答，投票取共识 | AutoGen GroupChat | 高准确率问答 |
 | **层级管理（Hierarchical）** | 主管拆解任务、工人执行、主管汇总 | Google ADK, LangGraph | 复杂研究、报告生成 |
 
+### Google ADK 层级架构深入分析
+
+Google 的 **Agent Development Kit (ADK)** 在 2025 年 11 月发布后，至 2026 年已成为多 Agent 系统的重要选择。其核心架构基于清晰的层级结构（Hierarchy）：
+
+#### 三种 Agent 类型
+
+| Agent 类型 | 角色 | 适用场景 |
+|-----------|------|---------|
+| **LLM Agent** | "大脑"——用 Gemini 理解自然语言、推理并决策 | 通用对话、问答、工具调用 |
+| **Workflow Agent** | "经理"——编排任务执行流程，不执行实际工作 | 数据管道、审批流程、多步自动化 |
+| **Custom Agent** | "专家"——继承 BaseAgent 实现自定义逻辑 | 特殊业务规则、遗留系统集成 |
+
+#### 层级管理规则
+
+ADK 的 Agent 层级模拟企业组织架构：
+
+```
+根 Agent (CEO)
+  ├── 子 Agent-1 (VP of Research)
+  │   ├── 子 Agent-1a (Director)
+  │   └── 子 Agent-1b (Director)
+  └── 子 Agent-2 (VP of Engineering)
+      └── 子 Agent-2a (Manager)
+```
+
+**两条核心规则**：
+1. **父 Agent 管理子 Agent**：父级可委派任务给子级
+2. **单亲规则**：每个 Agent 只能有一个父级，确保职责清晰
+
+#### 三种预编排器
+
+| 编排器 | 工作方式 | 适用场景 |
+|--------|---------|---------|
+| **SequentialAgent** | 子 Agent 按序运行，前一个输出为后一个输入 | 多步管道：提取数据→分析→生成报告 |
+| **其他编排器** | 可扩展自定义 | 复杂条件分支、人工审批节点 |
+
+> 来源：Google Cloud Blog — Building Collaborative AI: A Developer's Guide to Multi-Agent Systems with ADK（Annie Wang, 2025.11）
+
 ### 2026 框架全景对比
 
 | 框架 | 最新定位 | 核心优势 | 2026 年重点 |
@@ -287,6 +325,116 @@ ADK 支持层级结构（Hierarchical），上层 Agent 可委派子任务给下
 
 ---
 
+## 2026年多Agent框架实战对比：CrewAI vs LangGraph vs AutoGen
+
+### 2026年的多Agent格局
+
+2026年，单一模型的AI应用已经像在记事本里写代码——能用，但90%的潜力未被释放。真正的转变是由专业化Agent网络协作完成复杂任务：一个Agent做研究、一个做写作、一个做审查、一个做执行——每个Agent专精一个环节，最终产出的质量是单Agent无法企及的。
+
+基础设施在2026年已经成熟：GPT-4o、Claude 3.7、Gemini 2.0 Flash的推理成本自2023年以来下降超80%，运行5-Agent管线的成本已低于$0.10/次；LangGraph等框架确立了有状态Agent的生产标准。
+
+> 来源：[DEV Community — Multi-Agent AI in 2026: Build Production Systems with CrewAI, LangGraph & AutoGen](https://dev.to/ottoaria/multi-agent-ai-in-2026-build-production-systems-with-crewai-langgraph-autogen-5e40)
+
+### 三大框架最新定位
+
+| 框架 | 开发商 | 2026年定位 | 最适合 | 学习曲线 |
+|------|--------|----------|--------|---------|
+| **CrewAI** | CrewAI Inc. | 业务自动化首选 | 内容生产、研究分析、营销自动化 | 低 |
+| **LangGraph** | LangChain | 复杂状态机 | 需要分支逻辑、人机协作、条件流的应用 | 中-高 |
+| **AutoGen v0.4** | Microsoft | 对话式多Agent | Agent间需要来回对话协作的任务 | 中 |
+
+### CrewAI：业务自动化首选
+
+CrewAI 是三者中最易上手的。只需定义Agent和Task，框架自动处理编排。2026年典型用法：
+
+```python
+# 定义角色
+researcher = Agent(role="研究员", goal="分析最新AI进展",
+                   tools=[SerperDevTool()], llm="gpt-4o-mini")
+writer = Agent(role="内容策略师", goal="创作引人入胜的内容",
+               llm="gpt-4o")
+
+# 定义任务链
+research_task = Task(description="分析最新AI趋势，找出关键突破",
+                     agent=researcher)
+write_task = Task(description="基于研究撰写博客文章，易懂不术语",
+                  agent=writer)
+
+# 启动协作
+crew = Crew(agents=[researcher, writer],
+            tasks=[research_task, write_task])
+crew.kickoff()
+```
+
+**成本参考**：研究用 gpt-4o-mini、写作用 gpt-4o，一次完整运行约 $0.03-0.05。
+
+### LangGraph：复杂状态机
+
+LangGraph 更冗长但给予开发者对状态和路由的完全控制，适合需要分支逻辑、人工审批或条件流的应用。
+
+**2026年典型应用场景**：
+- 代码审查机器人：安全Agent → 性能Agent → 报告Agent
+- 客服分流：自动分类 → 知识库检索 → 回复 → 升级判断 → 人工接管
+- 研究管线：带回退逻辑的多步研究 + 人工审核节点
+
+### AutoGen v0.4：对话式协作
+
+AutoGen v0.4 是微软的框架，核心特点是**Agent间可以像人类一样对话**。一个Agent生成代码，另一个Agent执行它，发现bug后回传给第一个Agent修复——完全自主。
+
+**典型模式**：
+```
+User → CoderAgent(写代码) → ExecutorAgent(执行+报错)
+  → CoderAgent(修复bug) → ExecutorAgent(验证通过)
+  → User(收到正确的代码)
+```
+
+### 五大经过生产验证的多Agent蓝图
+
+以下模式来自真实生产部署：
+
+| # | 蓝图 | Agent链 | 产出 |
+|---|------|---------|------|
+| 1 | **内容工厂** | 趋势侦察→内容策略→写手→SEO编辑→社交媒体经理 | 完整文章+SEO数据+5条推文+1篇LinkedIn |
+| 2 | **销售情报** | 网站爬虫→新闻聚合→技术栈检测→痛点识别→报告生成 | 销售通话前的个性化简报 |
+| 3 | **代码审查流水线** | 安全审查→性能审查→报告撰写 | 带评分的人前结构化审查 |
+| 4 | **客服自动化** | 分类器→文档检索→回复→升级检查→发送 | 80-90%的一线工单自动处理 |
+| 5 | **投资研究** | 新闻分析→技术分析→基本面Agent→组合经理 | 每日邮件：组合健康评分+风险标记 |
+
+### 生产基础设施清单
+
+```
+1. 混合模型策略：非关键步骤用便宜模型
+   研究→gpt-4o-mini | 写作→gpt-4o | 审查→Claude
+
+2. 错误处理：每个Agent调用包裹try-catch
+   失败重试3次，指数退避
+
+3. 监控日志：Langfuse / Weave 追踪每一次LLM调用
+   成本、延迟、成功率实时看板
+
+4. 人工审批：关键操作前插入确认节点
+   发邮件、修改数据库 → 人工确认
+
+5. 步数上限：每个Agent和整个编排流设硬上限
+   防止死循环烧钱
+```
+
+### 商业机会：多Agent = 新产品
+
+| 想法 | 描述 | 定价 |
+|------|------|------|
+| 自动化内容工厂 | 每周自动发布5篇文章，AdSense+联盟营销 | $500-2000/月被动收入 |
+| AI销售研究 | 通话前自动研究潜在客户 | €49/次搜索 |
+| 代码审查SaaS | GitHub集成，自动多维度审查 | €29/月/seat |
+| AI投资顾问 | 个性化加密/股票研究 | €9/月 |
+| AI客服白标 | 80%一线工单自动处理 | 按工单定价 |
+
+**行动路线**：先构建蓝图1（内容工厂）→ 部署蓝图2或3供自己使用 → 挑表现最好的Agent加cron定时+Slack通知+FastAPI包装 → 找到外部需求最强的用例 → 5个beta用户免费测试 → 定价$29-99/月 → 目标10个付费用户。
+
+> 来源：[DEV Community — Multi-Agent AI in 2026: Build Production Systems with CrewAI, LangGraph & AutoGen](https://dev.to/ottoaria/multi-agent-ai-in-2026-build-production-systems-with-crewai-langgraph-autogen-5e40)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -299,4 +447,4 @@ ADK 支持层级结构（Hierarchical），上层 Agent 可委派子任务给下
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-04 00:07:49*
+*资源区块更新时间：2026-07-04 13:05:43*
