@@ -193,6 +193,44 @@
 > - ByteByteGo: Top AI GitHub Repositories in 2026
 > - AskGlitch: Trending AI GitHub Repos — May 2026
 
+---
+
+## 🚀 2026-07-05 追加：API 发现的高潜力新项目
+
+> 说明：以下项目通过 GitHub API 在 2026-07-05 采集，按 Stars 排序。这些项目代表 2026 年创建并快速增长的高质量 AI 项目。
+
+| 项目 | Stars | Forks | 类别 | 语言 | 一句话概括 |
+|------|-------|-------|------|------|-----------|
+| [karpathy/autoresearch](https://github.com/karpathy/autoresearch) | 89,803 | 12,968 | AI Research | Python | AI Agent 在单 GPU 上自动运行 nanochat 训练研究，Karpathy 的又一力作 |
+| [HKUDS/nanobot](https://github.com/HKUDS/nanobot) | 45,010 | 7,941 | AI Agent | Python | 轻量级开源 AI Agent，集成工具、聊天和工作流，MIT 许可 |
+| [tinyhumansai/openhuman](https://github.com/tinyhumansai/openhuman) | 34,169 | 3,317 | Personal AI | Rust | 本地优先的 AI 超级智能，构建个人记忆和与工具编排 |
+| [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | 33,155 | 3,085 | AI Video | TypeScript | 写 HTML 渲染视频，专为 Agent 构建，支持 MCP 协议 |
+
+### 重点项目解读
+
+#### 🥇 karpathy/autoresearch（89,803 ⭐）
+Andrej Karpathy 的新项目，让 AI Agent 在**单个 GPU** 上自动执行 nanochat 训练研究。这代表了一个关键趋势：**研究自动化**——Agent 不再只是写代码，而是自主设计实验、训练模型、分析结果。100k Stars 在即，是 2026 年最具影响力的 AI 研究项目之一。
+
+#### 🥇 HKUDS/nanobot（45,010 ⭐）
+来自香港大学数据科学团队的轻量级 Agent 框架。强调**极简设计**：一个命令启动，LLM 自动发现并调用本地工具，支持 OpenAI/Anthropic 兼容 API。适合快速原型验证和个人工作流自动化。
+
+#### 🥇 tinyhumansai/openhuman（34,169 ⭐）
+用 Rust 构建的个人 AI 基础设施。**本地优先 + 长期记忆**——所有数据和记忆存储在本地，Agent 编排工具来辅助日常生活。与 mem0（59k⭐）互补：mem0 提供记忆层，openhuman 提供完整个人 AI 系统。
+
+#### 🥇 heygen-com/hyperframes（33,155 ⭐）
+HeyGen 团队出品，**写 HTML 即可渲染视频**。专为 AI Agent 设计——Agent 写 HTML + CSS + JS 动画，自动转换成视频输出。支持 MCP 协议让 Agent 直接接入。适合营销视频、产品演示和 Agent 自主内容生产。
+
+### 本日追加趋势总结
+
+| 趋势 | 代表项目 | 解读 |
+|------|---------|------|
+| **研究自动化** | autoresearch | Agent 从"编码助手"升级为"自主研究员" |
+| **个人 AI 基础设施** | openhuman, nanobot, mem0 | 本地优先、隐私保护、工具编排成为个人 AI 核心诉求 |
+| **Agent 原生视频生成** | hyperframes | 不再需要复杂视频编辑 UI，Agent 通过代码直接生产视频 |
+| **轻量级 Agent 框架** | nanobot | 复杂框架之外，极简主义正在回到开发者视野 |
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -205,4 +243,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-04 13:05:43*
+*资源区块更新时间：2026-07-05 05:14:27*

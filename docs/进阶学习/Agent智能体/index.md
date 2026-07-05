@@ -336,6 +336,57 @@ AI Agent遵循 **PRAR循环**：
 
 ---
 
+## 11. 本地优先的 Agent 新范式（2026）
+
+### 11.1 OpenJarvis：本地优先的个人 AI Agent 框架
+
+**来源：** [OpenJarvis: a local-first personal AI - Ollama Blog (2026-05-28)](https://ollama.com/blog/openjarvis)
+
+OpenJarvis 是斯坦福 Hazy Research 和 Scaling Intelligence 实验室开发的开源框架，核心理念是"Intelligence Per Watt"（每瓦智能）——让个人 AI 默认在本地运行，云端可选。
+
+- **本地优先架构**：模型在本地运行，云端仅作为可选增强。同步追踪能耗、成本和延迟
+- **内置 Agent 预设**：开箱即用的早晨简报（日历+邮件+新闻）、跨文件研究、邮件助手等
+- **与 Ollama 深度集成**：安装脚本自动检测已有 Ollama 安装，支持任意 Ollama 模型
+- **灵活模型配置**：`jarvis model pull qwen3.5:35b` 即可切换模型
+
+```bash
+# 安装
+curl -fsSL https://open-jarvis.github.io/OpenJarvis/install.sh | bash
+
+# 使用
+jarvis init --preset morning-digest-mac
+jarvis digest --fresh
+```
+
+### 11.2 Minions 协议：本地+云端模型协作
+
+**来源：** [Minions: where local and cloud LLMs meet - Ollama Blog (2025-02-25)](https://ollama.com/blog/minions)
+
+斯坦福 Hazy Research 提出的 Minions 协议实现了本地小模型与云端大模型的高效协作：
+
+- **Minion 协议**：云端模型与一个能访问数据的本地模型自由对话，共同达成解决方案 → **云端成本降低 30.4 倍**，同时保持云端模型 **87%** 的性能
+- **MinionS 协议**：云端模型将任务分解为子任务，本地小模型在数据块上并行处理 → **云端成本降低 5.7 倍**，同时保持云端模型 **97.9%** 的性能
+- **关键洞察**：敏感数据始终保留在本地，小模型仅向云端传递处理结果摘要
+
+### 11.3 Secure Minions：端到端加密的 Agent 协作
+
+**来源：** [Secure Minions: private collaboration - Ollama Blog (2025-06-03)](https://ollama.com/blog/secureminions)
+
+在 Minions 基础上，Secure Minions 实现了本地-云端通信的端到端加密：
+
+- **核心安全机制**：
+  1. 本地设备与 NVIDIA H100 GPU 交换密钥
+  2. GPU 通过远程认证（Remote Attestation）证明自身真实性
+  3. H100 成为安全飞地（Secure Enclave）：所有内存和计算均加密，即使是 root 用户也无法访问明文
+  4. 本地 LLM 消息加密后发送到 GPU 飞地，在其中安全解密和处理
+  5. 输出结果再次加密后返回本地客户端
+- **隐私保证**：传输过程和远程推理过程中无任何明文暴露
+- 在 ~8K token 长提示词和 Qwen-32B 等大模型场景下验证通过
+
+> 💡 **2026 Agent 趋势总结**：本地优先 + 隐私保护成为 Agent 新范式。OpenJarvis 让个人 Agent 默认本地运行，Minions 用智能协议降低云端依赖，Secure Minions 确保敏感数据绝不离开加密边界。Agent 不再只是"更聪明的聊天机器人"，而是能安全访问本地数据、自主完成任务的个人助手。
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -348,4 +399,4 @@ AI Agent遵循 **PRAR循环**：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-04 13:05:43*
+*资源区块更新时间：2026-07-05 05:14:27*

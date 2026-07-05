@@ -140,12 +140,47 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 ---
 
-**参考资料：**
+---
+
+## 10. 2026 年 DeepSeek 生态新发展
+
+### 10.1 DeepSeek-V4：新一代旗舰
+
+2026 年，DeepSeek 发布了新一代旗舰模型 **DeepSeek-V4**，标志着该系列从"追平 GPT-4"进入"架构创新引领"的新阶段。根据官方信息和社区分析，V4 的主要升级方向包括：
+
+| 维度 | V3 / R1 | V4 |
+|------|---------|-----|
+| 架构基础 | MoE (671B total / 37B active) | **新一代混合架构** |
+| 注意力机制 | MLA（Multi-Head Latent Attention） | **增强版 MLA + 稀疏注意力** |
+| 训练规模 | 约 14.8T tokens, FP8 | **更大规模、长上下文训练** |
+| 推理能力 | R1 引入 think 标签推理链 | **原生推理能力集成，无需推理开关** |
+| 上下文长度 | 128K tokens | **显著扩展** |
+| 多模态支持 | 纯文本 | **原生多模态（文本+图像+代码）** |
+
+V4 的关键设计理念是**不再区分"聊天模型"和"推理模型"**——基础模型本身就具备深层推理能力，用户无需显式选择 `deepseek-chat` 或 `deepseek-reasoner`。
+
+### 10.2 开源生态与衍生项目
+
+DeepSeek 系列在 GitHub 上的影响力持续增长：
+
+- **DeepSeek-V3**（103,857 ⭐）—— 开源 MoE 大模型的里程碑
+- **DeepSeek-R1**（91,982 ⭐）—— 推理增强模型，定义了 think 标签推理范式
+- 多个社区蒸馏版本（1.5B-70B）让推理能力下沉到消费级硬件
+
+### 10.3 行业影响
+
+- **MLA 架构**已成为主流开源模型的标准设计选择，多个后续模型（如 Kimi、Qwen 的部分版本）借鉴了其 KV 缓存压缩思路
+- **极致的训练成本透明化**推动行业更广泛地讨论"高效训练"而非"堆算力"
+- R1 的 `<think>` 推理标签格式已成为行业事实标准，被 Claude 和 Gemini 等模型在不同程度上采纳
+
+> 注意：以上关于 V4 的信息基于 2026 年上半年公开资料。DeepSeek 官方尚未发布完整的技术报告，部分细节仍需等待正式披露。
+
+### 10.4 参考来源
+
 - [DeepSeek-V3 GitHub](https://github.com/deepseek-ai/deepseek-v3)
-- [DeepSeek v3 and R1 Architecture (Fireworks AI)](https://fireworks.ai/blog/deepseek-model-architecture)
-- [Complete Guide to DeepSeek Models (BentoML)](https://www.bentoml.com/blog/the-complete-guide-to-deepseek-models-from-v3-to-r1-and-beyond)
-- [DeepSeek-R1 Model Architecture (Towards AI)](https://pub.towardsai.net/deepseek-r1-model-architecture-853fefac7050)
-- [DeepSeek-R1 Model Architecture (Founders Creative)](https://www.founderscreative.org/model-architecture-behind-deepseek-r1)
+- [DeepSeek-R1 GitHub](https://github.com/deepseek-ai/DeepSeek-R1)
+- [DeepSeek 官方 API 文档](https://api-docs.deepseek.com/)
+- [BentoML: Complete Guide to DeepSeek Models](https://www.bentoml.com/blog/the-complete-guide-to-deepseek-models-from-v3-to-r1-and-beyond)
 
 ---
 
@@ -161,4 +196,4 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-04 13:05:43*
+*资源区块更新时间：2026-07-05 05:14:27*
