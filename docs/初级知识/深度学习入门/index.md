@@ -173,18 +173,49 @@
 
 ---
 
+## 🔧 深度学习实践工具与学习资源
+
+除了课程学习，动手实践是掌握深度学习的关键。以下几个开源仓库和平台可以帮助你快速上手：
+
+### 推荐实战资源
+
+| 资源 | 说明 | 适合人群 |
+|------|------|---------|
+| [Mikoto10032/DeepLearning](https://github.com/Mikoto10032/DeepLearning) | 深度学习入门教程合集，含 ML/DL/NLP 系统笔记，554 次提交的活跃仓库 | 中文学习者 |
+| [L1aoXingyu/code-of-learn-deep-learning-with-pytorch](https://github.com/L1aoXingyu/code-of-learn-deep-learning-with-pytorch) | 《深度学习入门之 PyTorch》配套代码，涵盖 CV、NLP 实战案例 | PyTorch 入门者 |
+| [DeepLearning.AI 的 YouTube 频道](https://www.youtube.com/c/deeplearningai) | 免费教程、论文解读、行业专家访谈 | 所有水平 |
+
+### 学习路径优化建议
+
+**如果时间有限**，可以跳过传统 CNN/RNN 课程，直接从**Transformer**入手。2026 年的深度学习格局已发生显著转变：
+
+1. **Transformer 已是默认架构**——不仅用于 NLP，也渗透到 CV（Vision Transformer）、音频（Whisper）、多模态领域
+2. **PyTorch 是研究首选**——学术论文使用率超 90%，2025 年起 Hugging Face 生态全面拥抱 PyTorch
+3. **不要重复造轮子**——使用 Hugging Face `transformers` 库加载预训练模型，比从零训练快 100 倍
+4. **迁移学习是标配**——在 ImageNet/LLaMA 等预训练模型基础上微调，而不是从头训练
+
+### 评估模型时的常见误区
+
+- **只看训练集准确率**：可能是过拟合的陷阱，需要同时追踪验证集指标
+- **忽视学习率调度**：使用学习率衰减（余弦退火/Step Decay）可显著提升收敛效果
+- **忽略 Batch Size 的影响**：小 Batch Size 引入噪声，有正则化效果；大 Batch Size 需要更高学习率
+
+---
+
 ## 📚 参考来源
 
 1. [Deep Learning Specialization — Coursera](https://www.coursera.org/specializations/deep-learning)
 2. [Deep Learning Specialization — DeepLearning.AI](https://www.deeplearning.ai/specializations/deep-learning/)
 3. [Andrew Ng — Courses 页面](https://www.andrewng.org/courses/)
 4. [Microsoft AI for Beginners — 免费深度学习课程](https://microsoft.github.io/AI-For-Beginners/)
-5. [Vaswani et al., "Attention Is All You Need" — Google, 2017](https://research.google/pubs/pub46201/)
+5. [Vaswani et al., Attention Is All You Need — Google, 2017](https://research.google/pubs/pub46201/)
 6. [DeepLearning.AI 的 YouTube 频道](https://www.youtube.com/c/deeplearningai)
+7. [Mikoto10032/DeepLearning — 深度学习入门教程合集](https://github.com/Mikoto10032/DeepLearning)
+8. [L1aoXingyu/code-of-learn-deep-learning-with-pytorch — 配套代码](https://github.com/L1aoXingyu/code-of-learn-deep-learning-with-pytorch)
 
 ---
 
-*本页面内容基于真实在线资源编写。所有课程信息、评分和描述均源自各课程官方网站（截至 2026 年 6 月）。*
+*本页面内容基于真实在线资源编写。所有课程信息、评分和描述均源自各课程官方网站（截至 2026 年 7 月）。*
 
 ## 资料整理状态
 

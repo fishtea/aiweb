@@ -138,6 +138,58 @@
 
 ---
 
+## 🧭 2026 AI 全景：从子领域到技术栈
+
+### AI 的核心子领域
+
+现代 AI 研究围绕以下关键子领域展开：
+
+| 子领域 | 核心问题 | 2026 年状态 |
+|--------|---------|------------|
+| **推理与问题求解** | 如何让机器进行逻辑推理和规划？ | 推理模型（如 OpenAI o1/o3、DeepSeek-R1）在数学和编程上超过人类专家 |
+| **知识表示** | 如何让机器存储和调用知识？ | 知识图谱 + 向量数据库混合方案成为主流 |
+| **规划与决策** | 如何在不确定环境中做最优决策？ | 强化学习 + LLM Agent 结合路线日趋成熟 |
+| **机器学习** | 如何从数据中自动学习模式？ | 深度学习仍是核心，但数据质量和合成数据成为新焦点 |
+| **自然语言处理** | 如何理解和生成人类语言？ | LLM 已接近或超越人类水平（律师考试、医学考试） |
+| **感知（计算机视觉）** | 如何从传感器理解世界？ | 多模态模型统一文本+图像+视频理解 |
+| **通用智能（AGI）** | 能否实现人类水平的通用智能？ | 仍是开放问题，但推理模型的出现让 AGI 路径更清晰 |
+
+### AI 的核心技术栈（2026）
+
+```
+应用层：  ChatGPT / Claude / Gemini / DeepSeek / Copilot
+  ↑
+模型层：  GPT-4o / Claude 4 / Gemini 2.5 / DeepSeek-R1 / LLaMA 4
+  ↑
+架构层：  Transformer → MoE（混合专家）/ State Space Models
+  ↑
+训练层：  预训练 → 监督微调 → RLHF（人类反馈强化学习）
+  ↑
+数据层：  网页文本、代码、多模态数据 → 数据清洗 → 合成数据
+  ↑
+硬件层：  NVIDIA H100/B200 GPU · Google TPU · 大规模数据中心
+```
+
+### 2026 年 AI 入门推荐路径
+
+1. **先理解概念**（1-2 周）：阅读本文，了解 AI 的分类、子领域和技术全景
+2. **上手使用**（立即）：注册 ChatGPT/Claude/DeepSeek，体验 prompt 交互
+3. **学习 Python**（2-4 周）：掌握基础语法、NumPy、Pandas
+4. **学习机器学习基础**（4-8 周）：Andrew Ng 课程，理解监督/无监督学习
+5. **学习深度学习**（4-8 周）：神经网络、反向传播、PyTorch
+6. **学习大语言模型**（4-8 周）：Transformer、prompt engineering、RAG
+
+> 💡 **2026 年新趋势**：与其从零写模型，不如先学会 **使用** 和 **微调** 现有模型。开源模型（LLaMA、DeepSeek、Qwen）已足够强大，可本地部署学习。
+
+### AI 的经济与社会影响（2026）
+
+- **电力需求激增**：IEA 预测到 2026 年 AI/数据中心用电将翻倍，相当于日本全国用电量
+- **就业变革**：高盛预测到 2030 年，美国数据中心将消耗 8% 电力（2022 年仅 3%）
+- **核能复苏**：微软与三里岛核电站签署 20 年供电协议，亚马逊购买核电数据中心
+- **监管加速**：欧盟 AI Act 落地，各国纷纷立法规范 AI 发展
+
+---
+
 ## 📚 参考来源
 
 1. [What Is Artificial Intelligence? Definition, Uses, and Types — Coursera](https://www.coursera.org/articles/what-is-artificial-intelligence)（2026 年 3 月更新）
@@ -146,6 +198,7 @@
 4. [Introduction to Artificial Intelligence (AI) — IBM / Coursera](https://www.coursera.org/learn/introduction-to-ai)
 5. [Microsoft AI for Beginners 课程](https://microsoft.github.io/AI-For-Beginners/)
 6. [Vaswani et al., "Attention Is All You Need" — Google Research, 2017](https://research.google/pubs/pub46201/)
+7. [Artificial Intelligence — Wikipedia](https://en.wikipedia.org/wiki/Artificial_intelligence)（2026 年 7 月查阅）
 
 ---
 

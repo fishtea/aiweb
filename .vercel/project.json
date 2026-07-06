@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_NDWaVIdrgb5aOQdyKUW8XZxC2sk2",
+  "orgId": "team_RaPgQ6aZIktACu3NsCRXBHAQ",
+  "projectName": "aiweb",
+  "settings": {
+    "createdAt": 1782707521349,
+    "framework": null,
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": "site",
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}
