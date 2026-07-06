@@ -423,6 +423,79 @@ pip install -e .
 
 > 2026年微调成本已大幅下降：7B 模型单次微调约 **$5 以下**（Spheron Network 数据）。Google Cloud 官方建议（2026年6月更新）：QLoRA 显存比 LoRA 低 75%，但 LoRA 训练速度快 66%、成本低 40%。
 
+## 9. NVIDIA NeMo AutoModel：2026 微调加速新范式
+
+### 9.1 概述
+
+**来源：** [Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel - HuggingFace Blog (2026-06-24)](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)
+
+NVIDIA NeMo AutoModel 是基于 HuggingFace Transformers v5 构建的开源微调加速库。它通过 Expert Parallelism（专家并行）、DeepEP 融合通信和 TransformerEngine 内核，在 MoE（Mixture of Experts，混合专家）模型的微调上实现了 **3.4-3.7 倍训练吞吐量提升**，同时 **降低 29-32% GPU 显存占用**。
+
+> 核心亮点：只需修改一行 import 语句，无需改动任何训练代码。
+
+### 9.2 与 Transformers v5 的关系
+
+Transformers v5 首次将 MoE 支持提升为一等公民：Expert Backends、动态权重加载、分布式执行的 Tensor Parallel 方案。NeMo AutoModel 在此基础上叠加：
+
+| 组件 | v5 原生 | NeMo AutoModel 增强 |
+|------|---------|---------------------|
+| 专家并行 (EP) | ❌ | ✅ EP=8/64 跨 GPU 分片 |
+| DeepEP 通信 | ❌ | ✅ 融合 all-to-all 分发，重叠通信与计算 |
+| TransformerEngine | ❌ | ✅ FP8 精度 + 融合注意力 |
+| 动态权重加载 | ✅ | ✅ 继承 v5 实现 |
+
+### 9.3 性能数据
+
+#### 大规模场景：Nemotron 3 Ultra 550B 全参数微调
+
+在 **16 个 H100 节点（128 GPU）** 上全参数微调 550B MoE 模型：
+
+| 指标 | NeMo AutoModel (EP=64) |
+|------|------------------------|
+| 吞吐量 | **815 TPS/GPU** |
+| 算力效率 | ~293 TFLOP/s/GPU |
+| 峰值显存 | 58.2 GiB |
+
+> v5 在此规模下直接 OOM（Out of Memory），NeMo AutoModel 的 Expert Parallelism 是将显存压入预算的关键。
+
+#### 单节点场景：Qwen3-30B-A3B (8×H100)
+
+| 指标 | Transformers v4 | v5 (FA2+grouped_mm) | NeMo AutoModel (EP=8) | v5→NeMo 提升 |
+|------|:---:|:---:|:---:|:---:|
+| TPS/GPU | deadlock | 3,075 | **11,340** | **3.69×** |
+| 峰值显存 | — | 68.2 GiB | **48.1 GiB** | **-29%** |
+| 前向+损失 | — | 582 ms | **194 ms** | **3.00×** |
+| 反向传播 | — | 758 ms | **126 ms** | **6.02×** |
+
+### 9.4 使用方式
+
+只需一行 import 变更，其余代码完全兼容 HF Transformers：
+
+```python
+# 替换这行：
+# from transformers import AutoModelForCausalLM
+# 为：
+from nemo_automodel import NeMoAutoModelForCausalLM
+
+model = NeMoAutoModelForCausalLM.from_pretrained(
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    dtype=torch.bfloat16,
+    distributed_setup=dist_setup,  # 传入 device_mesh 即可多 GPU
+)
+```
+
+自动适配 Qwen3、Nemotron、GPT-OSS、DeepSeek V3 等 MoE 架构；对于未适配模型，回退到标准 HF 行为并自动应用 Liger Kernel 优化。
+
+### 9.5 对微调实践的意义
+
+1. **MoE 模型微调不再是禁区**：Expert Parallelism 让 550B 模型全参数微调成为可能
+2. **API 兼容降低成本**：`save_pretrained()` 输出标准 HF checkpoint，vLLM/SGLang 可直接加载
+3. **单节点效率大幅提升**：30B 级 MoE 模型实现近 4× 加速，单日可完成更多实验迭代
+
+> 来源参考：[NVIDIA NeMo AutoModel - HuggingFace Blog](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -435,4 +508,4 @@ pip install -e .
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-05 05:14:27*
+*资源区块更新时间：2026-07-07 00:14:39*

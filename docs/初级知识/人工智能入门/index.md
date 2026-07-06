@@ -190,6 +190,89 @@
 
 ---
 
+## 🧩 AI 学习方法论：自顶向下 vs 自底向上
+
+根据 [Microsoft AI for Beginners 课程](https://microsoft.github.io/AI-For-Beginners/) 的介绍，实现人工智能有两大基本路径：
+
+### 自顶向下方法（符号推理 / Symbolic Reasoning）
+
+这种方法模拟人类的推理过程——先提取人类专家的**知识**，将其转化为计算机可读的形式（如规则库、知识图谱），再构建**推理引擎**来模拟人类决策。早期 AI 的代表如**专家系统（Expert Systems）** 就属于此类。
+
+**优点**：决策过程透明、可解释。**局限**：知识获取非常困难——许多人类专家无法清晰地解释自己如何做出判断。"从专家那里提取知识、用计算机表示、并保持知识库的准确性" 被证明是一项极其复杂且成本高昂的工作，这直接导致了 1970 年代的"AI 冬天"（AI Winter）。
+
+### 自底向上方法（神经网络 / Neural Networks）
+
+这种方法模拟人脑的基本结构——人工神经元。我们构建**人工神经网络**，通过提供大量示例来训练它解决问题，类似于婴儿通过观察来认识世界。
+
+**优点**：无需显式编程规则，可以从数据中自动学习模式。**局限**：决策过程不透明（黑箱问题），需要大量计算资源和数据。
+
+> 现代 AI 实践中，这两种方法常常结合使用。例如，LLM Agent 同时使用神经网络（理解自然语言）和符号推理（规划、工具调用）。
+
+**来源：** [Microsoft AI for Beginners — Lesson 1: Introduction to AI](https://microsoft.github.io/AI-For-Beginners/)
+
+---
+
+## 📚 Microsoft AI for Beginners：12 周系统课程推荐
+
+[A vitepress site to host the AI for Beginners curriculum.](https://microsoft.github.io/AI-For-Beginners/) 提供了一套完整的 **12 周、24 课时**的 AI 入门课程，涵盖 AI 的所有主要领域：
+
+### 课程结构概览
+
+| 模块 | 主题 | 课时数 |
+|------|------|:------:|
+| **I. AI 介绍** | AI 的历史、定义与图灵测试 | 1 |
+| **II. 符号 AI** | 知识表示、专家系统、本体论与概念图 | 1 |
+| **III. 神经网络入门** | 感知机 → 多层感知机 → 框架实操 → 过拟合 | 3 |
+| **IV. 计算机视觉** | OpenCV → CNN → 迁移学习 → 自编码器 → GAN → 目标检测 → 语义分割 | 7 |
+| **V. 自然语言处理** | 文本表示 → 词嵌入 → 语言建模 → RNN → 生成式 RNN → Transformer/BERT → NER → LLM/提示工程 | 8 |
+| **VI. 其他 AI 技术** | 遗传算法、深度强化学习、多智能体系统 | 3 |
+| **VII. AI 伦理** | AI 伦理与负责任 AI 原则 | 1 |
+
+### 课程特色
+
+- **双框架支持**：每个重要主题都同时提供 PyTorch 和 TensorFlow 的 Notebook
+- **动手实验室**：多数模块配有实践 Lab
+- **前/后测验**：每一课都有小测验验证学习成果
+- **中文化支持**：提供简体中文翻译版本
+
+> 该课程特别强调 **实践驱动** 的学习方式——每节课都配有可执行的 Jupyter Notebook，让你在写代码中理解概念。
+
+### 适合人群
+
+- 零编程基础或少量编程经验的学习者
+- 希望系统掌握 AI 全貌而非只了解某一个领域的入门者
+- 教育工作者（该课程还提供了教师指导手册）
+
+**来源：** [Microsoft AI for Beginners GitHub](https://github.com/microsoft/AI-For-Beginners) | [课程在线版本](https://microsoft.github.io/AI-For-Beginners/) | [示例入门代码](https://github.com/microsoft/AI-For-Beginners/tree/main/examples)
+
+---
+
+## 🤖 AI 的核心问题：什么是智能？
+
+Microsoft AI for Beginners 课程提出了一个发人深省的问题：**"猫有智能吗？"** 不同的人会给出不同答案，因为并没有一个普遍接受的"智能测试"。
+
+### 图灵测试（Turing Test）
+
+Alan Turing 在 1950 年提出了**图灵测试**：如果一位人类提问者通过文本对话无法区分对方是真人还是计算机系统，那么这个系统被认为具有智能。
+
+> 2014 年，圣彼得堡开发的聊天机器人 [Eugene Goostman](https://en.wikipedia.org/wiki/Eugene_Goostman) 接近通过图灵测试——它自称是一个 13 岁的乌克兰男孩，利用年龄和文化差异解释了"知识欠缺"。在 5 分钟对话后，它让 30% 的评委相信自己是人类。然而这并不意味着我们创造了一个智能系统——而是系统**创造者**欺骗了人类。
+
+### 智能的两种模型
+
+课程介绍了 AI 领域解决"智能"难题的两种典型路径：
+
+| 维度 | 符号推理（Top-Down） | 神经网络（Bottom-Up） |
+|------|:-------------------:|:--------------------:|
+| **核心思想** | 提取人类知识 → 表示为规则 → 推理机执行 | 模拟人脑神经元 → 训练网络 → 从数据中学习 |
+| **代表技术** | 专家系统、知识图谱、规则引擎 | 深度学习、CNN、Transformer |
+| **优势** | 可解释、可验证、精度高 | 无需人类编程规则、自动发现模式 |
+| **局限** | 知识提取困难、不擅长感知类任务 | 黑箱、需要大量数据、易过拟合 |
+| **典型应用** | 医疗诊断系统、法律推理 | 图像识别、NLP、语音识别 |
+
+**来源：** [Microsoft AI for Beginners — Lesson 1](https://github.com/microsoft/AI-For-Beginners/tree/main/lessons/1-Intro)
+
+---
+
 ## 📚 参考来源
 
 1. [What Is Artificial Intelligence? Definition, Uses, and Types — Coursera](https://www.coursera.org/articles/what-is-artificial-intelligence)（2026 年 3 月更新）
@@ -199,6 +282,67 @@
 5. [Microsoft AI for Beginners 课程](https://microsoft.github.io/AI-For-Beginners/)
 6. [Vaswani et al., "Attention Is All You Need" — Google Research, 2017](https://research.google/pubs/pub46201/)
 7. [Artificial Intelligence — Wikipedia](https://en.wikipedia.org/wiki/Artificial_intelligence)（2026 年 7 月查阅）
+8. [Microsoft AI for Beginners — Lesson 1: Introduction to AI 原文](https://github.com/microsoft/AI-For-Beginners/tree/main/lessons/1-Intro)
+
+---
+
+## 🧠 2026 Agent 认知架构入门：上下文窗口 ≠ 记忆
+
+根据 [Machine Learning Mastery 2026 年 6 月文章](https://machinelearningmastery.com/context-windows-are-not-memory-what-ai-agent-developers-need-to-understand/)：
+
+许多 AI 初学者看到模型宣称支持"200 万 token 上下文窗口"时，会本能地想："把所有内容塞进 prompt 就行了！" 但这在架构层面是一个根本性的误解。
+
+### 类比：办公桌 vs 文件柜
+
+| 概念 | 类比 | 特点 |
+|------|------|------|
+| **上下文窗口（Context Window）** | 办公桌面 | 无状态、每次会话结束"被清空" |
+| **记忆系统（Memory）** | 文件柜 | 持久化、可跨会话查询 |
+
+> "模型本质上是完全无状态的。每一次 API 调用都从零开始——即使你把 20 万 token 的对话历史传进去，模型也不是'记住'了之前发生的事，而是用几毫秒的时间把它的'整个宇宙'重新读了一遍。"
+
+### 三个关键概念
+
+#### 1. RAG（检索增强生成）= 书架
+
+RAG 系统像一个**大书架**——按需（Just-In-Time）拉取与当前问题最相关的文档片段进入上下文窗口。
+
+⚠️ **Agent 场景的陷阱**：向量相似度 ≠ 语义正确性。比如用户先说"把会议挪到周五"，后说"取消周四，Alice 病了"，向量检索可能同时返回这两条矛盾信息。解决方案：检索后先做冲突消解，如按时间戳取最新记录。
+
+#### 2. 压缩 = 减小信息体积
+
+压缩是**算法层面的 token 削减**——保持底层数据不变，只缩小物理占用。如用 LLMLingua 将 15000 token 压缩到 5000 token，释放上下文空间给核心任务。
+
+```
+原始负载（15000 token）→ LLMLingua 压缩 → 5000 token → 送进 prompt
+```
+
+#### 3. 摘要 = 单向不可逆
+
+摘要直接**替换原始数据为抽象**，原始信息不可恢复。最佳实践是"分叉存储"：原始对话写入 S3/SQL，摘要进 prompt，需要细节时再检索。
+
+### Agent 记忆的正确姿势：查询—提交循环
+
+要让 Agent 拥有真正的记忆，必须让它扮演**数据库管理员**而非**数据库本身**：
+
+```python
+def agent_turn(user_message, entity_graph):
+    # 每轮开始时查询已有状态
+    current_state = entity_graph.query(subject="User_Dog")
+    
+    response = model.generate(
+        messages=[{"role": "user", "content": user_message}],
+        context=current_state
+    )
+    
+    # 每轮结束时提交状态更新
+    for call in response.tool_calls:
+        entity_graph.update(**call.params)
+    
+    return response
+```
+
+> 核心理念：**别买一张 1000 万 token 的巨型办公桌。给 Agent 配一张普通桌子、一支好铅笔，教它如何打开文件柜。** （来源：Iván Palomares Carrascosa, Machine Learning Mastery, 2026-06-24）
 
 ---
 
@@ -218,4 +362,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-05 05:14:27*
+*资源区块更新时间：2026-07-07 00:14:39*

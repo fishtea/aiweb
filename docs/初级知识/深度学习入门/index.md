@@ -215,6 +215,83 @@
 
 ---
 
+## 🚀 2026 深度学习工具链新进展
+
+### PyTorch 生态 2026 重要更新
+
+根据 [PyTorch Blog 2026 年 7 月最新发布](https://pytorch.org/blog/)：
+
+#### Miles：大规模 LLM 强化学习后训练的 PyTorch 原生方案
+
+**Miles** 是 PyTorch 生态 2026 年推出的 **PyTorch-Native 强化学习后训练堆栈**，专为大规模语言模型的 RL 微调（RLHF / GRPO）设计。核心特点：
+
+- **原生 PyTorch 集成**：不再需要在 PyTorch 和外部 RL 框架之间桥接，减少数据搬运开销
+- **分布式训练优化**：支持跨多节点、多 GPU 的 RL 训练流水线
+- **适用场景**：DeepSeek-R1 风格的推理能力涌现训练、对齐调优
+
+#### TokenSpeed-Kernel：多芯片 LLM 推理加速
+
+**TokenSpeed-Kernel** 是面向多芯片平台的高性能推理内核：
+
+- **可移植 API**：同一套代码在 NVIDIA GPU、AMD GPU 和 Google TPU 上运行
+- **Blackwell 优化**：为 NVIDIA Blackwell 架构（B200）提供 warp 级别的稀疏自注意力加速
+- **实测数据**：Qwen3.5-397B-A17B 在 GPU 上跑 Agent 工作负载达到 **580 tokens/s** 的新纪录
+
+#### PyTorch Compile 内核融合
+
+PyTorch 的 `torch.compile` 通过**内核融合（Kernel Fusion）** 实现显著加速：
+- 将多个小操作（如激活函数 + 矩阵乘法）融合为单个 GPU 内核，减少内存读写
+- 2026 年新增 **Helion 内核**——为 SGLang、vLLM 等推理框架提供可移植的模型推理内核
+
+### 动手实战：用 LLM Embeddings 做无监督文本聚类
+
+根据 [Machine Learning Mastery 2026 年 6 月教程](https://machinelearningmastery.com/clustering-unstructured-text-with-llm-embeddings-and-hdbscan/)：
+
+这是将深度学习嵌入技术应用于实际数据分析的经典 pipeline：
+
+```
+原始文本 → Sentence-Transformers → 高维向量 → UMAP 降维 → HDBSCAN 聚类 → 话题发现
+```
+
+**核心步骤**：
+
+1. **生成嵌入（Embedding）**：使用 `sentence-transformers` 加载预训练模型（如 `all-MiniLM-L6-v2`），将每条文本转为 384 维向量
+2. **降维**：用 UMAP 将高维向量压缩到 2-3 维，保留语义结构
+3. **密度聚类**：HDBSCAN 自动发现话题簇，无需预设 K 值，且能识别噪声点
+4. **可视化**：用 Matplotlib 画出聚类散点图，直观展示话题分布
+
+```python
+from sentence_transformers import SentenceTransformer
+from umap import UMAP
+from hdbscan import HDBSCAN
+
+# 1. 生成嵌入
+model = SentenceTransformer('all-MiniLM-L6-v2')
+embeddings = model.encode(texts)
+
+# 2. 降维
+reduced = UMAP(n_components=2).fit_transform(embeddings)
+
+# 3. 密度聚类
+clusters = HDBSCAN(min_cluster_size=5).fit_predict(reduced)
+```
+
+> 💡 **关键认知**：LLM 不仅仅能聊天——其生成的语义嵌入是强大的特征提取器，可直接用于聚类、搜索、推荐等传统 ML 任务。
+
+### 2026 深度学习入门新建议
+
+- **从 PyTorch 开始**：PyTorch 已是学术界的默认框架，2026 年论文使用率超 90%
+- **拥抱预训练模型**：HuggingFace `transformers` 库是入门的最佳入口，先学会加载和微调，再学从零训练
+- **关注推理优化**：`torch.compile`、量化、内核融合等优化技术已是生产级 AI 系统的必备技能
+- **动手做项目**：LLM Embeddings + 聚类是理解深度学习的绝佳入门项目，代码不到 30 行
+
+### 参考来源
+
+- [PyTorch Blog — 2026 年 7 月](https://pytorch.org/blog/)
+- [Machine Learning Mastery — Clustering Unstructured Text with LLM Embeddings and HDBSCAN](https://machinelearningmastery.com/clustering-unstructured-text-with-llm-embeddings-and-hdbscan/)（2026-06-23）
+
+---
+
 *本页面内容基于真实在线资源编写。所有课程信息、评分和描述均源自各课程官方网站（截至 2026 年 7 月）。*
 
 ## 资料整理状态
@@ -229,4 +306,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-05 05:14:27*
+*资源区块更新时间：2026-07-07 00:14:39*

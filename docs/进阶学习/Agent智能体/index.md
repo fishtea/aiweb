@@ -387,6 +387,101 @@ jarvis digest --fresh
 
 ---
 
+## 12. 实战案例：Moon Bot — HuggingFace 内部 Slack Coding Agent
+
+### 12.1 概述
+
+**来源：** [Building Moon Bot: A Slack-Native Coding Agent Backed by HuggingFace Buckets - HuggingFace Blog (2026-06-24)](https://huggingface.co/blog/huggingface/moon-bot)
+
+Moon Bot 是 HuggingFace 团队内部的 Slack 原生编码 Agent，由 HuggingFace 工程师 Eliott Coyac、Caleb Fahlgren 和 Franck Abgrall 构建。它运行在 Kubernetes Pod 中，使用 **Pi coding agent SDK**，通过 **HuggingFace Buckets** 实现持久化会话记忆，每天自动滚动部署并恢复所有活跃对话。
+
+> 核心价值：将 Elasticsearch 日志查询、MongoDB 数据检索、代码库理解和 GitHub PR 创建全部压缩进一条 Slack 消息。
+
+### 12.2 解决的问题
+
+HuggingFace 团队每天在 Slack 中工作，但回答一个问题往往需要多次上下文切换：
+
+| 操作 | 原流程 | Moon Bot 流程 |
+|------|--------|--------------|
+| 查询 Elasticsearch 日志 | 打开 Elasticsearch → 认证 → 写查询 | `@Moon Bot 查一下最近的错误日志` |
+| 查询 MongoDB 用户数据 | 打开 MongoDB → 认证 → 写查询 | `@Moon Bot 上月有多少 Pro 用户注册？` |
+| 理解代码库 | 打开 IDE → 搜索 → 阅读 | `@Moon Bot Hub 的认证流程是怎样的？` |
+| 创建 GitHub PR | 写代码 → commit → push → 开 PR | `@Moon Bot 修复这个 bug 并开 PR` |
+
+### 12.3 架构设计
+
+```
+Slack (Socket Mode)
+  → src/slack.ts           # 消息路由
+  → src/agent.ts           # 创建 Bot 会话
+  → Pi SDK (createAgentSession)
+  → LLM (Kimi K2, Claude 等)
+  → Skills: es-cli, mongo, github, hub-code, plausible, …
+  → Tools: bash, read, write, edit, memory, open_pr, …
+```
+
+**独立会话隔离**：每个 Slack 线程拥有独立的 Pi Agent 会话——包含完整工具调用历史的有状态 LLM 对话。多个线程并行运行，互不干扰。
+
+### 12.4 HF Buckets 会话持久化
+
+这是 Moon Bot 最巧妙的设计。Pod 每天滚动部署或崩溃重启后，如何无缝恢复每个活跃线程？
+
+**方案：三个文件，一个私有 HF Bucket（`huggingface/moon-bot-memory`）**
+
+1. **`sessions/<id>.jsonl`**：每个 Pi Agent 会话的完整消息历史（包括所有工具调用和结果），以 append-only JSONL 格式存储。首次消息创建新文件，后续消息（即使几天后）按需下载并恢复。
+
+2. **`threads.json`**：Slack 线程 ID → 会话文件名的映射索引。
+
+3. **`context.txt`**：长期记忆——记录"上周帮过什么忙"，让 Agent 具备跨天上下文。
+
+```typescript
+// 启动时：按需从 Bucket 下载会话文件
+async function ensureSessionFile(filename: string): Promise<string | undefined> {
+  const localPath = join(LOCAL_SESSIONS_DIR, filename);
+  if (existsSync(localPath)) return localPath; // 已缓存
+  const blob = await downloadFile({
+    repo: "huggingface/moon-bot-memory",
+    path: `sessions/${filename}`
+  });
+  await writeFile(localPath, blob);
+  return localPath;
+}
+```
+
+### 12.5 Skills 工具集
+
+Moon Bot 集成了 HuggingFace 全栈技能：
+
+| Skill | 能力 |
+|-------|------|
+| **es-cli** | 直接查询 Elasticsearch 访问日志和错误日志 |
+| **mongo** | 查询 MongoDB 中的用户数据和系统状态 |
+| **github** | 浏览代码、理解架构、创建 PR |
+| **hub-code** | 理解 HuggingFace Hub 代码库 |
+| **plausible** | 拉取网站分析数据 |
+| **bash/read/write/edit** | 通用文件操作 |
+| **memory** | 长期记忆（基于 Buckets） |
+| **open_pr** | 从对话上下文直接创建 GitHub PR |
+
+### 12.6 生产级设计要点
+
+1. **Socket Mode 接入**：不需要公网 HTTP 端点，Slack 通过 WebSocket 推送消息到 Pod。
+2. **多模型路由**：支持 Kimi K2、Claude 等多个 LLM 后端切换。
+3. **每日滚动部署**：Pod 每天重启，所有会话从 Bucket 自动恢复——零数据丢失。
+4. **内网权限**：Pod 具有特权内部网络访问，可直接连接 Elasticsearch、MongoDB 等内部服务。
+5. **无上下文切换**：支持、工程、数据分析人员全部在 Slack 内完成查询和分析。
+
+### 12.7 对 Agent 工程实践的启示
+
+- **持久化是第一要务**：生产 Agent 不能假设会话不会中断。Bucket/对象存储是轻量且可靠的方案。
+- **工具即 Skills**：按业务领域组织工具（es-cli、mongo、github）比按技术类型组织更直观。
+- **长会话记忆**：`记忆上周帮了什么` 让 Agent 从"工具"进化为"同事"。
+- **自主部署节奏**：每日滚动部署 + 自动恢复 = 运维零负担。
+
+> 来源参考：[Building Moon Bot - HuggingFace Blog](https://huggingface.co/blog/huggingface/moon-bot)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -399,4 +494,4 @@ jarvis digest --fresh
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-05 05:14:27*
+*资源区块更新时间：2026-07-07 00:14:39*

@@ -298,6 +298,101 @@ Tom Mitchell（1997）给出了机器学习最经典的定义：
 
 ---
 
+## 📚 Microsoft ML for Beginners：12 周 26 课系统课程
+
+[A vitepress site to host the ML for Beginners curriculum.](https://microsoft.github.io/ML-For-Beginners/) 是 Microsoft Cloud Advocate 团队推出的 **12 周、26 课时**的机器学习入门课程，以 Scikit-learn 为主，避免深度学习内容（另有单独的 AI for Beginners 课程覆盖）。
+
+### 课程结构
+
+| 模块 | 课时 | 核心内容 |
+|------|:----:|---------|
+| **1. 入门** | 4 | ML 概念、历史、公平性议题、ML 技术分类 |
+| **2. 回归** | 3 | 工具搭建 → 数据可视化清理 → 线性/多项式回归 → 逻辑回归 |
+| **3. Web 应用** | 1 | 将训练模型部署到 Web App |
+| **4. 分类** | 4 | 分类器入门（决策树、SVM）→ 更多分类器（KNN、朴素贝叶斯）→ 推荐系统 Web App |
+| **5. 聚类** | 2 | K-Means 聚类可视化 |
+| **6. 自然语言处理** | 5 | NLP 基础 → 常见任务 → 翻译与情感分析 → 酒店评论情感分析实战（2 课） |
+| **7. 时间序列** | 3 | 时间序列基础 → ARIMA → SVR |
+| **8. 强化学习** | 2 | Q-Learning 基础 → Gym 环境实战 |
+| **附录** | 2 | 真实 ML 应用场景、RAI Dashboard 模型调试 |
+
+每个课时都包含：
+- **前/后测验** — 低风险测验检验学习效果
+- **动手项目** — 基于真实世界数据集构建项目
+- **挑战题** — 扩展练习
+- **补充阅读** — 延伸学习材料
+
+### 课程特色与教学法
+
+- **项目驱动（Project-Based）**：课程围绕真实数据集设计，每个模块都有完整的项目实践
+- **Scikit-learn 为主**：聚焦经典 ML 算法，适合初学者建立坚实基础
+- **世界文化主题**：数据来自世界各地——北美南瓜价格、亚洲/印度料理、尼日利亚音乐、欧洲浪漫酒店，让学习更有趣
+- **公平性贯穿始终**：第 3 课专门讨论 ML 公平性的哲学问题，包括偏见识别与缓解策略
+- **多语言支持**：提供 50+ 种语言的翻译
+
+### 学完后的核心能力
+
+1. ✅ 理解监督学习、无监督学习、强化学习的区别与应用场景
+2. ✅ 掌握 Scikit-learn 完成回归、分类、聚类、NLP、时间序列预测
+3. ✅ 懂得数据预处理、特征工程、模型评估与调优
+4. ✅ 能将训练好的模型部署到简单的 Web 应用中
+5. ✅ 了解 ML 项目的公平性考量
+
+### 对比 Andrew Ng ML Specialization
+
+| 维度 | Andrew Ng ML Specialization | Microsoft ML for Beginners |
+|------|:--------------------------:|:--------------------------:|
+| 课时 | 约 10 周（3 门课程） | 12 周（26 课时） |
+| 编程语言 | Python（NumPy、TensorFlow） | Python（Scikit-learn） |
+| 深度学习内容 | ✅ 含神经网络 | ❌ 不覆盖 |
+| 实践风格 | Jupyter Notebook | 项目驱动 + Notebook |
+| 价格 | Coursera 订阅（可申助学金） | 完全免费（开源） |
+| 适合人群 | 有一定编程基础 | 绝对零基础也可入门 |
+
+**来源：** [Microsoft ML for Beginners GitHub](https://github.com/microsoft/ML-For-Beginners) | [视频播放列表](https://aka.ms/ml-beginners-videos)
+
+---
+
+## 🎯 机器学习初学者的第一次练习
+
+根据 Microsoft ML for Beginners 课程第一课的介绍，学习 ML 的最佳方式是**动手练习**：
+
+### 立即开始的建议
+
+1. **安装环境**：Python 3 + Jupyter Notebook（或 VS Code + Python 扩展）
+2. **导入一个真实数据集**：从 Kaggle 或 UCI ML Repository 下载
+3. **做 EDA**：用 Pandas 读数据 → Matplotlib 画分布图 → 检查缺失值
+4. **运行第一个模型**：Scikit-learn 加载鸢尾花（Iris）数据集 → 训练决策树 → 评估准确率
+
+```python
+# 你的第一个 ML 模型：鸢尾花分类
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# 加载数据
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 拆分训练/测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 训练决策树
+model = DecisionTreeClassifier(max_depth=3)
+model.fit(X_train, y_train)
+
+# 评估
+y_pred = model.predict(X_test)
+print(f"准确率: {accuracy_score(y_test, y_pred):.2f}")
+```
+
+> 这个简单的例子涵盖了 ML 的基本流程：**加载数据 → 拆分 → 训练 → 评估**。任何 ML 项目都遵循相同的范式。
+
+**来源：** [Microsoft ML for Beginners — Lesson 1](https://github.com/microsoft/ML-For-Beginners/tree/main/1-Introduction/1-intro-to-ML)
+
+---
+
 ## 📚 参考来源
 
 1. [Machine Learning Specialization — Coursera](https://www.coursera.org/specializations/machine-learning-introduction)
@@ -309,6 +404,105 @@ Tom Mitchell（1997）给出了机器学习最经典的定义：
 7. [Machine Learning Mastery — Start Here](https://machinelearningmastery.com/start-here)
 8. [GeeksforGeeks — Machine Learning Tutorial](https://geeksforgeeks.org/machine-learning/machine-learning)
 9. [Machine Learning — Wikipedia](https://en.wikipedia.org/wiki/Machine_learning)（2026 年 7 月查阅）
+10. [Microsoft ML for Beginners GitHub](https://github.com/microsoft/ML-For-Beginners)
+11. [Microsoft ML for Beginners — 课程视频播放列表](https://aka.ms/ml-beginners-videos)
+
+---
+
+## 🔧 2026 AI 工程师必掌握的 5 个 Python 核心概念
+
+根据 [Machine Learning Mastery 2026 年 6 月文章](https://machinelearningmastery.com/python-concepts-every-ai-engineer-must-master/)（作者：Matthew Mayo）：
+
+从写实验脚本到构建生产级 AI 系统，需要的远不止基础循环和列表推导式。以下是每位 AI 工程师必须精通的 5 个 Python 概念：
+
+### 1. 生成器与惰性求值 — 大规模数据流式处理
+
+处理百万级文本或图片数据集时，一次性加载全部数据是内存溢出的根源。**生成器（Generator）** 通过 `yield` 关键字实现惰性求值——按需逐条产出，内存占用恒定。
+
+实测对比（50,000 条数据流）：
+
+| 方法 | 峰值内存 |
+|------|:---------:|
+| 列表一次性加载 | **25.21 MB** |
+| 生成器流式处理 | **13.96 MB** |
+
+```python
+# 生成器模式：内存占用平坦
+def stream_records(stream):
+    for line in stream:
+        payload = json.loads(line)
+        yield {
+            "id": payload["id"],
+            "text": payload["text"].lower(),
+        }
+```
+
+> 处理 GB 级 LLM 训练数据时，生成器确保内存消耗始终可预测。
+
+### 2. 上下文管理器 — 资源与状态管理
+
+AI 应用频繁操作 GPU 状态、数据库连接、性能分析。**`with` 语句**确保无论是否发生异常，资源的 setup/teardown 逻辑都得到执行：
+
+```python
+class InferenceProfiler:
+    def __enter__(self):
+        self.model.training = False    # 切换到推理模式
+        self.start_time = time.perf_counter()
+        return self
+    
+    def __exit__(self, *args):
+        self.model.training = True      # 恢复训练模式
+        elapsed = time.perf_counter() - self.start_time
+        print(f"推理耗时: {elapsed:.4f}s")
+
+# 使用：代码简洁且安全
+with InferenceProfiler(model):
+    outputs = model([1.0, 2.0, 3.0])
+```
+
+### 3. 异步编程 — 大规模 API 调用并发
+
+调用 LLM API 或执行 Agent 工具时，同步请求意味着串行等待。**`async/await`** 让并发请求成为可能：
+
+- **适用场景**：同时查询多个 LLM API、并发执行 Agent 工具调用
+- **关键库**：`asyncio`、`aiohttp`、`httpx`
+
+### 4. Dataclass 与 Pydantic — 配置验证与结构化 Schema
+
+从"随便传个 dict"到"类型安全的配置系统"，只差一个 Pydantic：
+
+- **Dataclass**：减少样板代码，定义数据容器
+- **Pydantic**：运行时验证 + 类型强制转换 + JSON Schema 生成
+- **典型应用**：Agent 工具调用的参数验证、模型配置管理
+
+### 5. 魔术方法 — 构建框架兼容的抽象
+
+`__call__`、`__getitem__`、`__len__` 等魔术方法让你自定义的类无缝融入 PyTorch 等深度学习框架：
+
+```python
+class CustomDataset:
+    def __len__(self): return len(self.data)
+    def __getitem__(self, idx): return self.data[idx]
+# 现在可以像 PyTorch Dataset 一样使用
+```
+
+### 五者关系图
+
+```
+生成器                上下文管理器          异步编程
+  ↓                      ↓                   ↓
+数据流式处理    →    资源安全封装    →    高并发调用
+  ↓                      ↓                   ↓
+Dataclass/Pydantic       ←      魔术方法
+  ↓                              ↓
+类型安全配置              框架兼容抽象
+```
+
+> 💡 **关键转变**：AI 工程不只是训练模型——它包括处理海量数据、管理 GPU 资源、并发调用 API、构建类型安全的接口。这 5 个概念是从"实验脚本"到"生产系统"的分水岭。
+
+### 参考来源
+
+- [Python Concepts Every AI Engineer Must Master — Machine Learning Mastery](https://machinelearningmastery.com/python-concepts-every-ai-engineer-must-master/)（Matthew Mayo, 2026-06-12）
 
 ---
 
@@ -326,4 +520,4 @@ Tom Mitchell（1997）给出了机器学习最经典的定义：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-05 05:14:27*
+*资源区块更新时间：2026-07-07 00:14:39*
