@@ -23,5 +23,3 @@ venv/
 
 # Node.js
 node_modules/
-
-.vercel

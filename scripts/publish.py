@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Build, deploy, commit, and push the current documentation batch."""
+"""Audit, build, commit, and push the current documentation batch to GitHub."""
 
 from __future__ import annotations
 
 import argparse
+import shutil
 import subprocess
 from datetime import datetime, timezone, timedelta
 
 
 def run(cmd: list[str]) -> None:
-    print(f"$ {' '.join(cmd)}")
-    subprocess.run(cmd, check=True)
+    print(f"$ {' '.join(cmd)}", flush=True)
+    executable = shutil.which(cmd[0]) or cmd[0]
+    subprocess.run([executable, *cmd[1:]], check=True)
 
 
 def has_staged_changes() -> bool:
@@ -21,16 +23,15 @@ def has_staged_changes() -> bool:
 def main() -> None:
     tz = timezone(timedelta(hours=8))
     default_message = f"docs: publish batch update {datetime.now(tz).strftime('%Y-%m-%d %H:%M')}"
-    parser = argparse.ArgumentParser(description="Publish all current docs changes to the website in one batch.")
+    parser = argparse.ArgumentParser(description="Publish current docs changes through GitHub Pages.")
     parser.add_argument("-m", "--message", default=default_message, help="Git commit message.")
-    parser.add_argument("--skip-git", action="store_true", help="Deploy only; do not commit or push.")
+    parser.add_argument("--skip-git", action="store_true", help="Audit and build only; do not commit or push.")
     parser.add_argument("--skip-audit", action="store_true", help="Skip docs audit.")
     args = parser.parse_args()
 
     if not args.skip_audit:
         run(["python", "scripts/audit_docs.py"])
     run(["npm", "run", "build"])
-    run(["python", "scripts/deploy.py"])
 
     if args.skip_git:
         return

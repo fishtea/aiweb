@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vitepress dev docs --host 0.0.0.0",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs --host 0.0.0.0"
+    "preview": "vitepress preview docs --host 0.0.0.0",
+    "audit": "python scripts/audit_docs.py",
+    "publish": "python scripts/publish.py",
+    "publish:check": "python scripts/publish.py --skip-git --skip-audit"
   },
   "devDependencies": {
     "vitepress": "^1.6.4"
