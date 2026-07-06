@@ -1,6 +1,6 @@
 # GPT 系列 — OpenAI
 
-> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族。按 2026-07-06 可核验的官方模型列表，生产选型应重点关注 GPT-4o、GPT-4.1 系列和 o 系列推理模型，而不是继续以早期 GPT-4 / GPT-3.5 作为默认基线。
+> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族。按 OpenAI 2026-07-06 官方模型列表，生产选型应重点关注 GPT-5.6、GPT-5.5、GPT-5.5-mini、GPT-4.1 和 o 系列推理模型。
 
 ---
 
@@ -20,8 +20,10 @@
 | GPT-4.5 | 2025.02 | 未公开 | 更强的世界知识和情感智能 |
 | o3 / o4-mini | 2025.04 | 未公开 | 推理 + 工具调用 + 多模态，o4-mini 性价比极高 |
 | GPT-4.1 系列 | 2025.04 | 未公开 | 强化编码、指令遵循和长上下文，提供 mini / nano 档位 |
+| GPT-5.5 系列 | 2026 | 未公开 | 2026 主力通用模型，含 mini 与 nano 档位 |
+| GPT-5.6 | 2026 | 未公开 | 最新旗舰预览模型，面向复杂任务、Agent 和编码 |
 
-> **核心架构:** GPT 系列仍以 Decoder-only Transformer 为基础。GPT-4o 将文本、图像、音频交互统一到更低延迟的多模态体验；o 系列是面向复杂推理的模型线，会在内部消耗推理 token；GPT-4.1 系列更适合代码、长上下文和稳定指令遵循。
+> **核心架构:** GPT 系列仍以 Decoder-only Transformer 为基础。GPT-4o 将文本、图像、音频交互统一到更低延迟的多模态体验；o 系列是面向复杂推理的模型线，会在内部消耗推理 token；GPT-5.5 / 5.6 系列把通用对话、编码、工具调用和 Agent 执行能力继续合并到更统一的模型路线。
 
 ---
 
@@ -44,11 +46,13 @@
 
 ---
 
-## GPT-4o、GPT-4.1 与 GPT-4.5
+## 2026 最新模型线
 
-- **GPT-4o**（2024.05）："o" 代表 "omni"，原生支持语音、文本、图像多模态，适合低延迟交互、图像理解和语音体验。
-- **GPT-4.1**（2025.04）：面向 API 的通用与编码模型线，重点提升指令遵循、长上下文和代码能力；mini / nano 版本适合低成本高吞吐。
-- **GPT-4.5**（2025.02）：偏重自然对话、知识广度和创造性，但成本较高，适合质量敏感而非大规模低价调用。
+- **GPT-5.6**：OpenAI 官方模型页列出的最新旗舰预览模型，定位为复杂任务、长期 Agent、编码和高难度推理的首选。
+- **GPT-5.5**：2026 主力旗舰模型，适合通用对话、多模态理解、工具调用和生产级 Agent。
+- **GPT-5.5-mini / nano**：面向低成本、高吞吐和低延迟场景，适合路由、抽取、摘要、批处理和简单工具调用。
+- **GPT-4.1 / 4.1-mini / 4.1-nano**：仍适合代码、长上下文和稳定结构化输出；如果系统已经围绕 4.1 做评估，可作为保守生产基线。
+- **GPT-4o / GPT-4o-mini**：多模态交互和低延迟体验仍有价值，但新项目应优先评估 GPT-5.5 系列。
 
 ---
 
@@ -104,19 +108,20 @@ print(completion.choices[0].message.content)
 
 截至 2026-07-06，OpenAI 的实用选型可以按任务拆分：
 
-- **默认多模态助手**：GPT-4o。适合聊天、语音、图像理解、轻量工具调用。
-- **长上下文与代码**：GPT-4.1 / GPT-4.1-mini。适合代码仓库问答、结构化生成和批量任务。
-- **复杂推理**：o3、o4-mini 或 o3-mini。适合数学、规划、复杂代码修复和多步工具调用。
-- **大规模低成本**：GPT-4.1-mini / nano、GPT-4o-mini 或 o4-mini，具体取决于是否需要推理能力。
+- **默认旗舰**：GPT-5.5。适合通用助手、多模态、工具调用和生产 Agent。
+- **最高质量 / 前沿能力验证**：GPT-5.6。适合复杂编码、规划、研究和高价值任务。
+- **成本敏感**：GPT-5.5-mini / nano。适合批量抽取、摘要、分类、路由和轻量对话。
+- **专门推理**：o3、o4-mini 或 o3-mini。适合需要显式推理预算和可控延迟的数学、规划、复杂代码修复。
+- **保守迁移**：GPT-4.1 系列。适合已有评估体系且暂不想切换到 GPT-5.5 的生产系统。
 
 ### 选择建议
 
 | 场景 | 推荐 |
 |------|------|
-| 日常对话、写作、翻译 | GPT-4o / GPT-4.1-mini |
-| 复杂推理、数学、竞赛编程 | o3 / o4-mini |
-| Agent 多步工具编排 | GPT-4.1 + o 系列组合 |
-| 成本敏感的大规模调用 | GPT-4.1-mini / GPT-4.1-nano / GPT-4o-mini |
+| 日常对话、写作、翻译 | GPT-5.5 / GPT-5.5-mini |
+| 复杂推理、数学、竞赛编程 | GPT-5.6 / o3 / o4-mini |
+| Agent 多步工具编排 | GPT-5.6 / GPT-5.5 |
+| 成本敏感的大规模调用 | GPT-5.5-mini / GPT-5.5-nano |
 
 > 趋势：生产系统越来越少依赖单一模型。常见做法是用便宜模型做路由、抽取和简单回答，用推理模型处理少量高难度任务，并通过评估集控制成本和质量。
 
@@ -137,7 +142,7 @@ from openai import OpenAI
 client = OpenAI(api_key="your-api-key")
 
 completion = client.chat.completions.create(
-    model="gpt-4.1",
+    model="gpt-5.5",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "解释一下 GPT 的架构特点。"}
@@ -163,7 +168,7 @@ class MathReasoning(BaseModel):
     final_answer: str
 
 completion = client.beta.chat.completions.parse(
-    model="gpt-4.1",
+    model="gpt-5.5",
     messages=[{"role": "user", "content": "解方程 8x + 7 = -23"}],
     response_format=MathReasoning,  # 模型输出会被约束为该结构
 )

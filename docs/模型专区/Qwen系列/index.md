@@ -1,6 +1,6 @@
 # Qwen 系列 — 阿里巴巴
 
-> Qwen（通义千问）是由阿里巴巴 Qwen 团队开发的大语言模型系列。Qwen 走 Dense（稠密）和 MoE（混合专家）双路线，并覆盖文本、代码、视觉、音频和 Omni 多模态，是中文开源生态中最重要的模型家族之一。
+> Qwen（通义千问）是由阿里巴巴 Qwen 团队开发的大语言模型系列。Qwen 走 Dense（稠密）和 MoE（混合专家）双路线，并覆盖文本、代码、视觉、音频和 Omni 多模态。按 2026-07-06 可核验的 Qwen 官方博客与模型仓库，新项目应优先评估 Qwen3、Qwen3-Coder、Qwen2.5-VL / Omni 相关模型。
 
 ---
 
@@ -37,6 +37,8 @@ Qwen3（2025.04）是 Qwen 走向"思考模式可控"的一代：
 | 代码生成与 Coding Agent | Qwen3-Coder、Qwen2.5-Coder |
 | 视觉文档理解 | Qwen2.5-VL、Qwen-VL 系列 |
 | 语音、视频、跨模态 Agent | Qwen-Omni / Qwen-Audio 相关模型 |
+
+> 截至 2026-07-06，未找到 Qwen 官方发布的 Qwen4 主线资料；本文按官方可核验的 Qwen3 / Qwen3-Coder / Qwen2.5-VL / Omni 相关模型更新。
 
 ---
 
@@ -116,7 +118,7 @@ completion = client.chat.completions.create(
     model="qwen-plus",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "介绍 Qwen2.5 系列的特点。"}
+        {"role": "user", "content": "介绍 Qwen3 系列的特点。"}
     ]
 )
 

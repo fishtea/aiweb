@@ -1,6 +1,6 @@
 # LLaMA 系列 — Meta
 
-> Llama（Large Language Model Meta AI）是 Meta 开发的开放权重大语言模型系列。作为开源生态中最具影响力的模型家族之一，Llama 3、3.1、3.3 和 4 系列推动了本地部署、微调和企业私有化应用。
+> Llama（Large Language Model Meta AI）是 Meta 开发的开放权重大语言模型系列。按 2026-07-06 可核验的 Meta 官方发布页，最新主线仍是 Llama 4；生产选型应重点评估 Llama 4 Scout / Maverick、Llama 3.3 70B 和 Llama 3.1 405B。
 
 ---
 
@@ -31,6 +31,18 @@ Llama 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
 - **开放权重许可延续**，但超大规模商业应用仍需遵守 Meta 的许可限制。
 
 > 局限：LLaMA 4 发布初期基准表现引发争议（Meta 承认评测版本配置问题），实际能力以官方更新为准。中文场景建议优先对比 Qwen3、DeepSeek。
+
+### 2026 最新可用列表
+
+| 场景 | 推荐 |
+|------|------|
+| 超长上下文、整库代码和海量文档 | Llama 4 Scout |
+| 通用多模态、质量优先 | Llama 4 Maverick |
+| 开放权重旗舰基线、蒸馏和评估 | Llama 3.1 405B |
+| 成本可控的生产文本模型 | Llama 3.3 70B |
+| 消费级 GPU 本地实验 | Llama 3.1 8B / 70B 量化版 |
+
+> 截至 2026-07-06，未找到 Meta 官方发布的 Llama 5 或 Llama 4.5。文档按可核验的 Llama 4 与 Llama 3.x 更新。
 
 ---
 
@@ -91,12 +103,12 @@ Llama 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
+model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-4-Scout-17B-16E-Instruct")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-4-Scout-17B-16E-Instruct")
 
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "介绍 Llama 3.1 的主要特性。"}
+    {"role": "user", "content": "介绍 Llama 4 Scout 的主要特性。"}
 ]
 
 input_ids = tokenizer.apply_chat_template(messages, return_tensors="pt")

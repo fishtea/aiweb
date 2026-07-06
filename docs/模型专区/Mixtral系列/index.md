@@ -1,6 +1,6 @@
 # Mixtral 系列 — Mistral AI
 
-> Mixtral 是法国 AI 公司 Mistral AI 开发的稀疏混合专家（Sparse Mixture-of-Experts, SMoE）模型系列。2026 年看 Mistral 生态时，不应只看 Mixtral 8x7B / 8x22B，还要同时评估 Mistral Small / Medium / Large、Codestral 和 Magistral 等新模型线。
+> Mixtral 是法国 AI 公司 Mistral AI 开发的稀疏混合专家（Sparse Mixture-of-Experts, SMoE）模型系列。2026 年看 Mistral 生态时，不应只看 Mixtral 8x7B / 8x22B，还要同时评估 Mistral Large、Medium 3.1、Small、Devstral、Codestral、Magistral 和 Voxtral 等新模型线。
 
 ---
 
@@ -17,11 +17,17 @@
 | Mistral Small 3 / 3.1 | 2025 | 24B | 24B | N/A (Dense) | 32K-128K |
 | Mistral Medium 3 | 2025.05 | 未公开 | 未公开 | N/A (Dense) | 128K |
 | Magistral | 2025.06 | Small / Medium | — | 推理增强 | 40K+ |
+| Mistral Medium 3.1 | 2026 | 未公开 | 未公开 | N/A | 128K |
+| Devstral | 2026 | Small / Medium | — | N/A | 代码与 Agent |
+| Voxtral | 2026 | Mini / Small | — | N/A | 语音理解 |
 
 ### Mistral 的推理与 Agent 转向
 
-2025 年 Mistral AI 开始补齐推理模型和 Agent 能力：
+2025-2026 年 Mistral AI 开始补齐推理模型、编码模型、语音模型和 Agent 能力：
 
+- **Mistral Medium 3.1**：2026 官方模型页列出的高性价比企业模型，适合 API、私有化和复杂业务工作流。
+- **Devstral**：面向软件工程和 Coding Agent 的模型线，适合代码检索、修改、测试和工具调用。
+- **Voxtral**：语音理解模型线，覆盖转写、语音问答和音频理解。
 - **Magistral**（2025.06）：Mistral 的推理模型线，面向多步推理、数学、代码和可解释推理过程。
 - **Mistral Medium 3**（2025.05）：主打高性价比，性能接近闭源旗舰但成本更低，企业可本地部署。
 - **Codestral**：代码专用模型，支持 80+ 编程语言，适合 IDE 补全和 Agent 编码。
@@ -138,7 +144,7 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 **局限:**
 - 中文能力有限（主要在英语和欧洲语言上训练）
 - 8x22B 仍需多 GPU 部署
-- 后续更新节奏慢（截至 2025 年末尚无 Mixtral 2）
+- Mixtral 本身更新节奏慢，Mistral 2026 的重点更多转向 Medium、Devstral、Magistral、Voxtral 等模型线
 - 创意写作不如 GPT-4/Claude
 
 ---
@@ -151,9 +157,11 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 | **Mistral Nemo** | 与 NVIDIA 合作的 12B 模型，128K 上下文 |
 | **Mistral Large** | 闭源旗舰，与 GPT-4 竞争的顶级模型 |
 | **Mistral Small 3 / 3.1** | 24B 参数的新一代高效模型，适合私有化部署 |
-| **Mistral Medium 3** | 企业高性价比模型，适合 API 与私有化 |
+| **Mistral Medium 3 / 3.1** | 企业高性价比模型，适合 API 与私有化 |
 | **Codestral** | 代码生成和补全模型 |
+| **Devstral** | 软件工程与 Coding Agent 模型 |
 | **Magistral** | 推理模型线 |
+| **Voxtral** | 语音理解模型线 |
 
 ---
 

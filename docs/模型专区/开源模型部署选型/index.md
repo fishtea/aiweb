@@ -32,10 +32,10 @@
 | 家族 | 常见使用重点 |
 |------|--------------|
 | LLaMA | 通用开源生态、微调资料丰富、部署工具支持好 |
-| Qwen | 中文、代码、多模态和工具调用生态活跃 |
-| DeepSeek | 代码、推理和性价比场景常被重点评估 |
-| Mixtral/Mistral | MoE 与轻量高效模型路线，适合关注吞吐和部署成本 |
-| Stable Diffusion | 图像生成与工作流生态，通常与 ComfyUI 配合使用 |
+| Qwen | Qwen3 / Qwen3-Coder 适合中文、代码、多模态和工具调用 |
+| DeepSeek | V3 / R1 / DeepSeek-OCR 适合代码、推理、文档理解和性价比场景 |
+| Mixtral/Mistral | Medium 3.1、Devstral、Magistral、Voxtral 与 Mixtral，覆盖企业、代码、推理和语音 |
+| Stable Diffusion / FLUX | 图像生成与工作流生态，通常与 ComfyUI 配合使用 |
 
 ## 部署前检查清单
 
@@ -80,6 +80,8 @@
 
 ## 2026 选型补充
 
+- **闭源 API 与开源模型混合使用**：GPT-5.6、Claude Fable 5、Gemini 3 Pro 等闭源模型适合高价值步骤；Qwen3、DeepSeek、Llama 4、Mistral 等适合私有化和成本控制。
+- **2026 开源默认候选**：中文与代码优先看 Qwen3 / DeepSeek-R1；超长上下文和开放权重多模态看 Llama 4 Scout / Maverick；欧洲合规和企业部署看 Mistral Medium 3.1 / Devstral。
 - **不要只看参数量**：MoE 模型要同时看总参数、激活参数、专家路由稳定性和实际吞吐。
 - **长上下文要测 KV cache**：128K 以上上下文的显存主要消耗常常来自 KV cache，并发越高越明显。
 - **量化必须复测业务任务**：4-bit / 8-bit 量化可能对抽取、代码和数学造成不同程度损失。
