@@ -204,6 +204,7 @@ const sidebar = [
 
 export default defineConfig({
   lang: 'zh-CN',
+  base: '/aiweb/',
   title: 'AI 学习路径导航',
   description: '每日自动更新的中文 AI 教程、模型、工具与 Agent 实践知识库',
   cleanUrls: true,
