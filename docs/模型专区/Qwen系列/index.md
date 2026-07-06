@@ -1,6 +1,6 @@
 # Qwen 系列 — 阿里巴巴
 
-> Qwen（通义千问）是由阿里巴巴旗下 Qwen 团队开发的大语言模型系列。Qwen 系列走 Dense（稠密）和 MoE（混合专家）双路线，在中文和多语言任务上表现尤为突出，是开源生态中最重要的中国模型家族。
+> Qwen（通义千问）是由阿里巴巴 Qwen 团队开发的大语言模型系列。Qwen 走 Dense（稠密）和 MoE（混合专家）双路线，并覆盖文本、代码、视觉、音频和 Omni 多模态，是中文开源生态中最重要的模型家族之一。
 
 ---
 
@@ -16,16 +16,27 @@
 | Qwen2.5 | 2024.12 | 0.5B-72B | Dense | 18T tokens | 128K |
 | Qwen2.5-Max | 2025.01 | 未公开 | **MoE** | >20T tokens | 128K |
 | Qwen2.5-VL | 2025.01 | 3B/7B/72B | 视觉语言 | — | — |
-| Qwen3 系列 | 2025.10 | 0.6B-235B(A22B) | Dense + MoE | 36T+ tokens | 128K |
+| Qwen3 系列 | 2025.04 | 0.6B-235B(A22B) | Dense + MoE | 36T+ tokens | 32K-128K |
+| Qwen3-Coder | 2025.07 | 多规格 | Dense / MoE | 代码与 Agent 数据 | 长上下文 |
 
 ### Qwen3 — 统一推理与思考模式
 
-Qwen3（2025.10）是 Qwen 走向"思考模式可控"的一代：
+Qwen3（2025.04）是 Qwen 走向"思考模式可控"的一代：
 
-- **混合思考模式**：支持 `thinking`（深度推理）与 `non-thinking`（快速直答）两种模式，可由用户或系统动态切换，兼顾准确率与延迟。
+- **混合思考模式**：支持 `thinking`（深度推理）与 `non-thinking`（快速直答）两种模式，兼顾准确率与延迟。
 - **Dense + MoE 双规格**：从 0.6B 端侧到 235B（激活 22B）旗舰 MoE，覆盖从手机到数据中心的部署需求。
 - **Agent 与工具调用强化**：原生支持函数调用、结构化输出和 MCP，在 Agent 基准上表现领先。
 - **多语言与中文优势**：延续 Qwen 系列的中文能力，同时大幅提升多语言覆盖。
+
+### 2026 选型建议
+
+| 场景 | 推荐 |
+|------|------|
+| 中文通用问答与企业知识库 | Qwen3-14B / 32B / 235B-A22B |
+| 本地轻量部署 | Qwen3-0.6B / 1.7B / 4B / 8B |
+| 代码生成与 Coding Agent | Qwen3-Coder、Qwen2.5-Coder |
+| 视觉文档理解 | Qwen2.5-VL、Qwen-VL 系列 |
+| 语音、视频、跨模态 Agent | Qwen-Omni / Qwen-Audio 相关模型 |
 
 ---
 
@@ -102,7 +113,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen-max-2025-01-25",
+    model="qwen-plus",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "介绍 Qwen2.5 系列的特点。"}
@@ -117,8 +128,8 @@ print(completion.choices[0].message.content)
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2.5-7B-Instruct")
-tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-7B-Instruct")
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-8B")
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-8B")
 ```
 
 ---
@@ -142,10 +153,10 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-7B-Instruct")
 
 **参考资料：**
 - [Qwen2.5 Technical Report (arXiv:2412.15115)](https://arxiv.org/abs/2412.15115)
+- [Qwen3 官方博客](https://qwenlm.github.io/blog/qwen3/)
+- [Qwen3-Coder 官方博客](https://qwenlm.github.io/blog/qwen3-coder/)
 - [Qwen2.5-Max 官方博客](https://qwenlm.github.io/blog/qwen2.5-max)
 - [Qwen2.5-VL 发布公告](https://qwen.ai/blog?id=qwen2.5-vl)
-- [Qwen2.5 技术报告解读 (Medium)](https://medium.com/@amanatulla1606/qwen2-5-technical-report-47c538fc4569)
-- [Qwen2.5-Max 分析 (Medium)](https://medium.com/@amanatulla1606/qwen2-5-technical-report-47c538fc4569)
 
 ---
 

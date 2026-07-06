@@ -1,6 +1,6 @@
 # LLaMA 系列 — Meta
 
-> LLaMA（Large Language Model Meta AI）是 Meta 开发的开源大语言模型系列。作为开源生态中最具影响力的模型家族，LLaMA 系列推动了 AI 民主化，让全球开发者可以在自有硬件上部署顶级模型。
+> Llama（Large Language Model Meta AI）是 Meta 开发的开放权重大语言模型系列。作为开源生态中最具影响力的模型家族之一，Llama 3、3.1、3.3 和 4 系列推动了本地部署、微调和企业私有化应用。
 
 ---
 
@@ -12,22 +12,23 @@
 | LLaMA 2 | 2023.07 | 7B/13B/70B | 2T tokens | 4K |
 | LLaMA 3 | 2024.04 | 8B/70B | 15T tokens | 8K |
 | LLaMA 3.1 | 2024.07 | 8B/70B/405B | 15T+ tokens | 128K |
-| LLaMA 4 | 2025.04 | Scout/Maverick/Heron | 22T+ tokens | 10M(Scout)/1M |
+| Llama 3.3 | 2024.12 | 70B | 15T+ tokens | 128K |
+| Llama 4 | 2025.04 | Scout / Maverick / Behemoth(预览) | 未完全公开 | 10M(Scout)/1M(Maverick) |
 
 ### LLaMA 4 — 原生多模态 MoE
 
-LLaMA 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
+Llama 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
 
 | 模型 | 架构 | 激活参数 | 上下文 | 定位 |
 |------|------|---------|--------|------|
-| LLaMA 4 Scout | MoE，17B 激活 | 17B | **10M** | 超长上下文，单 H100 可运行 |
-| LLaMA 4 Maverick | MoE，17B 激活 | 17B | 1M | 旗舰级，对标 GPT-4o/Claude |
-| LLaMA 4 Heron | 更大 MoE | — | — | 顶级推理 |
+| Llama 4 Scout | MoE，17B 激活 | 17B | **10M** | 超长上下文，适合文档和代码库分析 |
+| Llama 4 Maverick | MoE，17B 激活 | 17B | 1M | 通用多模态旗舰，质量高于 Scout |
+| Llama 4 Behemoth | 更大 MoE，训练中/预览 | — | — | 作为教师模型和未来旗舰方向 |
 
 - **原生多模态**：早期融合文本与视觉 token，无需单独视觉适配器。
 - **iRoPE 架构**：交替注意力机制支持超长上下文外推，Scout 达 10M token。
 - **训练数据 22T+ tokens**，多语言覆盖更广，中文能力较 LLaMA 3 显著提升。
-- **开源许可延续**，但超大规模应用仍需 Meta 授权。
+- **开放权重许可延续**，但超大规模商业应用仍需遵守 Meta 的许可限制。
 
 > 局限：LLaMA 4 发布初期基准表现引发争议（Meta 承认评测版本配置问题），实际能力以官方更新为准。中文场景建议优先对比 Qwen3、DeepSeek。
 
@@ -60,20 +61,21 @@ LLaMA 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
 
 ---
 
-## LLaMA 3.1 405B — 最大的开源模型
+## Llama 3.1 / 3.3 — 仍然重要的生产基线
 
-根据 [Wikipedia LLaMA 词条](https://en.wikipedia.org/wiki/Llama_(language_model))：
+根据 Meta Llama 3.1 官方发布与技术报告：
 
-- 405B 参数是目前最大的开源大语言模型
-- 上下文窗口扩展到 **128K tokens**
+- Llama 3.1 提供 8B / 70B / 405B 三档，均支持 **128K tokens** 上下文。
+- 405B 是重要的开放权重旗舰模型，可作为蒸馏、评估和企业私有化基线。
+- Llama 3.3 70B 在更小部署成本下接近 405B 的部分能力，适合作为生产默认候选。
 - 与 GPT-4 和 Claude 3.5 Sonnet 在多项基准上竞争
-- 采用 MoE（Mixture of Experts）风格的训练策略
+- Llama 3.1 / 3.3 仍是 Dense 模型路线，生态、量化和微调资料最成熟。
 
 ---
 
 ## 指令微调
 
-根据 [DebuggerCafe LLaMA 3 技术分析](https://debuggercafe.com/meta-llama-3-an-overview)：
+根据 Meta Llama 3 技术报告：
 
 - 组合使用 **SFT + 拒绝采样 + PPO + DPO**
 - 提示质量和偏好排序至关重要
@@ -89,12 +91,12 @@ LLaMA 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
+model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
 
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "介绍 LLaMA 3 的主要特性。"}
+    {"role": "user", "content": "介绍 Llama 3.1 的主要特性。"}
 ]
 
 input_ids = tokenizer.apply_chat_template(messages, return_tensors="pt")
@@ -132,10 +134,8 @@ ollama run llama3.1:405b
 
 **参考资料：**
 - [Meta Llama 3 官方发布博客](https://ai.meta.com/blog/meta-llama-3/)
-- [Wikipedia — Llama (language model)](https://en.wikipedia.org/wiki/Llama_(language_model))
-- [DebuggerCafe — Meta Llama 3 Overview](https://debuggercafe.com/meta-llama-3-an-overview)
+- [Meta Llama 4 官方发布博客](https://ai.meta.com/blog/llama-4-multimodal-intelligence/)
 - [The Llama 3 Herd of Models (arXiv:2407.21783)](https://arxiv.org/abs/2407.21783)
-- [Towards Data Science — Deep Dive into LLaMA 3](https://towardsdatascience.com/deep-dive-into-llama-3-by-hand-%EF%B8%8F-6c6b23dc92b2)
 
 ---
 

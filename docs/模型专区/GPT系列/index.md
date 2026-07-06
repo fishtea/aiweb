@@ -1,6 +1,6 @@
 # GPT 系列 — OpenAI
 
-> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族，从 2018 年的 GPT-1 发展到 2025 年的 GPT-4o / GPT-4.5 与 o 系列推理模型，彻底改变了自然语言处理格局。
+> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族。按 2026-07-06 可核验的官方模型列表，生产选型应重点关注 GPT-4o、GPT-4.1 系列和 o 系列推理模型，而不是继续以早期 GPT-4 / GPT-3.5 作为默认基线。
 
 ---
 
@@ -12,17 +12,16 @@
 | GPT-2 | 2019.02 | 1.5B | 扩大模型规模，展示零样本迁移能力 |
 | GPT-3 | 2020.06 | 175B | 大规模 In-context Learning，涌现 Few-shot 能力 |
 | GPT-3.5 | 2022.03 | 175B | InstructGPT 的 RLHF 微调版本，ChatGPT 的基础 |
-| GPT-4 | 2023.03 | 未公开 (~1.8T) | 多模态（图像+文本），推理能力大幅飞跃 |
+| GPT-4 | 2023.03 | 未公开 | 多模态（图像+文本），推理能力大幅飞跃 |
 | GPT-4o | 2024.05 | 未公开 | 原生多模态，实时语音交互，速度提升 |
 | o1 (preview) | 2024.09 | 未公开 | 首个推理模型，通过 RL 学会\"思考\"再回答 |
 | o1 正式版 | 2024.12 | 未公开 | 推理能力大幅提升，竞赛级数学/编程 |
 | o3-mini | 2025.01 | 未公开 | 低成本推理模型，支持函数调用 |
 | GPT-4.5 | 2025.02 | 未公开 | 更强的世界知识和情感智能 |
 | o3 / o4-mini | 2025.04 | 未公开 | 推理 + 工具调用 + 多模态，o4-mini 性价比极高 |
-| GPT-5 | 2025.08 | 未公开 | 统一推理与对话，自动决定思考深度 |
-| GPT-5.1 | 2026.04 | 未公开 | 编码与 Agent 能力增强，更长持续操作 |
+| GPT-4.1 系列 | 2025.04 | 未公开 | 强化编码、指令遵循和长上下文，提供 mini / nano 档位 |
 
-> **核心架构:** 所有 GPT 模型均基于 Decoder-only Transformer。GPT-4 增加了多模态视觉输入能力，GPT-4o 实现了原生多模态（语音+文本+图像）端到端处理。o 系列在基座模型上叠加了大规模强化学习训练的"内部思维链"，回答前先生成隐藏的推理过程。GPT-5 进一步统一了"快思考"与"慢思考"——模型自主判断问题难度，简单问题快速直答，复杂问题自动展开推理。
+> **核心架构:** GPT 系列仍以 Decoder-only Transformer 为基础。GPT-4o 将文本、图像、音频交互统一到更低延迟的多模态体验；o 系列是面向复杂推理的模型线，会在内部消耗推理 token；GPT-4.1 系列更适合代码、长上下文和稳定指令遵循。
 
 ---
 
@@ -45,10 +44,11 @@
 
 ---
 
-## GPT-4o 与 GPT-4.5
+## GPT-4o、GPT-4.1 与 GPT-4.5
 
-- **GPT-4o**（2024.05）："o" 代表 "omni"，原生支持语音、文本、图像多模态。响应延迟降低到 200ms 级别。在哥斯达黎加等低成本区域提供免费访问。
-- **GPT-4.5**（2025.02）：扩展了世界知识储备，改善了情感理解和创造力。OpenAI 称之为"迄今为止最有知识、最自然的对话模型"。
+- **GPT-4o**（2024.05）："o" 代表 "omni"，原生支持语音、文本、图像多模态，适合低延迟交互、图像理解和语音体验。
+- **GPT-4.1**（2025.04）：面向 API 的通用与编码模型线，重点提升指令遵循、长上下文和代码能力；mini / nano 版本适合低成本高吞吐。
+- **GPT-4.5**（2025.02）：偏重自然对话、知识广度和创造性，但成本较高，适合质量敏感而非大规模低价调用。
 
 ---
 
@@ -100,25 +100,25 @@ print(completion.choices[0].message.content)
 
 ---
 
-## GPT-5 与统一推理范式
+## 2026 生产选型建议
 
-GPT-5（2025.08）标志着 OpenAI 从"对话模型 + 推理模型双线"转向"单一模型自适应推理"：
+截至 2026-07-06，OpenAI 的实用选型可以按任务拆分：
 
-- **思考模式自适应**：模型自行判断问题难度，简单对话快速直答，复杂推理自动展开思维链，无需用户手动选择 `reasoning_effort`。
-- **Codex 与 Agent 增强**：GPT-5 及 GPT-5.1（2026.04）强化了多步骤编码、工具编排和长时任务执行能力，可在一个会话中持续操作数十步。
-- **多模态原生**：统一处理文本、图像、音频，减少模态切换开销。
-- **指令遵循与安全**：后训练阶段引入更多真实场景偏好数据，减少越狱和有害输出。
+- **默认多模态助手**：GPT-4o。适合聊天、语音、图像理解、轻量工具调用。
+- **长上下文与代码**：GPT-4.1 / GPT-4.1-mini。适合代码仓库问答、结构化生成和批量任务。
+- **复杂推理**：o3、o4-mini 或 o3-mini。适合数学、规划、复杂代码修复和多步工具调用。
+- **大规模低成本**：GPT-4.1-mini / nano、GPT-4o-mini 或 o4-mini，具体取决于是否需要推理能力。
 
 ### 选择建议
 
 | 场景 | 推荐 |
 |------|------|
-| 日常对话、写作、翻译 | GPT-5（默认快速模式）或 GPT-4o |
-| 复杂推理、数学、竞赛编程 | GPT-5（深度思考）或 o4-mini |
-| Agent 多步工具编排 | GPT-5.1 / GPT-5 |
-| 成本敏感的大规模调用 | GPT-4o-mini / o4-mini |
+| 日常对话、写作、翻译 | GPT-4o / GPT-4.1-mini |
+| 复杂推理、数学、竞赛编程 | o3 / o4-mini |
+| Agent 多步工具编排 | GPT-4.1 + o 系列组合 |
+| 成本敏感的大规模调用 | GPT-4.1-mini / GPT-4.1-nano / GPT-4o-mini |
 
-> 趋势：模型间"会不会推理"的边界正在消失，差异化更多体现在成本、延迟、上下文长度和 Agent 稳定性上。
+> 趋势：生产系统越来越少依赖单一模型。常见做法是用便宜模型做路由、抽取和简单回答，用推理模型处理少量高难度任务，并通过评估集控制成本和质量。
 
 ---
 
@@ -126,7 +126,7 @@ GPT-5（2025.08）标志着 OpenAI 从"对话模型 + 推理模型双线"转向"
 
 ### 通过 ChatGPT（网页/App）
 
-- ChatGPT Plus（$20/月）可访问 GPT-4、GPT-4o
+- ChatGPT 付费档位可访问更高能力模型和更高配额；具体模型与限额会随地区和订阅层级变化。
 - Team/Enterprise 有更高配额和隐私保护
 
 ### 通过 API
@@ -137,7 +137,7 @@ from openai import OpenAI
 client = OpenAI(api_key="your-api-key")
 
 completion = client.chat.completions.create(
-    model="gpt-4o",
+    model="gpt-4.1",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "解释一下 GPT 的架构特点。"}
@@ -163,7 +163,7 @@ class MathReasoning(BaseModel):
     final_answer: str
 
 completion = client.beta.chat.completions.parse(
-    model="gpt-4o",
+    model="gpt-4.1",
     messages=[{"role": "user", "content": "解方程 8x + 7 = -23"}],
     response_format=MathReasoning,  # 模型输出会被约束为该结构
 )
@@ -194,9 +194,8 @@ print(result.final_answer)
 
 **参考资料：**
 - [OpenAI GPT-4 官方页面](https://openai.com/index/gpt-4)
+- [OpenAI API Models 文档](https://platform.openai.com/docs/models)
 - [GPT-4 Technical Report (arXiv:2303.08774)](https://arxiv.org/abs/2303.08774)
-- [Evolution of GPT Models (Medium)](https://medium.com/@vipul.koti333/evolution-of-gpt-models-gpt-1-to-gpt-4-0238ee07a29b)
-- [GPT-4 Peer Review (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10795998)
 
 ---
 

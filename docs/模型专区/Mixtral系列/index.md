@@ -1,6 +1,6 @@
 # Mixtral 系列 — Mistral AI
 
-> Mixtral 是由法国 AI 公司 Mistral AI 开发的稀疏混合专家（Sparse Mixture-of-Experts, SMoE）模型系列。Mixtral 8x7B 以仅激活 12.9B 参数的方式达到了 70B 密集模型的质量，是开源高效推理的典范。
+> Mixtral 是法国 AI 公司 Mistral AI 开发的稀疏混合专家（Sparse Mixture-of-Experts, SMoE）模型系列。2026 年看 Mistral 生态时，不应只看 Mixtral 8x7B / 8x22B，还要同时评估 Mistral Small / Medium / Large、Codestral 和 Magistral 等新模型线。
 
 ---
 
@@ -14,14 +14,15 @@
 | Mistral Large | 2024.02 | 未公开 | 未公开 | N/A (Dense) | 32K |
 | Mistral Nemo | 2024.07 | 12B | 12B | N/A (Dense) | 128K |
 | Mistral Small 3 | 2025.01 | 24B | 24B | N/A (Dense) | 32K |
-| Magistral | 2025.06 | 24B / 405B | — | 推理增强 | 256K |
-| Mistral Medium 3 | 2025.05 | ~70B | — | Dense | 128K |
+| Mistral Small 3 / 3.1 | 2025 | 24B | 24B | N/A (Dense) | 32K-128K |
+| Mistral Medium 3 | 2025.05 | 未公开 | 未公开 | N/A (Dense) | 128K |
+| Magistral | 2025.06 | Small / Medium | — | 推理增强 | 40K+ |
 
 ### Mistral 的推理与 Agent 转向
 
 2025 年 Mistral AI 开始补齐推理模型和 Agent 能力：
 
-- **Magistral**（2025.06）：基于 Mistral Small 3 和 Large 2 的推理模型，引入思维链推理，在数学和编程上显著提升，256K 上下文。
+- **Magistral**（2025.06）：Mistral 的推理模型线，面向多步推理、数学、代码和可解释推理过程。
 - **Mistral Medium 3**（2025.05）：主打高性价比，性能接近闭源旗舰但成本更低，企业可本地部署。
 - **Codestral**：代码专用模型，支持 80+ 编程语言，适合 IDE 补全和 Agent 编码。
 - **MCP 与函数调用**：Mistral 模型原生支持函数调用和结构化输出，逐步融入 Agent 生态。
@@ -60,7 +61,7 @@
 | 推理速度 | **6× 更快** | 1× | — |
 | MT-Bench | **8.30** | — | 可比 |
 
-*数据来源: [Mixtral of Experts 博客](https://mistrai.ai/news/mixtral-of-experts)*
+*数据来源: [Mixtral of Experts 博客](https://mistral.ai/news/mixtral-of-experts)*
 
 ---
 
@@ -116,7 +117,7 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 
 ## 指令微调 (Instruct)
 
-根据 [Mixtral of Experts 博客](https://misral.ai/news/mixtral-of-experts)：
+根据 [Mixtral of Experts 博客](https://mistral.ai/news/mixtral-of-experts)：
 
 - 通过 **SFT + DPO** 优化指令跟随
 - MT-Bench 得分 **8.30**，是当时最好的开源模型
@@ -149,15 +150,19 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 | **Mistral 7B** | 最强的 7B 级模型之一，8K 滑动窗口注意力 |
 | **Mistral Nemo** | 与 NVIDIA 合作的 12B 模型，128K 上下文 |
 | **Mistral Large** | 闭源旗舰，与 GPT-4 竞争的顶级模型 |
-| **Mistral Small 3** | 24B 参数的新一代高效模型 |
+| **Mistral Small 3 / 3.1** | 24B 参数的新一代高效模型，适合私有化部署 |
+| **Mistral Medium 3** | 企业高性价比模型，适合 API 与私有化 |
+| **Codestral** | 代码生成和补全模型 |
+| **Magistral** | 推理模型线 |
 
 ---
 
 **参考资料：**
 - [Mixtral of Experts (Mistral AI Blog)](https://mistral.ai/news/mixtral-of-experts)
+- [Mistral AI Models 文档](https://docs.mistral.ai/getting-started/models/models_overview/)
+- [Magistral 发布公告](https://mistral.ai/news/magistral)
+- [Mistral Medium 3 发布公告](https://mistral.ai/news/mistral-medium-3)
 - [Mixtral 8x7B MLPerf Benchmark (MLCommons)](https://mlcommons.org/2024/08/moe-mlperf-inference-benchmark)
-- [Mixtral 8x7B Deep Dive (Ankur's Newsletter)](https://www.ankursnewsletter.com/p/mistral-ais-mixtral-8x7b-a-deep-dive)
-- [Mixtral Architecture Video](https://www.youtube.com/watch?v=5I9Ujj8nV20)
 - [HuggingFace Mixtral 8x7B](https://huggingface.co/mistralai/Mixtral-8x7B-v0.1)
 
 ---

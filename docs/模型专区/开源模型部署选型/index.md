@@ -53,93 +53,47 @@
 - 模型能力对比：阅读 [LLaMA 系列](/模型专区/LLaMA系列/)、[Qwen 系列](/模型专区/Qwen系列/)、[DeepSeek](/模型专区/DeepSeek/)。
 - 生产应用设计：结合 [LLM 应用架构](/进阶学习/LLM应用架构/)。
 
-## 2026 部署工具最新进展
+## 推理框架格局
 
-### vLLM：从推理引擎到全栈平台
-
-vLLM 在 2026 年已从单纯的推理引擎发展为覆盖多模态、路由、强化学习的全栈平台。2026 年 6-7 月发布的关键特性包括：
-
-- **vLLM Semantic Router v0.3 Themis**（2026-06-05）：从信号级路由升级到有状态生产路由，支持多模型动态调度和灰度发布。
-- **DiffusionGemma 原生支持**（2026-06-10）：首个在 vLLM 中原生支持的扩散 LLM（dLLM），标志着扩散模型与自回归模型推理的统一。
-- **MiniMax M3 Day-0 支持**（2026-06-12）：100 万 token 上下文的多模态推理，展示了超长上下文的工程挑战和解决方案。
-- **vLLM-Omni 多阶段模型服务**（2026-07-01）：从 Qwen3-Omni 的多阶段推理中总结的实战经验，解决语音、文本、视觉交替推理的调度难题。
-
-> 参考来源：vLLM Blog (https://blog.vllm.ai/)，2026 年 6-7 月系列文章。
-
-### SGLang 崛起与推理框架格局
-
-2026 年推理框架竞争加剧，SGLang 凭借结构化生成（constrained decoding）和 RadixAttention 前缀缓存获得广泛关注。主要变化：
+开源部署不再只有 Transformers 一条路。实际选型通常从开发便利性、吞吐、结构化输出、量化、硬件兼容和运维成本出发。
 
 | 框架 | 2026 定位 |
 |------|-----------|
-| vLLM | 全栈平台：推理 + 路由 + 多模态 + RL |
-| SGLang | 高性能推理 + 结构化生成 + 前缀缓存 |
+| vLLM | 高吞吐服务、PagedAttention、OpenAI 兼容 API、批处理和多模型服务 |
+| SGLang | 高性能推理、结构化生成、前缀缓存和 Agent / RAG 场景 |
 | llama.cpp | CPU/边缘推理首选，量化生态最丰富 |
 | Ollama | 个人开发者和本地实验首选 |
 | TGI (HuggingFace) | 企业级服务，HF 生态深度集成 |
+| TensorRT-LLM | NVIDIA GPU 上的极致性能优化 |
+| LM Studio | 桌面本地实验和非工程用户体验好 |
 
-### 部署新范式：扩散 LLM 与多模态统一推理
+## 模型与框架匹配
 
-2026 年出现了两个值得关注的部署新范式：
+| 需求 | 建议组合 |
+|------|----------|
+| 快速本地试用 | Ollama / LM Studio + GGUF 或官方模型仓库 |
+| 单机 GPU 高吞吐 API | vLLM / SGLang + AWQ / GPTQ / FP8 量化 |
+| CPU、Mac、边缘设备 | llama.cpp / Ollama + GGUF 量化 |
+| 结构化输出和 Agent 工具调用 | SGLang / vLLM + JSON schema / constrained decoding |
+| NVIDIA 企业生产 | TensorRT-LLM、TGI 或 vLLM，配合监控和灰度发布 |
+| 多模态模型 | 优先确认框架是否支持对应模型结构、视觉编码器和输入格式 |
 
-1. **扩散 LLM（dLLM）**：不同于传统的自回归逐 token 生成，扩散 LLM 并行生成整个响应，理论上可以实现更低的延迟。vLLM 对 DiffusionGemma 的 Day-0 支持标志着这一范式进入生产可用的阶段。
+## 2026 选型补充
 
-2. **多阶段模型统一推理**：Qwen3-Omni 等模型需要交替进行语音识别、文本理解和语音合成，传统的一次推理一个模型的模式效率低下。vLLM-Omni 的实践表明，通过阶段间缓存共享和流水线编排，可以在单个框架内处理多阶段推理。
+- **不要只看参数量**：MoE 模型要同时看总参数、激活参数、专家路由稳定性和实际吞吐。
+- **长上下文要测 KV cache**：128K 以上上下文的显存主要消耗常常来自 KV cache，并发越高越明显。
+- **量化必须复测业务任务**：4-bit / 8-bit 量化可能对抽取、代码和数学造成不同程度损失。
+- **推理模型要单独估算成本**：R1、o 系列、Qwen thinking 等模型会产生额外推理 token 或更长延迟。
+- **许可证先于性能**：Llama、Qwen、Mistral、DeepSeek 等许可证细节不同，商用、再分发、服务化都要单独确认。
+- **模型路由是常态**：生产系统常用小模型做分类、抽取和路由，用大模型或推理模型处理少量关键请求。
 
-### 部署选型更新建议（2026）
+## 参考来源
 
-基于 2026 年最新发展，对原有选型维度补充：
-
-- **扩散 LLM 场景**：如需极低延迟的并行生成，关注 dLLM + vLLM 组合。
-- **超长上下文场景**：MiniMax M3 和 Gemini 等 100 万+ token 模型需要专门的 KV cache 管理策略。
-- **多模态 Agent 场景**：优先考虑支持多阶段推理的框架（vLLM-Omni 等）。
-- **语义路由场景**：多模型生产环境考虑 vLLM Semantic Router 等专用路由方案。
-
-### 2026 年 Ollama 性能里程碑
-
-**来源：** [Ollama Blog 2026年6-7月系列文章](https://ollama.com/blog)
-
-Ollama 在 2026 年上半年发布了一系列重大性能更新，重新定义了本地模型部署的性能上限：
-
-#### 多 Token 预测（MTP）：Gemma 4 加速 90%
-
-**来源：** [Faster Gemma 4 on MLX with multi-token prediction (2026-06-29)](https://ollama.com/blog/faster-gemma-4-mlx-mtp)
-
-- Gemma 4 自带一个小型快速"草稿模型"（draft model），与主模型并行运行，同时预测后续多个 token
-- 主模型在单次前向传播中验证草稿模型的预测，接受正确的 token
-- 代码场景加速效果最显著（代码充满闭合括号、重复标识符和模板代码），对编程 Agent 的响应速度提升尤为明显
-- 在 Aider polyglot 基准测试中，Gemma 4 12B 在 M5 Max 上生成速度提升近 90%
-- Ollama 自动调优草稿 token 数量，无需手动配置
-
-#### MLX 引擎：Apple Silicon 上的最高性能
-
-**来源：** [Ollama's highest performance on Apple Silicon yet with MLX (2026-06-11)](https://ollama.com/blog/mlx-performance)
-
-- 支持 NVIDIA 模型优化格式 **NVFP4**——量化质量损失约为传统 Q4_K_M 的一半
-- 数据中心优化的模型可直接导入本地运行，实现数据中心到桌面的可移植性
-- 输出速度提升高达 20%（通过 Metal 内核融合和 JIT 编译优化）
-- 更低的内存占用和更快的首 token 时间
-
-#### GGUF 兼容性与 Vulkan 加速
-
-**来源：** [Improved performance and model support with GGUF (2026-06-05)](https://ollama.com/blog/improved-performance-and-model-support-with-gguf)
-
-- Ollama 0.30 在 NVIDIA 硬件上吞吐量提升高达 20%
-- **Vulkan 默认启用**：AMD 和 Intel GPU 开箱即用
-- 扩展 GGUF 生态兼容性：LFM、Prism 及 Unsloth 微调模型可直接运行
-- 支持从 HuggingFace 加载 GGUF 文件，与 Claude Code、Hermes Agent 等编程 Agent 无缝集成
-
-#### Nemotron 3 Ultra：Agent 工作流专用模型
-
-**来源：** [NVIDIA Nemotron 3 Ultra (2026-06-04)](https://ollama.com/blog/nemotron-3-ultra)
-
-- 550B 总参数 / 55B 激活参数 MoE 架构
-- 专为长时间运行的 Agent 工作流调优（编程 Agent、深度研究、企业工作流）
-- **100 万 token 上下文**：保留整个代码库、长工具调用历史和搜索路径
-- 成本效率领先：比同类开源模型节省高达 30% 成本
-- 通过 Ollama 一键启动：`ollama launch claude --model nemotron-3-ultra:cloud`
-
-> 💡 **2026 本地部署趋势总结**：本地推理不再是"妥协方案"——MLX + MTP + NVFP4 的组合让 MacBook 上的编程 Agent 体验接近云端；GGUF 生态的扩展让更多模型开箱即用；MoE 架构（如 Nemotron 3 Ultra）让大规模模型也能在消费级硬件上运行。
+- [vLLM 文档](https://docs.vllm.ai/)
+- [SGLang 文档](https://docs.sglang.ai/)
+- [llama.cpp](https://github.com/ggml-org/llama.cpp)
+- [Ollama 文档](https://github.com/ollama/ollama)
+- [Hugging Face TGI](https://huggingface.co/docs/text-generation-inference/index)
 
 ---
 

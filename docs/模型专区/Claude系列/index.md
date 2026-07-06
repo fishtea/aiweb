@@ -1,6 +1,6 @@
 # Claude 系列 — Anthropic
 
-> Claude 是由 Anthropic 开发的大语言模型家族，以"Constitutional AI"安全训练方法著称。从 Claude 1 发展到 2025 年的 Claude Sonnet 4.5 / Opus 4.8，Claude 系列在编程、推理和安全性方面建立了领先地位。
+> Claude 是由 Anthropic 开发的大语言模型家族，以 Constitutional AI、安全性、长上下文和编程体验著称。按 2026-07-06 可核验的官方资料，生产选型应重点关注 Claude 3.5 / 3.7 与 Claude 4 系列。
 
 ---
 
@@ -12,15 +12,14 @@
 | Claude 2 | 2023.07 | 100K | 扩展上下文窗口，提升推理能力 |
 | Claude 3 系列 | 2024.03 | 200K | Opus/Sonnet/Haiku 三级分层，多模态 |
 | Claude 3.5 Sonnet | 2024.06 | 200K | 编程能力大幅提升，Agent 能力 |
-| Claude 4 系列 | 2025.05 | 200K | Sonnet 4 + Opus 4，混合推理 |
-| Sonnet 4.5 | 2025.09 | 200K (1M Beta) | 最佳编程模型，Agent 编排 |
-| Opus 4.8 | 2026.05 | 200K | 可靠旗舰，浏览器 Agent SOTA |
+| Claude 3.7 Sonnet | 2025.02 | 200K | 混合推理模型，可在快速回答和延长思考之间切换 |
+| Claude 4 系列 | 2025.05 | 200K | Sonnet 4 与 Opus 4，面向编程、Agent 和长任务 |
 
 ---
 
 ## 架构特点
 
-根据 [Anthropic Claude 模型指南](https://www.codegpt.co/blog/anthropic-claude-models-complete-guide)：
+根据 Anthropic 官方模型文档与 Claude 3 / 4 发布资料：
 
 - **Transformer 架构:** 基于 decoder-only transformer，持续优化
 - **Constitutional AI:** 通过宪法 AI 方法训练，使模型行为符合人类价值观
@@ -42,13 +41,14 @@
 
 ---
 
-## 2025 年最新模型
+## 2025-2026 重点模型
 
-根据 [CodeGPT Claude 完整指南](https://www.codegpt.co/blog/anthropic-claude-models-complete-guide)：
+根据 Anthropic 官方发布与模型文档：
 
-- **Sonnet 4.5**（2025.09）：被标记为"世界上最好的编码模型"和"最好的 Agent 模型"。在 OSWorld 上达 61.4%，SWE-Bench 达 69.8%。
-- **Haiku 4.5**（2025.10）：达到 Sonnet 4.5 90% 的性能，但成本仅为 1/5。
-- **Opus 4.1**（2025.08）：安全网模型，慢但可靠，能捕捉其他模型遗漏的关键错误。
+- **Claude Opus 4**：旗舰模型，适合深度推理、复杂代码库修改、长时间 Agent 任务和高价值分析。
+- **Claude Sonnet 4**：平衡质量、速度与成本，适合作为工程团队的默认编码和知识工作模型。
+- **Claude 3.7 Sonnet**：引入混合推理能力，适合需要可控思考预算的复杂任务。
+- **Claude 3.5 Haiku**：轻量快速，适合分类、抽取、路由、低延迟问答等高吞吐场景。
 
 ### Claude 的差异化能力
 
@@ -57,7 +57,7 @@
 - **MCP（Model Context Protocol）**：Anthropic 主导的开放协议，让模型标准化接入外部工具和数据源，已成为 Agent 生态基础设施（见 [实际应用案例](/AIAgent实践/实际应用案例/)）。
 - **宪法 AI 与安全**：通过 Constitutional AI 训练，在拒绝率和无害性上长期领先，适合对安全敏感的企业场景。
 
-> 2025 年底 OpenAI 与 Anthropic 联合创立 Agentic AI Foundation（归属 Linux 基金会），将 MCP、AGENTS.md 等协议标准化，推动 Agent 互操作。
+> 生产建议：Claude 的优势集中在长上下文阅读、代码修改、工具调用和安全拒答策略。对高并发低成本任务，通常用 Haiku / Sonnet 做主力，把 Opus 留给少量高难度步骤。
 
 ---
 
@@ -76,7 +76,7 @@ import anthropic
 client = anthropic.Anthropic(api_key="your-api-key")
 
 message = client.messages.create(
-    model="claude-sonnet-4-20250501",
+    model="claude-sonnet-4-20250514",
     max_tokens=1024,
     messages=[
         {"role": "user", "content": "请介绍 Claude 系列模型的架构特点。"}
@@ -107,10 +107,9 @@ print(message.content[0].text)
 
 **参考资料：**
 - [Anthropic Claude 3.5 Sonnet 发布公告](https://www.anthropic.com/news/claude-3-5-sonnet)
-- [Anthropic Claude Models Complete Guide (CodeGPT)](https://www.codegpt.co/blog/anthropic-claude-models-complete-guide)
-- [Every Claude Model Guide (Claude.fa.st)](https://claudefa.st/blog/models)
-- [Claude Models Comparison (Gradually AI)](https://www.gradually.ai/en/claude-models)
-- [Claude 3 Opus/Sonnet/Haiku 探索 (Medium)](https://damiandabrowski.medium.com/exploring-the-claude-3-opus-sonnet-and-haiku-models-adbf9c74acaa)
+- [Anthropic Claude 4 发布公告](https://www.anthropic.com/news/claude-4)
+- [Anthropic Claude 3.7 Sonnet 发布公告](https://www.anthropic.com/news/claude-3-7-sonnet)
+- [Anthropic Models 文档](https://docs.anthropic.com/en/docs/about-claude/models)
 
 ---
 

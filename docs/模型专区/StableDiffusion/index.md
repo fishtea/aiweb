@@ -1,6 +1,6 @@
 # Stable Diffusion — Stability AI
 
-> Stable Diffusion（稳定扩散）是由 Stability AI 主导开发的开源文本到图像生成模型系列。从 2022 年的 SD 1.0 发展到 2024 年的 SD3，Stable Diffusion 系列是开源图像生成领域的标杆。
+> Stable Diffusion（稳定扩散）是由 Stability AI 主导开发的开源文本到图像生成模型系列。从 SD 1.5、SDXL 到 Stable Diffusion 3 / 3.5，它仍是本地可控图像工作流的重要基础；同时，FLUX.1、Ideogram、Midjourney、DALL·E 等模型也持续推动开源与闭源图像生成竞争。
 
 ---
 
@@ -16,7 +16,6 @@
 | SD 3.5 | 2024.10 | MMDiT | 8B | 改进版 |
 | FLUX.1 | 2024.08 | Diffusion Transformer | 12B | Black Forest Labs 开发，社区新宠 |
 | SD 3.5 Large Turbo | 2024.10 | MMDiT | 8B | 4 步快速生成 |
-| FLUX.2 | 2025.07 | Flow Matching | 12B+ | 多模态提示，更强调文本渲染 |
 
 ### 扩散模型演进要点
 
@@ -24,7 +23,7 @@
 |------|------|
 | 从 U-Net 到 DiT | SD3/FLUX 用 Transformer 替代 U-Net，扩展性更强 |
 | Rectified Flow / Flow Matching | 更直的采样路径，更少步数即可出图 |
-| 文本渲染突破 | FLUX.2、Ideogram 等大幅改善图中文字准确性 |
+| 文本渲染突破 | FLUX.1、Ideogram 等显著改善图中文字准确性 |
 | 速度优化 | Turbo/Lightning 蒸馏版 4-8 步出图，接近实时 |
 | ControlNet / IPAdapter | 精确控制构图、姿态、风格、角色一致性 |
 
@@ -74,7 +73,7 @@ SD3 使用三个文本编码器：
 
 ## FLUX.1 — Black Forest Labs 的崛起
 
-根据 [FLUX 架构解析 (arXiv:2507.09595)](https://arxiv.org/html/2507.09595v1)：
+根据 Black Forest Labs 发布资料与社区评测：
 
 - 由原 Stability AI 核心团队（Black Forest Labs）开发
 - 采用 **Flow Matching** 架构，基于 Diffusion Transformer
@@ -88,7 +87,16 @@ SD3 使用三个文本编码器：
 | FLUX.1 Pro | 完整版，最高质量 | 商业 |
 | FLUX.1 Dev | 开源版，蒸馏得到 | 开源 |
 | FLUX.1 Schnell | 极速版，4 步生成 | 开源 |
-| FLUX.2 | 升级版，2025 年发布 | — |
+
+### 2026 选型建议
+
+| 场景 | 推荐 |
+|------|------|
+| 社区资源和 LoRA 最丰富 | SD 1.5 / SDXL |
+| 更高提示遵循和文字能力 | SD3.5 Large、FLUX.1 Dev / Pro |
+| 快速草图与低步数生成 | SD3.5 Turbo、FLUX.1 Schnell |
+| 精确控制姿态、构图、角色 | SDXL / SD3.5 + ControlNet / IPAdapter / LoRA |
+| 商业闭源质量对比 | Midjourney、DALL·E、Ideogram、FLUX Pro |
 
 ---
 
@@ -157,10 +165,9 @@ image.save("cat.png")
 
 **参考资料：**
 - [Stable Diffusion 3 Research Paper (Stability AI)](https://stability.ai/news-updates/stable-diffusion-3-research-paper)
-- [Demystifying Flux Architecture (arXiv:2507.09595)](https://arxiv.org/html/2507.09595v1)
-- [Flux vs SD3 Comparison (YouTube)](https://www.youtube.com/watch?v=hSnepsdGzdo)
-- [SDXL vs Flux Comparison (Facebook)](https://www.facebook.com/groups/stablediffusion/posts/1433531040645700)
-- [Diffusion Models Overview (Medium)](https://medium.com/diffusion-doodles/the-myriad-of-diffusion-models-f0907ee6cc6b)
+- [Stable Diffusion 3.5 发布公告](https://stability.ai/news/introducing-stable-diffusion-3-5)
+- [Black Forest Labs FLUX.1](https://blackforestlabs.ai/announcing-black-forest-labs/)
+- [Diffusers Stable Diffusion 3 文档](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_3)
 
 ---
 
