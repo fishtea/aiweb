@@ -482,6 +482,201 @@ Moon Bot 集成了 HuggingFace 全栈技能：
 
 ---
 
+## 13. Agent 系统架构深度解析
+
+> 来源：[LLM-powered Autonomous Agents - Lilian Weng](https://lilianweng.github.io/posts/2023-06-23-agent/)（Jun 2023，持续更新）
+
+AI Agent 的核心架构由三个组件构成：**规划（Planning）**、**记忆（Memory）** 和 **工具使用（Tool Use）**。LLM 在其中扮演"大脑"角色。
+
+### 13.1 任务分解（Task Decomposition）
+
+Agent 面临复杂任务时，需要将任务拆解为可管理的子目标。目前有三种主要方式：
+
+| 方法 | 描述 | 代表工作 |
+|------|------|---------|
+| **Chain-of-Thought (CoT)** | 通过"逐步思考"提示，引导模型显式推理 | Wei et al. 2022 |
+| **Tree-of-Thoughts (ToT)** | 在每个推理步探索多种可能路径，搜索最优解 | Yao et al. 2023 |
+| **LLM + P** | 借助外部经典规划器（PDDL）进行长程规划 | Liu et al. 2023 |
+
+CoT 已成为标准技术，但对于需要探索多种可能性的复杂任务，ToT 更有效——它允许模型在推理树中回退和切换分支。LLM+P 则引入符号规划领域的成熟工具，适合确定性强的长期规划。
+
+> 实践中，**ToT** 在需要创造性或存在多路径的任务中表现优于普通 CoT，但 Token 消耗也更高。
+
+### 13.2 自我反思（Self-Reflection）
+
+自我反思是 Agent 迭代改进的关键能力——通过反思过去的行动来修正错误、优化策略。
+
+| 机制 | 核心思想 | 关键发现 |
+|------|---------|---------|
+| **ReAct** | 推理与行动交织 -> 交替输出 Thought/Action/Observation | 在知识和决策任务上都优于纯行动基线 |
+| **Reflexion** | 用启发式函数检测失败轨迹，生成反思文本作为经验 | 有效减少幻觉和低效规划 |
+| **Chain of Hindsight (CoH)** | 在上下文中展示逐步改进的输出序列，微调模型 | 模型可以学习从反馈中改进 |
+| **Algorithm Distillation (AD)** | 将学习历史（而非专家轨迹）蒸馏进网络 | 仅需 2-4 episode 的上下文即可学到接近最优策略 |
+
+**经验**：ReAct 是最低成本的自我反思方案，适合入门。生产环境建议叠加 Reflexion 用启发式函数自动终止无效轨迹。
+
+### 13.3 记忆系统（Memory）
+
+Agent 记忆可类比人类记忆系统：
+
+| 人类记忆类型 | Agent 对应实现 | 关键特征 |
+|------------|---------------|---------|
+| 感觉记忆（Sensory） | 输入嵌入表示 | 对原始输入的特征编码 |
+| 短期/工作记忆（STM） | 上下文学习（In-Context Learning） | 受限于 Transformer 上下文窗口 |
+| 长期记忆（LTM） | 外部向量存储 | 持久化、大容量、快速检索 |
+
+**最大内积搜索（MIPS）** 是实现长期记忆的关键技术，常用算法包括：
+
+- **LSH（局部敏感哈希）**：将相似输入映射到同一桶，概率性保证
+- **ANNOY（近似最近邻）**：随机投影树，构建二叉树集合
+- **HNSW（分层可导航小世界）**：基于小世界网络，多数节点可在几步内到达——目前工业首选
+- **FAISS（Facebook AI 相似度搜索）**：基于高斯分布假设，支持 GPU 加速
+- **ScaNN（可扩展最近邻）**：各向异性向量量化，Google 出品
+
+> **选型建议**：HNSW 综合表现最优（高召回 + 快速度），FAISS 适合大规模 + GPU 场景，ScaNN 在精度-速度权衡上表现突出。
+
+### 13.4 工具使用模式
+
+Agent 通过工具调用获取模型权重之外的信息和能力：
+
+| 框架 | 方式 | 特点 |
+|------|------|------|
+| **MRKL** | 神经符号架构，LLM 作为路由器，分发到专家模块 | 模块化，每个专家可独立优化 |
+| **Toolformer** | 自监督学习工具 API 调用时机 | 模型自行判断何时调用工具 |
+| **HuggingGPT** | ChatGPT 作为规划器，分发任务到 HuggingFace 模型 | 四阶段：规划→模型选择→执行→总结 |
+| **API-Bank** | 含 53 个 API 工具的三级评估基准 | Level1=调用, Level2=检索, Level3=规划 |
+
+**ChatGPT Plugins 和 OpenAI Function Calling** 是工具增强 LLM 的工业级实践。HuggingGPT 的四阶段流水线（任务规划→模型选择→任务执行→响应生成）展示了如何将 LLM 作为中心控制器编排异构 AI 模型。
+
+### 13.5 前沿案例：科学发现 Agent
+
+- **ChemCrow**：LLM + 13 个化学工具（有机合成、药物发现、材料设计），使用 ReAct 格式。有趣发现：LLM 自动评估认为 GPT-4 和 ChemCrow 性能相当，但人类专家评估显示 ChemCrow 在完整性和正确性上显著更优
+- **Boiko et al. (2023)**：自主科学实验 Agent，从设计到执行的全自动流程。包含风险测试——4/11 已知化学武器 Agent 被成功诱骗合成
+
+### 13.6 模拟案例：生成式 Agent
+
+Park et al. (2023) 创建了 25 个 LLM 驱动的虚拟角色，在沙盒环境中生活互动。设计核心：
+
+- **记忆流**：以自然语言记录所有经验（长期记忆）
+- **检索模型**：按相关性、近期性、重要性三维度评分，提取上下文
+- **反思机制**：综合记忆，生成高层次推论，指导未来行为
+- **规划与反应**：将反思和环境信息转化为具体行动
+
+> 有趣结果：出现了信息扩散、关系记忆（角色延续之前的对话话题）、社交活动协调等**涌现社会行为**。
+
+### 13.7 当前 Agent 的主要挑战
+
+| 挑战 | 描述 | 潜在解决方向 |
+|------|------|-------------|
+| **有限上下文长度** | 历史信息、指令、API 上下文竞争窗口 | 分层记忆 + 上下文压缩 |
+| **长期规划脆弱** | LLM 在长程探索中难以稳定调整计划 | 外部规划器 + 环境反馈 |
+| **自然语言接口可靠性** | LLM 输出格式不稳定，工具解析错误 | 结构化输出 + 验证层 |
+| **幻觉级联** | Agent 的早期错误会被后续步骤放大 | 每一步加验证门控 |
+
+### 13.8 参考来源
+
+- [LLM-powered Autonomous Agents - Lilian Weng](https://lilianweng.github.io/posts/2023-06-23-agent/)
+- [ReAct: Synergizing Reasoning and Acting in Language Models - Yao et al. 2023](https://arxiv.org/abs/2210.03629)
+- [Reflexion: an autonomous agent with dynamic memory and self-reflection - Shinn & Labash 2023](https://arxiv.org/abs/2303.11366)
+- [Tree of Thoughts: Deliberate Problem Solving with Large Language Models - Yao et al. 2023](https://arxiv.org/abs/2305.10601)
+- [Generative Agents: Interactive Simulacra of Human Behavior - Park et al. 2023](https://arxiv.org/abs/2304.03442)
+- [API-Bank: A Benchmark for Tool-Augmented LLMs - Li et al. 2023](https://arxiv.org/abs/2304.08244)
+- [HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in HuggingFace - Shen et al. 2023](https://arxiv.org/abs/2303.17580)
+
+---
+
+## 14. 2026年Agent互操作协议：MCP与A2A
+
+随着 Agent 生态从单一框架走向多 Agent 协作，**互操作协议**成为 2026 年最重要的基础设施层进展。两个互补的开放协议正推动 Agent 从"孤岛"走向"互联"：
+
+### 14.1 MCP（Model Context Protocol）
+
+**来源：** [Model Context Protocol - Anthropic 开源](https://modelcontextprotocol.io/)（2024/11 发布，2026 年广泛采用）
+
+MCP 是 Anthropic 发布的开放协议，解决的是 **Agent 如何标准化发现和调用工具/资源** 的问题。可以类比为"AI 世界的 USB-C 接口"：
+
+**核心概念：**
+
+| 概念 | 说明 | 类比 |
+|------|------|------|
+| **MCP Server** | 暴露工具和资源的服务端 | 打印机驱动 |
+| **MCP Client** | 连接 Server 的 Agent/应用 | 电脑 |
+| **Resources** | 结构化数据（文件、数据库记录） | 可读文件 |
+| **Tools** | 可执行操作（API 调用、计算） | 可执行程序 |
+| **Prompts** | 预定义提示词模板 | 快捷键 |
+
+**2026 年 MCP 生态现状：**
+
+- **主流框架原生支持**：LangChain、LangGraph、CrewAI、Microsoft Agent Framework、OpenAI Agents SDK 均已集成 MCP
+- **工具市场涌现**：社区贡献了数百个 MCP Server（Slack、GitHub、Google Drive、数据库、浏览器等）
+- **传输层标准化**：支持 stdio（本地进程）和 HTTP+SSE（远程服务）两种传输方式
+- **安全模型完善**：OAuth 2.0 认证、工具级权限控制、用户审批流
+
+```python
+# MCP 使用示例（概念性）
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+# 连接本地 MCP Server
+async with stdio_client(StdioServerParameters(
+    command="python", args=["my_server.py"]
+)) as (read, write):
+    async with ClientSession(read, write) as session:
+        # 发现可用工具
+        tools = await session.list_tools()
+        # 调用工具
+        result = await session.call_tool("search_docs", {"query": "..."})
+```
+
+### 14.2 A2A（Agent-to-Agent Protocol）
+
+**来源：** [Agent-to-Agent Protocol - Google 开源](https://github.com/google/A2A)（2025/04 发布）
+
+A2A 是 Google 发布的开放协议，解决的是 **Agent 之间如何相互发现、通信和协作** 的问题。如果说 MCP 是 Agent 的"手"（调用外部工具），A2A 就是 Agent 的"嘴"（与其他 Agent 对话）。
+
+**核心设计：**
+
+| 特性 | 说明 |
+|------|------|
+| **Agent Card** | JSON 格式的能力声明（支持的任务类型、技能、端点），类似 OpenAPI Spec |
+| **任务导向** | 通信围绕"任务"而非"消息"，支持长运行任务、流式更新、状态推送 |
+| **多模态** | 支持文本、文件、结构化数据在 Agent 间传递 |
+| **安全** | 企业级认证、授权和加密 |
+| **传输无关** | HTTP/gRPC 均可，不绑定特定传输协议 |
+
+**A2A + MCP 的互补关系：**
+
+```
+┌─────────────────────────────────────────────┐
+│                A2A (Agent ↔ Agent)            │
+│  ┌─────────┐  任务委托   ┌─────────┐         │
+│  │ Agent A │ ◄─────────► │ Agent B │         │
+│  └────┬─────┘            └────┬─────┘         │
+│       │ MCP                   │ MCP           │
+│       ▼                       ▼               │
+│  ┌─────────┐            ┌─────────┐          │
+│  │ 工具/数据 │            │ 工具/数据 │          │
+│  └─────────┘            └─────────┘          │
+└─────────────────────────────────────────────┘
+```
+
+> **MCP 解决垂直集成**（Agent ↔ 工具），**A2A 解决水平协作**（Agent ↔ Agent）。两者互补，共同构成 Agent 互操作的基础设施。
+
+### 14.3 对 Agent 工程实践的影响
+
+1. **工具开发一次，到处使用**：按 MCP 规范编写的工具可被所有支持 MCP 的框架调用，不再锁定单一框架
+2. **Agent 即服务**：通过 A2A 暴露 Agent 能力，实现"Agent 市场"——专业 Agent 可被其他 Agent 组合调用
+3. **企业安全性提升**：MCP 的 OAuth + A2A 的企业认证，让 Agent 在企业环境中可控可审计
+4. **降低迁移成本**：框架之间的切换成本大幅降低——工具和 Agent 通信都是基于开放协议而非框架私有 API
+
+### 14.4 参考来源
+
+- [Model Context Protocol (MCP) 官方文档](https://modelcontextprotocol.io/)
+- [Agent-to-Agent Protocol (A2A) - GitHub](https://github.com/google/A2A)
+- [A2A 协议详解 - Google Developers Blog](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。

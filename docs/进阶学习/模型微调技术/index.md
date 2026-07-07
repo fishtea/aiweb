@@ -496,6 +496,51 @@ model = NeMoAutoModelForCausalLM.from_pretrained(
 
 ---
 
+## 2026 最新进展：Transformers v5 与 MoE 模型微调
+
+2026年，HuggingFace Transformers v5 正式发布，首次为混合专家（MoE）模型提供了原生一等支持。NVIDIA 在此基础上构建了 NeMo AutoModel，实现了 MoE 模型微调的大幅加速——**3.4-3.7 倍训练吞吐量提升**和 **29-32% 的显存节省**，且无需改动用户代码。
+
+> 核心趋势：MoE 模型微调不再是禁区。Expert Parallelism（专家并行）让 550B 参数模型的全参数微调成为现实，而单节点 30B 级 MoE 模型可实现近 4× 加速。
+
+### 7.1 Transformers v5 的 MoE 基础设施
+
+Transformers v5 引入了三项关键基础设施：
+
+| 特性 | 说明 |
+|------|------|
+| **专家后端** | 每个 Expert 可独立指定后端（如 TransformerEngine），实现 per-expert 的精度和 kernel 优化 |
+| **动态权重加载** | 模型加载时自动转换 checkpoint 格式，无需手写 per-model 的加载逻辑 |
+| **分布式 DeviceMesh** | 将 PyTorch DeviceMesh 集成到 `from_pretrained()` 中，原生支持张量并行 |
+
+> 对于用户而言，这意味着 `AutoModelForCausalLM.from_pretrained("nvidia/Nemotron-3-Ultra-550B")` 即可加载 550B MoE 模型，无需任何额外配置。
+
+### 7.2 NeMo AutoModel：Expert Parallelism + DeepEP
+
+NVIDIA NeMo AutoModel 在 Transformers v5 基础上添加了：
+
+- **Expert Parallelism（专家并行）**：将不同 Expert 分配到不同 GPU 上，解决 MoE 模型推理/训练时 GPU 利用率不均的问题
+- **DeepEP 融合 All-to-All 分发**：在 Expert 间通信时与计算重叠，消除通信瓶颈
+- **TransformerEngine Kernel**：使用 FP8 混合精度训练内核，进一步降低显存和计算开销
+
+**关键性能数据：**
+
+| 模型 | 配置 | 训练吞吐量提升 | 显存节省 |
+|------|------|--------------|---------|
+| Nemotron 3 Ultra 550B (A55B) | 16 节点全参数微调 | **3.6×** | **32%** |
+| Qwen3-30B-A3B | 单节点 LoRA | **3.7×** | **29%** |
+| Nemotron 3 Nano 30B (A3B) | 单节点全参数微调 | **3.4×** | **31%** |
+
+### 7.3 实践要点
+
+1. **升级到 Transformers v5**：`pip install transformers>=5.0.0` 即可获得 MoE 支持
+2. **使用 NeMo AutoModel**：仅需将 `from transformers import AutoModelForCausalLM` 替换为 `from nemo_automodel import AutoModelForCausalLM`，其余代码无需改动
+3. **兼容现有生态**：`save_pretrained()` 输出标准 HF checkpoint，vLLM / SGLang 可直接加载推理
+4. **MoE 微调策略**：对于 MoE 模型，全参数微调+Expert Parallelism 效果最佳；资源受限时，LoRA 仍可覆盖 Attention 层和 Expert 层
+
+> 来源参考：[Accelerating Fine-Tuning with NVIDIA NeMo AutoModel - HuggingFace Blog](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)（2026年6月24日发布）
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。

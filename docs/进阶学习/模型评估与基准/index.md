@@ -168,6 +168,107 @@ MMLU-Pro 是 MMLU 的增强版本，主要改进：
 
 ---
 
+## 8. 2026年评估体系新进展
+
+### 8.1 LM Evaluation Harness 最新更新
+
+**来源：** [LM Evaluation Harness GitHub README](https://github.com/EleutherAI/lm-evaluation-harness)（2025-2026，持续更新）
+
+EleutherAI 的 LM Evaluation Harness 在 2025-2026 年进行了多项重大更新，标志着评估工具从"能用"走向"好用"：
+
+| 更新时间 | 特性 | 说明 |
+|----------|------|------|
+| 2025/12 | **CLI 重构为子命令** | `lm-eval run` / `lm-eval ls` / `lm-eval validate`，支持 YAML 配置文件（`--config`） |
+| 2025/12 | **轻量化安装** | 基础包不再捆绑 transformers/torch，按需安装后端：`pip install lm_eval[hf]` / `[vllm]` / `[api]` |
+| 2025/07 | **CoT 推理剥离** | `think_end_token` 参数支持自动剥离 CoT 推理痕迹，避免污染生成评估 |
+| 2025/03 | **HF 模型引导（Steering）** | 支持对 HuggingFace 模型进行激活引导实验 |
+| 2025/02 | **SGLang 后端支持** | 新增 SGLang 推理后端，与 vLLM 互补 |
+| 2024/09 | **多模态评估原型** | `hf-multimodal` 和 `vllm-vlm` 模型类型 + `mmmu` 任务，支持图文多模态输入 |
+
+> **重要变化**：v0.4.0 引入了基于配置的任务创建、Jinja2 提示词设计、Promptsource 集成、更灵活的 fewshot 配置和数据并行加速。
+
+```bash
+# 新版 CLI 用法示例
+lm-eval ls tasks                          # 列出所有可用任务
+lm-eval run --config my_eval.yaml         # 使用 YAML 配置运行
+lm-eval run --tasks mmlu,gsm8k            # 指定任务
+  --model hf --model_args pretrained=xxx  # 选择模型后端
+```
+
+### 8.2 Chatbot Arena 与动态评估生态
+
+**来源：** [LMSYS Chatbot Arena](https://chat.lmsys.org/)（2026 年持续运营）
+
+LMSYS Chatbot Arena 已成为模型评估的"黄金标准"之一，其核心价值在于：
+
+- **真实用户盲测**：数十万真实用户参与匿名对战投票，计算 Elo 评分
+- **难以作弊**：新模型持续加入，旧模型评分随用户偏好变化而更新
+- **细粒度排行榜**：按类别（编码、写作、数学、长文本等）、语言、难度分层排名
+
+2026 年 Chatbot Arena 已迁移到 HuggingFace Spaces（由 `lmarena-ai` 组织维护），评估类别进一步细化，引入了 **Arena-Hard-Auto** 等自动化变体，降低人工评估成本。
+
+与静态基准（MMLU、HumanEval）的互补关系：
+
+| 评估方式 | 优势 | 局限 |
+|----------|------|------|
+| 静态基准 | 可复现、低成本、快速 | 易被刷榜、数据污染 |
+| Chatbot Arena | 反映真实偏好、难作弊 | 成本高、结果慢、受用户群体偏差影响 |
+| LiveBench | 持续更新新题 | 出题质量波动 |
+
+> **建议**：不要只看一个榜单。静态基准（MMLU-Pro）+ 动态基准（LiveBench）+ Arena Elo 三方交叉验证，才能全面评估模型。
+
+### 8.3 Agent 评估基准的崛起
+
+随着 Agent 应用爆发，传统单轮问答基准已不足以评估 Agent 能力。2025-2026 年涌现出一批面向 Agent 的评估基准：
+
+| 基准 | 评估维度 | 特点 |
+|------|----------|------|
+| **SWE-Bench Verified** | 真实 GitHub Issue 修复 | 500 个经过人工验证的软件工程任务，测试编码 Agent |
+| **SWE-bench Multimodal** | 多模态软件工程 | 处理 UI 截图、设计稿等视觉输入的编码任务 |
+| **OSWorld** | 计算机操作 | 在真实操作系统环境中完成多步任务 |
+| **WebArena** | Web 交互 | 模拟电商、社交、CMS 等网站的自主操作 |
+| **τ²-bench** | 工具使用与规划 | 评估 Agent 的多工具协同和长期规划能力 |
+| **MCP Benchmark** | 协议互操作 | 测量 Agent 使用 MCP 协议工具的效率和正确率 |
+
+> 趋势：Agent 评估从"答对题"走向"完成任务"——更多强调多步规划、工具使用正确率和端到端成功率。
+
+### 8.4 LLM-as-Judge 的成熟与争议
+
+用 LLM 评判 LLM 的实践在 2026 年已广泛采用，但争议仍在：
+
+**适用场景**：
+- 开放式生成质量评估（写作、摘要、翻译），人工评估成本过高
+- 多轮对话连贯性评估，客观指标难以定义
+- 快速原型验证阶段的反馈环路
+
+**已知问题**：
+- **位置偏差**：评判 LLM 倾向于偏好第一个/最后一个选项
+- **长度偏差**：倾向于给更长的回答更高分
+- **自我增强**：评判 LLM 偏好与自己风格相似的输出
+- **风格偏见**：对冗长、权威语气的回答有系统性偏好
+
+**缓解策略**：
+- 交换候选答案顺序，多次评判取平均
+- 使用多个评判模型交叉验证
+- 结合人工抽检校准（每 100 条中抽 10 条人工比对）
+
+### 8.5 2026 评估实践建议
+
+1. **建立三层评估体系**：自动化基准（日常监控）→ LLM-as-Judge（生成质量）→ 人工抽检（校准兜底）
+2. **关注评估的一致性而非绝对值**：不同框架跑出来的 MMLU 分数不可直接比较，用同一框架对比才有意义
+3. **Agent 评估优先考虑 SWE-Bench Verified**：这是目前最接近真实工程场景的 Agent 基准
+4. **定期更新评估集**：任何静态基准在 6-12 个月后都可能被模型"学习"，切换至 LiveBench 或自建动态评估集
+5. **记录评估配置的完整信息**：模型版本、prompt 模板、fewshot 数量、解码参数——LM Evaluation Harness 的 YAML 配置可以很好地解决这个问题
+
+### 8.6 参考来源
+
+- [LM Evaluation Harness GitHub](https://github.com/EleutherAI/lm-evaluation-harness)（2026-07 获取最新 README）
+- [LMSYS Chatbot Arena (HuggingFace)](https://huggingface.co/spaces/lmarena-ai/chatbot-arena-leaderboard)
+- [SWE-Bench Verified](https://www.swebench.com/)
+- [Open LLM Leaderboard v2](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
+
+---
+
 ## 🔗 参考资料
 
 - [LLM Eval Harness Guide - Morphllm](https://www.morphllm.com/llm-eval-harness)

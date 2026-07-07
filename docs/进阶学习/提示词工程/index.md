@@ -198,6 +198,115 @@ English: "How much does this cost?" → French:
 
 ---
 
+## 7. 系统消息设计与生产级提示工程
+
+> 来源：[System message design for Azure OpenAI - Microsoft Learn](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/advanced-prompt-engineering?pivots=programming-language-chat-completions)（2026 更新）
+
+系统消息（System Message，也称 System Prompt 或 Metaprompt）是生产环境中**最重要但最容易忽视**的提示工程环节。它定义了助手的行为边界、语气和输出契约。
+
+### 7.1 系统消息的核心作用
+
+| 作用 | 说明 |
+|------|------|
+| **定义角色与边界** | 设定助手是什么、能做什么、不能做什么 |
+| **设定语气与风格** | 正式/友好/简洁/详细…… |
+| **指定输出格式** | JSON / Markdown / 固定 schema |
+| **添加安全约束** | 拒绝越界请求、保护敏感信息 |
+
+**关键原则**：系统消息可以影响模型行为，但不能保证完全合规。需要与过滤、评估等其他手段配合使用。
+
+### 7.2 系统消息设计清单
+
+Microsoft 推荐的六步设计法：
+
+**① 明确助手的工作**
+```
+"你是一个内部产品的技术支持助手。"
+```
+
+**② 定义边界**
+列出助手必须避免的主题、动作和内容类型：
+```
+- 不讨论政治、宗教话题
+- 不提供医疗、法律建议
+- 不执行未在工具列表中声明的操作
+```
+
+**③ 指定输出格式**
+如果需要结构化输出，必须显式指定：
+```
+仅返回 JSON，使用以下 schema：
+{"name": "", "amount": 0, "currency": "USD"}
+```
+
+**④ 添加"不确定时"策略**
+明确告诉模型在以下情况该怎么做：
+- 用户请求不明确 → 追问澄清
+- 请求超出范围 → 礼貌拒绝
+- 模型缺乏信息 → 说"我不知道"
+
+**⑤ 测试、度量、迭代**
+系统消息可能过拟合到特定示例，或在边缘情况下失效。需要：
+- 用真实和对抗性提示进行测试
+- 建立评估集（30-100 条）
+- 每次修改后对比新旧版本
+
+**⑥ 保持简洁**
+系统消息越长，消耗的上下文窗口越大，留给用户内容的空间越小。能用一句话说清的，不要写一段。
+
+### 7.3 三种典型系统消息模板
+
+**场景一：技术支持（含回退策略）**
+```
+你是一个内部产品的技术支持助手。
+如果你没有足够信息回答问题，请追问澄清。
+如果仍然无法回答，请说你不知道。
+```
+
+**场景二：结构化实体提取**
+```
+你从用户文本中提取实体。
+仅返回 JSON，使用以下 schema：
+{"name": "", "company": "", "phone_number": ""}
+```
+
+**场景三：多约束问答助手**
+```
+你是一个财务合规助手，帮助员工理解公司政策。
+- 只回答基于公司已发布的政策文档
+- 如果政策文档未覆盖该问题，说"我需要在政策中查找相关信息"
+- 不提供个人建议或主观判断
+- 响应使用中文，术语可保留英文
+```
+
+### 7.4 常见陷阱
+
+| 陷阱 | 示例 | 改进 |
+|------|------|------|
+| **指令冲突** | "保持简洁" + "全面覆盖所有细节" | 明确优先级："优先简洁，再补充关键细节" |
+| **过于冗长** | 3000 token 的系统消息 | 压缩到 500 token 以内，将细节放在使用说明中 |
+| **隐含需求** | 期望 JSON 输出但未提及 | "仅返回 JSON，使用以下 schema" |
+| **缺少回退策略** | 未说明"不知道怎么办" | 添加明确的不确定处理流程 |
+| **不安全默认值** | 未限制工具调用范围 | 添加白名单："只能调用 search_docs 和 get_policy 两个工具" |
+
+### 7.5 系统消息 vs 用户消息
+
+| 对比维度 | 系统消息 | 用户消息 |
+|---------|---------|---------|
+| 优先级 | 最高（多数模型优先遵循） | 次之 |
+| 可见性 | 对用户不可见 | 用户可见 |
+| 变更频率 | 低频（随版本发布） | 每次对话都可能不同 |
+| 安全风险 | 低（受控输入） | 高（可能包含对抗性内容） |
+| 长度限制 | 占用上下文窗口 | 动态变化 |
+
+### 7.6 参考来源
+
+- [System message design for Azure OpenAI - Microsoft Learn](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/advanced-prompt-engineering)
+- [Microsoft Safety system message templates](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/safety-system-message)
+- [Prompt Engineering Techniques - OpenAI Cookbook](https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
