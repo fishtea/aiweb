@@ -54,6 +54,34 @@
 - **GPT-4.1 / 4.1-mini / 4.1-nano**：仍适合代码、长上下文和稳定结构化输出；如果系统已经围绕 4.1 做评估，可作为保守生产基线。
 - **GPT-4o / GPT-4o-mini**：多模态交互和低延迟体验仍有价值，但新项目应优先评估 GPT-5.5 系列。
 
+### GPT-5.6 Sol 预览（2026-06-26）
+
+根据 [OpenAI 官方博客](https://openai.com/index/previewing-gpt-5-6-sol)（2026 年 6 月 26 日发布），OpenAI 预览了下一代旗舰模型 **GPT-5.6 Sol**，在编码、科学研究和网络安全三个领域实现了显著的能力跃升：
+
+- **编码能力**：在复杂软件工程任务、多文件重构和长链工具调用上的表现大幅超越 GPT-5.5
+- **科学研究**：在 GeneBench-Pro 等基因组学和生物学基准测试中展现出前沿水平
+- **网络安全**：配备 OpenAI 最先进的安全栈（safety stack），在保持高风险能力的同时强化了拒绝不当请求的准确性
+
+GPT-5.6 Sol 目前处于预览阶段，面向早期测试者和企业客户开放。其发布标志着 OpenAI 模型路线从"通用对话优先"转向"复杂 Agent 任务优先"。
+
+### OpenAI × Broadcom Jalapeño 推理芯片（2026-06-24）
+
+根据 [OpenAI 官方公告](https://openai.com/index/openai-broadcom-jalapeno-inference-chip)（2026 年 6 月 24 日），OpenAI 与 Broadcom 联合发布了 **Jalapeño**——一款专为大语言模型推理优化的定制 AI 芯片：
+
+- **定位**：LLM 推理专用芯片，旨在提升性能、效率和规模化部署能力
+- **意义**：OpenAI 首次涉足自研 AI 硬件，减少对外部 GPU 供应（主要是 NVIDIA）的依赖
+- **产业影响**：标志着头部 AI 公司从纯模型研发向"模型+芯片"垂直整合的战略转型，类似 Google TPU 和 Amazon Trainium 的路径
+
+### Agent 正在改变工作方式（2026-06-25）
+
+根据 [OpenAI 研究论文](https://openai.com/index/how-agents-are-transforming-work)（2026 年 6 月 25 日发布），OpenAI 发布了关于 AI Agent 对工作方式影响的实证研究：
+
+- **任务复杂度提升**：Agent 能完成更长、更复杂的多步任务，不再局限于单轮问答
+- **生产力扩展**：Agent 的使用正在从个人辅助扩展到跨角色、跨团队的协作场景
+- **产业趋势**：研究指出 Agent 正在从"工具"演进为"数字同事"，改变知识工作的组织方式
+
+> 这项研究与 GPT-5.6 Sol 的发布方向一致——OpenAI 正在将其模型能力向 Agent 化方向集中，而非单纯追求基准分数。
+
 ---
 
 ## o 系列 — 推理模型（Reasoning Models）
@@ -216,4 +244,4 @@ print(result.final_answer)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-07 00:14:39*
+*资源区块更新时间：2026-07-09 00:14:29*

@@ -6572,12 +6572,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 185310.0,
-    "verified_at": "2026-07-04 00:03:23",
+    "provider_score": 185433.0,
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 6,
+    "last_seen": "2026-07-09",
+    "seen_count": 10,
     "query": "GitHub AI 热门项目 周榜"
   },
   {
@@ -6632,12 +6632,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 164681.0,
-    "verified_at": "2026-07-04 00:03:23",
+    "provider_score": 165084.0,
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 4,
+    "last_seen": "2026-07-09",
+    "seen_count": 8,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6662,12 +6662,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 98441.0,
-    "verified_at": "2026-07-04 00:03:23",
+    "provider_score": 98767.0,
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 4,
+    "last_seen": "2026-07-09",
+    "seen_count": 8,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6692,12 +6692,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 94538.0,
-    "verified_at": "2026-07-04 00:03:23",
+    "provider_score": 94750.0,
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 4,
+    "last_seen": "2026-07-09",
+    "seen_count": 8,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6722,12 +6722,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 85657.0,
-    "verified_at": "2026-07-04 00:03:23",
+    "provider_score": 86425.0,
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 4,
+    "last_seen": "2026-07-09",
+    "seen_count": 8,
     "query": "trending AI projects GitHub"
   },
   {
@@ -8730,11 +8730,11 @@
       "tavily"
     ],
     "provider_score": 0.68723184,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-08 09:09:05",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 2,
+    "last_seen": "2026-07-08",
+    "seen_count": 3,
     "query": "机器学习 数学基础 入门"
   },
   {
@@ -8761,11 +8761,11 @@
       "tavily"
     ],
     "provider_score": 0.86632514,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-08 09:09:05",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-04",
-    "seen_count": 2,
+    "last_seen": "2026-07-08",
+    "seen_count": 3,
     "query": "math for machine learning beginners"
   },
   {
@@ -8860,6 +8860,36 @@
     "query": "math for machine learning beginners"
   },
   {
+    "url": "https://guvi.in/blog/mathematics-for-machine-learning",
+    "source_domain": "guvi.in",
+    "dedupe_key": "guvi.in/blog/mathematics-for-machine-learning",
+    "title": "Mathematics for Machine Learning: A Zero-to-Hero Guide",
+    "title_cn": "机器学习数学：零基础指南",
+    "summary": "This zero-to-hero guide breaks down the essential mathematics for machine learning from linear algebra fundamentals to statistics, probability, and calculus.",
+    "summary_cn": "这本从零到英雄的指南详细介绍了机器学习的基本数学知识，从线性代数基础知识到统计学、概率和微积分。",
+    "category": "初级知识",
+    "topic": "数学基础",
+    "tags": [
+      "数学",
+      "线性代数",
+      "概率",
+      "微积分"
+    ],
+    "level": "beginner",
+    "score": 3,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-08 09:09:05",
+    "verify_status": 200,
+    "first_seen": "2026-07-08",
+    "last_seen": "2026-07-08",
+    "seen_count": 1,
+    "query": "math for machine learning beginners"
+  },
+  {
     "url": "https://microsoft.com/en-us/research/articles/book-recommendation-machine-learning-math",
     "source_domain": "microsoft.com",
     "dedupe_key": "microsoft.com/en-us/research/articles/book-recommendation-machine-learning-math",
@@ -8882,11 +8912,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-08 09:09:05",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-08",
+    "seen_count": 2,
     "query": "机器学习 数学基础 入门"
   },
   {
@@ -8912,11 +8942,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-08 09:09:05",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-08",
+    "seen_count": 2,
     "query": "机器学习 数学基础 入门"
   },
   {
@@ -9286,8 +9316,8 @@
     "level": "beginner",
     "score": 12,
     "first_seen": "2026-06-30",
-    "last_seen": "2026-07-04",
-    "seen_count": 70,
+    "last_seen": "2026-07-08",
+    "seen_count": 72,
     "query": "AI beginner tutorial 2026",
     "dedupe_key": "youtube.com/watch",
     "provider": "legacy",
@@ -9297,7 +9327,7 @@
       "tavily"
     ],
     "provider_score": 0.95618236,
-    "verified_at": "2026-07-04 09:06:26",
+    "verified_at": "2026-07-08 17:00:29",
     "verify_status": 200
   },
   {
@@ -9351,11 +9381,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-09",
+    "seen_count": 2,
     "query": "人工智能入门教程 2026"
   },
   {
@@ -9480,8 +9510,8 @@
     "dedupe_key": "coursiv.io/blog/how-to-learn-ai-2026",
     "title": "How to Learn AI in 2026: Guide for Everyone | Coursiv Blog",
     "title_cn": "2026 年如何学习人工智能：所有人指南 |课程博客",
-    "summary": "1 week ago - A beginner-friendly roadmap for learning AI in 2026, including practical tools, use cases, career skills, prompt basics, and safe ways to start.",
-    "summary_cn": "1 周前 - 适合初学者的 2026 年人工智能学习路线图，包括实用工具、用例、职业技能、提示基础知识和安全的入门方法。",
+    "summary": "2 weeks ago - A beginner-friendly roadmap for learning AI in 2026, including practical tools, use cases, career skills, prompt basics, and safe ways to start.",
+    "summary_cn": "2 周前 - 适合初学者的 2026 年人工智能学习路线图，包括实用工具、用例、职业技能、提示基础知识和安全的入门方法。",
     "category": "初级知识",
     "topic": "人工智能入门",
     "tags": [
@@ -9496,11 +9526,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-08 17:00:29",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-08",
+    "seen_count": 2,
     "query": "AI beginner tutorial 2026"
   },
   {
@@ -9525,11 +9555,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-09",
+    "seen_count": 2,
     "query": "人工智能入门教程 2026"
   },
   {
@@ -9554,11 +9584,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-09",
+    "seen_count": 2,
     "query": "人工智能入门教程 2026"
   },
   {
@@ -9612,11 +9642,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-09",
+    "seen_count": 2,
     "query": "人工智能入门教程 2026"
   },
   {
@@ -9625,8 +9655,8 @@
     "dedupe_key": "coursiv.io/blog/how-to-learn-artificial-intelligence-free-2026",
     "title": "How to Learn Artificial Intelligence for Free in 2026: A Step-by-Step Roadmap",
     "title_cn": "2026 年如何免费学习人工智能：分步路线图",
-    "summary": "1 week ago - A beginner-friendly roadmap for learning AI in 2026, including practical tools, use cases, career skills, prompt basics, and safe ways to start.",
-    "summary_cn": "1 周前 - 适合初学者的 2026 年人工智能学习路线图，包括实用工具、用例、职业技能、提示基础知识和安全的入门方法。",
+    "summary": "2 weeks ago - A beginner-friendly roadmap for learning AI in 2026, including practical tools, use cases, career skills, prompt basics, and safe ways to start.",
+    "summary_cn": "2 周前 - 适合初学者的 2026 年人工智能学习路线图，包括实用工具、用例、职业技能、提示基础知识和安全的入门方法。",
     "category": "初级知识",
     "topic": "人工智能入门",
     "tags": [
@@ -9641,11 +9671,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-08 17:00:29",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-08",
+    "seen_count": 2,
     "query": "AI beginner tutorial 2026"
   },
   {
@@ -9965,13 +9995,43 @@
     "score": 8,
     "provider": "tavily",
     "providers": [
+      "ddgs",
       "tavily"
     ],
     "provider_score": 0.92980474,
-    "verified_at": "2026-07-02 11:37:25",
+    "verified_at": "2026-07-08 17:00:29",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-02",
+    "last_seen": "2026-07-08",
+    "seen_count": 2,
+    "query": "AI learning roadmap beginners"
+  },
+  {
+    "url": "https://github.com/krishnaik06/Complete-RoadMap-To-Learn-AI",
+    "source_domain": "github.com",
+    "dedupe_key": "github.com/krishnaik06/complete-roadmap-to-learn-ai",
+    "title": "GitHub - krishnaik06/Complete-RoadMap-To-Learn-AI · GitHub",
+    "title_cn": "GitHub - krishnaik06/Complete-RoadMap-To-Learn-AI · GitHub",
+    "summary": "Whether you want to become a Data Scientist, Generative AI Engineer, or Agentic AI Developer, this roadmap will guide your journey. ... graph TD A[Start Here] --> B{Choose Your Path} B -->|Traditional Route| C[Data Science First] B -->|Modern Route| D[Generative AI First] B -->|Advanced Route| E[All Three Parallel] C --> F[Master DS/ML/CV/NLP] F --> G[Add Gen AI] G --> H[Learn Agentic AI] D --> I[Master Gen AI] I --> J[Add Agentic AI] J --> K[Learn DS Fundamentals] E --> L[Comprehensive AI Expert]",
+    "summary_cn": "无论您想成为数据科学家、生成式 AI 工程师还是代理 AI 开发人员，此路线图都将指导您的旅程。 ... graph TD A[从这里开始] --> B{选择你的路径} B -->|传统路线| C[数据科学第一] B -->|现代路线| D[生成式人工智能优先] B -->|高级路线| E[全部三个并行] C --> F[大师 DS/ML/CV/NLP] F --> G[添加 Gen AI] G --> H[学习 Agentic AI] D --> I[Master Gen AI] I --> J[添加 Agentic AI] J --> K[学习 DS 基础知识] E --> L[综合 AI 专家]",
+    "category": "初级知识",
+    "topic": "AI学习路线图",
+    "tags": [
+      "路线图",
+      "入门",
+      "学习路径"
+    ],
+    "level": "beginner",
+    "score": 7,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-08 17:00:29",
+    "verify_status": 200,
+    "first_seen": "2026-07-08",
+    "last_seen": "2026-07-08",
     "seen_count": 1,
     "query": "AI learning roadmap beginners"
   },
@@ -10055,11 +10115,11 @@
       "ddgs"
     ],
     "provider_score": null,
-    "verified_at": "2026-07-04 00:03:23",
+    "verified_at": "2026-07-09 00:10:06",
     "verify_status": 200,
     "first_seen": "2026-07-04",
-    "last_seen": "2026-07-04",
-    "seen_count": 1,
+    "last_seen": "2026-07-09",
+    "seen_count": 3,
     "query": "人工智能 学习路线 零基础"
   },
   {
@@ -10088,6 +10148,64 @@
     "verify_status": 308,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-02",
+    "seen_count": 1,
+    "query": "AI learning roadmap beginners"
+  },
+  {
+    "url": "https://roadmap.sh/ai-data-scientist",
+    "source_domain": "roadmap.sh",
+    "dedupe_key": "roadmap.sh/ai-data-scientist",
+    "title": "AI and Data Scientist Roadmap",
+    "title_cn": "人工智能和数据科学家路线图",
+    "summary": "May 14, 2025 - Step by step roadmap guide to becoming an AI and Data Scientist in 2026",
+    "summary_cn": "2025 年 5 月 14 日 - 2026 年成为人工智能和数据科学家的分步路线图指南",
+    "category": "初级知识",
+    "topic": "AI学习路线图",
+    "tags": [
+      "路线图",
+      "入门",
+      "学习路径"
+    ],
+    "level": "beginner",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-08 17:00:29",
+    "verify_status": 200,
+    "first_seen": "2026-07-08",
+    "last_seen": "2026-07-08",
+    "seen_count": 1,
+    "query": "AI learning roadmap beginners"
+  },
+  {
+    "url": "https://ischool.syracuse.edu/how-to-learn-ai",
+    "source_domain": "ischool.syracuse.edu",
+    "dedupe_key": "ischool.syracuse.edu/how-to-learn-ai",
+    "title": "How to Learn AI in 2026? The Complete Roadmap",
+    "title_cn": "2026年如何学习人工智能？完整的路线图",
+    "summary": "March 12, 2026 - Unsure how to learn AI? Follow this roadmap for No-Code Power Users and Technical Builders. Future-proof your career with our step-by-step guide.",
+    "summary_cn": "2026 年 3 月 12 日 - 不确定如何学习人工智能？请遵循此无代码高级用户和技术构建者路线图。通过我们的分步指南，让您的职业生涯面向未来。",
+    "category": "初级知识",
+    "topic": "AI学习路线图",
+    "tags": [
+      "路线图",
+      "入门",
+      "学习路径"
+    ],
+    "level": "beginner",
+    "score": 4,
+    "provider": "ddgs",
+    "providers": [
+      "ddgs"
+    ],
+    "provider_score": null,
+    "verified_at": "2026-07-08 17:00:29",
+    "verify_status": 200,
+    "first_seen": "2026-07-08",
+    "last_seen": "2026-07-08",
     "seen_count": 1,
     "query": "AI learning roadmap beginners"
   },

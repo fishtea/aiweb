@@ -170,6 +170,109 @@ mp_fp16 = MixedPrecision(
 
 ---
 
+## 7. 2026 训练效率新突破
+
+### 7.1 NeMo AutoModel：MoE 微调 3.7 倍加速
+
+**来源：** [Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel — HuggingFace Blog (2026-06-24)](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)
+
+2026 年 6 月，NVIDIA 发布了 **NeMo AutoModel**，这是一个直接构建在 HuggingFace Transformers v5 之上的开源训练加速库，专为 MoE（混合专家）模型的大规模微调设计。
+
+**核心性能数据（对比原生 Transformers v5）：**
+
+| 指标 | 提升幅度 |
+|------|---------|
+| 训练吞吐量 | **3.4-3.7×** |
+| GPU 显存占用 | **减少 29-32%** |
+
+**技术栈：**
+
+- **Expert Parallelism**：将不同专家分布到不同 GPU 上，减少通信开销
+- **DeepEP**：融合的 all-to-all 派发（dispatch）内核，优化 MoE 路由的专家间通信
+- **TransformerEngine 内核**：针对 NVIDIA GPU 优化的高性能算子
+- **动态权重加载**：继承 Transformers v5 的能力，按需加载专家权重
+
+**关键亮点——零代码迁移：**
+
+```python
+# 只需替换一行 import，其余代码不变
+from nemo_automodel import AutoModelForCausalLM  # 替代 transformers.AutoModelForCausalLM
+
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-30B-A3B")
+# 训练代码完全不变
+```
+
+> **启示：** 2026 年的训练加速已经从"需要深入理解分布式框架"走向"一行 import 即用"。Transformers v5 + NeMo AutoModel 的组合让 MoE 微调的门槛大幅降低，中小团队也能高效微调百亿级 MoE 模型。
+
+### 7.2 HuggingFace Kernels 2.0：自定义算子的标准化生态
+
+**来源：** [🤗 Kernels: Major Updates — HuggingFace Blog (2026-07-06)](https://huggingface.co/blog/revamped-kernels)
+
+2026 年 7 月，HuggingFace 对其 Kernels 项目进行了重大升级，旨在标准化自定义 CUDA/Metal 等算子的打包、分发和消费方式。
+
+**主要更新：**
+
+| 更新 | 说明 |
+|------|------|
+| **新仓库类型 "kernel"** | Kernels 成为 Hub 上的一等公民，可查看支持的加速器、操作系统和后端版本 |
+| **可复现构建** | 使用 Nix 进行封闭构建（hermetic build），确保二进制与源代码匹配 |
+| **可信发布者** | 引入信任机制，区分社区和官方维护的 kernel |
+| **代码签名** | 嵌入源码 Git SHA1，防止篡改 |
+| **改进的 CLI** | 统一的命令行工具，简化 kernel 安装和管理 |
+
+**对训练优化的意义：**
+
+- FlashAttention-3 等关键算子可通过统一的 Kernels 生态安装和验证
+- 安全机制降低第三方 kernel 的供应链风险
+- 为后续"Agent 化 kernel 开发"（AI 辅助编写和优化 kernel）打下基础
+
+> 2026 年的训练栈正在形成新的分层：**Transformers v5（模型层）→ NeMo AutoModel（分布层）→ Kernels 2.0（算子层）**，每一层都有标准化的接口和一流的生态支持。
+
+---
+
+### 7.3 ZeRO 三阶段深入解析：从原理到选型
+
+**来源：** [HuggingFace Transformers — Perf Train GPU Many](https://huggingface.co/docs/transformers/en/perf_train_gpu_many)
+
+ZeRO（Zero Redundancy Optimizer）是 2026 年大模型训练的标配技术，它通过将参数、梯度和优化器状态分片（shard）到数据并行进程中，大幅降低每 GPU 的内存占用。理解三个阶段的差异对训练配置至关重要：
+
+| 阶段 | 分片内容 | 通信开销 | 内存节省（相对 DDP） | 适用场景 |
+|------|----------|---------|---------------------|---------|
+| **ZeRO-1** | 优化器状态 | 2Ψ | ~4× | 模型刚好能放进单 GPU，想扩大 batch size |
+| **ZeRO-2** | 优化器 + 梯度 | 2Ψ | ~8× | 模型能放进单 GPU，但需要更大的有效 batch |
+| **ZeRO-3** | 参数 + 梯度 + 优化器 | 3Ψ | ~64× | 模型单 GPU 放不下，必须分片 |
+
+> Ψ = 参数量（例如 7B 模型，Ψ = 7B 个 float16 ≈ 14GB）
+
+**关键选择依据：**
+- **ZeRO-1 对通信模式无影响**，因为它只分片优化器状态，前向/反向时参数和梯度仍是完整的
+- **ZeRO-2 在前向时也不影响**，但在反向阶段需要 reduce-scatter 梯度
+- **ZeRO-3 在前向和反向都需要 all-gather 恢复完整参数**，通信量最大，但内存节省最显著
+- 实践中，**如果模型能放进单 GPU，优先 ZeRO-2；如果放不下，才用 ZeRO-3**
+
+### 7.4 模型并行：流水线并行与张量并行
+
+除 ZeRO 数据并行外，当模型极大（100B+）时还需要模型并行（Model Parallelism）。HuggingFace 文档区分了两种主要方式：
+
+**流水线并行（Pipeline Parallelism, PP）**：
+- 将模型的不同层分配到不同 GPU 上
+- 前向时：GPU 1 处理一个 batch → 传给 GPU 2 → 以此类推
+- 反向时：从最后一个 GPU 向前传播梯度
+- **优点**：适合层数极深的模型
+- **缺点**：GPU 利用率可能不均衡，需要微批次调度（micro-batch scheduling）来减少"气泡"
+
+**张量并行（Tensor Parallelism, PP）**：
+- 将单层内的矩阵运算拆分到多个 GPU
+- 每个 GPU 持有张量的一部分（如按列分割权重矩阵）
+- **优点**：单层超大（如 embedding 层、FFN 层）时的必需策略
+- **缺点**：对模型架构有侵入性，需修改模型定义
+
+**3D 并行（3D Parallelism）**：ZeRO 数据并行 + 流水线并行 + 张量并行三者组合，是训练 100B+ 模型的工业级标准方案，在 DeepSpeed 和 Megatron-LM 中得到广泛实践。
+
+> **2026 趋势**：随着模型规模持续增长（DeepSeek V3/R1 参数达 671B），3D 并行已成为大模型训练的默认架构。但中小团队（<30B 参数）通常只需 ZeRO-2 或 ZeRO-3 即可满足需求，无需引入额外的并行复杂度。
+
+---
+
 ## 🔗 参考资料
 
 - [How Distributed Training Works in PyTorch - AI Summer](https://theaisummer.com/distributed-training-pytorch)
@@ -177,6 +280,9 @@ mp_fp16 = MixedPrecision(
 - [Everything about Distributed Training and Efficient Finetuning](https://sumanthrh.com/post/distributed-and-efficient-finetuning)
 - [FSDP Mixed Precision Training - YouTube](https://www.youtube.com/watch?v=-caN92JtKqA)
 - [Amazon SageMaker Mixed Precision Training](https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-core-features-v2-mixed-precision.html)
+- [HuggingFace Transformers — Scalability Guide](https://huggingface.co/docs/transformers/en/perf_train_gpu_many)
+- [Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel (2026-06-24)](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)
+- [🤗 Kernels: Major Updates (2026-07-06)](https://huggingface.co/blog/revamped-kernels)
 
 ---
 
@@ -192,4 +298,4 @@ mp_fp16 = MixedPrecision(
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-07 00:14:39*
+*资源区块更新时间：2026-07-09 00:14:29*
