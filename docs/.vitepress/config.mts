@@ -86,6 +86,7 @@ const nav = [
       { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
       { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
       { text: 'Agent 评估与可观测性', link: '/AIAgent实践/Agent评估与可观测性/' },
+      { text: 'AI Agent PRD 方案库', link: '/AIAgent实践/PRD方案库/' },
       { text: '📋 实际应用案例', link: '/AIAgent实践/实际应用案例/' }
     ]
   },
@@ -189,6 +190,7 @@ const sidebar = [
       { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
       { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
       { text: 'Agent 评估与可观测性', link: '/AIAgent实践/Agent评估与可观测性/' },
+      { text: 'AI Agent PRD 方案库', link: '/AIAgent实践/PRD方案库/' },
       { text: '📋 实际应用案例', link: '/AIAgent实践/实际应用案例/' }
     ]
   },

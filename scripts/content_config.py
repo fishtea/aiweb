@@ -330,6 +330,12 @@ CATEGORIES = {
                 "tags": ["Agent", "评估", "可观测性"],
                 "level": "practice",
             },
+            "PRD方案库": {
+                "desc": "实用 AI Agent 产品需求文档、MVP 范围、成功指标和风险边界",
+                "queries": ["AI agent product requirements examples", "AI Agent PRD 方案 MVP"],
+                "tags": ["PRD", "产品需求", "MVP", "Agent方案"],
+                "level": "practice",
+            },
             "实际应用案例": {
                 "desc": "企业落地案例、行业最佳实践、Agent 方案选型和实施复盘",
                 "queries": ["AI agent real world case studies", "AI Agent 企业落地 案例"],
