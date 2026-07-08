@@ -30,7 +30,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 DATA_FILE = DATA_DIR / "resources.json"
 REPORT_DIR = PROJECT_ROOT / "docs" / "知识库" / "更新报告"
-DEFAULT_TAVILY_API_KEY = "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"
+DEFAULT_SEARCH_PROVIDERS = "github"
 tz = timezone(timedelta(hours=8))
 NOW = datetime.now(tz)
 TODAY = NOW.strftime("%Y-%m-%d")
@@ -206,8 +206,9 @@ def search_ddgs(task: SearchTask, max_results: int) -> list[SearchCandidate]:
 
 
 def search_tavily(task: SearchTask, max_results: int) -> list[SearchCandidate]:
-    api_key = os.getenv("TAVILY_API_KEY", DEFAULT_TAVILY_API_KEY).strip()
+    api_key = os.getenv("TAVILY_API_KEY", "").strip()
     if not api_key:
+        print("[WARN] tavily provider requested but TAVILY_API_KEY is not set; skipping", file=sys.stderr)
         return []
     try:
         data = json_request(
@@ -279,12 +280,12 @@ PROVIDERS = {
 
 
 def parse_providers(raw: str | None) -> list[str]:
-    configured = raw or os.getenv("AIWEB_SEARCH_PROVIDERS") or "tavily,ddgs,github"
+    configured = raw or os.getenv("AIWEB_SEARCH_PROVIDERS") or DEFAULT_SEARCH_PROVIDERS
     providers = []
     for name in (p.strip().lower() for p in configured.split(",")):
         if name and name in PROVIDERS and name not in providers:
             providers.append(name)
-    return providers or ["ddgs"]
+    return providers or [DEFAULT_SEARCH_PROVIDERS]
 
 
 def search_resources(task: SearchTask, max_results: int, providers: list[str]) -> list[SearchCandidate]:
@@ -480,7 +481,7 @@ def main() -> None:
     parser.add_argument("--topic", action="append", help="Limit collection to a topic. Can be repeated.")
     parser.add_argument("--max-results", type=int, default=5, help="Search results per query.")
     parser.add_argument("--workers", type=int, default=8, help="Parallel search workers.")
-    parser.add_argument("--providers", help="Comma-separated providers: tavily,ddgs,github. Defaults to AIWEB_SEARCH_PROVIDERS or tavily,ddgs,github.")
+    parser.add_argument("--providers", help=f"Comma-separated providers: tavily,ddgs,github. Defaults to AIWEB_SEARCH_PROVIDERS or {DEFAULT_SEARCH_PROVIDERS}.")
     parser.add_argument("--skip-url-verify", action="store_true", help="Skip URL reachability validation before saving candidates.")
     parser.add_argument("--no-render", action="store_true", help="Only update data/resources.json, do not render docs blocks.")
     args = parser.parse_args()
