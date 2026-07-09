@@ -239,6 +239,45 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 ---
 
+## PyTorch 2.13.0 发布 (2026年7月8日)
+
+2026年7月8日，PyTorch 发布 **2.13.0 正式版**，这是 2026 下半年的第一个重大版本，带来多项面向大模型训练和推理的关键更新。
+
+### 核心亮点
+
+| 特性 | 说明 |
+|------|------|
+| **FlexAttention 登陆 Apple Silicon** | MPS 后端支持 FlexAttention，稀疏注意力模式相比 SDPA 加速最高 **~12 倍**；CUDA 端新增确定性反向路径（deterministic backward） |
+| **CuTeDSL "Native DSL" 后端（原型）** | Inductor 新增第二条高性能代码路径，与 Triton 并列，编译速度更快，面向关键 GPU 算子 |
+| **`nn.LinearCrossEntropyLoss`** | 融合最终预测与损失计算，大词表语言模型训练峰值显存降低最高 **4 倍** |
+| **torchcomms** | PyTorch 分布式通信新后端，改进大规模集群训练的容错性、扩展性和可调试性 |
+| **FSDP2 通信重叠** | 通过专用进程组（opt-in）重叠 reduce-scatter 与 all-gather 通信，提升分布式训练吞吐量 |
+| **Python 3.15 wheel 支持** | Linux 平台提供 Python 3.15（含自由线程 3.15t）预编译 wheel |
+| **更广泛的硬件平台** | ROCm 升级 AOTriton 0.12b + 原生 HIP CMake；Arm 新增 Armv9-A `torch.compile` 目标；Intel XPU 新增设备遥测 API |
+
+### 向后不兼容变更
+
+- **停止构建 CPython 3.13t（自由线程）wheel**：上游 `pypa/manylinux` 已移除 3.13t，用户应迁移至 Python 3.14t
+- **Bare `PyObject` 不再允许出现在算子 schema 中**：PyTorch 2.12 中意外接受裸 `PyObject`，2.13 起拒绝解析
+
+### 升级建议
+
+```bash
+# 升级到 PyTorch 2.13.0
+pip install torch==2.13.0
+
+# 如需 ROCm 版本
+pip install torch==2.13.0+rocm7.2
+```
+
+> ⚠️ ROCm wheel 已知回归：在无 GPU 环境中 `torch.compile` CPU 路径会报 `RuntimeError: Can't detect vectorized ISA for CPU`。临时方案：在有 ROCm 镜像中运行，或无 GPU 环境使用标准 CPU/CUDA 构建。
+
+### 参考来源
+
+- [PyTorch 2.13.0 Release Notes](https://github.com/pytorch/pytorch/releases/tag/v2.13.0)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -251,4 +290,4 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

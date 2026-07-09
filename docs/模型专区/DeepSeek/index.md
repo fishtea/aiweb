@@ -147,9 +147,33 @@ DeepSeek-V3 在多个基准上达到或超越了 GPT-4 和 Claude 3.5 Sonnet 水
 
 ---
 
+## 2026 年 7 月 V4 API 状态更新
+
+截至 2026 年 7 月 9 日，DeepSeek 官方 API 已全面迁移至 V4 模型。根据 [DeepSeek API 官方文档](https://api-docs.deepseek.com/)：
+
+### 当前模型与定价
+
+| 模型 | 输入价格 (cache miss) | 输入价格 (cache hit) | 输出价格 | 并发限制 |
+|------|----------------------|---------------------|---------|---------|
+| **deepseek-v4-flash** | $0.14 / 1M tokens | $0.0028 / 1M tokens | $0.28 / 1M tokens | 2,500 |
+| **deepseek-v4-pro** | $0.435 / 1M tokens | $0.003625 / 1M tokens | $0.87 / 1M tokens | 500 |
+
+- 两个模型均支持 **1M 上下文长度**，最大输出 **384K tokens**
+- 均支持 Thinking Mode（思考/非思考双模式）、JSON Output、Tool Calls、Chat Prefix Completion（Beta）
+- FIM Completion（Beta）仅非思考模式支持
+- 同时兼容 OpenAI API 格式（`https://api.deepseek.com`）和 Anthropic API 格式（`https://api.deepseek.com/anthropic`）
+
+### ⚠️ 旧模型名废弃提醒
+
+`deepseek-chat` 和 `deepseek-reasoner` 将于 **2026 年 7 月 24 日 15:59 UTC** 完全废弃并不可访问。目前这两个名称自动路由到 `deepseek-v4-flash` 的非思考模式和思考模式。**所有生产系统必须在 7 月 24 日前更新 model 参数。**
+
+### Agent 集成
+
+V4 API 已原生支持 Claude Code、GitHub Copilot、OpenCode 等 Agent 工具，无需额外适配代码即可将 DeepSeek 作为这些工具的后端模型。
+
 ## 如何使用
 
-### API 调用
+### API 调用（V4 新版）
 
 ```python
 from openai import OpenAI
@@ -159,12 +183,23 @@ client = OpenAI(
     base_url="https://api.deepseek.com"
 )
 
+# 非思考模式（日常任务）
 completion = client.chat.completions.create(
-    model="deepseek-chat",  # 或 deepseek-reasoner
+    model="deepseek-v4-flash",  # 或 deepseek-v4-pro
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "解释 DeepSeek 的 MoE 架构。"}
     ]
+)
+
+# 思考模式（复杂推理）
+completion = client.chat.completions.create(
+    model="deepseek-v4-pro",
+    messages=[
+        {"role": "user", "content": "证明根号2是无理数"}
+    ],
+    extra_body={"thinking": {"type": "enabled"}},
+    reasoning_effort="high"
 )
 
 print(completion.choices[0].message.content)
@@ -200,11 +235,13 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 | 场景 | 推荐 |
 |------|------|
-| 通用中文问答、代码解释、低成本 API | `deepseek-chat`（V3-0324） |
-| 数学、代码修复、复杂规划 | `deepseek-reasoner`（R1 / R1-0528） |
+| 通用中文问答、代码解释、低成本 API | `deepseek-v4-flash`（非思考模式） |
+| 数学、代码修复、复杂规划、Agent 任务 | `deepseek-v4-pro`（思考模式） |
 | OCR、文档解析、版面理解 | DeepSeek-OCR |
 | 本地推理模型学习 | DeepSeek-R1-Distill-Qwen / Llama 系列 |
-| 私有化高吞吐服务 | DeepSeek-V3 / R1 + vLLM、SGLang 或 TensorRT-LLM |
+| 私有化高吞吐服务 | DeepSeek-V4 + vLLM、SGLang 或 TensorRT-LLM |
+
+> ⚠️ `deepseek-chat` 和 `deepseek-reasoner` 将于 **2026 年 7 月 24 日** 废弃，请在此之前迁移至 V4 模型名。
 
 > 截至本次更新，正文只保留官方 API 文档、官方 GitHub 或 DeepSeek 官方 Hugging Face 组织页可核验的模型。没有把未发布技术报告的传闻模型写成事实。
 
@@ -222,4 +259,4 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

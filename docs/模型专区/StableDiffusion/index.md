@@ -100,6 +100,54 @@ SD3 使用三个文本编码器：
 | 精确控制姿态、构图、角色 | SDXL / SD3.5 + ControlNet / IPAdapter / LoRA |
 | 商业闭源质量对比 | Midjourney、DALL·E、Ideogram、FLUX Pro |
 
+### FLUX.2 系列详解（2026 更新）
+
+根据 Black Forest Labs 官方网站（bfl.ai，2026-07 访问）及 BFL 博客，FLUX.2 系列已发展为一个完整的产品家族：
+
+| 模型 | 定位 | 关键特性 |
+|------|------|---------|
+| **FLUX.2** | 旗舰模型 | 多参考图像控制（Multi-Reference Control）、专业级场景一致性、产品植入与光照自适应 |
+| **FLUX.2 [klein]** | 快速推理 | 亚秒级推理，生产质量不妥协，开放权重可本地运行 |
+| **FLUX.2 [max]** | 极致质量 | 最高编辑一致性、世界知识最丰富、提示遵循最强 |
+| **FLUX.1 Kontext** | 上下文感知 | 基于 Flow Matching 的图像生成与编辑，支持 BFL Playground |
+
+**核心能力升级：**
+
+- **多参考控制（Multi-Reference Control）**：支持多张参考图像统一风格或角色身份，实现批量资产生成的风格一致性。同一角色可生成数百张图片，角色身份保持一致。
+- **产品植入（Products In Any Context）**：自动适应光照、透视和材质，将产品自然融入场景，光线自动适配，物理效果真实。
+- **FLUX Erase（2026.06 发布）**：一键擦除任意图像元素，不留痕迹，类似 Photoshop 的生成式填充但更精准。
+- **FLUX VTO（2026.05 发布）**：虚拟试穿（Virtual Try-On），支持在电商目录规模上进行服装试穿展示，BFL 已与多家零售商合作落地。
+
+**开放生态：**
+
+- **API 服务**：通过 docs.bfl.ai 接入，提供 Premium Quality、Ease of Use、Built for Scale 三个层级
+- **开放权重**：FLUX.2 [klein] 开放权重，可在 Hugging Face 下载（black-forest-labs 组织）
+- **Playground**：bfl.ai 提供免费在线试用
+- **企业许可证**：SOC 2 + ISO 27001 认证，适合企业生产部署
+- **Azure AI Foundry 集成**：FLUX 模型已在 Microsoft Azure 上线
+
+**生态影响：** Martin Scorsese（马丁·斯科塞斯）于 2026 年 6 月加入 BFL 担任顾问，标志着 BFL 在影视创作领域的战略布局。BFL 已完成 3 亿美元的 B 轮融资（2025.12），估值 32.5 亿美元。
+
+### BFL API 快速使用
+
+```python
+# 通过 BFL API 生成图像
+import requests
+
+response = requests.post(
+    "https://api.bfl.ai/v1/image",
+    headers={"Authorization": f"Bearer YOUR_API_KEY"},
+    json={
+        "model": "flux.2",
+        "prompt": "A cat wearing a hat, cinematic lighting, photorealistic",
+        "width": 1024,
+        "height": 1024,
+        "steps": 50
+    }
+)
+print(response.json())
+```
+
 ---
 
 ## 如何使用
@@ -169,7 +217,9 @@ image.save("cat.png")
 - [Stable Diffusion 3 Research Paper (Stability AI)](https://stability.ai/news-updates/stable-diffusion-3-research-paper)
 - [Stable Diffusion 3.5 发布公告](https://stability.ai/news/introducing-stable-diffusion-3-5)
 - [Black Forest Labs FLUX.1](https://blackforestlabs.ai/announcing-black-forest-labs/)
-- [Black Forest Labs API 文档](https://docs.bfl.ai/)
+- [Black Forest Labs 官网 — FLUX.2](https://blackforestlabs.ai/)
+- [BFL API 文档](https://docs.bfl.ai/)
+- [BFL Hugging Face 组织](https://huggingface.co/black-forest-labs)
 - [Diffusers Stable Diffusion 3 文档](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_3)
 
 ---
@@ -186,4 +236,4 @@ image.save("cat.png")
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

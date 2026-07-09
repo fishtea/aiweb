@@ -280,9 +280,35 @@ docker run -d -p 3000:8080 \
 - [2026 年 OpenClaw 最佳 Ollama 本地模型推荐 — CSDN](https://aicoding.csdn.net/6a23e6b610ee7a33f278ab72.html)
 - [不想数据上传云端？2026年本地部署AI大模型完全指南 — 知乎](https://zhuanlan.zhihu.com/p/2015729095867138141)
 
-### v0.31.1: Gemma 4 Apple Silicon 大幅加速 (2026年6月30日)
+### v0.31.2: 稳定性增强与引擎更新 (2026年7月6日)
 
-2026年6月30日，Ollama 发布 **v0.31.1**，核心亮点是 **Gemma 4 在 Apple Silicon 上推理速度提升近 90%**。
+2026年7月6日，Ollama 发布 **v0.31.2**，这是在 v0.31.1 重大加速更新（Gemma 4 MTP Apple Silicon ~90% 提升）之后的稳定性补丁。
+
+**关键变更：**
+
+| 变更 | 说明 |
+|------|------|
+| **老 GPU Flash Attention 支持** | 计算能力 6.x（Pascal 架构，如 GTX 1080/Titan Xp）的 NVIDIA GPU 现在可启用 Flash Attention |
+| **iGPU 视觉模型卸载** | 集成显卡可通过填充（padding）将视觉模型适配到可用显存，降低入门门槛 |
+| **思考模型结构化输出修复** | 当思考（thinking）被禁用时，结构化输出现在正常工作 |
+| **GGUF 模型创建加固** | 增强 GGUF 模型文件创建的健壮性 |
+| **Claude Code 遥测默认关闭** | `ollama launch` 启动 Claude Code 时默认禁用遥测 |
+| **非 UTF-8 路径修复** | 修复在含非 UTF-8 字符路径上加载模型的问题 |
+| **MLX + llama.cpp 引擎更新** | 同步上游最新优化 |
+
+> 这是一个典型的"稳定性版本"——在 v0.31.1 大胆的性能突破之后，v0.31.2 专注于边缘场景修复和引擎同步，为下一步功能突破铺路。
+
+### 版本演进总览
+
+| 版本 | 日期 | 关键变化 |
+|------|------|---------|
+| v0.30.11 | 6月25日 | `ollama launch` 支持 Claude Code/openCode 自动安装；Vulkan 混合显卡修复 |
+| v0.30.12-rc0 | 6月29日 | 工具调用 JSON 解析增强；MLX 依赖更新 |
+| v0.31.1 | 6月30日 | Gemma 4 MTP Apple Silicon 加速 ~90%；MLX + llama.cpp 引擎更新 |
+| **v0.31.2** | **7月6日** | **Flash Attention 老 GPU 兼容；iGPU 视觉卸载；Claude Code 遥测关闭** |
+
+### 参考来源
+- [Ollama v0.31.2 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.2)
 
 **多 Token 预测（MTP）自动调优：**
 
@@ -297,26 +323,9 @@ docker run -d -p 3000:8080 \
 - llama.cpp 后端更新至 build 9840
 - 统一并调优推测解码（speculative decoding）在 MLX runner 中的行为
 
-### v0.30.x 近期功能亮点
-
-| 版本 | 日期 | 关键变化 |
-|------|------|---------|
-| v0.30.11 | 6月25日 | `ollama launch` 支持 Claude Code/openCode 自动安装；Vulkan 混合显卡修复；推测解码统一调优 |
-| v0.30.12-rc0 | 6月29日 | 工具调用 JSON 解析增强（忽略字符串内花括号）；MLX 依赖更新 |
-| v0.31.1 | 6月30日 | Gemma 4 MTP Apple Silicon 加速 ~90%；MLX + llama.cpp 引擎更新 |
-
-**重要趋势：`ollama launch` 生态成形**
-
-`ollama launch` 命令正在成为 Ollama 生态的核心入口：
-- 支持 **Kimi K2.6 Agent 工作流**（`ollama launch kimi`）
-- 自动检测并安装 **Claude Code** / **openCode**
-- 模型漂移检测——Codex App UI 切换模型时自动适配
-- 这意味着 Ollama 正从"本地模型运行器"进化为"本地 Agent 运行时"
-
 ### 参考来源
+- [Ollama v0.31.2 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.2)
 - [Ollama v0.31.1 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.1)
-- [Ollama v0.30.11 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.30.11)
-- [Ollama 官方 GitHub](https://github.com/ollama/ollama)
 
 ---
 
@@ -332,4 +341,4 @@ docker run -d -p 3000:8080 \
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

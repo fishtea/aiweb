@@ -21,16 +21,42 @@ Llama 4（2025.04）是 Meta 首次大规模转向 MoE + 多模态的一代：
 
 | 模型 | 架构 | 激活参数 | 上下文 | 定位 |
 |------|------|---------|--------|------|
-| Llama 4 Scout | MoE，17B 激活 | 17B | **10M** | 超长上下文，适合文档和代码库分析 |
-| Llama 4 Maverick | MoE，17B 激活 | 17B | 1M | 通用多模态旗舰，质量高于 Scout |
+| Llama 4 Scout | MoE，16 专家，17B 激活 | 17B / ~109B 总 | **10M** | 超长上下文，适合文档和代码库分析 |
+| Llama 4 Maverick | MoE，128 专家，17B 激活 | 17B / ~400B 总 | 1M | 通用多模态旗舰，质量高于 Scout |
 | Llama 4 Behemoth | 更大 MoE，训练中/预览 | — | — | 作为教师模型和未来旗舰方向 |
 
-- **原生多模态**：早期融合文本与视觉 token，无需单独视觉适配器。
-- **iRoPE 架构**：交替注意力机制支持超长上下文外推，Scout 达 10M token。
-- **训练数据 22T+ tokens**，多语言覆盖更广，中文能力较 LLaMA 3 显著提升。
-- **开放权重许可延续**，但超大规模商业应用仍需遵守 Meta 的许可限制。
+根据 [Hugging Face 官方博客](https://huggingface.co/blog/llama4-release)（2025.04）及 Meta 发布资料：
 
-> 局限：LLaMA 4 发布初期基准表现引发争议（Meta 承认评测版本配置问题），实际能力以官方更新为准。中文场景建议优先对比 Qwen3、DeepSeek。
+#### 架构核心特性
+
+- **MoE 架构差异**：Maverick 使用 **128 个专家**（每 token 激活 1 个），Scout 使用 **16 个专家**（每 token 激活 1 个）。两者均有 17B 活跃参数，但总参数 Maverick（~400B）远超 Scout（~109B）。
+- **原生多模态（Early Fusion）**：视觉 token 在模型输入端即与文本 token 融合，无需单独的视觉编码器或 adapter。支持文本和图像输入。
+- **iRoPE 位置编码**：改进的旋转位置编码，支持超长上下文外推。Scout 的 10M token 上下文窗口是目前开源模型中最大的。
+- **训练数据**：使用 **40 万亿 tokens** 训练，涵盖 **200 种语言**，其中 12 种语言有专门的微调支持（包括阿拉伯语、西班牙语、德语、印地语等）。
+
+#### 部署与量化
+
+- **Scout**：设计为可在**单张服务器级 GPU** 上运行，支持 4-bit 或 8-bit 动态量化（on-the-fly int4 量化代码由 Hugging Face 提供）。
+- **Maverick**：提供 BF16 和 FP8 两种格式，需要多 GPU 部署。
+- **许可协议**：Llama 4 Community License，与 Llama 3 系列许可类似，月活超 7 亿用户需 Meta 授权。
+
+#### Hugging Face 集成
+
+Hugging Face 与 Meta 密切合作，确保 Llama 4 在发布当天即可在以下框架中使用：
+
+- **Transformers（v4.51.0+）**：支持完整的多模态推理、加载和微调 API，自动 tensor-parallel 和设备映射。
+- **TGI（Text Generation Inference）**：支持优化和高吞吐生产部署。
+- **TRL 集成**：支持使用 Transformers Reinforcement Learning 库进行微调。
+
+#### 评测与争议
+
+Llama 4 发布初期，其评测分数引发了**广泛争议**——社区发现 Maverick 在多个基准上与 Llama 3 相比提升有限，Meta 随后承认评测版本存在配置问题并发布了修正。以下为 Hugging Face 官方博客引用修正后的评测：
+
+- Maverick Instruct 在 MMLU、MATH、HumanEval 等基准上**接近或持平 GPT-4o 和 Claude 3.5 Sonnet**。
+- Scout 在长上下文任务（如 Needle-in-a-Haystack）上展示了对 10M token 的支持能力。
+- 多模态评测（MMMU、MathVista）中，Maverick 表现与同代多模态模型相当。
+
+> 综合来看，Llama 4 的主要价值在于：**① 开放权重的超长上下文（Scout 10M），② MoE 架构的效率尝试，③ 原生多模态的简化部署。** 但在中文场景和部分数学推理基准上，Qwen3 和 DeepSeek 仍是更好的选择。
 
 ### 2026 最新可用列表
 
@@ -163,4 +189,4 @@ ollama run llama3.1:405b
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

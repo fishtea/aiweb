@@ -286,6 +286,32 @@ LangGraph v1.2.0 带来了一系列面向生产的关键增强，参考 [官方 
 
 ---
 
+## LangChain 1.3.12 补丁版（2026年7月8日）
+
+2026年7月8日，LangChain 发布 **1.3.12** 补丁版，主要修复 Agent 中间件在生产环境中的稳定性问题。
+
+### 修复要点
+
+| 修复 | 说明 |
+|------|------|
+| **中断传播修复** | `ToolRetryMiddleware` 中的中断（interrupts）现在能正确传播，避免 Agent 在工具重试时吞掉取消信号 |
+| **Shell 中间件进程组修复** | 避免共享进程组被意外 kill，防止并行 Agent 任务间互相干扰 |
+| **Anthropic 缓存标记清理** | 在回退重试（fallback retries）时清理 Anthropic 缓存标记，防止缓存标记污染后续请求 |
+
+### 版本演进
+
+| 版本 | 日期 | 关键变化 |
+|------|------|---------|
+| v1.2.0 | 5月 | LangGraph DeltaChannel、逐节点超时、Event Streaming v3 Beta |
+| v1.3.0 | 5月 | LangChain 同步引入 Event Streaming v3 |
+| v1.3.11 | 6月 | 多个中间件修复和类型增强 |
+| **v1.3.12** | **7月8日** | **中断传播、Shell 中间件、Anthropic 缓存修复** |
+
+### 参考来源
+- [LangChain v1.3.12 Release Notes](https://github.com/langchain-ai/langchain/releases/tag/langchain%3D%3D1.3.12)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -298,4 +324,4 @@ LangGraph v1.2.0 带来了一系列面向生产的关键增强，参考 [官方 
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

@@ -163,6 +163,43 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 | **Magistral** | 推理模型线 |
 | **Voxtral** | 语音理解模型线 |
 
+### 2026 Mistral 生态深度解读
+
+**Mistral Medium 3.1**（2026 年发布）是当前 Mistral 企业级私有化部署的首选模型。根据 Mistral 官方模型文档（docs.mistral.ai），Medium 3.1 在以下场景中表现突出：
+
+- **企业业务工作流**：API 与私有化部署双模式，适合 GDPR 合规场景
+- **结构化输出**：原生支持 JSON schema 和函数调用
+- **128K 上下文**：支持长文档分析和合同审查
+- **多语言能力**：在英语、法语、德语、意大利语、西班牙语上表现最佳
+
+**Devstral — 面向 Coding Agent 的专业模型**
+
+Devstral 是 Mistral 2026 年布局 AI 编码 Agent 市场的核心产品，定位直接对标 GitHub Copilot、Cursor 和 Claude Code：
+
+- **代码检索与理解**：跨文件代码库检索，理解项目上下文
+- **多步代码修改**：编辑、测试、验证全流程 Agent
+- **80+ 编程语言支持**：覆盖主流和后端语言
+- **工具调用集成**：原生支持 MCP（Model Context Protocol）和函数调用
+
+**Mistral 的差异化优势**
+
+1. **欧洲合规旗舰**：作为法国公司，Mistral 天然适合欧盟 GDPR 合规场景。比美国公司（OpenAI、Google、Anthropic）和亚太公司（DeepSeek、Qwen）更容易通过欧盟企业数据合规审计。
+2. **MCP 与 Agent 生态**：Mistral 模型原生支持 MCP 协议，可以无缝接入 Anthropic 主导的 Agent 工具生态。
+3. **开放权重 + 商业许可**：Mistral Small/Medium 系列提供开放权重和企业友好许可，适合私有化部署。
+4. **Azure 与云集成**：Mistral 模型在 Microsoft Azure 和多家欧洲云平台上架。
+
+**生产选型建议：**
+
+| 场景 | 推荐 |
+|------|------|
+| 欧洲企业合规部署 | Mistral Medium 3.1 |
+| Coding Agent | Devstal + MCP 工具生态 |
+| 低延迟代码补全 | Codestral |
+| 多步推理 | Magistral |
+| 语音理解 | Voxtral |
+
+> **核心判断：** Mistral 2026 年的主线已从\"对标 LLaMA 的通用开源模型\"转变为\"面向欧洲企业 + 编码 Agent + 多模态的专业模型矩阵\"。Mixtral 8x7B/8x22B 仍是高性价比的轻量选择，但 Mistral 的研发重心已转移到 Medium 3.1、Devstral、Magistral 和 Voxtral 等新模型线上。
+
 ---
 
 **参考资料：**
@@ -170,8 +207,10 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 - [Mistral AI Models 文档](https://docs.mistral.ai/getting-started/models/models_overview/)
 - [Magistral 发布公告](https://mistral.ai/news/magistral)
 - [Mistral Medium 3 发布公告](https://mistral.ai/news/mistral-medium-3)
+- [Mistral AI 官方文档](https://docs.mistral.ai/)
 - [Mixtral 8x7B MLPerf Benchmark (MLCommons)](https://mlcommons.org/2024/08/moe-mlperf-inference-benchmark)
 - [HuggingFace Mixtral 8x7B](https://huggingface.co/mistralai/Mixtral-8x7B-v0.1)
+- [HuggingFace Mistral 组织](https://huggingface.co/mistralai)
 
 ---
 
@@ -187,4 +226,4 @@ vllm serve mistralai/Mixtral-8x22B-Instruct-v0.1
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

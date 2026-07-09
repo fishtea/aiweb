@@ -67,6 +67,53 @@
 
 ---
 
+## 2026 年 6 月：Claude Fable 5 与模型格局重塑
+
+根据 [Anthropic 官方模型文档](https://docs.anthropic.com/en/docs/about-claude/models)（2026-07 访问）及 [Claude Fable 5 发布公告](https://www.anthropic.com/news/claude-fable-5)：
+
+### Claude Fable 5 — 新一代旗舰
+
+2026 年 6 月 9 日，Anthropic 正式发布 **Claude Fable 5**（`claude-fable-5`），这是 Anthropic 迄今为止最强大的广泛发布模型。Fable 5 专为长运行 Agent 场景设计，号称"面向长期 Agent 的下一代智能"：
+
+| 维度 | 详情 |
+|------|------|
+| 上下文窗口 | **1M tokens** |
+| 最大输出 | 128K tokens |
+| 定价 | $10/百万输入 tokens，$50/百万输出 tokens |
+| 知识截止 | 2026 年 1 月 |
+| 自适应思考 | 始终开启（Always On） |
+| 延迟 | 较慢（旗舰级） |
+| 可用平台 | Claude API、AWS Bedrock、Google Cloud、Microsoft Foundry |
+
+Fable 5 的使用场景定位包括：复杂多步 Agent、深度推理、创造性写作和高价值分析。
+
+### Claude Mythos 5 — Project Glasswing 专属
+
+同期发布的 **Claude Mythos 5**（`claude-mythos-5`）规格与 Fable 5 相同，但仅供 Project Glasswing 计划中的受邀客户使用，专注于防御性网络安全工作流。该模型**不在公开 API 中提供**。
+
+### 当前模型选型矩阵
+
+| 模型 | API ID | 定位 | 上下文 | 定价（每百万 token） | 延迟 | 自适应思考 |
+|------|--------|------|--------|-------------------|------|-----------|
+| **Claude Fable 5** | `claude-fable-5` | 下一代 Agent 智能 | 1M | $10 输入 / $50 输出 | 较慢 | 是（始终开启） |
+| **Claude Opus 4.8** | `claude-opus-4-8` | 复杂编码与企业工作 | 1M | $5 输入 / $25 输出 | 中等 | 是 |
+| **Claude Sonnet 5** | `claude-sonnet-5` | 速度与智能最佳平衡 | 1M | $3 输入 / $15 输出 | 快速 | 是 |
+| **Claude Haiku 4.5** | `claude-haiku-4-5-20251001` | 最快近前沿模型 | 200K | $1 输入 / $5 输出 | 最快 | 否 |
+
+> 注意：Sonnet 5 的价格至 2026 年 8 月 31 日有优惠价 $2/$10 每百万 token。
+
+### Claude Code 与 The Making of Claude Code
+
+根据 [Anthropic 官方文章](https://www.anthropic.com/features/making-of-claude-code)，Claude Code（CLI 编程 Agent）是 Anthropic 在 Agentic Coding 领域的重要实践。核心设计理念：
+
+- **自主编辑与执行**：Claude Code 可以直接读写文件、运行命令，在多步工程任务中自主决策。
+- **SWE-Bench 长期领先**：从 Claude 3.5 Sonnet 开始，Anthropic 的模型在 SWE-Bench 基准测试中持续保持顶尖表现。
+- **MCP 生态赋能**：Model Context Protocol（MCP）作为开放的 Agent 工具协议，已在 Claude Code、IDE 插件和自定义 Agent 中广泛集成。
+
+**生产建议**：如果团队需要实现代码库级别的 Agent（如自动 PR 审查、代码重构、Bug 修复），Claude Code + Claude Sonnet 5 是 2026 年推荐的组合方案。
+
+---
+
 ## 如何使用
 
 ### 通过 Claude.ai（网页/App）
@@ -131,4 +178,4 @@ print(message.content[0].text)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*

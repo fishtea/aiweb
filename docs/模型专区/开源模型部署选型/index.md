@@ -89,6 +89,70 @@
 - **许可证先于性能**：Llama、Qwen、Mistral、DeepSeek 等许可证细节不同，商用、再分发、服务化都要单独确认。
 - **模型路由是常态**：生产系统常用小模型做分类、抽取和路由，用大模型或推理模型处理少量关键请求。
 
+## 2026 部署技术前沿
+
+### vLLM v1 引擎重构
+
+vLLM 在 2025-2026 年推出了 **v1 引擎**（V1 Engine），对核心推理架构进行了重大重构，不是简单的版本升级，而是架构层面的重新设计：
+
+| 维度 | v0 引擎 | v1 引擎 |
+|------|---------|---------|
+| 调度模型 | 同步式，按 step 调度 | 异步事件驱动，更灵活 |
+| 内存管理 | PagedAttention v1 | PagedAttention v2 + 更细粒度内存复用 |
+| 多模态 | 后期添加，支持有限 | 原生多模态支持，统一 encoder/decoder 管线 |
+| 推测解码 | 有限支持 | EAGLE3、DFlash、DSpark、MTP 等多种推测策略 |
+| 分页服务 | — | 原生 disaggregated prefill/decode/encode |
+| 结构化输出 | 基础 xgrammar | xgrammar + guidance，支持复杂 JSON schema |
+| 批处理策略 | 固定调度窗口 | 动态批处理 + 前缀缓存感知调度 |
+
+**迁移建议：** v1 引擎已在 2025 年下半年进入稳定阶段，新项目应直接使用 v1。对于已有 v0 部署，建议在测试环境验证业务兼容性后逐步迁移。v0 将继续获得安全更新但不再有架构级新特性。
+
+### Disaggregated Serving（分离式服务）
+
+Disaggregated serving 是 2026 年推理架构的最大变化之一，将传统的单一服务节点拆分为 **prefill 节点（预填充）** 和 **decode 节点（解码）**：
+
+- **Prefill 节点**：专门处理 prompt 的并行预填充，对计算密度要求高，适合用 H100/B200 等高性能 GPU
+- **Decode 节点**：专门处理自回归解码，KV cache 占用大但计算密度低，适合用显存大但计算能力中等的 GPU
+- **跨节点 KV cache 传输**：prefill 完成后通过高速网络（NVLink/InfiniBand/RoCE）将 KV cache 传输到 decode 节点
+
+**适用场景：**
+- 长上下文推理（128K+ tokens）：prefill 阶段计算量大，分离后可按需分配 GPU
+- 高并发在线服务：decode 节点可独立扩缩容，应对流量波动
+- 混合负载：不同 prompt 长度可路由到不同 prefill 节点
+
+**2026 实现状态：** vLLM、SGLang 均已支持 disaggregated serving 生产部署。DeepSeek-V4 等最新模型也针对分离式服务做了优化。
+
+### SGLang 结构化生成与 Agent 路由
+
+SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择：
+
+- **Constrained Decoding（约束解码）**：原生支持 JSON schema、正则表达式和 CFG（上下文无关文法）约束，无需后处理即可保证输出格式
+- **RadixAttention（前缀缓存）**：自动缓存和复用公共前缀的 KV cache，在多轮对话和 RAG 场景中显著降低延迟
+- **Agent 路由**：支持根据 prompt 内容自动路由到不同模型，适合多模型 Agent 系统中的任务分发
+- **Multi-Turn 性能**：在 Agent 多轮工具调用的场景中，RadixAttention 的优势尤为明显
+
+**选型建议：** 如果你的核心场景是结构化输出、Agent 工具调用和多轮对话，SGLang 的约束解码和前缀缓存机制比 vLLM 天然更适合；如果主要是高吞吐通用对话和批处理，vLLM 的调度和批处理生态更成熟。
+
+### 2026 推理框架决策树
+
+```
+你的场景是什么？
+├── 本地实验/学习
+│   └── Ollama / LM Studio（零配置、体验友好）
+├── 单 GPU 低延迟服务
+│   └── llama.cpp / Ollama（CPU/边缘）+ GGUF 量化
+├── 单机多 GPU 高吞吐
+│   ├── 通用对话 → vLLM（生态最成熟）
+│   ├── Agent + 结构化输出 → SGLang（约束解码优势）
+│   └── 多模态 → 优先确认框架支持（vLLM v1 / SGLang）
+├── 集群生产环境
+│   ├── 高并发 → vLLM + K8s + 自动扩缩容
+│   ├── 长上下文 + 高 QPS → Disaggregated serving
+│   └── 多模型路由 → 考虑模型网关（vLLM / SGLang 多模型服务）
+└── NVIDIA 极致性能
+    └── TensorRT-LLM（深度优化，但开发和运维成本最高）
+```
+
 ## 参考来源
 
 - [vLLM 文档](https://docs.vllm.ai/)
@@ -96,6 +160,8 @@
 - [llama.cpp](https://github.com/ggml-org/llama.cpp)
 - [Ollama 文档](https://github.com/ollama/ollama)
 - [Hugging Face TGI](https://huggingface.co/docs/text-generation-inference/index)
+- [vLLM Blog — v1 Engine](https://blog.vllm.ai/)
+- [SGLang — Structured Generation](https://docs.sglang.ai/)
 
 ---
 
@@ -111,4 +177,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-09 00:14:29*
+*资源区块更新时间：2026-07-10 00:09:45*
