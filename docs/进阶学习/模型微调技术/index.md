@@ -553,4 +553,4 @@ NVIDIA NeMo AutoModel 在 Transformers v5 基础上添加了：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

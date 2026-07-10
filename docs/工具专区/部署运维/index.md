@@ -238,6 +238,68 @@ vLLM 通过 `--enable-metrics` 暴露 Prometheus 端点，关键指标：
 
 ---
 
+## LLM 可观测性工具对比（2026年7月）
+
+LLM 应用上生产后，可观测性（Observability）是从"能跑"到"可靠"的关键一步。2026 年 LLM 可观测性赛道已形成稳定格局，三大主流工具各有侧重。
+
+### 工具矩阵
+
+| 工具 | 定位 | 开源 | 核心能力 | 适用场景 |
+|------|------|------|---------|---------|
+| **Langfuse** | 开源 LLM 可观测平台 | ✅ MIT | Trace/Spans、Prompt 管理、评估、成本追踪 | 中小团队自托管、LangChain/LangGraph 原生集成 |
+| **Braintrust** | AI 评估与观测平台 | 部分开源 | Evals 框架、A/B 实验、数据集管理、回归测试 | 重视评估驱动的团队、产品化 AI 功能 |
+| **Traceloop** | LLM 应用可观测性 | ✅ Apache 2.0 | OpenTelemetry 原生、实时告警、安全策略 | 已有 OpenTelemetry 基础设施的团队 |
+
+### 最新动态
+
+**Langfuse v3.210（2026年7月9日）**：
+- **RBAC 增强**：Cloud 管理员现在可以查看组织与项目设置页面
+- **Agent 仪表盘**：新增 PostHog 集成仪表盘，可直接在 Langfuse 内分析 Agent 使用数据
+- **实时推理展示**：内置 Assistant 现在支持流式展示推理过程（reasoning tokens）
+- **导出格式**：Blob 导出默认格式切换为 Parquet（v3.208），更适合大规模数据分析
+
+**Braintrust（2026年最新）**：
+Braintrust 发布了一份 [2026 LLM 监控工具全面对比指南](https://braintrust.dev/articles/best-llm-monitoring-tools-2026)，涵盖质量、成本、延迟和漂移四大维度的评测方法论。核心观点：
+- **质量监控**：不能只靠人工打分，需要自动化 Eval（如 LLM-as-Judge）+ 人工抽检双轨制
+- **成本监控**：按 model/trace/user 多维度拆解 token 消耗，设置预算告警
+- **漂移检测**：Embedding 分布偏移检测 + 关键指标（准确率、拒答率）趋势告警
+
+### 选型决策树
+
+```
+你的需求是什么？
+├── 我需要开源自托管 + LangChain 深度集成
+│   └── → Langfuse（MIT 协议、Docker 一键部署）
+├── 我需要强大的评估框架 + A/B 实验能力
+│   └── → Braintrust（Evals-first 设计）
+├── 我已使用 OpenTelemetry，需要统一观测
+│   └── → Traceloop（OTel 原生，零侵入）
+└── 我的场景非常特殊（合规/私有化/多模态）
+    └── → 组合使用 + 自定义指标
+```
+
+### 监控体系最佳实践
+
+无论选哪个工具，2026 年生产级 LLM 监控应覆盖以下四层：
+
+| 层级 | 监控对象 | 典型指标 | 告警策略 |
+|------|---------|---------|---------|
+| **基础设施** | GPU/CPU/内存/网络 | GPU 利用率、显存使用、请求排队 | > 90% 资源使用 |
+| **应用性能** | 延迟/吞吐 | TTFT P95、TPOT P95、请求数/秒 | P95 > 2s（TTFT） |
+| **模型质量** | 输出准确性/安全性 | 拒答率、幻觉率、安全拦截率 | 周环比恶化 > 10% |
+| **业务指标** | 用户行为/成本 | 日活、留存、token 成本/用户 | 成本超预算 20% |
+
+> **2026 年趋势**：LLM 监控正从"事后看板"向"实时干预"演进——Langfuse 的 Agent 仪表盘和 Braintrust 的 A/B 实验框架代表了行业方向：不仅观测，还要能基于数据快速迭代模型和提示词。
+
+### 参考来源
+- [Langfuse v3.210 Release Notes](https://github.com/langfuse/langfuse/releases/tag/v3.210.0)
+- [Best LLM Monitoring Tools in 2026 — Braintrust](https://braintrust.dev/articles/best-llm-monitoring-tools-2026)
+- [What is LLM Observability & Monitoring? — Langfuse](https://langfuse.com/faq/all/llm-observability)
+- [Practical Steps for a Smooth LLM Application Rollout — Traceloop](https://traceloop.com/blog/practical-checklist-to-deploy-an-llm-app-into-product)
+- [LLM Monitoring: The Key to Successful LLM Deployments — Fiddler AI](https://fiddler.ai/blog/llm-monitoring-the-key-to-successful-llm-deployments)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -250,4 +312,4 @@ vLLM 通过 `--enable-metrics` 暴露 Prometheus 端点，关键指标：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

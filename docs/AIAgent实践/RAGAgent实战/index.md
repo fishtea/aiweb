@@ -355,6 +355,93 @@ class HybridRetriever:
 
 ---
 
+## 🏭 2026 RAG 生产实践全景
+
+### 残酷现实：朴素 RAG 的 40% 失败率
+
+2026 年，RAG 已成为用外部知识接地 LLM 的主流架构——但**朴素 RAG 管线在检索阶段大约有 40% 的失败率**。LLM 生成自信、结构工整的回答，却建立在错误的文档之上。2026 年的共识是：**检索步骤才是真正的瓶颈，而非生成**。
+
+这一现实推动了 RAG 超越基本向量搜索，进入混合检索、Agentic RAG 和图增强架构的时代。
+
+> 来源：[Lushbinary — RAG in 2026: The Complete Production Guide](https://lushbinary.com/blog/rag-retrieval-augmented-generation-production-guide/)、[Iterathon — RAG Systems Production Guide 2026](https://iterathon.tech/blog/rag-systems-production-guide-2025)
+
+### GraphRAG：知识图谱 + RAG
+
+2026 年，**GraphRAG（图增强检索）** 已成为处理多跳推理和实体关系型问题的关键技术。与仅依赖向量相似度的传统 RAG 不同，GraphRAG 将知识图谱的显式关系结构注入检索过程：
+
+- **实体提取**：从文档中提取实体（人物、组织、概念）及其关系
+- **图构建**：构建实体-关系知识图谱
+- **图遍历检索**：查询时沿图谱关系路径检索相关子图
+- **图上下文注入**：将图谱上下文与文本块一起提供给 LLM
+
+GraphRAG 在以下场景中显著优于纯向量 RAG：
+- **多跳问题**："张三所在部门的副总裁是谁？"
+- **对比问题**："产品 A 和产品 B 的技术架构有何不同？"
+- **聚合问题**："哪些客户同时购买了服务 X 和 Y？"
+
+> 来源：[EmergentMind — Graph-Based Agentic RAG](https://www.emergentmind.com/topics/graph-based-agentic-rag)、[myengineeringpath.dev — GraphRAG 2026](https://myengineeringpath.dev/genai-engineer/graph-rag/)
+
+### 混合检索已成为基线
+
+纯粹向量搜索在 2026 年已不满足生产需求。**混合检索**（Hybrid Search）成为新基线——同时使用向量检索 + BM25 关键词检索 + 重排序：
+
+```python
+class HybridRetriever:
+    def __init__(self, vector_store, bm25_index):
+        self.vector_store = vector_store
+        self.bm25_index = bm25_index
+
+    def retrieve(self, query, k=10, alpha=0.5):
+        # 向量语义搜索
+        vector_results = self.vector_store.similarity_search(query, k=k*2)
+        # BM25 关键词搜索
+        bm25_results = self.bm25_index.search(query, k=k*2)
+        # 倒数排名融合（Reciprocal Rank Fusion）
+        merged = self.rrf_merge(vector_results, bm25_results, alpha)
+        # 重排序
+        reranked = self.reranker.rerank(query, merged)
+        return reranked[:k]
+```
+
+**重排序（Reranking）** 被广泛认为是提升 RAG 质量性价比最高的"单一改动"——无需改索引、无需改分块策略，一个 reranker 通常能提升 **15-25%** 的检索准确率。
+
+### RAG 评估：RAGAS 成为标配
+
+2026 年，**RAGAS（RAG Assessment）** 已成为 RAG 系统评估的事实标准。它从三个维度衡量检索质量：
+
+| 指标 | 衡量内容 | 目标 |
+|------|---------|------|
+| **Context Precision** | 检索到的上下文中相关文档的比例 | > 0.7 |
+| **Context Recall** | 相关文档被检索到的比例 | > 0.7 |
+| **Faithfulness** | 生成内容是否完全基于检索上下文（无幻觉） | > 0.8 |
+| **Answer Relevancy** | 回答与问题的相关程度 | > 0.7 |
+
+持续低分意味着索引、检索或生成管道有结构性问题，而非个别 case。
+
+### 分块策略速查（2026）
+
+| 策略 | 适用场景 | 注意事项 |
+|------|---------|---------|
+| **固定大小（512-1024 tokens）** | 通用文档 | 最简单，但不是最优 |
+| **语义分块（按段落/章节）** | 结构化文档 | 保留语义完整性 |
+| **递归分块（按分隔符层级）** | 混合内容（代码+文本） | 优先在段落边界切割 |
+| **10-20% Overlap** | 所有策略 | 防止边界信息丢失 |
+| **元数据保留** | 生产必备 | `source`、`timestamp`、层级路径 |
+
+### 2026 RAG 架构选型矩阵
+
+| 场景 | 架构 | 理由 |
+|------|------|------|
+| 文档 QA | 混合检索 + Reranking | 覆盖面 + 准确率的最佳平衡 |
+| 多跳推理 | GraphRAG + 向量检索 | 显式关系推理必须图支持 |
+| 动态/实时数据 | Agentic RAG + Web Search | 不确定何时需要检索 |
+| 企业知识库 | 混合检索 + 多源路由 | 多数据源需要路由层 |
+| 客服 FAQ | 查询扩展 + 混合检索 | 用户表达方式多样 |
+
+> 来源：[Lushbinary — RAG Production Guide 2026](https://lushbinary.com/blog/rag-retrieval-augmented-generation-production-guide/)、[Iterathon — RAG Systems Production Guide 2026](https://iterathon.tech/blog/rag-systems-production-guide-2025)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -367,4 +454,4 @@ class HybridRetriever:
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

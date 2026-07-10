@@ -435,6 +435,103 @@ User → CoderAgent(写代码) → ExecutorAgent(执行+报错)
 
 ---
 
+## 🏭 2026 多 Agent 框架新格局
+
+### 六强争霸：2026 框架全景
+
+2026 年，多 Agent 框架生态已从"三足鼎立"进入"六强争霸"。构建多 Agent 系统不再是从 LangGraph/CrewAI/AutoGen 三选一——OpenAI、Google 和 Anthropic 都已加入战场：
+
+| 框架 | 开发商 | 发布/成熟时间 | 核心抽象 | 最适合 |
+|------|--------|------------|---------|--------|
+| **OpenAI Agents SDK** | OpenAI | 2025.03 | Handoff（交接） | 基于 GPT 的 Agent 编排 |
+| **LangGraph** | LangChain | 2024+ 持续迭代 | 有状态图（StateGraph） | 需要复杂条件分支的生产系统 |
+| **CrewAI** | CrewAI Inc. | 2024+ 持续迭代 | 角色分工（Role+Task） | 内容生产、研究分析自动化 |
+| **AutoGen/AG2** | Microsoft | v0.4 (2025) | 对话式协作 | Agent 间需要来回对话的场景 |
+| **Google ADK** | Google | 2025.04 | 层级结构（Hierarchical） | Gemini 生态、企业级部署 |
+| **Claude Agent SDK** | Anthropic | 2026 (随 Claude 4.6) | 原生工具调用 | Claude 生态、安全优先场景 |
+
+> 来源：[GuruSup — Best Multi-Agent Frameworks 2026](https://gurusup.com/blog/best-multi-agent-frameworks-2026)、[RankSquire — Open Source AI Agent Frameworks 2026](https://ranksquire.com/2026/05/03/open-source-ai-agent-frameworks-2026/)
+
+### 新入局者详解
+
+#### OpenAI Agents SDK：Handoff 模式的工业化
+
+2025 年 3 月，OpenAI 发布了 Agents SDK，取代了实验性的 Swarm 框架。其核心设计哲学是 **Handoff（交接）**——Agent 之间显式地转移控制权，同时传递对话上下文。
+
+核心三原语：
+- **Handoffs**：Agent→Agent 任务转移（类似队列分配模式）
+- **Guardrails**：输入/输出验证护栏
+- **Tracing**：端到端可观测性
+
+典型模式是"分流→专项"：一个分流 Agent 接收用户输入 → 判断意图 → 交接给专项 Agent（账单、技术支持、账户管理）→ 专项 Agent 可返回控制权或继续交接。
+
+#### Google ADK：层级结构的企业级方案
+
+Google 的 Agent Development Kit (ADK) 采用企业管理式的**层级结构**：
+
+```
+根 Agent (CEO)
+  ├── 研究 Agent (VP)
+  │   ├── 文献检索 Agent
+  │   └── 数据分析 Agent
+  └── 工程 Agent (VP)
+      ├── 代码生成 Agent
+      └── 测试 Agent
+```
+
+核心规则：
+- **父管子**：父 Agent 委派任务给子 Agent
+- **单亲制**：每个 Agent 只有一个父级，职责清晰
+- **SequentialAgent 编排器**：子 Agent 按序运行，前一个输出为后一个输入
+
+#### Claude Agent SDK：安全优先
+
+Anthropic 随 Claude 4.6 发布了 Agent SDK，强调**安全约束下的工具调用**——原生支持的宪法 AI（Constitutional AI）护栏和引用溯源，特别适合金融、医疗等监管严格的领域。
+
+### 生产验证：什么真正活了下来
+
+根据 [Multi-Agent in Production in 2026: What Actually Survived](https://medium.com/@Micheal-Lanham/multi-agent-in-production-in-2026-what-actually-survived-f86de8bb1cd1) 的生产数据分析：
+
+| 发现 | 影响 |
+|------|------|
+| ✅ **集中式协调**在可并行化任务上提升 80.9% | 任务可拆解 → 多 Agent 真有价值 |
+| ❌ **顺序规划任务**上每个多 Agent 变体都**退化 39-70%** | 串行任务 → 单 Agent 更好 |
+| ⚠️ 大多数多 Agent 部署是"过度工程" | 降级到单 Agent 后效果反而更好 |
+| ✅ Graph-based 编排（LangGraph）在故障恢复和合规上表现最佳 | 生产环境优先考虑可靠性 |
+
+**核心教训**：多 Agent 不是免费的午餐。在决定使用多 Agent 之前，先问自己：任务是否可并行拆解？是否真的需要不同专业的 Agent？单 Agent + 好的提示词能否解决？
+
+### 框架选型决策矩阵（2026）
+
+| 判断条件 | 推荐 | 理由 |
+|---------|------|------|
+| 任务可并行拆解 | CrewAI / OpenAI SDK | 流水线和 Handoff 开销最低 |
+| 需要复杂分支逻辑 | LangGraph | 图结构 + 条件边 + 状态持久化 |
+| Agent 间需要来回对话 | AutoGen / AG2 | 对话式协作原语 |
+| Gemini 生态 | Google ADK | 原生集成，层级管理 |
+| 监管严格（安全/合规） | Claude SDK / LangGraph | 护栏 + 可审计的决策链 |
+| 快速原型 | CrewAI | 最低学习曲线 |
+| 不确定是否需要多 Agent | **单 Agent 先上线** | 大多数情况不需要多 Agent |
+
+### 多 Agent 生产成本速算
+
+```
+5-Agent 管线成本参考（2026）：
+- 研究 Agent：gpt-4o-mini → ~$0.005
+- 写作 Agent：gpt-4o → ~$0.02
+- 审查 Agent：claude-3.5-haiku → ~$0.005
+- SEO Agent：gpt-4o-mini → ~$0.005
+- 发布 Agent：gpt-4o-mini → ~$0.005
+总计：~$0.04/次
+
+每月 1000 次运行 ≈ $40
+推理成本自 2023 年下降 >80%
+```
+
+> 来源：[DEV Community — Multi-Agent AI in 2026](https://dev.to/ottoaria/multi-agent-ai-in-2026-build-production-systems-with-crewai-langgraph-autogen-5e40)、[Medium — Multi-Agent in Production in 2026](https://medium.com/@Micheal-Lanham/multi-agent-in-production-in-2026-what-actually-survived-f86de8bb1cd1)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -447,4 +544,4 @@ User → CoderAgent(写代码) → ExecutorAgent(执行+报错)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

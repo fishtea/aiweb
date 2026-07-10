@@ -464,6 +464,109 @@ diff没问题则返回空数组——不要编造问题。
 
 ---
 
+## 🏭 2026 MCP 生态：从协议到基础设施
+
+### MCP 的 2026 年里程碑
+
+2024 年 11 月，Anthropic 在 GitHub 上发布了一份技术规范和两个 SDK。仅 16 个月后，MCP（Model Context Protocol）已被 OpenAI、Google、Microsoft 和 AWS 采纳，月 SDK 下载量突破 **9700 万次**，并已捐赠给 Linux Foundation 旗下的 **Agentic AI Foundation**。在 AI 历史上，没有任何其他基础设施协议能如此快速地整合碎片化的生态系统。
+
+**MCP 已是 Agentic AI 经济的底层管道。** 如果你在 2026 年构建 AI Agent，理解 MCP 不再是可选项。
+
+> 来源：[Requesty — The MCP Ecosystem in 2026](https://www.requesty.ai/blog/mcp-ecosystem-2026-building-agent-tool-infrastructure-that-scales)、[DEV Community — MCP Tools 2026: The Complete Guide](https://dev.to/agdex_ai/mcp-tools-2026-the-complete-model-context-protocol-guide-for-ai-agents-3ib0)
+
+### MCP 的三层架构
+
+MCP 定义了一个基于 JSON-RPC 的三层架构：
+
+| 层 | 角色 | 示例 |
+|---|------|------|
+| **Host（宿主）** | 用户交互的应用 | Claude Desktop、VS Code、自建聊天机器人 |
+| **Client（客户端）** | Host 内部的组件，管理 MCP 连接 | 应用中的 MCP 客户端库 |
+| **Server（服务端）** | 对外暴露能力的轻量程序 | GitHub MCP Server、数据库查询 Server |
+
+每个 MCP Server 通过三种原语暴露能力：
+- **Tools**：AI 可调用的可执行函数（如 `create_issue`、`run_query`）
+- **Resources**：AI 可读取的数据（如文件内容、数据库 schema）
+- **Prompts**：可复用的提示词模板
+
+### 2026 年三大变化
+
+#### 1. MCP Apps：工具返回 UI
+
+2026 年最大的 MCP 扩展是 **MCP Apps**——工具现在可以返回交互式 UI 组件，直接在对话中渲染：仪表盘、表单、可视化、多步工作流。ChatGPT、Claude、VS Code 和 Goose 都已支持 MCP Apps。
+
+以前数据分析工具返回一堵文字墙，现在返回可交互的仪表盘——用户可以筛选区域、下钻账户、导出报告，全程不离开对话界面。
+
+#### 2. MCP v2 Beta：面向多 Agent 系统
+
+2026 年 3 月发布的 `@ai-sdk/mcp v2.0.0-beta.3` 包含了破坏性变更，信号明确：MCP 不再是实验，协议正在为 2026 年交付的多 Agent 生产系统而加固。关键变更包括更严格的认证合规、OpenAI Agents SDK 集成的错误规范化改进、以及 Google ADK 中用于 Agent 间委派的结构化 Task API。
+
+#### 3. 72% 上下文窗口问题
+
+一个被广泛引用的基准测试显示，连接多个 MCP Server 时，**Agent 上下文窗口的 72% 被工具 schema 本身消耗**。生态系统中有超过 10,000 个公共 Server，团队面临一个硬问题：如何在保持工具可用性的同时不消耗所有上下文窗口？解法包括：
+- **动态工具发现**：不在启动时加载所有工具，运行中按需发现
+- **工具检索**：用 Embedding 向量化工具描述，按查询语义检索 top-k
+- **Schema 压缩**：精简工具定义的 description 和 parameters，去除冗余
+
+### 主流 MCP Server（2026）
+
+| 类别 | Server | 用途 |
+|------|--------|------|
+| 开发 | MCP GitHub Server | Issues、PR、代码审查 |
+| 开发 | MCP Filesystem Server | 读写本地文件 |
+| 开发 | MCP PostgreSQL Server | 自然语言查询数据库 |
+| 搜索 | Brave Search MCP | 实时网页搜索 |
+| 搜索 | Fetch MCP Server | URL → 清洁 Markdown |
+| 搜索 | Puppeteer MCP | 浏览器自动化 |
+| 数据 | Notion MCP | 页面、数据库操作 |
+| 数据 | Slack MCP | 消息、频道管理 |
+| 数据 | Google Drive MCP | 文件管理 |
+
+### FastMCP：Python 快速构建
+
+FastMCP 的装饰器 API 让构建 MCP Server 只需几分钟，自动处理所有协议样板代码：
+
+```python
+from fastmcp import FastMCP
+
+mcp = FastMCP("Weather Service")
+
+@mcp.tool
+def get_weather(city: str) -> str:
+    """获取指定城市的当前天气"""
+    return f"Weather in {city}: 72°F, sunny"
+
+@mcp.resource("config://settings")
+def get_settings() -> str:
+    """应用配置信息"""
+    return '{"units": "fahrenheit"}'
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+### 框架集成速查
+
+| 框架 | 集成方式 |
+|------|---------|
+| **LangChain/LangGraph** | `langchain_mcp_adapters.tools.load_mcp_tools()` |
+| **CrewAI** | `crewai_tools.MCPServerAdapter` |
+| **Claude Desktop** | `claude_desktop_config.json` 配置 MCP Server 路径 |
+| **OpenAI Agents SDK** | v2 Beta 原生支持，错误规范化 |
+
+### MCP-Native 开发工具
+
+| 工具 | MCP 配置 | 适用场景 |
+|------|---------|---------|
+| **Cursor** | `.cursor/mcp.json` | 完整编码工作流 |
+| **Claude Code** | `claude mcp add <command>` | Anthropic 原生 |
+| **Cline** | VS Code 插件内配置 | 开源 VS Code Agent |
+| **Continue** | `config.json` | 开源 AI 代码助手 |
+
+> 来源：[DEV Community — MCP Tools 2026: The Complete Guide](https://dev.to/agdex_ai/mcp-tools-2026-the-complete-model-context-protocol-guide-for-ai-agents-3ib0)、[Wikipedia — Model Context Protocol](https://en.wikipedia.org/wiki/Model_Context_Protocol)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -476,4 +579,4 @@ diff没问题则返回空数组——不要编造问题。
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

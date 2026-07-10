@@ -236,7 +236,9 @@ docker run -d -p 3000:8080 \
 
 ### 2026 年 Ollama 关键数据
 
-- **GitHub Stars**：165k（截至 2026 年 3 月），40,000+ 社区集成
+- **GitHub Stars**：165k+（截至 2026 年 3 月），40,000+ 社区集成
+- **开发者用户**：890 万+ 活跃开发者
+- **融资里程碑**：累计融资 $8,800 万（Benchmark、Theory Ventures、8VC、Y Combinator）
 - **模型库**：200+ 模型，涵盖 Llama 4、Qwen 3.5、DeepSeek-R1/V3、Gemma 4、Kimi K2.6、GPT-OSS 等全部主流开源模型
 - **新能力**：原生 `ollama launch kimi` 命令支持 Kimi Agent 工作流；MLX 优化大幅提升 Apple Silicon 推理速度
 - **版本迭代**：约每两周一次更新，v0.17.x 系列（2026年3月）
@@ -308,7 +310,6 @@ docker run -d -p 3000:8080 \
 | **v0.31.2** | **7月6日** | **Flash Attention 老 GPU 兼容；iGPU 视觉卸载；Claude Code 遥测关闭** |
 
 ### 参考来源
-- [Ollama v0.31.2 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.2)
 
 **多 Token 预测（MTP）自动调优：**
 
@@ -326,6 +327,10 @@ docker run -d -p 3000:8080 \
 ### 参考来源
 - [Ollama v0.31.2 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.2)
 - [Ollama v0.31.1 Release Notes](https://github.com/ollama/ollama/releases/tag/v0.31.1)
+- [Ollama 官方博客](https://ollama.com/blog)
+- [Ollama 选型指南：本地大模型运行工具全面解析（2026） — SegmentFault](https://segmentfault.com/a/1190000047650440)
+- [Top 5 Local LLM Tools and Models in 2026 — Pinggy](https://pinggy.io/blog/top_5_local_llm_tools_and_models)
+- [2026 年 OpenClaw 最佳 Ollama 本地模型推荐 — CSDN](https://aicoding.csdn.net/6a23e6b610ee7a33f278ab72.html)
 
 ---
 
@@ -341,4 +346,4 @@ docker run -d -p 3000:8080 \
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

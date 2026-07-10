@@ -278,6 +278,56 @@ pip install torch==2.13.0+rocm7.2
 
 ---
 
+## PyTorch 生态动态（2026年7月）
+
+### PyTorch Conference 2026
+
+PyTorch 年度大会定于 **2026年10月20-21日** 在 **加州圣何塞（San Jose, CA）** 举行。这是 PyTorch 社区每年最重要的线下活动，通常伴随重大版本发布和技术路线图披露。
+
+根据往年惯例，大会将涵盖：
+- PyTorch 2.14 / 3.0 路线图预览
+- torch.compile 下一代编译技术
+- 分布式训练最新进展（FSDP2/3、torchcomms）
+- 边缘推理与 ExecuTorch 生态
+- 社区贡献者峰会
+
+预计 2026 年大会焦点将围绕 **CuTeDSL 后端** 的成熟化路线以及 FlexAttention 的多后端扩展展开。
+
+### CuTeDSL：Triton 之外的第二条路
+
+PyTorch 2.13.0 引入的 **CuTeDSL "Native DSL" 后端**（原型阶段）是近年来 Inductor 编译器最值得关注的基础设施变革。
+
+**背景**：PyTorch 2.0 以来，`torch.compile` 的 Inductor 后端一直依赖 OpenAI 的 **Triton** 作为 GPU 代码生成引擎。Triton 在灵活性上表现出色，但存在两个固有问题：
+
+1. **编译开销**：Triton 的 JIT 编译在某些复杂算子上耗时较长（首次推理增加数秒到数十秒）
+2. **依赖耦合**：Inductor 的优化能力受限于 Triton 的中间表示（Triton IR）的表达力
+
+**CuTeDSL 的改进**：
+
+| 维度 | Triton 后端 | CuTeDSL 后端 |
+|------|-----------|-------------|
+| 编译速度 | 中等（JIT 编译器） | 更快（直接生成 CUDA C++ 模板） |
+| 优化粒度 | Triton IR 级别 | CUDA 线程/内存级别（更细粒度） |
+| 成熟度 | 稳定（2020+） | 原型（2026.7） |
+| 适用算子 | 通用 | 关键 GPU 算子（matmul、attention、element-wise） |
+
+> **影响预测**：CuTeDSL 成熟后将形成 **Triton + CuTeDSL 双后端架构**——Triton 处理通用算子，CuTeDSL 加速高频关键路径。这与 NVIDIA 的 CUTLASS 库形成官方-社区互补，最终让 PyTorch 用户无需手动编写 CUDA kernel 即可逼近手写性能。
+
+### PyTorch 版本路线（2026 展望）
+
+| 版本 | 预计时间 | 关键主题 |
+|------|---------|---------|
+| v2.12.0 | 2026年5月 | 基础增强（torch.accelerator.Graph、MX 量化导出） |
+| v2.13.0 | 2026年7月 | 训练优化（FlexAttention MPS、nn.LinearCrossEntropyLoss、torchcomms） |
+| v2.14.0 | 预计9月 | CuTeDSL 稳定性、Conference 前预览版 |
+| v3.0（推测）| 2027？ | 向后不兼容大版本（可能的 Python API 重构、动态图语义变更） |
+
+### 参考来源
+- [PyTorch Blog — Conference 2026](https://pytorch.org/blog/)
+- [PyTorch 2.13.0 Release Notes — CuTeDSL](https://github.com/pytorch/pytorch/releases/tag/v2.13.0)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -290,4 +340,4 @@ pip install torch==2.13.0+rocm7.2
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*

@@ -312,6 +312,48 @@ LangGraph v1.2.0 带来了一系列面向生产的关键增强，参考 [官方 
 
 ---
 
+## LangGraph 7月迭代速览（v1.2.7 → v1.2.9）
+
+LangGraph 在 2026 年 6 月底至 7 月初保持了高频迭代节奏，连续三周发布补丁版本，重点修复分布式状态管理中的边缘情况。
+
+### 版本变化一览
+
+| 版本 | 日期 | 关键修复 |
+|------|------|---------|
+| **v1.2.9** | **7月10日** | `updateState` 在 delta channel 上的 metadata/counters 修复——确保增量更新时计数器不丢失 |
+| v1.2.8 | 7月6日 | delta channel 在全新线程上调用 `updateState` 时强制生成 snapshot 而非空 stub checkpoint，避免状态丢失 |
+| v1.2.7 | 6月30日 | `DeltaChannel` 的 `Overwrite` 操作在 JSON 往返后不再丢失语义；snapshot 场景下 superstep 覆盖行为修正 |
+
+### 技术解读：DeltaChannel 的演进
+
+DeltaChannel 是 LangGraph v1.2.0 引入的增量状态通道机制，允许 Agent 在多轮工具调用中仅传递状态变更（delta）而非全量 snapshot，大幅减少序列化开销。
+
+v1.2.7–v1.2.9 这三个补丁集中解决了 DeltaChannel 在生产环境中的三个边缘问题：
+
+1. **Overwrite 的 JSON 保真性**（v1.2.7）：`Overwrite` 是 DeltaChannel 的一种写入语义——"用新值完全替换旧值"。但在某些序列化路径中（如通过 LangGraph API 传输），`Overwrite` 经 JSON 往返后会退化为普通写入，导致并发冲突时旧值残留。v1.2.7 通过保留类型标记解决了这个问题。
+
+2. **全新线程的 updateState**（v1.2.8）：在一个尚未执行任何 superstep 的线程上调用 `updateState` 时，旧代码会生成空的 stub checkpoint，导致后续状态读取为空。修复后强制生成真实 snapshot。
+
+3. **Counters 一致性**（v1.2.9）：DeltaChannel 维护内部计数器以追踪增量顺序。`updateState` 在某些路径下会绕过计数器更新，导致后续增量被错误排序。v1.2.9 修复了 metadata/counters 的同步问题。
+
+> **实际影响**：如果你的 LangGraph 应用使用了 `updateState` API（从外部注入状态更新，如人工审批流程），升级到 v1.2.9 可以避免状态更新在特定时序下丢失。
+
+### 生态节奏
+
+LangChain 生态在 2026 年 Q3 初的迭代节奏约为：
+- **LangChain 核心**：~1-2 周发布补丁（1.3.x 系列）
+- **LangGraph**：~每周发布补丁（1.2.x 系列）
+- **LangSmith**：持续交付，无固定版本号
+- **DeepAgents**：~每月发布功能版本（当前 v0.6.0）
+
+### 参考来源
+- [LangGraph v1.2.9 Release Notes](https://github.com/langchain-ai/langgraph/releases/tag/1.2.9)
+- [LangGraph v1.2.8 Release Notes](https://github.com/langchain-ai/langgraph/releases/tag/1.2.8)
+- [LangGraph v1.2.7 Release Notes](https://github.com/langchain-ai/langgraph/releases/tag/1.2.7)
+- [LangChain Changelog](https://docs.langchain.com/oss/python/releases/changelog)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -324,4 +366,4 @@ LangGraph v1.2.0 带来了一系列面向生产的关键增强，参考 [官方 
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-10 00:09:45*
+*资源区块更新时间：2026-07-11 00:07:05*
