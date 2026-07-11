@@ -442,6 +442,129 @@ class HybridRetriever:
 
 ---
 
+## 🪞 Self-Reflective RAG：自我反思的检索增强
+
+2026 年 RAG 的一个重要进化方向是 **Self-Reflective RAG（自我反思 RAG）**——让 RAG 系统不仅检索和生成，还能对自己的检索结果进行评估和修正，而非盲目信任第一次召回的内容。
+
+### 核心机制
+
+与传统 RAG 的单向流水线不同，Self-Reflective RAG 引入了一个**评估-反馈循环**：
+
+```
+用户问题 → 检索 → 生成 → 评估置信度
+                           ↓
+               置信度 > 0.8 → 直接输出
+               置信度 < 0.8 → 改写查询 → 重新检索 → 重新生成
+                           ↓
+               仍不足 → 触发 Web Search 作为补充
+```
+
+这种设计**可将幻觉率降低 52% 以上**，因为系统在生成最终回答前先验证了检索内容是否真正支撑了回答。
+
+### 实现示例
+
+```python
+class SelfReflectiveRAG:
+    def __init__(self, retriever, generator, evaluator):
+        self.retriever = retriever
+        self.generator = generator
+        self.evaluator = evaluator
+
+    async def generate_with_reflection(
+        self, query: str, max_iterations: int = 2
+    ):
+        for iteration in range(max_iterations):
+            context = self.retriever.retrieve(query)
+            answer = self.generator.generate(query, context)
+
+            # 评估答案的置信度和检索支撑度
+            evaluation = self.evaluator.evaluate(
+                query=query,
+                context=context,
+                answer=answer
+            )
+
+            if evaluation["confidence"] > 0.8:
+                return answer, evaluation
+
+            # 置信度不足：根据评估反馈改写查询
+            if evaluation["needs_more_context"]:
+                query = self._refine_query(query, evaluation)
+            # 继续下一轮检索-生成循环
+        return answer, evaluation  # 已达最大迭代次数
+```
+
+### CRAG：纠正性 RAG（Corrective RAG）
+
+**Corrective RAG（CRAG）** 是 Self-Reflective RAG 的一个变体，专注于**检测检索结果的质量并采取纠正动作**。当检索内容质量不佳时，CRAG 不是简单重试，而是智能切换策略：
+
+| 检测到的状态 | 采取的纠正动作 |
+|------------|--------------|
+| 检索结果高度相关（置信度 > 0.8） | 直接使用检索结果生成回答 |
+| 检索结果部分相关（0.5 < 置信度 < 0.8） | 仅保留高相关片段，丢弃噪声内容 |
+| 检索结果不相关（置信度 < 0.5） | 触发 Web Search 替换知识库检索 |
+| 检索结果过时 | 自动触发知识库更新或实时数据查询 |
+
+CRAG 的关键洞察是：**"错误"不等于"无信息"**——有时检索到的内容部分正确、部分过时，CRAG 能精细地只保留有用的部分，而非全盘接受或全盘否定。
+
+### 在 bRAG-langchain 中体验
+
+如果你希望从可运行的代码中学习 Self-Reflective RAG 和 CRAG，推荐参考开源项目 **[bRAG-langchain](https://github.com/bRAGAI/bRAG-langchain/)**。该项目以 Jupyter Notebook 形式，从基础 RAG 逐步演进到多查询、路由、高级索引、重排序和自反思检索，是 2026 年学习 RAG 进阶技术的优秀实战材料。
+
+> 来源：[Iterathon — RAG Systems Production Guide 2026](https://iterathon.tech/blog/rag-systems-production-guide-2025)、[DEV — RAG in 2026: A Practical Blueprint](https://dev.to/suraj_khaitan_f893c243958/-rag-in-2026-a-practical-blueprint-for-retrieval-augmented-generation-16pp)
+
+---
+
+## 🏛️ 2026 前沿：从 RAG Pipeline 到 Agentic RAG
+
+Anthropic 的《Building Effective Agents》（2024.12）提出了"**Augmented LLM**"（增强型 LLM）作为 Agent 系统的基础构建块——这与 RAG 的概念一脉相承，但把它提升到了一个更高的抽象层次。
+
+### Augmented LLM：RAG 进化的方向
+
+传统 RAG 关注"检索 + 生成"两个步骤的串联。Augmented LLM 则将检索、工具和记忆作为 LLM 的三个**可组合增强能力**：
+
+```
+         ┌──────────────┐
+         │   LLM 核心    │
+         │  (推理/生成)  │
+         └──┬───┬───┬───┘
+    ┌───────┘   │   └───────┐
+    ▼           ▼           ▼
+┌──────┐  ┌──────┐    ┌──────┐
+│ 检索  │  │ 工具  │    │ 记忆  │
+│(RAG) │  │(API) │    │(状态) │
+└──────┘  └──────┘    └──────┘
+```
+
+在这个框架下，RAG 不再是独立的"管道"，而是 Agent 可以**自主决定何时启用、如何组合**的一项能力。例如：Agent 可以先尝试从记忆中找到相关信息，如果没有，再触发检索；检索结果不满意时，自动切换到 Web 搜索——这已经超越了传统 RAG 的固定路线。
+
+### Agentic RAG 的编排模式
+
+在 Agentic RAG 中，最常用的两种工作流模式：
+
+#### Orchestrator-Workers for Multi-Source RAG
+
+中央 LLM 动态判断：这个查询需要哪些数据源？（知识库 / 实时 API / Web Search / 数据库）→ 分派给对应 Worker 检索 → 汇总结果。这对跨系统知识检索（如同时查内部文档 + 客户 CRM + 实时价格）尤其有效。
+
+#### Evaluator-Optimizer for Retrieval Quality
+
+检索结果 → LLM 评估相关性 → 不满足则重新检索（换查询词 / 换数据源 / 调整 chunk 大小）→ 再次评估 → 直到满足阈值。这本质上是 CRAG（Corrective RAG）的通用化版本。
+
+### 何时升级到 Agentic RAG？
+
+Anthropic 的建议是：**先追求简单**。如果以下条件不满足，标准 RAG Pipeline 就足够了：
+
+- ✅ 单个检索源的 top-k 结果经常不满足需求
+- ✅ 查询需要跨多个不同系统组装信息
+- ✅ 检索质量需要用反馈循环来保证（如法律/医疗场景）
+- ✅ 任务的步骤数不可预测（如多跳推理 QA）
+
+升级前先衡量：增加的延迟和成本是否值得更好的任务表现？
+
+> 来源：[Anthropic — Building Effective Agents (Dec 2024)](https://www.anthropic.com/engineering/building-effective-agents)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -454,4 +577,4 @@ class HybridRetriever:
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-11 00:07:05*
+*资源区块更新时间：2026-07-12 00:07:00*

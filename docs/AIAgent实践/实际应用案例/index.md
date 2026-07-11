@@ -434,6 +434,50 @@
 
 ---
 
+## 📚 2026 年开源 Agent 参考项目生态
+
+除商业 Agent 产品外，2026 年开源社区涌现出一批高质量的 Agent 参考实现，适合作为学习和自建基线。
+
+### bRAG-langchain：从零到生产级 RAG Agent 的渐进式教程
+
+[bRAG-langchain](https://github.com/bRAGAI/bRAG-langchain/) 是一个以 Jupyter Notebook 驱动的开源学习项目，从最基础的 RAG 管线逐步演进到高级模式：
+
+| Notebook 序号 | 内容 | 核心技能 |
+|:---:|------|---------|
+| 1 | 基础 RAG 搭建 | Loader → Chunk → Embed → Retrieve → Generate |
+| 2 | 多查询（Multi-query）改进 | 将单个问题扩展为多个变体并行检索 |
+| 3 | 路由 + 查询构建 | 根据问题类型分发到不同检索器 |
+| 4 | 高级索引策略 | 语义分块、父文档检索、多表示索引 |
+| 5 | 重排序 + RRF 融合 | Cross-encoder 重排序、倒数排名融合 |
+
+### 社区 Agent 商业模式案例
+
+2026 年独立开发者社区总结了多个经过验证的 Agent 商业模式。这些案例的价值在于：它们不是大厂 PR 稿，而是真实个体开发者用开源工具搭建并盈利的项目：
+
+| 商业模式 | 核心产品 | 参考收入 |
+|---------|---------|---------|
+| **AI 内容工厂** | 每周自动发布 5 篇文章，AdSense + 联盟营销 | $500-2000/月被动收入 |
+| **销售情报 Agent** | 通话前自动研究潜在客户，生成完整客户画像 | €49/次搜索 |
+| **代码审查 SaaS** | GitHub 集成，自动多维度 PR 审查 | €29/月/席位 |
+| **客服分流白标** | 80-90% 一线工单自动处理，复杂问题升级人工 | 按工单定价 |
+| **AI 投资顾问** | 个性化加密/股票研究，每日自动报告 | €9/月 |
+
+> 来源：DEV Community — Multi-Agent AI in 2026: Build Production Systems（Otto Aria, 2026.03）
+
+### 2026 年 Agent 部署平台全景（补充）
+
+| 平台 | 核心定位 | 特色 |
+|------|---------|------|
+| **Google ADK** | 多 Agent 层级编排 | 根 Agent→子 Agent 树状结构，Workflow/LLM/Custom 三种 Agent 类型 |
+| **LangGraph Platform** | 生产级状态机 | 条件分支、人机协作、LangSmith 可观测性深度集成 |
+| **CrewAI** | 零门槛业务自动化 | 角色分工模式，下载量超 100 万 |
+| **Dify** | 可视化工作流 | 拖拽式编排，十零代码即可搭建多 Agent 工作流 |
+| **Microsoft Copilot Studio** | 企业级 Agent 构建 | 230,000 家组织使用，365 生态深度集成 |
+
+> 来源：Google Cloud Blog — Building Collaborative AI: Multi-Agent Systems with ADK（Annie Wang, 2025.11）；DEV Community 多 Agent 框架对比（2026.03）
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -446,4 +490,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-11 00:07:05*
+*资源区块更新时间：2026-07-12 00:07:00*

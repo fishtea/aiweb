@@ -565,6 +565,347 @@ if __name__ == "__main__":
 
 > 来源：[DEV Community — MCP Tools 2026: The Complete Guide](https://dev.to/agdex_ai/mcp-tools-2026-the-complete-model-context-protocol-guide-for-ai-agents-3ib0)、[Wikipedia — Model Context Protocol](https://en.wikipedia.org/wiki/Model_Context_Protocol)
 
+### 2026 函数调用 Agent 生产优化：模型选择与成本策略
+
+2026 年的函数调用 Agent 部署不再局限于单一模型。根据 PromptArch 的 2026 年系统提示词最佳实践指南，**混合模型策略**已成为生产部署的标准：
+
+#### 按任务复杂度选择模型
+
+| 任务类型 | 推荐模型 | 理由 | 每万次成本参考 |
+|---------|---------|------|-------------|
+| 简单工具路由（查询数据库、FAQ 检索） | GPT-4o-mini / Claude Haiku | 函数调用准确率已足够，成本低 | ~$0.15 |
+| 复杂多步推理（多工具编排、有状态对话） | GPT-4o / Claude Sonnet | 需要精确的参数生成和工具选择 | ~$1.50 |
+| 高安全敏感操作（退款、权限变更） | Claude Opus / GPT-4o 高精度 | 参数幻觉容忍度为零 | ~$5.00 |
+| 大规模批处理（每日百万次调用） | 开源模型（Qwen 2.5 / Llama 3.1）自部署 | 边际成本趋近于零 | 硬件成本 |
+
+#### 系统提示词的分层缓存策略
+
+2026 年的一个重要优化是**缓存友好的系统提示词设计**：
+
+1. **稳定层（可缓存）** — 角色定义、任务范围、通用工具使用规则、语气风格 → 约占 70% token
+2. **动态层（不可缓存）** — 当前工具列表、会话特定指令 → 约占 30% token
+
+**关键实践**：将稳定层和动态层在提示词中用明确分隔符分开，使支持 Prompt Caching 的提供商（Anthropic、OpenAI）能缓存稳定层，每次请求节省约 50% 的输入 token 成本。
+
+#### 实时监控与参数校验
+
+生产级函数调用 Agent 在 2026 年需要在以下三个层面建立监控：
+
+| 监控层面 | 检测目标 | 告警阈值参考 |
+|---------|---------|------------|
+| **工具选择准确率** | 是否调用了正确的工具 | < 90% 告警 |
+| **参数完整性** | 必填字段是否都有、类型是否正确 | 任何一次缺失告警 |
+| **工具调用成功率** | 外部 API 是否正常返回 | < 95% 告警 |
+| **平均步数** | 是否需要过多轮次才能完成 | > 5 步告警 |
+| **端到端延迟** | 用户等待时间 | > 15s P95 告警 |
+
+> 来源：[PromptArch — AI System Prompt Best Practices 2026](https://promptarch.ai/blog/ai-system-prompt-best-practices-2026)
+
+---
+
+## 🤖 OpenAI Agents SDK：2026 函数调用 Agent 的新标准
+
+2026 年，OpenAI 发布了 **Agents SDK**（前身为实验性 Swarm 项目），为函数调用 Agent 提供了一套轻量级、生产可用的 Python 框架。它将函数调用从"手动管理循环"升级为"框架自动编排"。
+
+> 来源：[OpenAI Agents SDK 官方文档](https://openai.github.io/openai-agents-python/)
+
+### SDK 核心原语
+
+Agents SDK 只有三种核心原语，能在不增加学习曲线的情况下覆盖复杂的 Agent 场景：
+
+| 原语 | 说明 | 对应函数调用场景 |
+|------|------|----------------|
+| **Agent** | 配备指令（instructions）和工具（tools）的 LLM | 单工具/多工具 Agent |
+| **Handoffs（移交）** | Agent 将任务委托给其他 Agent | 多 Agent 协作、分工 |
+| **Guardrails（护栏）** | 输入/输出的安全检查 | 生产环境安全防护 |
+
+### Hello World 对比：手动循环 vs Agents SDK
+
+**传统手动循环**（~50 行，需手动管理工具调用、结果回传）：
+
+```python
+# 传统方式：手动管理整个 Agent 循环
+messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_query}]
+while True:
+    response = client.chat.completions.create(model="gpt-4o", messages=messages, tools=tools)
+    if response.choices[0].finish_reason == "stop":
+        break
+    # 手动解析 tool_calls，手动执行，手动追加结果...
+    tool_call = response.choices[0].message.tool_calls[0]
+    result = execute_tool(tool_call.function.name, json.loads(tool_call.function.arguments))
+    messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": result})
+```
+
+**Agents SDK**（5 行，框架自动管理循环）：
+
+```python
+from agents import Agent, Runner
+
+agent = Agent(
+    name="Assistant",
+    instructions="You are a helpful assistant",
+    tools=[get_weather, search_web, send_email]  # 任意 Python 函数自动注册
+)
+
+result = Runner.run_sync(agent, "查询北京天气并发邮件通知")
+print(result.final_output)  # 框架自动循环直到任务完成
+```
+
+### 自动化 Schema 生成
+
+任何 Python 函数都可一键转为工具，框架自动从类型注解和 docstring 生成 JSON Schema：
+
+```python
+from agents import Agent, function_tool
+
+@function_tool
+def get_stock_price(symbol: str, exchange: str = "NASDAQ") -> dict:
+    """获取指定股票的实时价格。
+
+    Args:
+        symbol: 股票代码，如 AAPL
+        exchange: 交易所，默认 NASDAQ
+    """
+    # 实际 API 调用
+    return {"symbol": symbol, "price": 185.32, "currency": "USD"}
+
+# 自动生成 schema: {"name":"get_stock_price","parameters":{"symbol":"string",...}}
+agent = Agent(name="Trader", tools=[get_stock_price])
+```
+
+### Handoffs：多 Agent 函数调用协作
+
+Handoffs 是 Agents SDK 最强大的功能——允许一个 Agent 将任务**移交**给另一个更专业的 Agent：
+
+```python
+from agents import Agent, Runner
+
+# 通用客服 Agent
+triage_agent = Agent(
+    name="Triage",
+    instructions="你是客服入口，判断用户问题类型并移交给对应专家",
+    handoffs=[billing_agent, tech_agent]  # 可移交的 Agent 列表
+)
+
+# 专业账单 Agent
+billing_agent = Agent(
+    name="Billing",
+    instructions="处理账单、退款、订阅问题",
+    tools=[lookup_order, process_refund]
+)
+
+# 专业技术支持 Agent
+tech_agent = Agent(
+    name="Tech Support",
+    instructions="处理技术故障、API 问题",
+    tools=[check_service_status, create_ticket]
+)
+
+# Runner 自动处理 handoff 链
+result = Runner.run_sync(triage_agent, "我的 API 返回 500 错误")
+# triage_agent 识别为技术问题 → handoff 到 tech_agent → 调用工具诊断
+```
+
+### Guardrails：生产安全防护
+
+在函数调用前后插入安全检查，失败时快速阻断：
+
+```python
+from agents import Agent, Runner, InputGuardrail, GuardrailFunctionOutput
+
+# 输入护栏：检查用户输入是否包含敏感信息
+async def security_check(context, agent, input_text):
+    # 检测 PII、越权请求等
+    if contains_pii(input_text):
+        return GuardrailFunctionOutput(allow=False, reason="输入包含个人敏感信息")
+    return GuardrailFunctionOutput(allow=True)
+
+agent = Agent(
+    name="Banking Agent",
+    instructions="银行助手",
+    tools=[check_balance, transfer_money],
+    input_guardrails=[InputGuardrail(guardrail_function=security_check)]
+)
+# 如果 security_check 返回 allow=False，Agent 不会执行任何工具调用
+```
+
+### Agents SDK vs 手动循环决策指南
+
+| 场景 | 推荐方案 | 理由 |
+|------|---------|------|
+| 单工具、简单流程 | 手动循环（Chat Completions API） | 灵活、无框架依赖 |
+| 多工具、自动编排 | Agents SDK | 自动管理循环、减少样板代码 |
+| 多 Agent 协作 | Agents SDK Handoffs | 框架管理移交逻辑 |
+| 需要安全检查 | Agents SDK Guardrails | 原生输入/输出护栏 |
+| 需要沙箱环境 | Agents SDK Sandbox | 隔离执行代码和文件操作 |
+| 需要实时语音 | Agents SDK Realtime | 原生语音 Agent 支持 |
+| 跨模型提供商 | 手动循环 + LiteLLM | SDK 主要优化 OpenAI 模型 |
+
+### Sessions：持久化记忆层
+
+Agents SDK 的 Sessions 提供了跨轮次的持久化上下文管理，支持 SQLite、Redis、MongoDB 等多种后端：
+
+```python
+from agents import Agent, Runner
+from agents.extensions.sessions import SQLAlchemySession
+
+session = SQLAlchemySession("sqlite:///agent_memory.db")
+
+agent = Agent(name="Personal Assistant", tools=[...])
+
+# 第一轮
+result1 = Runner.run_sync(agent, "我叫张三", session=session)
+# 第二轮——Agent 记住用户名
+result2 = Runner.run_sync(agent, "我叫什么名字？", session=session)
+# → "你叫张三"
+```
+
+> 来源：[OpenAI Agents SDK Documentation](https://openai.github.io/openai-agents-python/)
+
+---
+
+## 🆕 2026 函数调用最佳实践
+
+### 工具定义的精细化管理
+
+2026 年生产级函数调用 Agent 对工具定义的要求已远超简单 JSON Schema。以下是被验证有效的工具定义准则：
+
+| 要素 | 要求 | 具体做法 |
+|------|------|---------|
+| **名称唯一性** | 工具名全局唯一、语义明确 | `get_customer_refund_history` 而非 `search_v2` |
+| **描述精准度** | 说明"何时调用"而非"功能" | "当用户询问退款历史或退款状态时使用" —— 而非"查询退款数据" |
+| **参数示例** | 在描述字段嵌入示例值 | `customer_id: string — 例: 'CUST-4471'` |
+| **枚举约束** | 对所有有限集合使用 enum | `status: enum["pending", "approved", "rejected"]` |
+| **必填声明** | 明确标记必填参数 | `required: ["customer_id", "invoice_id"]` |
+
+### 工具调用治理：事前、事后双重检查
+
+生产级 Agent 的核心安全防线是**工具调用治理（Tool Call Governance）**，即在工具执行前和执行后分别进行校验：
+
+**事前检查（Pre-execution Guard）**：
+- 参数类型校验：LLM 生成的参数是否符合 schema 约束
+- 许可检查：当前 Agent 是否有权调用此工具
+- 敏感操作确认：涉及退款、删除、发邮件等操作要求二次确认
+- 范围检查：参数值是否在合理范围内（如退款金额不超过订单金额）
+
+**事后检查（Post-execution Guard）**：
+- 结果合规性：工具返回的数据是否包含敏感信息
+- 副作用验证：操作是否产生了预期的效果
+- 异常捕获：工具超时或返回错误时的降级策略
+
+```python
+class ToolGuard:
+    def __init__(self):
+        self.permitted_tools = ["query_customer", "search_orders"]
+        self.sensitive_tools = ["issue_refund", "delete_account"]
+
+    def pre_check(self, tool_name: str, args: dict) -> tuple[bool, str]:
+        # 许可检查
+        if tool_name not in self.permitted_tools:
+            return False, f"Tool '{tool_name}' not permitted"
+
+        # 敏感操作二次确认
+        if tool_name in self.sensitive_tools:
+            return False, "REQUIRES_CONFIRMATION:" + json.dumps(args)
+
+        # 参数类型校验
+        try:
+            validate_schema(tool_name, args)
+        except SchemaError as e:
+            return False, f"Invalid args: {e}"
+
+        return True, "ok"
+```
+
+### 工具调用失败的优雅恢复策略
+
+2026 年 Agent 开发的一个关键认知是：**工具调用必然失败**。API 可能超时、参数可能被拒绝、权限可能不够。真正的工程挑战不是"避免失败"，而是"失败后优雅恢复"：
+
+| 失败类型 | 恢复策略 |
+|---------|---------|
+| **参数幻觉**（模型生成错误参数） | 自动重试：用更准确的参数描述让 LLM 重新生成 |
+| **工具超时** | 设置 p95 超时阈值，超时后告知用户并建议稍后重试 |
+| **权限不足** | 降级为只读操作，或提示用户申请更高权限 |
+| **结果为空** | 告知用户"未找到信息"，并建议使用其他关键词搜索 |
+| **数据格式错误** | 提示用户数据异常，而非返回无意义的错误信息 |
+
+### 函数调用的测试方法论
+
+函数调用 Agent 的测试与传统软件测试有本质区别。以下是被 2026 年先进团队验证的**三层测试金字塔**：
+
+| 测试层级 | 测试什么 | 工具/方法 | 频率 |
+|---------|---------|---------|------|
+| **单元测试** | 单个工具调用：给定输入，是否调用了正确工具和参数 | 断言 LLM 输出中的 tool_calls 字段 | 每次提交 |
+| **集成测试** | 多步任务：Agent 能否按正确顺序调用多个工具 | LangSmith 回归测试、DeepEval | CI/CD 每次合并 |
+| **端到端测试** | 生产环境：用户意图到最终输出的完整流程 | LLM-as-Judge 评估 + 人工抽样 | 每次发布 |
+
+**关键实践**：为每个工具自动生成测试用例——工具定义的参数约束本身就暗示了测试边界（必填缺失、枚举越界、类型错误），可以自动转换为测试输入，让测试集随工具定义同步演进。
+
+> 来源：[Prompt Engineering Guide — Function Calling](https://www.promptingguide.ai/agents/function-calling)、[OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)
+
+---
+
+## 🔮 2026 最新进展：从 Function Calling 到 Agentic 系统
+
+Anthropic 在 2024 年 12 月发布的《Building Effective Agents》一文已成为 Agent 工程领域的必读经典。该文基于与数十个团队的合作经验，总结了一套从简单到复杂的 Agent 设计方法论。
+
+### 核心概念区分：Workflow vs Agent
+
+| 概念 | 定义 | 特点 |
+|------|------|------|
+| **Workflow（工作流）** | LLM 和工具按预定义代码路径编排 | 可预测、一致性好、适合明确任务 |
+| **Agent（智能体）** | LLM 动态自主决定流程和工具使用 | 灵活、适合需要模型驱动决策的场景 |
+
+这一区分对函数调用 Agent 的设计至关重要：**不要因为"Agent"这个词就盲目追求完全自主**。很多场景下，预定义的 Prompt Chaining 或 Routing 工作流反而比全自主 Agent 更可靠、更经济。
+
+### 五种经典 Agent 工作流模式
+
+Anthropic 归纳了 5 种逐步增加复杂度的模式：
+
+#### 1. Prompt Chaining（提示链）
+将任务分解为顺序步骤，每步的 LLM 输出作为下步输入。可在中间步骤加入程序化检查。适合可清晰拆分为固定子任务的工作。
+
+#### 2. Routing（路由分发）
+根据输入分类，分发给专门的后续处理流程。适合不同类别需要不同处理方式的复杂任务。例如：简单咨询路由到低成本模型（如 Claude Haiku），复杂分析路由到高能力模型（如 Claude Sonnet）。
+
+#### 3. Parallelization（并行化）
+- **分段模式**：将任务分为独立子任务并行执行——如一个模型处理用户查询、另一个同时筛查不当内容
+- **投票模式**：同一任务多次执行获得多样化输出——如多个 prompt 同时评审代码漏洞
+
+#### 4. Orchestrator-Workers（编排-工人）
+中心 LLM 动态分解任务、分派给 Worker LLM、汇总结果。适合无法预知需要多少子任务的场景（如修改多个文件的代码变更）。
+
+#### 5. Evaluator-Optimizer（评估-优化）
+一个 LLM 生成、另一个 LLM 评估并反馈，循环迭代。适合有明确评估标准且迭代能带来可量化提升的场景——如文学翻译中评估者 LLM 能捕捉译者 LLM 初稿中遗漏的细微语义。
+
+### 工具设计的 ACI 理念
+
+Anthropic 提出：**工具定义的提示工程投入不应少于主 Prompt 的投入**——就像我们为人类设计 UI（HCI），为 Agent 设计工具接口（ACI，Agent-Computer Interface）同样需要精心打磨。
+
+关键原则：
+- 避免"格式负担"——如要求模型在写 diff 前先计算变化行数（反例：相对路径 vs 绝对路径——Anthropic 在 SWE-bench Agent 中强制使用绝对路径后，模型无误使用）
+- 放在模型的"视角"思考：看工具描述和参数，是否能直观知道怎么用？
+- 好的工具定义应像写给团队新手的优质文档——包含示例、边界情况和输入格式要求
+- **Poka-yoke 设计**：改变参数设计让错误难以发生
+
+> 来源：[Anthropic — Building Effective Agents (Dec 2024)](https://www.anthropic.com/engineering/building-effective-agents)
+
+---
+
+## 🧠 Agent 架构经典：Lilian Weng 的 LLM-Powered Autonomous Agents
+
+Lilian Weng（OpenAI）在 2023 年发表的这篇长文被广泛视为 Agent 系统设计的入门必读。它将 Agent 架构归纳为三大组件：
+
+| 组件 | 核心机制 | 代表工作 |
+|------|---------|---------|
+| **规划（Planning）** | 任务分解 + 自我反思 | CoT, Tree of Thoughts, LLM+P, ReAct, Reflexion |
+| **记忆（Memory）** | 短期（上下文学习）+ 长期（向量检索） | MIPS 算法族: LSH, ANNOY, HNSW, FAISS, ScaNN |
+| **工具使用（Tool Use）** | 调用外部 API 扩展能力边界 | MRKL, Toolformer, HuggingGPT, API-Bank |
+
+其中 **ReAct**（Reasoning + Acting）已成为现代 Agent 框架的基础范式：将推理（Thought）和行动（Action）交织在同一个循环中，每次行动后的观察（Observation）反馈给下一轮推理。
+
+> 来源：[Lilian Weng — LLM Powered Autonomous Agents (Jun 2023)](https://lilianweng.github.io/posts/2023-06-23-agent/)
+
 ---
 
 ## 资料整理状态
@@ -579,4 +920,4 @@ if __name__ == "__main__":
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-11 00:07:05*
+*资源区块更新时间：2026-07-12 00:07:00*
