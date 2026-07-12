@@ -30,7 +30,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if not args.skip_audit:
-        run(["python", "scripts/audit_docs.py"])
+        run(["python3", "scripts/audit_docs.py"])
     run(["npm", "run", "build"])
 
     if args.skip_git:
