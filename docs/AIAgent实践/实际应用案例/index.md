@@ -365,20 +365,6 @@
 
 ---
 
-> **参考来源**
->
-> - 甲子光年：《2025企业级AI Agent价值及应用报告》（2025.07）
-> - IDC：《AI Agent 企业级应用现状与推荐》（2025.06）
-> - OWASP：Top 10 for Agentic Applications（2025.12）
-> - OpenAI Blog：Agentic AI Foundation Announcement（2025.12）
-> - Microsoft Build 2025：Open Agentic Web 发布
-> - 数据猿：《2025 中国 AI Agent 最具商业合作价值企业盘点》
-> - Windows Forum / TechHQ：Microsoft's AI Agents at Build 2025
-> - Arize AI：Best AI Observability Tools for Autonomous Agents (2026)
-> - Langfuse：Comparing Open-Source AI Agent Frameworks (2025)
-
----
-
 ## 九、2026 年 Agent 经济：从技术验证到商业模式
 
 ### 9.1 Agent 部署成本已降至实用区间
@@ -478,6 +464,79 @@
 
 ---
 
+## 十、本周动态（2026.07.12 更新）
+
+### 10.1 Anthropic「Building Effective Agents」依然是 Agent 架构的权威参考
+
+Anthropic 发布的《Building Effective Agents》持续作为 Agent 系统设计的"黄金标准"被业界引用。其核心建议可概括为三条原则：
+
+| 原则 | 说明 | 实践 |
+|------|------|------|
+| **保持简单** | 从单 LLM 调用 + 检索 + in-context 示例开始，仅在必要时增加复杂度 | 不要一上来就用 Agent 框架 |
+| **工作流 vs Agent** | 工作流（预定义代码路径编排）适合确定性流程；Agent（模型自主决策）适合需灵活应变的场景 | 客服问题分流用工作流，复杂故障排查用 Agent |
+| **ACI（Agent-Computer Interface）** | 工具定义和 Prompt 一样重要，需要精心设计 | 避免让模型写 diff 或 JSON 转义，保持格式自然 |
+
+文章重点区分了三种 Agent 模式：
+- **Prompt chaining**：将任务分解为顺序步骤，每步专注不同子任务
+- **Routing**：分类后分发到不同处理路径
+- **Evaluator-optimizer**：生成 -> 评估 -> 迭代优化的闭环
+
+> 来源：Anthropic Engineering Blog — [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)（持续更新）
+
+### 10.2 Agent Skills 生态爆发：从单个脚本到标准化技能库
+
+本周 GitHub 上 Agent Skills 生态出现爆发式增长，多个新项目登上周榜：
+
+| 项目 | Stars | 语言 | 说明 |
+|------|-------|------|------|
+| [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills) | 7,080⭐ | TypeScript | **Google 官方出品**，Agent Skills 库，兼容 Antigravity、Gemini CLI、Claude Code、Cursor 等主流编码 Agent |
+| [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | 22,226⭐ | Python | 345+ 技能，覆盖工程、营销、产品、合规、研究、商业运营等 30+ Agent 场景 |
+| [tt-a1i/archify](https://github.com/tt-a1i/archify) | 3,714⭐ | JavaScript | Agent 生成架构图技能，支持暗/亮主题切换，输出 PNG/JPEG/WebP/SVG |
+| [agentskills/agentskills](https://github.com/agentskills/agentskills) | 22,922⭐ | Python | Agent Skills 开放标准的规范文档 |
+
+**趋势解读**：Skills 正在成为 Agent 能力的"标准封装单元"——不再是给 Agent 单个工具，而是给 Agent 完整的工程能力（规范驱动开发、TDD、可观测性等）。Google 入场（stitch-skills）标志着这一范式获得头部科技公司认可。
+
+### 10.3 Agent 安全与沙箱基础设施
+
+本周两个 Agent 安全项目引起广泛关注：
+
+| 项目 | Stars | 类型 | 说明 |
+|------|-------|------|------|
+| [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) | 19,966⭐ | Go | **完全自主 AI Agent 渗透测试系统**，可自动化执行复杂渗透测试任务，本周 +1,766 stars |
+| [TencentCloud/CubeSandbox](https://github.com/TencentCloud/CubeSandbox) | 9,700⭐ | Rust | **即时、并发、安全、轻量的 AI Agent 沙箱**，专为 Agent 代码执行设计的隔离环境 |
+
+两个项目分别从"攻击者视角"和"防御者视角"构成了 Agent 安全的完整图景：pentagi 用于发现 Agent 应用的漏洞，CubeSandbox 用于安全执行 Agent 生成的代码。
+
+### 10.4 浏览器 Agent 与 DevTools 集成
+
+| 项目 | Stars | 说明 |
+|------|-------|------|
+| [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 46,697⭐ | Chrome 官方出品的 DevTools MCP 服务，让编码 Agent 直接控制浏览器 DevTools |
+| [alibaba/page-agent](https://github.com/alibaba/page-agent) | 26,060⭐ | JavaScript 页面 GUI Agent，自然语言控制 Web 界面 |
+
+Chrome 官方团队直接将 DevTools 以 MCP 协议暴露给编码 Agent，标志着浏览器厂商开始主动为 Agent 构建基础设施层。阿里巴巴的 page-agent 与 Google 的 stitch-skills 形成东西方 Agent Web 自动化竞争。
+
+### 10.5 Agent 编排与开发环境
+
+| 项目 | Stars | 类型 | 说明 |
+|------|-------|------|------|
+| [stablyai/orca](https://github.com/stablyai/orca) | 16,392⭐ | TypeScript | **并行 Agent 舰队开发环境（ADE）**，支持桌面和移动端，自带模型订阅 |
+| [ogulcancelik/herdr](https://github.com/ogulcancelik/herdr) | 15,519⭐ | Rust | **终端中的 Agent 多路复用器**，统一管理多个 Agent 会话 |
+| [usestrix/strix](https://github.com/usestrix/strix) | 40,563⭐ | Python | 开源 AI 渗透测试工具 |
+
+Orca 提出了"Agent Development Environment (ADE)"的新概念——就像 IDE 之于程序员，ADE 是管理并行 Agent 舰队的开发环境。herdr（Rust 实现）则从终端角度切入，统一管理多个 Agent 会话。
+
+### 10.6 企业 Agent 落地关键经验回顾
+
+基于 Anthropic 与数百个客户合作的经验，企业成功落地 Agent 的共性：
+
+1. **从简单开始**：多数场景不需要完整自主 Agent，优化单 LLM 调用 + 检索就够了
+2. **优先透明度**：显式展示 Agent 的每一步规划，而非黑箱输出
+3. **精心设计 ACI**：Agent-Computer Interface（工具格式、定义、文档）的投入应该像 HCI 一样认真
+4. **衡量一切**：始终建立评估体系，用数据而不是直觉判断复杂化是否值得
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -490,4 +549,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 00:07:00*
+*资源区块更新时间：2026-07-12 05:04:02*

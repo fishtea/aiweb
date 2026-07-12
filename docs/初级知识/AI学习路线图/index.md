@@ -77,6 +77,47 @@
 - 提示词、RAG、微调分别适合解决什么问题？
 - 什么时候应该用现成模型，什么时候才考虑训练或微调？
 
+## 推荐的免费课程资源
+
+以下课程均经过社区验证，质量可靠，且大部分免费。按学习阶段分类：
+
+### 入门阶段
+
+| 课程 | 平台 | 适合人群 | 说明 |
+|------|------|----------|------|
+| [AI for Beginners](https://github.com/microsoft/AI-For-Beginners) | Microsoft | 零基础 | 12 周 24 节课，涵盖符号 AI、神经网络、CV、NLP、LLM、AI 伦理 |
+| [Making Friends with Machine Learning](https://www.youtube.com/playlist?list=PLRKtJ4IpxJpDxl0NTvNYQWKCYzHNuy2xG) | YouTube | 零基础 | 迷你系列讲座，解释分类 vs 回归、精度 vs 召回等核心概念 |
+| [Caltech CS156: Learning from Data](https://www.youtube.com/playlist?list=PLD63A284B7615313A) | YouTube/Caltech | 有编程基础 | 经典入门课程，覆盖学习问题、VC 维、偏差-方差权衡、过拟合 |
+
+### 机器学习进阶
+
+| 课程 | 平台 | 适合人群 | 说明 |
+|------|------|----------|------|
+| [Stanford CS229: Machine Learning](https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU) | Stanford | 有数学基础 | 线性回归、逻辑回归、SVM、决策树、神经网络入门 |
+| [Applied Machine Learning](https://www.youtube.com/playlist?list=PL2UML_KCiC0UlY7iCQDSiGDMovaupqc83) | YouTube | 有 Python 基础 | 优化、过拟合、正则化、蒙特卡洛估计等实用技术 |
+
+### 深度学习
+
+| 课程 | 平台 | 适合人群 | 说明 |
+|------|------|----------|------|
+| [Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) | YouTube (Andrej Karpathy) | 有编程基础 | 从零实现神经网络，深入理解反向传播 |
+| [Stanford CS230: Deep Learning](https://www.youtube.com/playlist?list=PLoROMvodv4rOABXSygHTsbvUz4G_YQhOb) | Stanford | 有 ML 基础 | 构建 CNN、RNN、LSTM，涵盖 GAN、可解释性 |
+| [Practical Deep Learning for Coders](https://www.youtube.com/playlist?list=PLfYUBJiXbdtSvpQjSnJJ_PmDQB_VyT5iU) | fast.ai | 有 Python 基础 | 使用 PyTorch 和 fastai 快速上手深度学习实践 |
+
+### NLP 与大语言模型
+
+| 课程 | 平台 | 适合人群 | 说明 |
+|------|------|----------|------|
+| [CS224N: NLP with Deep Learning](https://www.youtube.com/playlist?list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ) | Stanford | 有深度学习基础 | 依存分析、RNN、Transformer、预训练模型、LLM |
+| [Hugging Face NLP Course](https://www.youtube.com/playlist?list=PLo2EIpI_JMQvWfQndUesu0nPBAtZ9gP1o) | YouTube/Hugging Face | 有 Python 基础 | 迁移学习、分词、微调、文本嵌入、模型评估 |
+
+### 学习建议
+
+- **不要同时学多门课程**：选一门主线课程（推荐 Microsoft AI for Beginners 或 Stanford CS229），从头到尾学完再看其他的。
+- **边学边练**：每学一个概念，立刻用小项目验证。比如学完回归就拿一个公开数据集跑一遍。
+- **加入学习社区**：Microsoft AI Discord、Hugging Face 社区、Reddit r/MachineLearning 都是不错的讨论场所。
+- **定期回顾**：AI 领域更新很快，但基础概念（偏差-方差、过拟合、梯度下降）不会变。打好基础再看新论文会更轻松。
+
 ## 延伸阅读
 
 - [人工智能入门](../人工智能入门/)
@@ -97,4 +138,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 00:07:00*
+*资源区块更新时间：2026-07-12 05:04:02*

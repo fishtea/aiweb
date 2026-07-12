@@ -735,6 +735,113 @@ def route_by_quality(self, merged):
 
 ---
 
+## 🏛️ Google ADK：多Agent系统的企业级架构（2026）
+
+> 来源：Google Cloud Blog — [Building Collaborative AI: A Developer's Guide to Multi-Agent Systems with ADK](https://cloud.google.com/blog/topics/developers-practitioners/building-collaborative-ai-a-developers-guide-to-multi-agent-systems-with-adk)（2025-11）
+
+Google 的 **Agent Development Kit (ADK)** 从底层就为多Agent系统而设计，提供了结构化的层次架构，而非将不同组件拼凑在一起。
+
+### 多Agent系统的三个核心理念
+
+| 理念 | 说明 | 类比 |
+|------|------|------|
+| **去中心化控制** | 没有"老板"Agent 统一指挥，每个Agent基于自身规则和局部信息独立决策 | 鸟群——没有领导者，却形成协调的飞行模式 |
+| **局部视图** | 每个Agent只感知和响应其直接环境，而非整个系统状态 | 球场观众——只看得到周围的人，看不到全场 |
+| **涌现行为** | 简单的局部交互产生复杂、智能的全局行为 | 蚁群——简单个体规则涌现出复杂社会行为 |
+
+### ADK 的三种 Agent 类型
+
+| 类型 | 角色 | 说明 |
+|------|------|------|
+| **LLM Agent** | 大脑 🧠 | 利用 Gemini 等大模型理解自然语言、推理问题、决定行动方案 |
+| **Workflow Agent** | 管理者 📋 | 不执行具体任务，而是编排其他Agent的执行流程 |
+| **Custom Agent** | 专家 🔧 | 继承 `BaseAgent`，用 Python 编写特定逻辑和完全自定义行为 |
+
+### Agent 层级结构（Agent Hierarchy）
+
+ADK 将Agent组织成树形层级，类似公司组织架构：
+
+```
+Root Agent (CEO)
+  ├── VP Agent (研发)
+  │   ├── Director (前端)
+  │   └── Director (后端)
+  └── VP Agent (市场)
+      └── Director (内容)
+```
+
+核心规则：
+- **父Agent可管理多个子Agent**，委托任务给它们
+- **每个Agent只能有一个父Agent**，确保清晰的指令和数据流线
+
+### 三种工作流编排器（Workflow Agents）
+
+| 编排器 | 模式 | 适用场景 |
+|--------|------|---------|
+| **SequentialAgent** | 流水线——子Agent按预定顺序逐个执行，前一个的输出作为后一个的输入 | `fetch data → clean data → analyze → summarize` |
+| **ParallelAgent** | 并行——所有子Agent同时执行 | 同时调用3个不同API收集信息 |
+| **LoopAgent** | 循环——反复执行子Agent直到条件满足或达到最大迭代次数 | 轮询API状态、重试直到成功 |
+
+### Agent 间通信机制
+
+ADK 提供三种通信方式：
+
+| 机制 | 原理 | 类比 |
+|------|------|------|
+| **Shared Session State** | Agent将结果写入共享状态对象，其他Agent可读取 | 共享数字白板 |
+| **LLM-Driven Delegation** | 父Agent（LLM Agent）分析请求，推理出最适合的子Agent并动态路由 | 协调者按需分派 |
+| **AgentTool（显式调用）** | 一个Agent将另一个Agent包装为\"工具\"，通过函数调用方式直接调用 | 外部顾问——需要时调用，不属于核心团队 |
+
+### Sub-Agent vs AgentTool 的区别
+
+| 维度 | Sub-Agent | AgentTool |
+|------|-----------|-----------|
+| 关系 | 层级中的固定成员 | 外部"顾问" |
+| 生命周期 | 始终在编 | 按需调用 |
+| 使用方式 | 父Agent管理、委托 | 作为工具被调用 |
+
+### ADK 快速上手
+
+```bash
+pip install google-adk
+```
+
+```python
+from google.adk.agents import LlmAgent, SequentialAgent
+from google.adk.tools import google_search
+
+# 定义子Agent
+researcher = LlmAgent(
+    name="researcher",
+    model="gemini-2.5-pro",
+    instruction="Research the given topic and provide key findings",
+    tools=[google_search]
+)
+
+writer = LlmAgent(
+    name="writer",
+    model="gemini-2.5-pro",
+    instruction="Write a comprehensive summary based on research findings",
+)
+
+# 用 SequentialAgent 编排流水线
+pipeline = SequentialAgent(
+    name="research_pipeline",
+    sub_agents=[researcher, writer]
+)
+
+result = pipeline.run("Latest advances in AI agents 2026")
+```
+
+> **选型建议**：如果你的技术栈在 GCP 生态中，ADK 是原生选择；如果追求框架无关性和社区生态，LangGraph 更通用。ADK 的层级结构设计使其在超大规模多Agent系统中优势明显。
+
+### 参考来源
+- [Google ADK Documentation](https://google.github.io/adk-docs/)
+- [ADK Samples on GitHub](https://github.com/google/adk-samples)
+- [ADK Codelab](https://codelabs.developers.google.com/onramp/instructions#0)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -747,4 +854,4 @@ def route_by_quality(self, merged):
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 00:07:00*
+*资源区块更新时间：2026-07-12 05:04:02*

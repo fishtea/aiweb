@@ -354,6 +354,124 @@ LangChain 生态在 2026 年 Q3 初的迭代节奏约为：
 
 ---
 
+## LangChain v1.x `create_agent` 全解析（2026 实战模式）
+
+> 来源：JetBrains Blog — [LangChain Python Tutorial: A Complete Guide for 2026](https://blog.jetbrains.com/pycharm/2026/02/langchain-tutorial-2026)
+
+LangChain v1.0 将 Agent 创建简化为 `create_agent()` 一个函数调用，彻底告别了旧版 `create_react_agent` + `AgentExecutor` 的组合。
+
+### 核心 API
+
+```python
+from langchain.agents import create_agent
+
+agent = create_agent(
+    model="gpt-5",       # 支持 GPT-4o/5、Claude、Gemini 等
+    tools=tools,          # @tool 装饰器定义的工具列表
+    system_prompt="...",  # 系统提示词
+)
+```
+
+### 静态 vs 动态模型
+
+LangChain v1.x 区分两种模型使用模式：
+
+| 模式 | 特点 | 适用场景 |
+|------|------|---------|
+| **静态模型** | Agent 创建时固定模型，运行期间不变 | 大多数常规场景 |
+| **动态模型** | 运行时根据状态/上下文切换模型 | 需要模型回退、成本优化的场景 |
+
+**动态模型示例**——通过 `ModelFallbackMiddleware` 实现主模型失败时自动切换到备用模型：
+
+```python
+from langchain.agents.middleware import ModelFallbackMiddleware
+
+agent = create_agent(
+    model="gpt-4o",
+    tools=[],
+    middleware=[
+        ModelFallbackMiddleware(
+            "gpt-4o-mini",
+            "claude-3-5-sonnet-20241022",
+        ),
+    ],
+)
+```
+
+### 工具（Tools）——@tool 装饰器
+
+LangChain v1.x 使用 `@tool` 装饰器定义工具，比旧版更简洁：
+
+```python
+@tool
+def search_db(query: str, limit: int = 10) -> str:
+    """Search the customer database for records matching the query."""
+    ...
+    return f"Found {limit} results for '{query}'"
+
+@tool("pycharm_docs_search", return_direct=False)
+def pycharm_docs_search(q: str) -> str:
+    """Search the local FAISS index of documentation."""
+    ...
+    docs = retriever.get_relevant_documents(q)
+    return format_docs(docs)
+```
+
+### 中间件（Middleware）一览
+
+中间件是 LangChain v1.x 最强大的扩展机制，可在 Agent 运行时拦截和定制行为：
+
+| 中间件 | 功能 |
+|--------|------|
+| **Summarization** | Token 接近上限时自动摘要对话历史 |
+| **Human-in-the-loop** | 工具调用前暂停等待人工审批 |
+| **Context editing** | 修剪或清除工具调用记录，管理上下文长度 |
+| **PII detection** | 检测并处理个人身份信息 |
+| **ModelFallback** | 主模型失败时自动切换到备用模型 |
+| **ToolRetry** | 工具调用失败时自动重试 |
+
+### 文档问答实战（FAISS + LangChain）
+
+JetBrains 教程中的完整文档问答 Agent 模式：
+
+```python
+from langchain.agents import create_agent
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+
+# 1. 定义文档搜索工具
+@tool("pycharm_docs_search")
+def pycharm_docs_search(q: str) -> str:
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    vector_store = FAISS.load_local(
+        "index_dir", embeddings, allow_dangerous_deserialization=True
+    )
+    retriever = vector_store.as_retriever(
+        search_type="mmr", search_kwargs={"k": 4, "fetch_k": 12}
+    )
+    docs = retriever.invoke(q)
+    return format_docs(docs)
+
+# 2. 创建 Agent
+agent = create_agent(
+    model="gpt-5",
+    tools=[pycharm_docs_search],
+    system_prompt="You are a helpful assistant. Always consult the docs tool before answering. Cite sources."
+)
+
+# 3. 调用
+result = agent.invoke({"messages": [{"role": "user", "content": "How to debug in PyCharm?"}]})
+```
+
+### 架构最佳实践
+
+> 2026 年 LangChain Agent 架构的推荐分层：
+> - **LangChain v1.x `create_agent`**：适合简单到中等复杂度的单 Agent 场景
+> - **LangGraph StateGraph**：需要精确控制循环、分支、人工干预的生产级 Agent
+> - **DeepAgents**：长时间运行（数小时/天）的复杂编程或研究任务
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -366,4 +484,4 @@ LangChain 生态在 2026 年 Q3 初的迭代节奏约为：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 00:07:00*
+*资源区块更新时间：2026-07-12 05:04:02*
