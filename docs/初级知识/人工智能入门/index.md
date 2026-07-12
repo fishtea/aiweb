@@ -362,4 +362,4 @@ def agent_turn(user_message, entity_graph):
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 05:04:02*
+*资源区块更新时间：2026-07-13 00:08:05*

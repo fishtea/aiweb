@@ -81,12 +81,79 @@ print(accuracy_score(y_test, pred))
 | 中文乱码 | 编码不一致 | 尝试 `encoding="utf-8"` 或 `gbk` |
 | 训练分数很高、测试很低 | 过拟合或数据泄漏 | 重新划分数据，检查特征 |
 
+## 2026 Python 数据科学生态系统
+
+Python 的数据科学生态在 2026 年发生了显著变化。以下是最值得关注的新工具和趋势。
+
+### Polars：Pandas 的现代替代品
+
+Pandas 仍然是 Python 数据处理的标配，但 [Polars](https://pola.rs/) 在 2026 年已经成为一个不可忽视的竞争者：
+
+| 对比维度 | Pandas | Polars |
+|----------|--------|--------|
+| 执行模型 | 即时执行（Eager） | 惰性执行（Lazy），查询优化器自动优化 |
+| 多核利用 | 默认单核，Pandas 2.x 开始改善 | 原生多核并行 |
+| 大数据集性能 | 中等规模（<10GB）表现好 | 10GB+ 数据集显著更快，部分场景快 10-50 倍 |
+| 内存效率 | 会复制数据，内存占用高 | 零拷贝和查询下推，内存更高效 |
+| API 风格 | DataFrame API，多年积累 | 类似 Pandas 但有自己习惯 |
+| 流式处理 | 不支持 | 支持流式处理超大文件（内存只保存窗口数据） |
+
+> 来源：Kanaries, "Polars vs Pandas：2026 年你该用哪个 DataFrame 库？", https://docs.kanaries.net/zh/articles/polars-vs-pandas。
+
+**实践建议**：Pandas 对中小规模数据、快速原型和 Jupyter 交互式分析仍然是最顺手的；Polars 在面对大数据集、性能瓶颈和生产流水线时更具优势。很多团队的做法是——Pandas 做探索分析，Polars 做生产管道。
+
+### Jupyter AI：AI 驱动的交互式计算
+
+2025-2026 年，Jupyter 生态最大的变化是 **Jupyter AI** 的成熟。这是 JupyterLab 的官方 AI 扩展，把大语言模型直接带入 notebook 体验：
+
+- **`%%ai` 魔法命令**：在 notebook cell 中用一行命令调用 AI，如 `%%ai chatgpt` 或 `%%ai ollama`，直接把 AI 输出嵌入实验流程。
+- **多提供商支持**：支持 OpenAI、Anthropic、Gemini、HuggingFace、Ollama、MistralAI 等主流提供商。
+- **Notebook Intelligence (NBI)**：2025 年 3 月推出的扩展，支持 AI 补全、代码生成和工具调用。
+- **本地模型支持**：通过 Ollama 和 GPT4All 运行本地模型，适合隐私敏感场景。
+
+> 来源：LLM Info, "Jupyter AI", https://llm.info/tools/jupyter-ai。
+
+### 其他值得关注的工具
+
+| 工具 | 定位 | 说明 |
+|------|------|------|
+| **DuckDB** | 嵌入式分析数据库 | 直接对 CSV/Parquet 文件运行 SQL，无需导入。适合快速数据探索 |
+| **FireDucks** | Pandas 加速替代 | 兼容 Pandas API 但并行化执行，宣称可比 Pandas 快 10x 以上 |
+| **PyTorch 2.x / JAX** | 深度学习框架 | PyTorch 2.x 的 `torch.compile` 大幅优化训练性能；JAX 在科研场景中增长迅速 |
+| **scikit-learn 2.0+** | 传统 ML 工具包 | 持续更新中，加入更多实用接口 |
+
+> 来源：Daily Dose of Data Science, "FireDucks vs. Pandas vs. DuckDB vs. Polars", https://www.dailydoseofds.com/p/fireducks-vs-pandas-vs-duckdb-vs-polars/。
+
+### 2026 学习路径建议
+
+对于初学者，推荐的学习顺序已经与几年前有所不同：
+
+1. **Python 基础**（变量、控制流、函数）→ 2-3 周
+2. **Pandas 基础**（读取 CSV、筛选、分组聚合）→ 1-2 周
+3. **NumPy 基础**（数组操作、广播）→ 配合 Pandas 学习
+4. **DuckDB 或 Polars**（大数据集处理）→ 有需要时再学
+5. **Matplotlib / Seaborn**（可视化）→ 贯穿始终
+6. **scikit-learn 快速上手**（训练第一个模型）→ 1 周
+7. **Jupyter AI 辅助** → 用于加速实验和理解代码
+
+### 环境管理最佳实践
+
+| 工具 | 用途 | 推荐指数 |
+|------|------|----------|
+| **uv** | 2025-2026 年新兴的极速包管理工具，替代 pip/poetry | ⭐⭐⭐⭐⭐ |
+| **conda / mamba** | 管理复杂依赖和 Python 版本 | ⭐⭐⭐⭐ |
+| **venv** | Python 内置虚拟环境，轻量可靠 | ⭐⭐⭐⭐ |
+| **Dev Containers** | VSCode 容器开发环境，项目环境完全隔离 | ⭐⭐⭐ |
+
+> 参考：ABC Trainings, "Artificial Intelligence Fundamentals India 2026", https://abctraining.in/blog/artificial-intelligence-fundamentals-india-1775082075095。
+
 ## 延伸阅读
 
 - [数据与特征工程](../数据与特征工程/)
 - [机器学习基础](../机器学习基础/)
 - [PyTorch](/工具专区/PyTorch/)
 - [TensorFlow](/工具专区/TensorFlow/)
+- [生成式 AI 基础](../生成式AI基础/)
 
 ## 资料整理状态
 
@@ -100,4 +167,4 @@ print(accuracy_score(y_test, pred))
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 05:04:02*
+*资源区块更新时间：2026-07-13 00:08:05*

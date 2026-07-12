@@ -181,7 +181,43 @@ AutoGPT 作为先驱验证了"LLM 自主循环"的可行性，但也暴露了第
 - **云托管 Beta 版**：加入 waitlist 即可使用，无需自建基础设施
 - **一键安装脚本**：`curl -fsSL https://setup.agpt.co/install.sh -o install.sh && bash install.sh`
 
-### 3. 支持的模型（2026）
+### 3. 自托管部署
+
+根据 [AutoGPT README](https://github.com/Significant-Gravitas/AutoGPT)：
+
+**系统要求：**
+| 资源 | 最低要求 | 推荐 |
+|------|---------|------|
+| CPU | 4 核 | 8 核+ |
+| 内存 | 8 GB | 16 GB |
+| 存储 | 10 GB 空闲 | SSD |
+| 软件 | Docker 20.10+, Docker Compose 2.0+, Git, Node.js 16+ | — |
+
+**支持的操作系统**：Linux (Ubuntu 20.04+)、macOS (10.15+)、Windows 10/11 (需 WSL2)
+
+### 4. 示例 Agent
+
+AutoGPT README 展示了两个典型场景：
+
+1. **热门话题短视频生成**：读取 Reddit 话题 → 识别趋势 → 自动创建短视频
+2. **YouTube 金句提取**：订阅 YouTube 频道 → 新视频发布时自动转录 → AI 识别精彩语录 → 自动发布社交媒体帖子
+
+### 5. AutoGPT Classic vs Platform
+
+| 维度 | AutoGPT Classic（原版） | AutoGPT Platform（新版） |
+|------|------------------------|--------------------------|
+| 定位 | 命令行自主 Agent | 完整 Agent 开发与部署平台 |
+| 界面 | CLI | Web 可视化前端 |
+| 构建方式 | 代码 + 配置文件 | 低代码 Block 拖拽 |
+| 部署 | 本地 Python 运行 | Docker 容器化 + 云托管可选 |
+| 许可 | MIT | Platform 部分 Polyform Shield，其余 MIT |
+| 适用场景 | 学习和原型验证 | 生产级自动化工作流 |
+
+此外还有两个独立的 MIT 许可项目：
+- **AutoGPT Forge**（`classic/forge`）：Agent 开发框架，用于构建自定义 Agent
+- **AutoGPT Benchmark**（`classic/benchmark` / `agbenchmark`）：Agent 性能评测基准
+
+### 6. 支持的模型（2026）
 
 AutoGPT Platform 现在支持主流 LLM 提供商，包括但不限于：
 
@@ -198,7 +234,7 @@ AutoGPT Platform 现在支持主流 LLM 提供商，包括但不限于：
 - **Microsoft**: Phi-4、WizardLM 2
 - **Cohere**: Command A、Command R
 
-### 4. 许可模型更新
+### 7. 许可模型更新
 
 | 组件 | 许可 |
 |------|------|
@@ -230,4 +266,4 @@ AutoGPT Platform 现在支持主流 LLM 提供商，包括但不限于：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 05:04:02*
+*资源区块更新时间：2026-07-13 00:08:05*

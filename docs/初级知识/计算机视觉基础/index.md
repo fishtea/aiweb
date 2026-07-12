@@ -116,6 +116,65 @@ CNN 并未消失——许多最新架构采用 **CNN + Transformer 混合设计*
 - 用 LLaVA 做图片问答
 - 用 OpenCV + 传统方法做 OCR（用于理解基础图像处理）
 
+### SAM 2：图像与视频分割的基础模型
+
+根据 [SAM 2 GitHub 仓库](https://github.com/facebookresearch/sam2) 和 [Meta 官方发布博客](https://ai.meta.com/blog/segment-anything-2)：
+
+**Segment Anything Model 2（SAM 2）** 是 Meta FAIR 团队推出的分割基础模型，将 SAM 从静态图像扩展到**视频领域**。
+
+#### 核心创新
+
+| 特性 | 说明 |
+|------|------|
+| **图像+视频统一分割** | 图像视为单帧视频，无需单独模型 |
+| **流式记忆（Streaming Memory）** | Transformer 架构 + 流式记忆实现实时视频处理 |
+| **可提示交互** | 点击、框选、涂抹等方式指定分割目标 |
+| **多目标跟踪** | SAM2VideoPredictor 支持多对象独立推理 |
+| **模型内循环数据引擎** | 通过用户交互持续改进模型和数据 |
+
+#### SAM 2.1（2024年9月发布）
+
+- **改进的模型检查点**：SAM 2.1 系列（tiny / small / base_plus / large）
+- **开放训练代码**：支持微调和自定义训练（`training/README.md`）
+- **Web Demo 开源**：前后端完整代码均开源
+- **torch.compile 支持**（2024年12月）：全模型编译，视频对象分割（VOS）推理大幅加速
+
+#### 使用方式
+
+```python
+# 图像分割
+from sam2.build_sam import build_sam2
+from sam2.sam2_image_predictor import SAM2ImagePredictor
+
+checkpoint = "./checkpoints/sam2.1_hiera_large.pt"
+predictor = SAM2ImagePredictor(build_sam2("configs/sam2.1/sam2.1_hiera_l.yaml", checkpoint))
+
+with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
+    predictor.set_image(image)
+    masks, _, _ = predictor.predict(prompts)  # 点击/框选即可
+```
+
+```python
+# 视频分割与追踪
+from sam2.build_sam import build_sam2_video_predictor
+
+predictor = build_sam2_video_predictor(model_cfg, checkpoint)
+with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
+    state = predictor.init_state(video_frames)
+    # 在第一帧添加提示，自动传播到所有帧
+    frame_idx, object_ids, masks = predictor.add_new_points_or_box(state, prompts)
+    for frame_idx, object_ids, masks in predictor.propagate_in_video(state):
+        ...  # 获取每一帧的分割结果
+```
+
+#### SA-V 数据集
+
+SAM 2 配套发布了 **SA-V（Segment Anything Video）** 数据集——目前最大的视频分割数据集，通过模型内循环数据引擎收集，覆盖广泛的任务和视觉领域。
+
+> SAM 2 的意义在于让「分割一切」从图像走进了视频，且延续了 SAM 的开放精神。它在视频编辑、自动驾驶感知、医学影像分析等领域有巨大潜力。
+
+- **参考来源**：[SAM 2 GitHub](https://github.com/facebookresearch/sam2) | [SAM 2 论文](https://ai.meta.com/research/publications/sam-2-segment-anything-in-images-and-videos/) | [SAM 2 博客](https://ai.meta.com/blog/segment-anything-2)
+
 ## 延伸阅读
 
 - [深度学习入门](../深度学习入门/)
@@ -135,4 +194,4 @@ CNN 并未消失——许多最新架构采用 **CNN + Transformer 混合设计*
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-12 05:04:02*
+*资源区块更新时间：2026-07-13 00:08:05*
