@@ -292,7 +292,181 @@ clusters = HDBSCAN(min_cluster_size=5).fit_predict(reduced)
 
 ---
 
+## 2026 年深度学习入门路线图
+
+2026 年，深度学习依然是 AI 领域的核心技术。以下是根据 Scaler 等教育平台推荐的 10 阶段学习路线，适合从零开始的初学者：
+
+### 第一阶段：数学与 Python 基础（第0-1月）
+
+在进入深度学习之前，需要打好基础：
+- **Python 基础**：变量、控制流、函数、模块、调试
+- **线性代数**：向量、矩阵、点积——这些是神经网络层和嵌入（Embedding）的基本运算
+- **微积分**：导数与梯度——理解反向传播的核心
+- **概率与统计**：损失函数、似然估计、不确定性度量
+- 推荐工具：Python、NumPy、Pandas、Matplotlib
+
+### 第二阶段：机器学习基础（第1-2月）
+
+在深入学习深度学习前，先理解机器学习的基本概念：监督学习、非监督学习、过拟合与正则化、模型评估指标。
+
+### 第三阶段：深度学习基础（第2-3月）
+
+从最简单的神经网络入手：
+- 感知机（Perceptron）与多层感知机（MLP）
+- 激活函数（ReLU、Sigmoid、Tanh）
+- 前向传播与反向传播
+- 损失函数与优化器（SGD、Adam）
+
+### 第四至六阶段：CNN → RNN/LSTM → Transformer（第3-6月）
+
+- **CNN（卷积神经网络）**：图像识别、目标检测的基础架构
+- **RNN/LSTM/GRU**：序列数据处理，如时间序列预测、文本生成
+- **Transformer**：现代深度学习的核心架构，支撑了 GPT、BERT 等大模型
+
+### 第七至九阶段：生成模型 → 优化与分布式训练 → 部署（第6-9月）
+
+- **生成模型**：GAN（生成对抗网络）、扩散模型（Diffusion Models）、VAE
+- **训练优化**：混合精度训练、模型并行、分布式训练策略
+- **MLOps 部署**：模型导出（ONNX/TensorRT）、容器化部署、GPU 推理优化
+
+### 2026 年深度学习关键工具
+
+| 工具 | 用途 | 推荐理由 |
+|------|------|---------|
+| **PyTorch** | 深度学习框架 | 学术界默认框架，论文使用率超 90% |
+| **HuggingFace Transformers** | 预训练模型库 | 加载和使用预训练模型的最便捷方式 |
+| **CUDA / cuDNN** | GPU 加速 | 训练和推理必须的底层加速库 |
+| **Weights & Biases** | 实验跟踪 | 记录和可视化训练过程的标准工具 |
+| **ONNX / TensorRT** | 模型优化 | 生产环境推理加速 |
+
+### 参考来源
+
+- [Deep Learning Tutorial for Beginners [2026] — igmGuru](https://www.igmguru.com/blog/deep-learning-tutorial)（2026-04-04）
+- [Deep Learning Roadmap 2026: Step-by-Step Learning Path — Scaler](https://www.scaler.com/blog/deep-learning-roadmap/)（2026-04-08）
+- [How to Learn Deep Learning in 2026: A Complete Guide — DataCamp](https://www.datacamp.com/blog/how-to-learn-deep-learning)（2024-02-29 最后更新）
+
+---
+
 *本页面内容基于真实在线资源编写。所有课程信息、评分和描述均源自各课程官方网站（截至 2026 年 7 月）。*
+
+## PyTorch 官方入门教程实战解析（2026年更新版）
+
+PyTorch 官方提供了 **Learn the Basics** 入门教程（最后更新 2026-01-20），以 FashionMNIST 数据集为例，带你走通完整的深度学习工作流。以下是 7 个核心模块的精要：
+
+### 0. Quickstart — 5 分钟快速体验
+
+如果你有其他框架经验，可以先跑这个快速入门，感受 PyTorch 的 API 风格：
+
+```python
+import torch
+from torch import nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+# 加载数据
+training_data = datasets.FashionMNIST(root="data", train=True, download=True,
+                                       transform=transforms.ToTensor())
+train_loader = DataLoader(training_data, batch_size=64)
+
+# 定义模型
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28*28, 512), nn.ReLU(),
+            nn.Linear(512, 512), nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+    def forward(self, x):
+        return self.linear_relu_stack(self.flatten(x))
+
+model = NeuralNetwork()
+```
+
+### 1. Tensors（张量）— PyTorch 的核心数据结构
+
+Tensor 是 PyTorch 中的多维数组，类似于 NumPy 的 ndarray，但可以在 GPU 上加速运算：
+
+- `torch.zeros()`, `torch.ones()`, `torch.rand()` — 创建张量
+- `.to("cuda")` — 将张量移到 GPU
+- Tensor 和 NumPy 之间的无缝转换（共享内存）
+
+### 2. Datasets & DataLoaders — 数据加载标准化
+
+PyTorch 提供 `torch.utils.data.Dataset` 和 `DataLoader`：
+
+- `Dataset`：存储样本和标签
+- `DataLoader`：自动分批（batching）、打乱（shuffling）、多进程加载
+- 内置数据集：FashionMNIST、CIFAR-10、ImageNet 等
+
+### 3. Transforms（数据增强与预处理）
+
+`torchvision.transforms` 提供常用变换：
+
+```python
+transforms.Compose([
+    transforms.ToTensor(),           # PIL → Tensor
+    transforms.Normalize((0.5,), (0.5,))  # 归一化
+])
+```
+
+### 4. Build Model（构建模型）
+
+- 继承 `nn.Module`，定义 `__init__` 和 `forward`
+- 使用 `nn.Sequential` 快速堆叠层
+- `model.to(device)` 将模型移至 GPU
+
+### 5. Autograd（自动求导）
+
+PyTorch 的核心魔法——自动计算梯度：
+
+```python
+loss.backward()  # 自动计算所有参数的梯度
+optimizer.step() # 更新参数
+```
+
+无需手动推导反向传播公式。
+
+### 6. Optimization Loop（训练循环）
+
+标准训练循环模板：
+
+```python
+for epoch in range(epochs):
+    for X, y in train_loader:
+        X, y = X.to(device), y.to(device)
+        pred = model(X)           # 前向传播
+        loss = loss_fn(pred, y)   # 计算损失
+        optimizer.zero_grad()     # 清空梯度
+        loss.backward()           # 反向传播
+        optimizer.step()          # 更新参数
+```
+
+### 7. Save & Load Model（模型保存与加载）
+
+```python
+torch.save(model.state_dict(), "model.pth")   # 保存权重
+model.load_state_dict(torch.load("model.pth")) # 加载权重
+```
+
+### 2026 年 PyTorch 学习建议
+
+| 阶段 | 内容 | 预计时间 |
+|------|------|:--------:|
+| 入门 | 跑通官方 Learn the Basics 教程 | 2-3 天 |
+| 进阶 | 实现一个 CNN 图片分类器（CIFAR-10） | 1 周 |
+| 实战 | 用 HuggingFace Transformers 微调 BERT/GPT | 1-2 周 |
+| 工程化 | 学习混合精度训练、分布式训练、ONNX 导出 | 2-4 周 |
+
+> 💡 **2026 年关键提醒**：PyTorch 2.x 引入了 `torch.compile()`，可将模型编译为优化的计算图，推理速度提升 30-50%。在部署前加一行 `model = torch.compile(model)` 即可获得免费加速。
+
+### 参考来源
+
+- [PyTorch — Learn the Basics](https://pytorch.org/tutorials/beginner/basics/intro.html)（2026-01-20 更新）
+- [PyTorch 2.x 文档 — torch.compile](https://pytorch.org/docs/stable/torch.compiler.html)
+
+---
 
 ## 资料整理状态
 
@@ -306,4 +480,4 @@ clusters = HDBSCAN(min_cluster_size=5).fit_predict(reduced)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-13 00:08:05*
+*资源区块更新时间：2026-07-14 00:10:05*

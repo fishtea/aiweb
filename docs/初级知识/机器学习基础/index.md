@@ -508,6 +508,110 @@ Dataclass/Pydantic       ←      魔术方法
 
 *本页面内容基于真实在线资源编写。所有课程信息、评分和描述均源自各课程官方网站（截至 2026 年 7 月）。*
 
+## 2026 年机器学习工具链与生态概览
+
+### 三大框架最新动态
+
+| 框架 | 2026 状态 | 适用场景 |
+|------|----------|---------|
+| **scikit-learn** | v1.6，稳定成熟 | 传统 ML（分类、回归、聚类）的首选 |
+| **PyTorch** | v2.6，学术界标准 | 深度学习研究，论文实现首选 |
+| **TensorFlow/Keras** | v2.18，稳步更新 | 生产部署、TPU 训练、移动端 |
+
+### scikit-learn：2026 年机器学习入门的正确打开方式
+
+scikit-learn 仍然是机器学习入门的最佳框架。它的 API 设计遵循统一的"fit-predict-transform"范式：
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# 1. 加载数据
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# 2. 初始化模型
+model = RandomForestClassifier(n_estimators=100)
+
+# 3. 训练
+model.fit(X_train, y_train)
+
+# 4. 预测
+y_pred = model.predict(X_test)
+
+# 5. 评估
+print(f"准确率: {accuracy_score(y_test, y_pred):.2%}")
+```
+
+**关键原则**：所有模型共享相同的 API——`.fit()` 训练、`.predict()` 预测、`.transform()` 转换。学会一个，就学会了所有。
+
+### 2026 年 ML 工程必备技能
+
+除了本页面已覆盖的 5 大 Python 进阶概念，现代 ML 工程师还需要掌握：
+
+1. **实验跟踪** — 使用 MLflow 或 Weights & Biases 记录每次实验的参数、指标和模型
+2. **特征存储** — Feast 等工具确保训练/推理时特征计算一致
+3. **模型注册表** — 管理模型版本、阶段（staging/production）和元数据
+4. **数据版本控制** — DVC（Data Version Control）像 Git 一样管理数据集
+
+### 2026 年新趋势：从"调参"到"系统思维"
+
+> 2026 年，单纯会调 sklearn 参数已经不够。真正的竞争力在于：理解数据流水线、模型服务化、监控漂移——这些 ML 系统工程的实践正成为区分初级和高级 ML 工程师的关键标准。
+
+### 参考来源
+
+- [scikit-learn — Machine Learning in Python](https://scikit-learn.org/stable/)（截至 2026-07-13）
+- [PyTorch — From Research to Production](https://pytorch.org/)（v2.6，截至 2026-07-13）
+- [Weights & Biases — ML Experiment Tracking](https://wandb.ai/)
+
+---
+
+## 🔄 2026 年机器学习的新视角：Context Engineering 与 Memory Engineering
+
+> 以下内容基于 Machine Learning Mastery 2026 年 7 月的最新文章整理，帮助初学者理解 ML 在 Agent 时代的新应用方向。
+
+### 为什么 ML 初学者也应该了解 Context Engineering？
+
+当我们从经典的 ML 训练（分类、回归、聚类）扩展到 LLM 和 AI Agent 领域时，一个关键的新概念出现了：**上下文工程（Context Engineering）**。
+
+### 什么是 Context Engineering？
+
+Context Engineering 是**设计单次模型调用中上下文窗口的内容和结构**的实践。它包括：
+
+| 任务 | 说明 | 类比到传统 ML |
+|------|------|-------------|
+| **选择性包含（Selective Inclusion）** | 决定哪些信息进入上下文、哪些丢弃 | 特征选择（Feature Selection） |
+| **结构放置（Structural Placement）** | 关键信息放在窗口的开头或结尾（避免\"lost in the middle\"效应） | 特征排序对模型的影响 |
+| **压缩到达（Compression on Arrival）** | 工具返回的原始数据先压缩再进入上下文 | 数据降维（Dimensionality Reduction） |
+| **历史对话管理** | 决定保留多少轮对话 | 滑动窗口（Sliding Window） |
+
+### 什么是 Memory Engineering？
+
+Memory Engineering 关注的是**跨会话、跨 Agent 持久化信息**——包括写入策略、存储层选择、检索策略和更新策略。一个结构良好的记忆系统是区分"演示级 Agent"和"生产级 Agent"的关键。
+
+### 表格式对比
+
+| 维度 | Context Engineering | Memory Engineering |
+|------|-------------------|-------------------|
+| 作用域 | 单次推理调用 | 跨调用、跨会话 |
+| 数据位置 | 模型活动窗口内 | 外部存储（向量数据库、KV 存储、关系数据库） |
+| 核心问题 | 该包含什么？如何排列？ | 该持久化什么？如何检索？如何信任？ |
+| 失败模式 | 窗口填满、位置错误、噪声掩盖信号 | 检索遗漏、数据过期、中毒攻击 |
+| 数据生命周期 | 一次 LLM 调用的时长 | 取决于记忆类型（短期/长期） |
+
+### 对 ML 初学者的启示
+
+虽然 Context Engineering 和 Memory Engineering 是 Agent 领域的术语，但其核心思想与经典 ML 一脉相承：**数据质量决定模型表现**。无论你处理的是表格数据还是 Agent 上下文，理解"哪些数据该进入模型、以什么形式进入、从哪里获取"才是根本。
+
+> 优秀的 ML 工程师=懂得构建数据流水线的工程师。在 Agent 时代，好的 Agent 架构师=懂得设计上下文和记忆的工程师。
+
+### 参考来源
+
+- [Context vs. Memory Engineering in Agentic AI Systems — Machine Learning Mastery](https://machinelearningmastery.com/context-vs-memory-engineering-in-agentic-ai-systems/)（Bala Priya C, 2026-07-03）
+- [The AI Agent Tech Stack Explained — Machine Learning Mastery](https://machinelearningmastery.com/the-ai-agent-tech-stack-explained/)（Shittu Olumide, 2026-06-27）
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -520,4 +624,4 @@ Dataclass/Pydantic       ←      魔术方法
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-13 00:08:05*
+*资源区块更新时间：2026-07-14 00:10:05*

@@ -6572,12 +6572,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 185492.0,
-    "verified_at": "2026-07-13 00:07:58",
+    "provider_score": 185504.0,
+    "verified_at": "2026-07-13 17:01:34",
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-13",
-    "seen_count": 38,
+    "seen_count": 46,
     "query": "GitHub AI 热门项目 周榜"
   },
   {
@@ -6632,12 +6632,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 165536.0,
-    "verified_at": "2026-07-13 00:07:58",
+    "provider_score": 165593.0,
+    "verified_at": "2026-07-13 17:01:34",
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-13",
-    "seen_count": 36,
+    "seen_count": 44,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6662,12 +6662,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 98967.0,
-    "verified_at": "2026-07-13 00:07:58",
+    "provider_score": 99001.0,
+    "verified_at": "2026-07-13 17:01:34",
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-13",
-    "seen_count": 36,
+    "seen_count": 44,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6692,12 +6692,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 94829.0,
-    "verified_at": "2026-07-13 00:07:58",
+    "provider_score": 94857.0,
+    "verified_at": "2026-07-13 17:01:34",
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-13",
-    "seen_count": 36,
+    "seen_count": 44,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6722,12 +6722,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 86934.0,
-    "verified_at": "2026-07-13 00:07:58",
+    "provider_score": 87016.0,
+    "verified_at": "2026-07-13 17:01:34",
     "verify_status": 200,
     "first_seen": "2026-07-02",
     "last_seen": "2026-07-13",
-    "seen_count": 36,
+    "seen_count": 44,
     "query": "trending AI projects GitHub"
   },
   {
