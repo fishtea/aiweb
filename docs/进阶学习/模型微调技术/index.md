@@ -541,6 +541,149 @@ NVIDIA NeMo AutoModel 在 Transformers v5 基础上添加了：
 
 ---
 
+## 10. 实战案例：用 Unsloth 微调 0.6B 模型做领域分类
+
+### 10.1 案例背景
+
+**来源：** [Fine Tuning a Local LLM to Categorize Questions - Teach Me Cool Stuff (2026-06-16)](https://www.teachmecoolstuff.com/viewarticle/fine-tuning-a-local-llm-to-categorize-questions)（HN 215 分）
+
+作者 Torgeir Helgevold 构建了一个家庭知识库聊天机器人，背后使用 RAG 从向量数据库中检索信息。为了提升检索精度，他需要一个问题预处理步骤——先对用户问题做**元数据分类**（如 "pool"、"hvac"、"cooking"），用分类结果缩小向量搜索空间。
+
+核心假设：一个仅有 **6 亿参数**的极小本地模型（Qwen 3:0.6B），经过微调后能否成为可靠的问题分类器？
+
+### 10.2 技术方案
+
+- **问答模型**：Qwen 3:4B（通用对话）
+- **分类模型**：Qwen 3:0.6B（问题分类器）
+- **微调框架**：Unsloth（专为 Llama/Qwen 优化的开源框架）
+- **训练数据**：约 850 条标注数据，70/15/15 比例拆分为训练/验证/测试集
+
+```json
+[
+  { "question": "Who cleans our gutters at the house?", "category": "gutters" },
+  { "question": "What dimensions are the air filters for the home AC?", "category": "hvac" },
+  { "question": "Which store do we usually buy pinnekjott from?", "category": "cooking" }
+]
+```
+
+### 10.3 实验结果
+
+| 阶段 | 方法 | 效果 |
+|------|------|------|
+| 基线 | 未微调的 Qwen 0.6B + Prompt 分类 | 不可靠，分类混乱 |
+| 微调后 | Qwen 0.6B + Unsloth LoRA 微调 | 可靠分类，准确率满足生产需求 |
+
+### 10.4 关键启示
+
+1. **极小的模型也能胜任窄领域任务**：0.6B 模型经过微调后，在限定类别（10-20 类）的分类任务上可以达到生产级准确率
+2. **Unsloth 降低微调门槛**：在消费级 GPU 上即可完成微调，无需云端集群
+3. **微调的目标是"塑形"而非"喂知识"**：这里不是让模型"学知识"，而是训练它学会一个稳定的分类行为
+4. **RAG + 分类器的组合模式**：先用微调的小模型做意图/主题分类缩小检索范围，再用大模型 + RAG 生成回答——这是一种高性价比的 Agent 架构模式
+
+> 来源参考：[Fine Tuning a Local LLM to Categorize Questions](https://www.teachmecoolstuff.com/viewarticle/fine-tuning-a-local-llm-to-categorize-questions)（HN 215 分，2026年6月）
+
+---
+
+## 11. 推理模型微调：SFT vs 强化学习
+
+### 11.1 问题场景
+
+**来源：** [Finetuning a Reasoning LLM with Supervised or Reinforcement Learning? - HuggingFace Forums (2026-06)](https://discuss.huggingface.co/t/finetuning-a-reasoning-llm-with-supervised-or-reinforcement-learning/176449)
+
+当你需要微调一个具有推理和工具调用能力的 LLM 时，数据集不仅包含最终答案，还包含**推理链**（`assistant_think`）和**工具调用决策**（`assistant_tool`）。此时训练策略面临两个核心问题：
+
+1. 如何组织训练数据格式？
+2. SFT 之后是否需要引入强化学习（RL）？
+
+### 11.2 训练数据组织原则
+
+社区讨论（用户 John6666）给出了清晰的分层建议：
+
+**数据格式转换：** 将 `assistant_think`、`assistant_tool`、`assistant_answer` 视为内部标注格式，**转换为目标模型的实际聊天模板和工具调用格式**，而非直接当作模型角色训练。
+
+**损失掩码（Loss Masking）：** 仅对 assistant 部分（`think + tool + answer`）计算损失，系统和用户消息应被掩码。这样可以确保模型学习"给定上下文后如何响应"，而不是学习"用户会说什么"。
+
+**训练样本拆分：** 将多轮对话拆分为多个训练样本，每个样本包含到当前轮为止的完整历史：
+
+```
+样本1: system → user1 → assistant1
+样本2: system → user1 → assistant1 → user2 → assistant2
+```
+
+### 11.3 SFT → DPO → RL 的渐进路线
+
+| 阶段 | 使用条件 | 说明 |
+|------|---------|------|
+| **SFT 先行** | 已有正确轨迹数据 | 这是起点，不应跳过 |
+| **DPO（偏好优化）** | 能构造"好/坏"轨迹对 | 无需奖励模型，适合偏好对齐（语气、拒绝模式） |
+| **GRPO / RL** | 有可执行工具 + 部署环境 + 可靠奖励函数 | 只在 SFT 和 DPO 仍不足时考虑 |
+
+### 11.4 关键补充策略
+
+- **添加边界样本**：训练集中应包含"无工具可用""需要澄清""工具不可用"等边界情况，否则模型面对这些场景会不稳定
+- **RL 的适用边界**：RL 的核心价值在于"教模型何时该用/不该用工具"，但这需要可执行工具的真实部署环境和可靠的奖励信号——缺乏这些条件时，RL 反而可能降低模型质量
+- **多数场景 SFT 已足够**：如果你的数据已经覆盖了正确的推理-工具-回答模式，SFT 就能取得很好的效果，不必急于引入 RL 的复杂性
+
+> 来源参考：[HuggingFace Forums - Finetuning a Reasoning LLM](https://discuss.huggingface.co/t/finetuning-a-reasoning-llm-with-supervised-or-reinforcement-learning/176449)
+
+---
+
+## 12. 2026年7月微调技术前沿
+
+### 12.1 课程式渐进微调：MinHash 相似度调度
+
+**来源：** [Similarity-Guided Curriculum Fine-Tuning of LLMs for Neural Architecture Synthesis - arXiv:2607.11591 (2026-07-13)](https://arxiv.org/abs/2607.11591v1)
+
+传统微调将全部训练数据一次性喂给模型，而这篇来自 University of Würzburg 团队的研究提出了一种**基于 MinHash 相似度的课程式渐进微调策略**，专门针对神经网络架构搜索（NAS）场景。
+
+**核心技术思路：**
+
+1. **MinHash 签名生成**：对归一化后的源代码 7-gram 片段生成 128 排列（permutation）的 MinHash 签名
+2. **相似度分桶**：将参考代码池按签名相似度划分为多个 band
+3. **渐进式训练**：从高相似度（简单）样本开始，逐步推进到低相似度（困难）样本
+4. **LoRA Adapter 累积合并**：每个训练阶段的 LoRA 权重累积合并到 backbone 模型中
+
+**关键实验发现：**
+
+| 实验设置 | 峰值成功率（Peak SR） |
+|---------|---------------------|
+| 高相似度阶段（无修复） | **60%** |
+| 最大多样性阶段（课程模型，无修复） | 7% |
+| 最大多样性阶段（基础模型，无修复） | 47% |
+| 最大多样性阶段（课程模型 + 部分接口修复） | 53% |
+| 最大多样性阶段（基础模型 + 部分接口修复） | 53% |
+
+> **核心洞察**：课程式微调在训练早期表现惊人（60% 成功率），但在高多样性阶段会急剧退化。研究发现这与 **LoRA 权重累积合并导致的"权重漂移"（weight drift）** 有关——逐步合并 LoRA adapter 会让模型逐渐"遗忘"评估器接口的先验知识。关键启示：**课程调度（curriculum scheduling）和接口修复（interface repair）针对的是不同的失败模式**，两者互补而非替代。
+
+在 SVHN 数据集上的跨数据集迁移实验进一步验证了这一点：直接使用基础模型生成（无课程预热）在 SVHN 上仅获得 27% 峰值成功率，且准确率（60.5%）明显低于 CIFAR-10，说明任务难度的增加会放大课程策略的收益。
+
+---
+
+### 12.2 联邦学习中的 LoRA 遗忘：HermesHFL 框架
+
+**来源：** [HermesHFL: Incentive-Compatible Hierarchical Federated Unlearning for Dynamic LLM Fine-Tuning - arXiv:2607.11528 (2026-07-13)](https://arxiv.org/abs/2607.11528v1)
+
+随着隐私法规（如 GDPR"被遗忘权"）的普及，联邦学习场景下的**模型遗忘（unlearning）**成为一个关键挑战。这篇论文提出了 HermesHFL，一个支持选择性遗忘、动态客户端参与和客户端重新加入的层次化联邦学习框架。
+
+**为何联邦遗忘比集中式遗忘更难？**
+- 模型更新在多层聚合节点间传播，无法简单地"撤销"某个客户端的贡献
+- 遗忘请求可能与客户端断开/重新加入同时发生
+- LLM 微调中 LoRA 参数的强耦合性使得选择性移除尤为困难
+
+**HermesHFL 的核心创新：Neogen 优化器**
+
+论文提出了 **Neogen**——一个神经引导的双层进化优化框架：
+
+- **上层（连续优化）**：CMA-ES（协方差矩阵自适应进化策略）优化激励分配
+- **下层（离散优化）**：基于 CHC（跨代精英选择）的进化机制处理客户端参与和边缘关联决策
+- **神经代理模型（Neural Surrogate）**：加速优化过程，提升搜索效率
+
+实验结果表明 HermesHFL 在模型效用、遗忘效果、收敛稳定性和资源效率方面均显著优于现有 baseline。
+
+> **实践意义**：对于企业级联邦微调场景，HermesHFL 提供了生产可用的选择性遗忘方案——当某个数据提供方要求删除其数据贡献时，系统可以在不重新训练的前提下有效移除其影响。
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -553,4 +696,4 @@ NVIDIA NeMo AutoModel 在 Transformers v5 基础上添加了：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-14 00:10:05*
+*资源区块更新时间：2026-07-15 00:07:02*

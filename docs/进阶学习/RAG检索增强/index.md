@@ -491,7 +491,259 @@ CAG：预加载全部文档 → 预计算 KV Cache → 查询 → 直接基于 C
 - [ColPali: Efficient Document Retrieval with Vision-Language Models](https://arxiv.org/abs/2407.01449)
 - [Cache-Augmented Generation (CAG) - arXiv](https://arxiv.org/abs/2412.15605)
 - [Multimodal RAG with LlamaIndex - LlamaIndex Blog](https://www.llamaindex.ai/blog)
-- [ColQwen: Visual Document Retrieval](https://github.com/illuin-tech/colqwen)
+|- [ColQwen: Visual Document Retrieval](https://github.com/illuin-tech/colqwen)
+
+---
+
+## 13. RAGAgent：RAG + Agent 的融合模式
+
+2026 年，RAG 和 Agent 两个范式的边界正在模糊。越来越多的生产系统不再区分"我这个系统是 RAG 还是 Agent"——而是将检索作为 Agent 的工具之一，让 LLM 自主决定何时检索、检索什么、怎么组织检索结果。
+
+### 13.1 为什么需要融合？
+
+传统 RAG 的局限在于**检索是固定流程**：用户查询 → 向量搜索 → 拼入上下文 → 生成。它假设"一次检索就能找到所有答案"。但在真实场景中：
+
+| 传统 RAG 的失败场景 | 表现 |
+|--------------------|------|
+| **多跳问题** | "2024 年诺贝尔物理学奖得主创办的公司叫什么？" → 需要先查诺贝尔奖，再查公司信息 |
+| **对比类问题** | "对比 GPT-4o 和 Claude 3.5 在代码生成上的表现" → 需要分别搜索两种模型 |
+| **信息不足** | 首次检索返回空结果 → 传统 RAG 只能返回空，Agent 可以改写查询重试 |
+| **权限敏感** | 不同用户看到不同文档 → Agent 可以根据用户身份自适应检索范围 |
+
+**RAGAgent 的解决思路：** 将检索抽象为 Agent 的一个工具（或一组工具），Agent 自主规划检索策略，而非在流程图中硬编码。
+
+### 13.2 RAGAgent 的三种架构模式
+
+**来源：** [Agentic RAG with LangGraph - LangChain Blog](https://blog.langchain.dev/agentic-rag-langgraph/), [Building Agentic RAG Systems - LlamaIndex](https://docs.llamaindex.ai/en/stable/examples/agent/agentic_rag/)
+
+| 模式 | 架构描述 | 适用场景 |
+|------|---------|----------|
+| **Tool-based RAG** | 检索作为 Agent 的一个工具（search_docs），Agent 自主决定何时调用 | 通用问答、需要多步推理 |
+| **Query Planning RAG** | Agent 先分析用户问题，拆解为多个子查询并行/串行检索 | 复杂多跳、对比分析问题 |
+| **Adaptive RAG** | Agent 按问题难度路由：简单直接回答，中等单次检索，复杂多步检索 | 需要平衡延迟和准确率 |
+
+### 13.3 Tool-based RAG：检索即工具
+
+最简单的融合模式——将检索封装为一个工具函数，Agent 像调用计算器或搜索一样调用它：
+
+```python
+@tool
+def search_knowledge_base(query: str, top_k: int = 5) -> str:
+    """Search the company knowledge base for relevant documents.
+    
+    Use this tool when you need factual information from internal documentation.
+    The knowledge base contains product docs, policies, and technical references.
+    
+    Args:
+        query: The search query, should be concise and specific
+        top_k: Number of results to return (1-10)
+    
+    Returns:
+        Relevant document excerpts with their source references
+    """
+    # 向量搜索 + 重排序
+    results = vector_store.similarity_search(query, k=top_k)
+    reranked = reranker.rerank(query, results)
+    return format_results(reranked)
+```
+
+**关键设计要点：**
+- **工具描述包含"何时使用"**：帮助 Agent 判断当前场景是否需要检索
+- **参数简洁**：减少 Agent 调用时的出错概率
+- **返回结构化结果**：包含引用来源，便于 Agent 追溯验证
+
+### 13.4 Query Planning RAG：Agent 作为检索规划器
+
+当问题复杂到需要多步、多源检索时，Agent 充当"检索规划器"的角色：
+
+**工作流程：**
+
+```
+用户提问 → Agent 分析问题
+  → 生成检索计划（3 个子查询）
+  → 并行执行 3 个检索
+  → 合并检索结果
+  → 评估是否充分
+  → 如不足，补充检索（可选）
+  → 生成最终回答（含引用）
+```
+
+**示例（对比类问题）：**
+
+```
+用户："对比 LangGraph 和 CrewAI 在多人协作场景中的优劣"
+
+Agent 检索计划：
+1. search("LangGraph multi-agent collaboration features 2026")
+2. search("CrewAI multi-agent orchestration 2026")
+3. search("LangGraph vs CrewAI comparison agent frameworks")
+
+Agent 评估：三个查询结果覆盖了各自的特性和已知对比 → 充分
+Agent 回答：...（综合三个来源生成对比分析）
+```
+
+> **实践建议：** Query Planning 需要增加"充分性评估"步骤。Agent 应在生成最终答案前检查：检索结果是否覆盖了问题的所有方面？信息是否有冲突？如果信息不足，应补充检索。
+
+### 13.5 Adaptive RAG：按需路由
+
+Adaptive RAG 根据问题复杂度动态调整检索策略，是延迟和准确率的最佳平衡点：
+
+```
+用户问题
+  ├── 简单问答（"公司年假政策是什么？"）
+  │   └── → 单次向量检索 → 直接回答
+  ├── 中等复杂度（"远程员工的出差报销流程？"）
+  │   └── → 检索 + 重排序 → 回答
+  └── 复杂问题（"对比去年和今年 Q2 的销售策略变化？"）
+      └── → Query Planning RAG → 多步检索 → 综合回答
+```
+
+**分类方法：**
+| 分类方式 | 实现 | 效果 |
+|---------|------|------|
+| 关键词启发式 | 按问题长度、疑问词类型判断 | 简单高效，但不够精准 |
+| LLM 路由 | 用一个小模型（如 GPT-4o-mini）分类问题 | 准确，增加一次 LLM 调用 |
+| 嵌入相似度 | 将问题与预定义的复杂度模板匹配 | 零额外延迟，需预定义分类 |
+
+### 13.6 RAGAgent 的实践经验
+
+**1. 最少检索原则**：不要让 Agent 过度检索。每多一次检索就多一次延迟和 Token 消耗。能用一次检索解决的问题，不要用两次。
+
+**2. 检索结果缓存**：相同或相似的查询在短时间内复用缓存结果，缓存命中率可达 50-70%。
+
+**3. 检索引用的自动验证**：Agent 在引用检索结果时，应附带原文片段链接，方便人工验证。这是从"可信"到"可证"的关键一步。
+
+**4. 降级路径**：当所有检索都返回空时，Agent 应明确告知而非编造。建议提供三种降级策略：
+| 降级策略 | 行为 |
+|---------|------|
+| 拒绝回答 | "未找到相关信息，请补充文档或联系专家" |
+| 网络搜索候选 | 启用公共网络搜索作为后端（需授权） |
+| 转人工 | 记录查询并转给人工客服 |
+
+### 13.7 参考来源
+
+- [Agentic RAG with LangGraph - LangChain Blog](https://blog.langchain.dev/agentic-rag-langgraph/)
+- [Building Agentic RAG Systems - LlamaIndex Docs](https://docs.llamaindex.ai/en/stable/examples/agent/agentic_rag/)
+- [Adaptive RAG: Retrieval-Augmented Generation with Dynamic Routing - arXiv](https://arxiv.org/abs/2403.14403)
+- [Self-RAG: Learning to Retrieve, Generate, and Critique - arXiv](https://arxiv.org/abs/2310.11511)
+- [CRAG: Corrective RAG - arXiv](https://arxiv.org/abs/2401.15884)
+
+---
+
+## 14. Pinecone RAG 进阶实战：重排序与两阶段检索
+
+### 14.1 RAG 检索的两阶段范式
+
+**来源：** [Pinecone RAG Series - Rerankers and Two-Stage Retrieval](https://www.pinecone.io/learn/series/rag/)（2026年持续更新）
+
+Pinecone 在其 RAG 系列教程中将生产级检索提炼为一个清晰的**两阶段模式**：
+
+```
+第一阶段（粗排）：快速检索（向量/BMS25） → 召回 Top-100 候选
+第二阶段（精排）：重排序模型 → 精选 Top-5 → 送入 LLM 生成
+```
+
+这种架构的核心洞察是：**召回和精排应该使用不同的模型**——召回阶段追求速度和覆盖率（用轻量嵌入模型），精排阶段追求准确率（用计算量更大的交叉编码器或 LLM）。
+
+### 14.2 重排序器的三种类型
+
+| 类型 | 代表工具 | 速度 | 精度 | 适用场景 |
+|------|---------|------|------|---------|
+| **交叉编码器** | Cohere Rerank、BGE Reranker、MixedBread | 慢 | 最高 | 对准确率要求最高的生产场景 |
+| **双编码器** | ColBERT、Sentence-BERT | 中 | 中 | 平衡速度与质量 |
+| **LLM 直接评分** | GPT-4 打分、Claude 排序 | 最慢 | 最高（但成本高昂） | 小批量、高价值场景 |
+
+> Pinecone 建议：**交叉编码器重排序是 RAG 系统性价比最高的单项优化**——比换更大的嵌入模型或更大的 LLM 收益更高。
+
+### 14.3 嵌入模型选型（2026 年推荐）
+
+| 场景 | 推荐模型 | 理由 |
+|------|---------|------|
+| 英文通用 | `voyage-3`、`text-embedding-3-large` | 性价比最高 |
+| 多语言 | `multilingual-e5-large` | 跨语言检索首选 |
+| 代码检索 | `voyage-code-2` | 代码语义理解 |
+| 高精度 | `Cohere embed-v4` | 最高质量 |
+| 本地部署 | `BGE-M3`（开源） | 无需 API 调用 |
+
+### 14.4 指标驱动的 Agent 开发
+
+Pinecone 强调，RAG Agent 的开发应从**定义评估指标**开始，而非从选择工具开始：
+
+1. **先定指标**：`precision@5`、`recall@20`、答案忠实度、端到端延迟
+2. **建基线**：最简单的 Naive RAG 跑一遍指标
+3. **逐步叠加**：每次只加一个优化（先加重排序，再加查询改写，再加混合搜索），对比指标变化
+4. **只在有数据支撑时才保留优化**：如果某个优化没有显著改善指标，果断移除
+
+> 来源参考：[Pinecone RAG Series](https://www.pinecone.io/learn/series/rag/)
+
+---
+
+## 15. 2026年7月RAG研究前沿
+
+### 15.1 FAIR GraphRAG：将 FAIR 数据原则引入图检索增强
+
+**来源：** [FAIR GraphRAG: A Retrieval-Augmented Generation Approach for Semantic Data Analysis - arXiv:2607.11464 (2026-07-13), IEEE ICKG 2025](https://arxiv.org/abs/2607.11464v1)
+
+GraphRAG 通过知识图谱捕获语义关系来增强检索，但在生物医学等复杂领域，现有方法缺乏对底层知识资源的**结构化 FAIR 化处理**。FAIR GraphRAG 是首个将 FAIR 原则（可发现 Findability、可访问 Accessibility、可互操作 Interoperability、可复用 Reusability）与图检索增强生成深度整合的框架。
+
+**核心架构创新：FAIR 数字对象（FDO）作为图节点**
+
+```
+传统 GraphRAG:  实体节点 → 属性边 → 向量嵌入
+FAIR GraphRAG:  FDO节点（核心数据 + 元数据 + 持久标识符 + 语义链接） → 向量嵌入
+```
+
+每个图节点不再只是简单的实体，而是包含以下四层信息的 FAIR 数字对象：
+
+| 层级 | 内容 | 在检索中的作用 |
+|------|------|-------------|
+| **核心数据** | RNA 测序表达值、基因注释 | 向量相似度匹配的基础 |
+| **元数据** | 样本来源、实验条件、质量控制指标 | 支持按条件过滤检索结果 |
+| **持久标识符（PID）** | DOI、数据集 accession 号 | 确保可追溯性和可引用性 |
+| **语义链接** | 本体论关系（如 Gene Ontology）、跨数据集引用 | 支持跨数据源推理 |
+
+**LLM 辅助的自动化构建管道：**
+
+论文设计了由医生和计算机科学家共同参与的协作设计流程，LLM 在以下环节发挥关键作用：
+1. **Schema 构建**：从数据源自动推断本体论结构
+2. **内容与元数据提取**：从非结构化文本中抽取结构化信息
+3. **语义链接生成**：自动建立跨数据集的关联关系
+
+**在胃肠病学 RNA 测序数据上的验证结果：**
+
+FAIR GraphRAG 在处理涉及**元数据和本体论链接的复杂查询**时，在答案准确性、覆盖率和可解释性方面均显著优于传统 GraphRAG baseline。特别是在需要跨数据集推理的场景下，FAIR 化的知识表示使模型能够追溯到原始数据源，显著减少幻觉。
+
+> **拓展潜力**：论文指出该框架不仅适用于生物医学，还可扩展到教育、商业等需要 FAIR 数据治理的专业领域。
+
+---
+
+### 15.2 RAG 中的意识形态偏差传递：温度参数的关键作用
+
+**来源：** [How Temperature Shapes Ideological Discourse in Retrieval-Augmented Generation? - arXiv:2607.11783 (2026-07-13)](https://arxiv.org/abs/2607.11783v1)
+
+这是一项开创性的研究，首次系统考察了 RAG 框架在**传递、放大或抑制检索材料中的意识形态话语**方面的行为。研究团队构建了一个包含 1,117 篇 COVID-19 治疗文献的语料库，通过词汇多维分析（Lexical Multidimensional Analysis, LMDA）识别出三种意识形态话语，再将其作为 RAG 系统的外部知识源。
+
+**核心实验设计：**
+
+1. 对 1,117 篇文章进行 LMDA 分析，识别三种意识形态话语维度
+2. 将这些文章作为 RAG 系统的检索知识库
+3. 让多个 LLM 在不同采样温度（temperature）下回答意识形态相关问题
+4. 从语义和词汇两个维度评估生成文本与意识形态参考文本的相似度
+
+**关键发现：温度参数的 U 型效应**
+
+| 温度设置 | 话语传递强度 | 解释 |
+|---------|------------|------|
+| **低温度（接近 0）** | **最低** | 过度确定性采样抑制了从检索材料中吸收话语特征 |
+| **中等温度** | **最高** | 在随机性与检索基础之间达到最佳平衡，最忠实地传递了检索材料的意识形态特征 |
+| **高温度** | 中等 | 随机性增加导致话语传递的一致性下降 |
+
+> **核心洞察**：RAG 并不是意识形态中立的——检索材料中的立场和观点会系统性地影响 LLM 输出。温度参数不是简单的"创造性调节旋钮"，而是**控制模型对检索材料"忠实度"的关键杠杆**。过度降低温度（如设置为 0）虽然减少了随机性，却可能意外地**抑制了 RAG 从检索材料中获取上下文信息的能力**。
+
+**实践启示：**
+- 如果希望 RAG 系统忠实反映检索材料的立场，应使用中等温度（如 0.5-0.7）
+- 如果希望模型保持更"中立"的立场，低温度反而可能适得其反——需要额外的提示词约束
+- 对于敏感领域（如政治、医疗政策），建议在 RAG 管道中增加**话语审计层**来检测和报告潜在的意识形态偏差
 
 ---
 
@@ -507,4 +759,4 @@ CAG：预加载全部文档 → 预计算 KV Cache → 查询 → 直接基于 C
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-14 00:10:05*
+*资源区块更新时间：2026-07-15 00:07:02*

@@ -352,6 +352,59 @@ Anthropic 还提出了一种新的训练技术——**反事实反射训练（Co
 
 ---
 
+---
+
+## 8. 2026 前沿架构深度解读：Mamba 与 DeepSeekMoE
+
+### 8.1 Mamba：选择性状态空间模型
+
+**来源：** [Mamba: Linear-Time Sequence Modeling with Selective State Spaces — arXiv 2312.00752](https://arxiv.org/abs/2312.00752)
+
+Mamba 由 Albert Gu 和 Tri Dao 于 2023 年 12 月提出，是一种以**线性时间复杂度 O(n)** 处理序列的架构。
+
+**核心创新：**
+
+| 创新 | 描述 |
+|------|------|
+| **选择性 SSM** | SSM 参数 Δ、B、C 成为输入函数 → 实现内容感知（content-based reasoning） |
+| **硬件感知并行扫描** | 利用 GPU 内存层次结构的融合 CUDA 内核，在递归模式下实现并行计算 |
+| **简化端到端架构** | 无自注意力、无 MLP 子层、无位置编码、无 KV 缓存 |
+
+**核心优势：**
+- 推理速度：**5 倍于同等规模 Transformer 的吞吐量**
+- 序列长度线性缩放：随上下文增长保持恒速（Transformer 为二次方）
+- Mamba-3B 在语言建模上**超越同等规模 Transformer**，媲美两倍参数量的 Transformer
+- 跨模态通用：语言、音频、基因组学
+
+**为什么叫"选择性"？**
+传统状态空间模型（S4 等）的转换参数是固定的，无法根据输入内容动态调整——这是它们在语言等离散模态上表现不佳的关键原因。Mamba 让 SSM 参数成为输入的函数（即"选择性"），解决了这一问题。
+
+### 8.2 DeepSeekMoE：终极专家专业化
+
+**来源：** [DeepSeekMoE: Towards Ultimate Expert Specialization — arXiv 2401.06066](https://arxiv.org/abs/2401.06066)
+
+DeepSeekMoE 是 DeepSeek 提出的**混合专家（Mixture of Experts, MoE）**架构改进方案，核心思想是实现更精细的专家专业化。
+
+**MoE 基本原理：**
+```
+输入 Token → 路由器（Gating Network）→ 选择 Top-K 专家 → 加权融合输出
+```
+
+传统 MoE 的痛点：
+- 专家之间的**知识冗余**——多个专家学到相似功能
+- 专家**负载不均**——热门专家过载，冷门专家浪费
+
+**DeepSeekMoE 的改进：**
+- **细粒度专家分割**：将每个 FFN 专家进一步切分为更小的子专家 → 实现更精细的专业化
+- **共享专家隔离**：设置一些"共享专家"处理通用知识，其余专家专注特定领域
+- 在相同计算预算下显著提升模型性能
+
+**参考来源：**
+- [Mamba — arXiv 2312.00752](https://arxiv.org/abs/2312.00752)
+- [DeepSeekMoE — arXiv 2401.06066](https://arxiv.org/abs/2401.06066)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -364,4 +417,4 @@ Anthropic 还提出了一种新的训练技术——**反事实反射训练（Co
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-14 00:10:05*
+*资源区块更新时间：2026-07-15 00:07:02*

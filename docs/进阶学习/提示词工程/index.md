@@ -303,7 +303,349 @@ Microsoft 推荐的六步设计法：
 
 - [System message design for Azure OpenAI - Microsoft Learn](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/advanced-prompt-engineering)
 - [Microsoft Safety system message templates](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/safety-system-message)
-- [Prompt Engineering Techniques - OpenAI Cookbook](https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md)
+|- [Prompt Engineering Techniques - OpenAI Cookbook](https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md)
+
+---
+
+## 8. 面向推理模型的新一代提示词工程
+
+2025-2026 年，推理模型（Reasoning Models）如 OpenAI o1/o3、DeepSeek-R1、Claude 3.5 Sonnet（Thinking Mode）、Gemini 2.5 Pro Thinking 等彻底改变了提示词工程的范式。与传统模型直接输出答案不同，推理模型在内部进行"思考"（Chain-of-Thought 隐藏在模型内部），然后给出答案。
+
+### 8.1 推理模型 vs 传统模型的提示差异
+
+**来源：** [Reasoning Models: A New Era of AI - DeepLearning.AI](https://www.deeplearning.ai/the-batch/reasoning-models-and-the-future-of-ai/), [o1 Prompting Guide - OpenAI](https://platform.openai.com/docs/guides/reasoning)
+
+| 维度 | 传统模型（GPT-4o, Claude 3） | 推理模型（o1, DeepSeek-R1, Gemini 2.5 Pro） |
+|------|------------------------------|---------------------------------------------|
+| 推理方式 | 外部 CoT（需提示引导分步） | 内部隐式推理（模型自主深度思考） |
+| 提示风格 | 需详细说明推理步骤 | 直接给任务，模型自行推理 |
+| Few-shot 效果 | 极好（示例引导模式） | 常规（内部推理可能被示例局限） |
+| 最佳实践 | "Let's think step by step" | 简洁指令 + 清晰目标 |
+| 延迟 | 低 | 中-高（内部推理耗时） |
+| 输出格式 | 不稳定，需格式约束 | 较稳定，可指定结构 |
+
+### 8.2 推理模型的提示原则
+
+**原则一：简化指令，明确目标**
+
+推理模型擅长自主规划推理路径，不需要在提示词中手把手教它如何推理：
+
+```
+❌ 不推荐："首先分析已知条件，列出解决方案，评估优缺点..."
+✅ 推荐："分析这个定价优化问题，给出最优策略及依据。"
+```
+
+**原则二：将约束条件放在系统消息中**
+
+推理模型对系统消息中的约束遵循度较高，可将输出格式、安全边界等放在系统消息层：
+
+```
+你是一个金融分析助手。
+- 只基于给定的数据做分析，不臆测数据之外的结论
+- 输出使用 JSON 格式
+- 如果数据不充分，明确指出信息缺口
+```
+
+**原则三：提供明确的质量标准**
+
+推理模型能理解并优化到指定的质量水平：
+
+```
+生成一份项目风险评估报告。
+- 深度：分析每个风险的根因、概率、影响和应对策略
+- 格式：Markdown 表格 + 要点说明
+- 标准：每个风险项必须有至少 2 个备选方案
+```
+
+### 8.3 推理模型的三种提示模式
+
+| 模式 | 描述 | 适用场景 |
+|------|------|----------|
+| **零样本直接提问** | 直接给任务，让模型自行推理 | 复杂分析、数学物理、代码生成 |
+| **限定推理范围** | 在系统消息中划定推理边界 | 需要控制成本和延迟的场景 |
+| **引导式提问** | 给出结构化框架但留推理空间 | 报告生成、多角度分析 |
+
+### 8.4 推理模型的成本控制策略
+
+推理模型的内部推理消耗大量 token，成本比传统模型高 3-10 倍：
+
+| 策略 | 方法 | 效果 |
+|------|------|------|
+| **设置 max_tokens 上限** | 限制总输出长度（含内部推理） | 直接控制成本 |
+| **推理预算（Reasoning Effort）** | OpenAI o1 支持 low/medium/high | low ≈ 降低 60% 推理成本 |
+| **路由策略** | 简单问题走传统模型，复杂问题走推理模型 | 综合成本最优 |
+| **缓存复用** | 对同一问题的推理过程做 KV Cache | 重复查询零额外推理成本 |
+
+> **经验：** 80% 的日常查询不需要推理模型。建议搭建路由层：简单问答 → 传统模型（GPT-4o-mini），复杂推理 → 推理模型（o1/R1），可在保持质量的同时将推理成本降低 70-80%。
+
+### 8.5 与传统模型提示的迁移指南
+
+| 保留的做法 | 放弃的做法 |
+|-----------|-----------|
+| 清晰的任务描述 | 手写分步推理指令（"Let's think step by step"） |
+| 输出格式约束 | 过多的 Few-shot 示例 |
+| 安全边界和约束 | 角色扮演式的冗长背景故事 |
+| 上下文/参考材料 | 过度详细的中间推理引导 |
+
+> **关键洞察：** 推理模型的出现不是提示词工程的终结，而是提示词工程从"教模型怎么推理"转变为"告诉模型要解决什么问题"。提示词变得更简洁，但对目标定义、质量标准和约束条件的精确度要求更高。
+
+### 8.6 参考来源
+
+- [Reasoning Models: What They Are and Why They Matter - DeepLearning.AI](https://www.deeplearning.ai/the-batch/reasoning-models-and-the-future-of-ai/)
+- [OpenAI o1 Reasoning Model Prompting Guide](https://platform.openai.com/docs/guides/reasoning)
+- [Extended Thinking (Reasoning) - Anthropic Claude Docs](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)
+- [Prompt Engineering for Reasoning Models - LangChain Blog](https://blog.langchain.dev/reasoning-models-prompting/)
+
+## 2026 年提示词工程进阶实践：缓存、结构化输出与生产模式
+
+> 来源：[OpenAI Responses API 指南](https://developers.openai.com/api/docs/guides/latest-model)（2026 更新），[Prompt Caching 排查实践 - 菠萝AI笔记](https://www.boluoblog.com/coding/openai-responses-prompt-caching-miss-2026/)，[GPT Prompting Production Patterns](https://gptprompts.ai/chatgpt-api-prompting)
+
+### 生产级提示词工程的三层架构
+
+2026 年，成熟的提示词工程体系已从"写提示词"演进为**多层级系统工程**：
+
+| 层级 | 组件 | 职责 |
+|------|------|------|
+| **系统层** | System Prompt / Meta Prompt | 定义行为边界、角色、安全约束（低频变更） |
+| **应用层** | 模板引擎（Jinja2 / Mustache） + 变量注入 | 将动态内容填入固定模板（中频变更） |
+| **运行时层** | Prompt Caching / 语义路由 / 质量门禁 | 控制成本、延迟和输出质量（自动运行） |
+
+### Prompt Caching：成本优化的第一道防线
+
+OpenAI Responses API 的 **Prompt Caching** 是 2026 年控制推理成本最直接的手段。命中缓存的输入 token 享有折扣价，但实际命中率取决于工程实现：
+
+#### 缓存命中条件
+
+| 条件 | 说明 | 常见故障 |
+|------|------|---------|
+| 前缀精确匹配 | 请求开头的 token 序列必须完全一致 | 动态值（时间戳、trace_id）放在了最前面 |
+| 最小 1024 tokens | 低于 1024 tokens 的请求不参与缓存 | 短查询永远 miss |
+| 128-token 台阶增长 | 命中按 128-token 增量计费 | 980-token 请求显示 cached_tokens=0 是正常结果 |
+
+#### 缓存命中排查三步骤
+
+```python
+# 步骤 1：检查 cached_tokens 字段
+response = client.responses.create(...)
+cached = response.usage.input_tokens_details.cached_tokens
+if cached == 0 and total_input > 1024:
+    print("需要排查请求前缀稳定性")
+
+# 步骤 2：固定可复用前缀的顺序
+# ✅ 正确：将稳定内容放在开头
+instructions = "You are a code reviewer."  # 放最前面
+tools = [readRepoTool, searchIssueTool]    # 固定顺序
+user_input = f"Review this diff: {diff}"   # 动态部分放最后
+
+# ❌ 错误：将动态值放在开头
+instructions = f"You are a code reviewer. Request time: {datetime.now()}"
+```
+
+#### 工程实践建议
+
+| 策略 | 方法 | 效果 |
+|------|------|------|
+| **固定工具定义顺序** | 不要每次重组 tools 数组 | 避免前缀变化导致 miss |
+| **使用 prompt_cache_key** | 为同类请求分配相同分桶键 | 同前缀请求路由到同一缓存节点 |
+| **系统提示与用户输入分离** | 系统消息在前，用户消息在后 | 最大化可复用前缀长度 |
+| **Structured Outputs 固定 schema** | 输出 schema 顺序不变 | schema 定义参与缓存键计算 |
+
+> **经验**：Prompt Caching 的收益不只看命中率。cached_tokens 上升但账单没降时，通常是因为输出 token、reasoning 或工具调用费用在同步增长。
+
+### 结构化输出的生产级方案
+
+2026 年，结构化输出已成为生产级应用的标准配置。主流方案对比：
+
+| 方案 | 实现方式 | 保证级别 | 适用场景 |
+|------|---------|---------|---------|
+| **OpenAI Structured Outputs** | API 原生支持，server-side 校验 | 100% JSON schema 合规 | OpenAI 模型 |
+| **Outlines** | 基于 logit 正则约束的生成 | 严格语法保证 | 开源模型本地部署 |
+| **JSON mode + Pydantic** | 提示词要求 JSON + 后处理校验 | 高（依赖模型） | 任意 API 兼容 |
+| **LMQL** | 声明式约束语言 | 严格语法保证 | 需要自定义约束 |
+
+#### 典型实现：Pydantic + LLM 的结构化提取
+
+```python
+from pydantic import BaseModel
+from openai import OpenAI
+
+class ExtractedEntity(BaseModel):
+    name: str
+    company: str
+    position: str
+    confidence: float
+
+client = OpenAI()
+response = client.responses.create(
+    model="gpt-4o-mini",
+    input="从以下文本中提取实体...",
+    text={
+        "format": {
+            "type": "json_schema",
+            "name": "entity_extraction",
+            "schema": ExtractedEntity.model_json_schema()
+        }
+    }
+)
+entity = ExtractedEntity.model_validate_json(response.output_text)
+```
+
+### GPT-5.6 时代的提示词新特性
+
+OpenAI GPT-5.6（2026 年发布）引入了多项提示词相关的突破性特性：
+
+| 特性 | 说明 | 对提示词设计的影响 |
+|------|------|------------------|
+| **Programmatic Tool Calling** | 模型可编写 JS 脚本调用工具，串行执行无需每次调用模型 | 减少多步工具调用中的模型往返次数 |
+| **Multi-Agent Coordination** | 单一 GPT-5.6 实例可协调多个子 Agent 并行工作 | 提示词需要定义子任务边界和汇总策略 |
+| **Reasoning Effort 控制** | low/medium/high 三级推理预算 | 简单任务用 low effort，复杂推理用 high |
+| **Cross-Turn Reasoning** | 跨轮次复用推理状态 | 长篇对话不再需要重复推理过程 |
+| **自动推断任务复杂度** | 模型根据上下文自动选择推理深度 | 不需要人工猜测该用哪个 effort 级别 |
+
+**对提示词工程师的影响**：
+- 不再需要手写"Let's think step by step" — 推理模型自行决定推理路径
+- 提示词从"教模型怎么做"转向"告诉模型要什么结果"
+- 质量标准和约束条件的精确度要求更高
+
+### 提示词质量门禁：输出校验自动化
+
+生产环境中，提示词的输出质量需要自动校验而非人工检查：
+
+| 门禁层级 | 检查内容 | 工具/方法 |
+|---------|---------|----------|
+| **Schema 校验** | JSON/YAML 格式正确性 | Pydantic / JSON Schema |
+| **内容校验** | 必填字段、长度限制、关键词覆盖 | 规则引擎 |
+| **语义校验** | 与期望分布的相似度 | LLM-as-Judge |
+| **安全门禁** | PII 泄漏、敏感内容、注入检测 | 内容过滤 + 正则 |
+
+**实践建议**：每次提示词变更后自动运行 30-100 条评测集，对比新旧版本的通过率。提示词的改动比换模型更便宜，但更难追踪——建立评估集是提示词工程从"手艺"走向"工程"的分水岭。
+
+### 参考来源
+
+- [Compare model features, migration guidance, and prompting best practices - OpenAI](https://developers.openai.com/api/docs/guides/latest-model)
+- [Prompt Caching 排查实践 - 菠萝AI笔记](https://www.boluoblog.com/coding/openai-responses-prompt-caching-miss-2026/)
+- [ChatGPT API Prompting: Production Patterns & Examples](https://gptprompts.ai/chatgpt-api-prompting)
+- [Best practices for prompt engineering with the OpenAI API](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
+
+---
+
+## 11. 2026年7月提示词工程前沿
+
+### 11.1 从提示词工程到认知提示（Epistemic Prompting）
+
+**来源：** [From Prompt Engineering to Epistemic Prompting: Prompt Trajectories as AI-Mediated Problem Framing in Science Education - arXiv:2607.11680 (2026-07-13)](https://arxiv.org/abs/2607.11680v1)
+
+这篇来自意大利卡利亚里大学的研究重新定义了 STEM 教育场景下的提示词设计范式。作者 Matteo Tuveri 认为，传统"提示词工程"过于强调**技术性产出（准确性、格式、相关性）**，但在教育场景中，提示词更应该被理解为一种**持续的认知实践（epistemic practice）**。
+
+**核心框架：Framing-Prompting Loop（框架-提示循环）**
+
+```
+初始提示 → 建立临时宏框架（问题、表示、假设、标准、人机分工）
+    ↓
+模型响应 → 学习者理解/吸收
+    ↓
+学习者下一轮提示 → 维持 / 细化 / 挑战 / 修复 / 转换框架
+    ↓
+学科检查 → 验证知识是否符合学科规范
+    ↓
+重新框架（Reframing）→ 循环继续
+```
+
+**与传统提示词工程的本质区别：**
+
+| 维度 | 传统提示词工程 | 认知提示（Epistemic Prompting） |
+|------|-------------|---------------------------|
+| **目标** | 获得"正确"输出 | 发展知识和理解能力 |
+| **评估标准** | 准确性、相关性、格式 | 学科规范、推理深度、概念转变 |
+| **提示词角色** | 一次性指令 | 持续的框架协商工具 |
+| **人机关系** | 人类指挥、AI 执行 | 人类与 AI 共同构建知识 |
+| **成功标志** | 输出匹配预期 | 学习者的概念理解和推理能力提升 |
+
+**提示框架轨迹（Prompt Framing Trajectory）：**
+
+论文提出，教育的真正产出不是单次提示词的结果，而是整个**提示框架轨迹**——即从初始提示到最终理解的完整发展路径。这条轨迹包含：
+- 初始宏框架（决定了后续所有交互的"游戏规则"）
+- 每一轮的框架操作（维持、细化、挑战、修复、转换）
+- 学科检查点的介入时机
+
+> **实践意义**：在 AI 辅助教育产品设计中，不应仅关注"如何写出更好的提示词"，而应设计支持框架演化的交互界面——让学生能够看到并反思自己的提示词如何塑造了 AI 的回答，以及这些回答又如何反过来塑造了他们对问题的理解。
+
+---
+
+### 11.2 ThinkLog：将推理注入提示词实现日志语句生成
+
+**来源：** [ThinkLog: Leveraging Reasoning for Log Statement Generation - arXiv:2607.11615 (2026-07-13)](https://arxiv.org/abs/2607.11615v1)
+
+来自日本九州大学和南山大学的研究团队提出了 ThinkLog——一种基于 LLM 的端到端日志语句生成方法，其核心创新在于**将推理过程注入提示词**。
+
+**传统日志生成的三难困境：**
+
+软件工程中，日志语句生成需要同时决定三个要素：
+1. **日志位置（Where）**：在代码的什么位置插入日志
+2. **严重级别（Severity）**：INFO / WARNING / ERROR
+3. **日志消息（Message）**：写什么内容
+
+传统方法将这三个决策分离处理，导致准确性受限。ThinkLog 的创新在于让 LLM **通过推理链一次性完成三个决策**。
+
+**提示词设计：推理注入模式**
+
+ThinkLog 在 few-shot 示例中嵌入了完整的推理过程：
+
+```
+示例：
+代码片段: [Java method]
+推理: (1) 在该方法的数据库操作后需要记录执行状态
+      (2) 如果出现异常应记录 ERROR 级别
+      (3) 日志消息应包含方法名、参数和返回值
+日志: [location: line 42] [severity: INFO] "UserService.createUser completed, userId={}"
+```
+
+**实验结果（在 9,619 个 Java 方法上评测）：**
+
+| 方法 | 日志生成准确率 | 推理成本（USD） |
+|------|-------------|---------------|
+| 此前最佳方法 | 17.81% | 基准（100%） |
+| **ThinkLog** | **20.55%** | **约 50%** |
+
+> **关键洞察**：ThinkLog 以约一半的推理成本实现了 15.4% 的相对提升。这验证了一个重要模式：**在 few-shot 提示词中提供推理示例，比增加更多"正确输出"的示例更高效**。推理过程让模型学到了"为什么这样决策"，而非仅仅模仿输出格式。
+
+**提示词工程启示：**
+- 对于需要多步决策的生成任务，在 few-shot 示例中加入"为什么"而不仅仅是"是什么"
+- 推理链的成本可以通过优化推理长度来控制——ThinkLog 通过更精准的推理降低了 token 消耗
+- 这一模式可推广到代码审查、测试生成、配置生成等其他软件工程任务
+
+---
+
+### 11.3 Prompt Generation（PG）框架：配置驱动的工业级提示词生成
+
+**来源：** [Prompt Generation Technical Report - arXiv:2607.11326 (2026-07-13)](https://arxiv.org/abs/2607.11326v1)
+
+来自阿里巴巴淘宝搜索团队的技术报告，描述了一种已在生产环境中验证的配置驱动提示词生成框架。这不是关于"如何写提示词"的指南，而是一个**将特征工程从模型架构中解耦的工程框架**。
+
+**问题背景：工业搜索/推荐系统的特征-模型耦合困境**
+
+在淘宝搜索等工业场景中，生成式检索模型依赖丰富的用户行为特征，但传统做法将**特征处理逻辑与模型架构紧密耦合**：
+- 每次特征变更需要同时修改训练和推理代码
+- 不同业务场景之间无法复用特征逻辑
+- 在线延迟预算紧张，特征计算开销需要精细控制
+
+**PG 框架的三层加速：**
+
+```
+声明式配置（两个 JSON 文件）→ 特征类型 → 可组合处理组件 → 统一训练/推理管道
+```
+
+| 加速层级 | 机制 | 效果 |
+|---------|------|------|
+| **训练迭代加速** | 特征实验只需修改配置文件，内置 token 压缩 | 实验周期从天级降至小时级 |
+| **部署加速** | 新场景只需符合 PG schema 即可接入通用管道 | 无需场景专属工程开发 |
+| **推理加速** | 引擎对标准化配置应用统一优化 | PG 开销降至可忽略水平 |
+
+**在线 A/B 实验结果：**
+- 成交笔数（Transaction Count）：**+0.47%**（统计显著）
+- GMV（成交总额）：**+0.51%**（统计显著）
+
+> **实践意义**：对于构建 LLM 应用的团队，PG 框架提供了一个重要的架构参考——将"提示词构建"提升为独立的配置层，使其与模型和服务代码解耦。这种解耦带来的迭代速度提升，往往比模型本身的性能提升更直接地影响业务指标。
 
 ---
 
@@ -319,4 +661,4 @@ Microsoft 推荐的六步设计法：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-14 00:10:05*
+*资源区块更新时间：2026-07-15 00:07:02*
