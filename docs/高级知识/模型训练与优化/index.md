@@ -273,6 +273,125 @@ ZeRO（Zero Redundancy Optimizer）是 2026 年大模型训练的标配技术，
 
 ---
 
+## 8. 2026 MoE 模型微调实战：NVIDIA NeMo AutoModel 深度解析
+
+> 本节基于 NVIDIA 官方博客 [Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)（2026-06-24）和 HuggingFace Transformers v5 发布说明。
+
+### 8.1 MoE 模型微调面临的三大挑战
+
+MoE（混合专家）模型已成为前沿模型的默认架构（DeepSeek V3/R1、Qwen3、Nemotron 等），但其微调面临独特的工程挑战：
+
+| 挑战 | 描述 | 影响 |
+|------|------|------|
+| **专家分片困难** | 100+ 专家需要在 GPU 间均匀分配 | 负载不均衡导致 straggler |
+| **通信开销大** | 路由 token 到专家需要 all-to-all 通信 | 通信可能占训练时间的 40%+ |
+| **FSDP 兼容性** | ModuleList 方式的专家实现可能导致死锁 | v4 下 Qwen3 直接死锁 |
+
+**案例：Qwen3-30B-A3B 在 Transformers v4 上的死锁问题**
+
+Transformers v4 将 Qwen3 的 MoE 专家存储为 ModuleList（128 个独立 MLP 模块），每个模块单独被 FSDP 包装。前向传播时，不同 rank 上的数据分配到的专家不同——某些 rank 跳过了部分专家，导致 FSDP 的 AllGather/ReduceScatter 集合操作不匹配，产生无限期挂起（deadlock）。
+
+**Transformers v5 的修复方案**：将专家存储为融合的 3D 参数张量（不再有逐专家模块和逐专家 FSDP 集合操作），彻底消除了这一死锁问题。
+
+### 8.2 NeMo AutoModel：一行代码迁移的 MoE 训练加速库
+
+2026 年 6 月，NVIDIA 发布了 NeMo AutoModel，建立在 HuggingFace Transformers v5 之上，为 MoE 模型的大规模微调提供开箱即用的加速方案。
+
+**核心特性：**
+
+| 特性 | 说明 |
+|------|------|
+| **API 兼容** | 继承 AutoModelForCausalLM，只需替换 import 行 |
+| **专家并行（Expert Parallelism, EP）** | 将不同专家分布到不同 GPU，减少每 GPU 内存 |
+| **DeepEP** | 融合的 all-to-all 派发内核，通信与计算重叠 |
+| **TransformerEngine 内核** | 针对 NVIDIA GPU 优化的融合注意力、MLP 层 |
+| **Liger Kernel 回退** | 非 MoE 层自动应用 Liger Kernel 优化 |
+| **HF 检查点兼容** | save_pretrained() 输出标准 HF 格式，vLLM/SGLang 可直接加载 |
+
+**一行代码迁移示例：**
+
+```python
+# 只需替换 import
+from nemo_automodel import NeMoAutoModelForCausalLM  # 替代 transformers.AutoModelForCausalLM
+
+model = NeMoAutoModelForCausalLM.from_pretrained(
+    "Qwen/Qwen3-30B-A3B",
+    dtype=torch.bfloat16,
+)
+# 后续训练代码完全不变——相同的前向、loss、backward 调用
+```
+
+### 8.3 性能基准实测
+
+**Qwen3-30B-A3B（单节点 8×H100 80GB）：**
+
+| 指标 | v4 | v5 (FA2+grouped_mm) | NeMo AutoModel (EP=8) | v5 → AutoModel |
+|------|----|--------------------|-----------------------|---------------|
+| TPS/GPU | 死锁 | 3,075 | **11,340** | **3.69×** |
+| 峰值显存 | — | 68.2 GiB | **48.1 GiB** | **-29%** |
+| 前向+Loss | — | 582 ms | **194 ms** | 3.00× |
+| 反向传播 | — | 758 ms | **178 ms** | 4.26× |
+
+**Nemotron 3 Nano 30B A3B（单节点 8×H100 80GB）：**
+
+| 指标 | v4 (hub代码) | v5 (FA2+grouped_mm+Mamba CUDA) | NeMo AutoModel (EP=8) | v5 → AutoModel |
+|------|-------------|-------------------------------|-----------------------|---------------|
+| TPS/GPU | 1,807 | 4,583 | **15,421** | **3.36×** |
+| 峰值显存 | 61.9 GiB | 62.1 GiB | **42.5 GiB** | **-32%** |
+| 前向+Loss | 1,024 ms | 283 ms | **109 ms** | 2.60× |
+| 反向传播 | 1,246 ms | 611 ms | **157 ms** | 3.89× |
+
+**Nemotron 3 Ultra 550B A55B（多节点 16×H100 节点，128 GPU，EP=64）：**
+
+| 指标 | NeMo AutoModel |
+|------|---------------|
+| TPS/GPU | 815 |
+| TFLOP/s/GPU | ~293 |
+| 峰值显存 | 58.2 GiB |
+| Transformers v5 | 无法运行（OOM） |
+
+> **关键洞察**：550B 模型的对比没有 v5 列——因为 Transformers v5 在 EP=64 的规模下直接 OOM 了。NeMo AutoModel 的专家并行将专家权重分散到 64 路 GPU 上，使全参数微调在 128 GPU 上成为可能。
+
+### 8.4 加速来源分析
+
+3.4-3.7× 的加速来自三个独立的技术贡献：
+
+1. **专家并行降低内存压力 (≈1.5×)**：EP=8 将专家权重分布到 8 块 GPU，单 GPU MoE 占用降低 8×，以 Qwen3 为例峰值显存从 68.2 GiB 降至 48.1 GiB（-29%），释放的空间可用于更大 batch 或更长序列。
+
+2. **DeepEP 融合通信与计算 (≈1.3×)**：传统的专家路由需要独立的 AllGather/ReduceScatter 集合通信步骤，DeepEP 将 token 派发和组合融合为优化的 GPU 内核，使通信与专家计算重叠执行——相当于"免费"的通信时间。
+
+3. **TransformerEngine 内核加速核心运算 (≈1.5×)**：TE 的融合注意力、线性层和 RMSNorm 实现在所有层类型上（不仅仅是 MoE 层）都提供了比原生 PyTorch/FlashAttention 更一致的加速。
+
+### 8.5 2026 训练栈分层架构
+
+NeMo AutoModel 的出现标志着 2026 年的训练栈形成了清晰的分层结构：
+
+```
+┌─────────────────────────────────────────┐
+│  Transformers v5（模型层）               │
+│  ─ 模型定义、检查点加载、专家接口          │
+├─────────────────────────────────────────┤
+│  NeMo AutoModel（分布式层）              │
+│  ─ 专家并行、DeepEP、FSDP2 编排          │
+├─────────────────────────────────────────┤
+│  Kernels 2.0（算子层）                   │
+│  ─ FlashAttention-3、TE 内核、自定义 CUDA │
+├─────────────────────────────────────────┤
+│  HuggingFace Hub（分发层）               │
+│  ─ 标准化 kernel 打包、可复现构建、签名    │
+└─────────────────────────────────────────┘
+```
+
+每一层都有标准化的接口和活跃的生态支持，中小团队无需深入理解分布式框架细节，即可高效微调百亿级 MoE 模型。
+
+> **实际建议**：如果你要微调 MoE 模型（Qwen3、DeepSeek、Nemotron 系列），优先尝试 NeMo AutoModel。只需 `pip install nemo-automodel` + 修改 import 行，即可获得 3×+ 的吞吐提升和 30% 的内存节省。对于非 MoE 模型，升级到 Transformers v5 并启用 grouped_mm 后端的专家实现同样能获得显著加速。
+
+**来源：**
+- [Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel — HuggingFace Blog (2026-06-24)](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)
+- [🤗 Kernels: Major Updates — HuggingFace Blog (2026-07-06)](https://huggingface.co/blog/revamped-kernels)
+
+---
+
 ## 🔗 参考资料
 
 - [How Distributed Training Works in PyTorch - AI Summer](https://theaisummer.com/distributed-training-pytorch)
@@ -283,6 +402,56 @@ ZeRO（Zero Redundancy Optimizer）是 2026 年大模型训练的标配技术，
 - [HuggingFace Transformers — Scalability Guide](https://huggingface.co/docs/transformers/en/perf_train_gpu_many)
 - [Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel (2026-06-24)](https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel)
 - [🤗 Kernels: Major Updates (2026-07-06)](https://huggingface.co/blog/revamped-kernels)
+
+---
+
+## 9. Harness 工程与递归自我改进
+
+**来源：** [Harness Engineering for Self-Improvement — Lilian Weng (2026-07-04)](https://lilianweng.github.io/posts/2026-07-04-harness/)
+
+递归自我改进（Recursive Self-Improvement, RSI）最早由 I.J. Good (1965) 提出——一个能设计出更优机器的超智能系统。在 2026 年的 AI 语境下，RSI 不仅意味着模型直接改写自身权重，更广泛地指向模型改进训练管线、部署系统，从而提升后继模型性能的完整循环。前沿实验室（Anthropic、OpenAI）已经验证了这一反馈循环的加速效应。
+
+### 9.1 什么是 Harness？
+
+Harness（线束/框架）是围绕基础模型的系统层，负责编排执行、决策模型如何思考与规划、调用工具与行动、感知与管理上下文、存储产物与评估结果。与早期 "Agent = LLM + Memory + Tools + Planning + Action" 的简单公式不同，现代 Harness 工程更接近运行时与软件系统设计。
+
+**核心设计原则**：刻意保持简单性和通用性，参考既有软件工程实践（如操作系统抽象），让 Harness 封装复杂逻辑的同时保持接口简洁。
+
+### 9.2 三大设计模式
+
+**模式 1：工作流自动化（Workflow Automation）**
+定义一个"规划→执行→观察/测试→改进→再执行"的目标导向循环。Karpathy 的 [autoresearch](https://github.com/karpathy/autoresearch) 和 Codex agent loop 是典型范例。
+
+**模式 2：文件系统作为持久记忆（File System as Persistent Memory）**
+长周期 Agent 任务中，产物（实验日志、代码 diff、论文摘要、错误轨迹）远超出上下文窗口容量。通过文件的读写和编辑管理持久状态，天然受益于 LLM 基础能力的提升。
+
+**模式 3：子 Agent 与后台任务（Sub-agent and Backend Jobs）**
+Harness 可派生多个子 Agent 并行执行，搜索多条假设、运行并发实验或委派隔离子任务。父 Agent 作为轻量进程管理器：启动任务、检查日志、取消失败运行、合并结果。
+
+### 9.3 Harness 优化进阶
+
+**上下文工程（Context Engineering）**：
+- **ACE (Zhang et al. 2025)**：将上下文视为"动态演化的剧本"，通过生成器、反思器、策展人三个组件维护条目化的上下文日志
+- **Meta Context Engineering (Ye et al. 2026)**：分离"如何管理上下文"的机制与"上下文内容"，在元优化层进化技能，在基础层优化上下文
+
+**工作流搜索**：
+- **ADAS (Hu et al. 2025)**：将 Agent 设计本身形式化为优化问题，元 Agent 搜索新的 Agent 工作流设计
+- **AFlow (Zhang et al. 2025)**：将工作流表示为图（节点=LLM 调用，边=逻辑操作），用 MCTS 搜索最优工作流
+
+**元 Harness (Meta-Harness, Lee et al. 2026)**：优化的对象是"决定什么信息该存储、检索和呈现给模型"的代码本身。整个执行历史通过文件系统访问，Harness 候选者作为字典存储（含源代码、评分、轨迹、状态更新），只有合格的 Harness 被保留。
+
+### 9.4 关键洞察
+
+> *"Harness 工程将向着元方法论的方向演进——优化的是'获得更好答案的机制'，而不仅仅是答案本身。"*
+
+- Harness 本身成为优化目标，从手工启发规则转向通用机制
+- STOP (Zelikman et al. 2023) 实验表明：递归自我改进需要足够强的基础模型（GPT-4 有效，GPT-3.5/Mixtral 退化）
+- 随着模型智能提升，许多 Harness 改进可能内化到模型行为中（类似 prompt engineering 的演变路径）
+
+### 参考来源
+- [Harness Engineering for Self-Improvement — Lilian Weng (Jul 2026)](https://lilianweng.github.io/posts/2026-07-04-harness/)
+- [STOP: Self-Taught Optimizer — Zelikman et al. (2023)](https://arxiv.org/abs/2310.02304)
+- [ADAS — Hu et al. (2025)](https://arxiv.org/abs/2408.08435)
 
 ---
 
@@ -298,4 +467,4 @@ ZeRO（Zero Redundancy Optimizer）是 2026 年大模型训练的标配技术，
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-15 00:07:02*
+*资源区块更新时间：2026-07-16 00:08:55*

@@ -6572,12 +6572,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 185532.0,
-    "verified_at": "2026-07-15 00:06:55",
+    "provider_score": 185558.0,
+    "verified_at": "2026-07-16 00:08:48",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-15",
-    "seen_count": 54,
+    "last_seen": "2026-07-16",
+    "seen_count": 64,
     "query": "GitHub AI 热门项目 周榜"
   },
   {
@@ -6632,12 +6632,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 165715.0,
-    "verified_at": "2026-07-15 00:06:55",
+    "provider_score": 165807.0,
+    "verified_at": "2026-07-16 00:08:48",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-15",
-    "seen_count": 52,
+    "last_seen": "2026-07-16",
+    "seen_count": 62,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6662,12 +6662,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 99083.0,
-    "verified_at": "2026-07-15 00:06:55",
+    "provider_score": 99135.0,
+    "verified_at": "2026-07-16 00:08:48",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-15",
-    "seen_count": 52,
+    "last_seen": "2026-07-16",
+    "seen_count": 62,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6692,12 +6692,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 94898.0,
-    "verified_at": "2026-07-15 00:06:55",
+    "provider_score": 94931.0,
+    "verified_at": "2026-07-16 00:08:48",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-15",
-    "seen_count": 52,
+    "last_seen": "2026-07-16",
+    "seen_count": 62,
     "query": "trending AI projects GitHub"
   },
   {
@@ -6722,12 +6722,12 @@
     "providers": [
       "github_api"
     ],
-    "provider_score": 87222.0,
-    "verified_at": "2026-07-15 00:06:55",
+    "provider_score": 87363.0,
+    "verified_at": "2026-07-16 00:08:48",
     "verify_status": 200,
     "first_seen": "2026-07-02",
-    "last_seen": "2026-07-15",
-    "seen_count": 52,
+    "last_seen": "2026-07-16",
+    "seen_count": 62,
     "query": "trending AI projects GitHub"
   },
   {
