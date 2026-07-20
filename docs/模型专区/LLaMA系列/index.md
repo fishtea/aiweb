@@ -188,23 +188,40 @@ llama-model prompt-format -m MODEL_ID  # 查看模型的提示模板格式
 
 ## 如何使用
 
-### 通过 Hugging Face
+### 通过 Hugging Face Transformers（v4.51.0+）
+
+Llama 4 需要使用 **Transformers v4.51.0+** 和 `Llama4ForConditionalGeneration` 类（而非 `AutoModelForCausalLM`），以支持原生多模态加载和自动设备映射：
 
 ```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+from transformers import Llama4ForConditionalGeneration, AutoTokenizer
 
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-4-Scout-17B-16E-Instruct")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-4-Scout-17B-16E-Instruct")
+model = Llama4ForConditionalGeneration.from_pretrained(
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+    torch_dtype=torch.bfloat16,
+    device_map="auto",        # 自动 tensor-parallel 和设备映射
+)
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+)
 
 messages = [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "介绍 Llama 4 Scout 的主要特性。"}
+    {"role": "user", "content": [
+        {"type": "text", "text": "描述这张图片中的内容。"},
+        {"type": "image", "url": "https://example.com/photo.jpg"}  # 多模态输入
+    ]}
 ]
 
-input_ids = tokenizer.apply_chat_template(messages, return_tensors="pt")
-output = model.generate(input_ids, max_new_tokens=512)
-print(tokenizer.decode(output[0], skip_special_tokens=True))
+input_ids = tokenizer.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True
+)
+inputs = tokenizer(input_ids, return_tensors="pt").to(model.device)
+output = model.generate(**inputs, max_new_tokens=512)
+print(tokenizer.decode(output[0][len(inputs.input_ids[0]):], skip_special_tokens=True))
 ```
+
+> 注意：Llama 4 使用原生多模态 Early Fusion 架构，视觉 token 在输入端与文本 token 融合，无需单独的视觉编码器或 adapter。`AutoModelForCausalLM` 在 v4.51.0+ 版本中会通过 `AutoModel` 自动匹配到 `Llama4ForConditionalGeneration`，但显式导入更可靠。
 
 ### 通过 Ollama 本地运行
 
@@ -253,4 +270,4 @@ ollama run llama3.1:405b
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-16 00:08:55*
+*资源区块更新时间：2026-07-20 21:29:01*

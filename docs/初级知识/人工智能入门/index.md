@@ -484,6 +484,270 @@ MIT Lincoln Laboratory 的最新项目显示，即使是航空军学员也能利
 
 ---
 
+## 🎨 2026 年 AI 入门新范式：Vibe Coding 与无代码 AI
+
+### 概述
+
+2026 年，AI 入门的方式正在发生根本性转变。"学会编程才能用 AI"的旧观念正在被打破——以 **Vibe Coding**（氛围编程）和**无代码 AI 工作流**为代表的新范式，让非技术人员也能直接上手构建 AI 应用。核心思想是：**会说话就会做应用**。
+
+### 核心要点
+
+#### 1. Vibe Coding：用自然语言编程
+
+Vibe Coding 不是传统编程——你不需要记住语法、不需要理解编译器。你只需用自然语言描述你想要什么，AI 帮你生成代码、调试、部署。
+
+**Datawhale 的 Easy-Vibe 项目**（GitHub 18,000+ Stars）是 2026 年最受欢迎的中文 Vibe Coding 入门教程。其核心定位是：
+
+> 「直接上手，一起 vibe！会说话就会做应用。」
+
+课程特点：
+- 支持 **10 种语言**（中、英、日、韩、法、德、西、阿、越等）
+- 分三阶段递进：Stage 1 基础 → Stage 2 进阶 → Stage 3 实战
+- 提供**交互式教程**，在浏览器中即可运行
+- 附真实案例：vibe-stories 收录社区成员用 Vibe Coding 构建的真实项目
+- 同时推荐配套硬件项目 [hello-claw](https://github.com/datawhalechina/hello-claw)（OpenClaw 开源硬件平台）
+
+**来源：** [Datawhale Easy-Vibe — GitHub](https://github.com/datawhalechina/easy-vibe)（2026-07-20 更新，⭐18,366）
+
+#### 2. 无代码 AI 工作流：IKEA 式的 AI 手册
+
+`t02beurko-sys/ai-primer-for-everyone`（AI Workflow Navigator）是另一个 2026 年值得关注的项目。它将自己比作"AI 的 IKEA 说明书"——不需要焊接，只需清晰的步骤和一点耐心。
+
+项目的三层架构（按难度递进）：
+
+```
+Layer 1: 基础（Foundation）
+  └── 无代码 AI 工具 + 提示词工程
+      └── 示例：2 分钟摘要 10 封邮件
+
+Layer 2: 集成（Integration）
+  └── API 连接（OpenAI、Claude 等）
+      └── 示例：将 ChatGPT 连接到 Google Sheets
+
+Layer 3: 自动化（Automation）
+  └── 自定义工作流与逻辑
+      └── 示例：用无代码平台构建 24/7 客服机器人
+```
+
+核心理念：**最小承诺**——完成第一个指南后，你就能拥有一个每周至少节省 30 分钟的 AI 工具。
+
+**来源：** [AI Workflow Navigator — GitHub](https://github.com/t02beurko-sys/ai-primer-for-everyone)（2026-07-20 更新）
+
+#### 3. 给初学者的务实建议
+
+综合多个 2026 年入门指南的核心共识：
+
+**关于"是否要学编程"：**
+- 想快速应用 AI → 从 Vibe Coding / 无代码工具开始
+- 想深入理解 AI → 仍需 Python 基础，但学习路径已大幅缩短
+- 最好的方式：边用边学，在项目中掌握需要的技能
+
+**关于"从哪开始"：**
+- 注册一个 ChatGPT Plus 或 Claude Pro（$20/月起步），这是最低投入
+- 先做 3 个 Zapier/Make 自动化，理解"触发器→动作→条件"的基本逻辑
+- 然后在终端里运行你的第一个 Agent（不需要界面，终端就行）
+
+**来源：**
+- [How to Build Your First AI Agent — Jock.pl](https://thoughts.jock.pl/p/how-to-build-your-first-ai-agent-beginners-guide-2026)（2026-04-15）
+- [A Pragmatic Beginner's Guide to Introducing AI to Your Engineering Workflow — Jeff Ammons](https://jeffammons.com/2026/05/05/a-pragmatic-beginners-guide-to-introducing-ai-to-your-engineering-workflow/)（2026-05-05）
+
+### 2026 年 AI 入门路径对比
+
+| 路径 | 适合人群 | 时间投入 | 产出 |
+|------|---------|---------|------|
+| **Vibe Coding** | 产品经理、创业者、学生 | 1-2 周上手 | 可用的 Web 应用 |
+| **无代码 AI** | 运营、营销、管理人员 | 1-3 天 | 自动化工作流 |
+| **传统编程+AI** | 转行工程师、研究者 | 3-6 个月 | 深度定制能力 |
+
+### 实践建议
+
+1. **从 Vibe Coding 开始**：用 [Easy-Vibe](https://datawhalechina.github.io/easy-vibe/welcome.html) 的交互式教程，在浏览器中构建你的第一个应用
+2. **建立 AI 使用习惯**：每天让 AI 帮你完成一个任务（写邮件、总结文档、生成图片），培养"AI 优先"的思维
+3. **加入社区**：Datawhale、GitHub Discussions 都有活跃的中文 AI 学习社区
+
+### 参考来源
+- [Datawhale Easy-Vibe — 2026 Vibe Coding 入门教程](https://github.com/datawhalechina/easy-vibe)（⭐18,366，2026-07-20 更新）
+- [AI Workflow Navigator — 非技术人员的 AI 蓝图](https://github.com/t02beurko-sys/ai-primer-for-everyone)（2026-07-20 更新）
+- [How to Build Your First AI Agent — A Real Beginner's Guide (2026)](https://thoughts.jock.pl/p/how-to-build-your-first-ai-agent-beginners-guide-2026)
+- [A Pragmatic Beginner's Guide to Introducing AI to Your Engineering Workflow](https://jeffammons.com/2026/05/05/a-pragmatic-beginners-guide-to-introducing-ai-to-your-engineering-workflow/)
+
+---
+
+## 🧭 2026 年 AI 核心概念重访：从定义到能力边界的重新理解
+
+> 撰写日期：2026-07-20 | 基于 IBM、Google Cloud、Coursera 等权威来源
+
+### 概述
+
+2026 年，"人工智能"这个词已经无处不在，但很多人对它的理解停留在"ChatGPT 就是 AI"。本文基于 IBM、Google Cloud 和 Coursera 等权威来源的最新定义，重新梳理 AI 的核心概念体系，帮助初学者建立正确的认知框架。
+
+### AI 的定义：不止是"模拟人类智能"
+
+根据 [IBM 的定义](https://www.ibm.com/think/topics/artificial-intelligence)（2024 年 8 月更新），**人工智能是使计算机和机器能够模拟人类学习、理解、问题解决、决策、创造力和自主性的技术**。关键点在于 AI 不仅仅是"像人一样思考"，还涉及**感知、推理、学习和自主行动**。
+
+[Google Cloud](https://cloud.google.com/learn/what-is-artificial-intelligence) 则强调 AI 的跨学科本质——它融合了计算机科学、数据科学、统计学、语言学、神经科学，甚至哲学和心理学。AI 的本质是"用大量数据教会计算机做我们大脑能做的事"。
+
+### AI 的四层嵌套结构（2026 年共识）
+
+当前业界对 AI 技术栈形成了高度共识的嵌套结构：
+
+```
+人工智能（AI）
+  └── 机器学习（ML）—— 通过数据训练算法，无需显式编程
+        └── 神经网络 —— 模拟人脑结构的多层节点网络
+              └── 深度学习（DL）—— 使用多层神经网络的 ML 子集
+                    └── 生成式 AI（Gen AI）—— 创造新内容的 DL 应用
+```
+
+[IBM](https://www.ibm.com/think/topics/artificial-intelligence) 明确指出：**2024 年后大多数 AI 头条新闻都围绕生成式 AI 展开**，但要理解生成式 AI，必须先理解它下面的每一层技术。
+
+### 机器学习的三种核心范式
+
+根据 [GeeksforGeeks ML Tutorial](https://www.geeksforgeeks.org/machine-learning/machine-learning/)（2026 年 6 月更新），机器学习分为三大范式：
+
+| 范式 | 机制 | 典型应用 |
+|------|------|---------|
+| **监督学习（Supervised）** | 使用标注数据训练模型预测或分类 | 垃圾邮件检测、房价预测 |
+| **无监督学习（Unsupervised）** | 在无标注数据中发现模式或分组 | 客户分群、异常检测 |
+| **强化学习（RL）** | 通过试错和奖励机制学习最优决策 | 游戏 AI、机器人控制 |
+
+此外，**自监督学习**和**半监督学习**已成为深度学习中的关键补充范式。
+
+### 2026 年 AI 的能力与局限
+
+[Google Cloud](https://cloud.google.com/learn/what-is-artificial-intelligence) 在 2026 年指出，AI 的核心能力包括：
+
+- ✅ **模式识别**：在海量数据中发现人类难以察觉的规律
+- ✅ **自然语言理解**：理解、生成和翻译人类语言
+- ✅ **计算机视觉**：识别图像、人脸、物体和场景
+- ✅ **自主决策**：在特定领域（如游戏、推荐系统）做出优化决策
+- ❌ **真正的理解**：AI 没有意识，不理解"意义"
+- ❌ **常识推理**：对物理世界的基本常识仍然薄弱
+- ❌ **创造性思维**：生成式 AI 能"组合"但非真正"创造"
+
+### 实践要点：从"使用 AI"到"理解 AI"
+
+对于 2026 年的初学者，建议优先建立以下认知：
+
+1. **AI 不是魔法**——每一层都有清晰的数学和工程原理
+2. **数据是燃料**——模型质量直接取决于训练数据的质量和数量
+3. **算力是引擎**——从 GPU 到专用 AI 芯片，硬件是 AI 进步的物理基础
+4. **算法是方向盘**——不同的学习算法决定了模型"学什么"和"怎么学"
+
+### 参考来源
+
+- [IBM — What Is Artificial Intelligence (AI)?](https://www.ibm.com/think/topics/artificial-intelligence)（2024-08-09 发布，持续更新）
+- [Google Cloud — What is Artificial Intelligence (AI)?](https://cloud.google.com/learn/what-is-artificial-intelligence)
+- [Coursera — What Is Artificial Intelligence? Definition, Uses, and Types](https://www.coursera.org/articles/what-is-artificial-intelligence)
+- [GeeksforGeeks — Machine Learning Tutorial](https://www.geeksforgeeks.org/machine-learning/machine-learning/)（2026-06-05 更新）
+
+---
+
+## 🚀 2026 年 7 月 AI 入门新资源速览
+
+> 撰写日期：2026-07-20 | 综合 GitHub、HuggingFace、知名博客等渠道
+
+### 概述
+
+2026 年中，AI 学习生态持续繁荣。我们可以从几个标志性资源看出当前 AI 入门的最佳路径：GitHub 上高星标的开源学习指南、可以浏览器直接运行的 1-Bit LLM 实验，以及面向非技术人员的 AI Agent 入门教程。以下是最近一周值得关注的几项优质资源。
+
+### 核心要点
+
+1. **Start Machine Learning in 2026（⭐ 5200+ GitHub Stars）**
+   [louisfb01/start-machine-learning](https://github.com/louisfb01/start-machine-learning) 是一个从零开始的 ML/AI 免费学习指南（2026 年 7 月 20 日更新），涵盖：
+   - YouTube 视频入门、免费在线课程、书籍推荐
+   - 数学预备知识（线性代数、概率统计、多元微积分）
+   - 从零学 Python → 机器学习 → 深度学习 → LLM 应用开发
+   - 推荐资源包括：Andrej Karpathy 的 micrograd 教程、3Blue1Brown 神经网络系列、Stanford CS229 速查表
+   - 特别推荐：Towards AI 的《From Beginner to Advanced LLM Developer》课程，手把手教你构建可部署的 AI 应用
+
+2. **1-Bit LLM 在浏览器中运行**
+   [HuggingFace Space: bonsai-webgpu](https://huggingface.co/spaces/webml-community/bonsai-webgpu) 展示了**全量 1-Bit 大语言模型直接在浏览器中运行**的能力。这标志着：
+   - 🎯 **入门门槛大幅降低**：无需 GPU、无需安装任何软件，浏览器即可体验 LLM
+   - 🔬 WebGPU 标准成熟：AI 推理从云端走向边缘设备
+   - 💡 对初学者的意义：可以直接在浏览器中实验不同模型，理解 LLM 的生成行为
+
+3. **AI Agent 入门指南（面向非技术人员）**
+   [How to Build Your First AI Agent — A Real Beginner's Guide (2026)](https://thoughts.jock.pl/p/how-to-build-your-first-ai-agent-beginners-guide-2026) 是 2026 年第一批面向完全零基础读者的 Agent 教程。它从"什么是 Agent"开始，不假设编程背景，适合作为 AI 入门的第零步阅读。
+
+### 实践建议
+
+对于 2026 年 7 月开始学习 AI 的初学者，建议按以下顺序体验：
+
+1. **先用浏览器体验 LLM**：打开 bonsai-webgpu（1-Bit LLM），感受模型生成文本的实时过程
+2. **看 YouTube 视频建立直觉**：3Blue1Brown 神经网络系列 + Luis Serrano 的 Transformer 讲解
+3. **跟随 GitHub 学习路线**：fork [start-machine-learning](https://github.com/louisfb01/start-machine-learning)，每天学习 1-2 个模块
+4. **动手实践**：在 Kaggle 上完成 Intro to ML 课程，用真实数据集建立第一个模型
+
+## 2026 年 AI 入门新趋势：从"看课"到"做项目"
+
+> 根据 Sabrine Bendimerad 在 Towards Data Science 发表的 [A Realistic Roadmap to Start an AI Career in 2026](https://towardsdatascience.com/a-realistic-roadmap-to-start-an-ai-career-in-2026/) 以及 Mahnoor Javed 的 [AI Agent 入门教程](https://towardsdatascience.com/the-ultimate-beginners-guide-to-building-an-ai-agent-in-python/)。
+
+### 1. AI 教育市场的现状
+
+2026 年的 AI 教育市场已极度饱和。Bootcamp 遍地开花，在线平台承诺"12 周速成"，课程捆绑包层出不穷。但现实是：
+
+- **Bootcamp 价格昂贵**（动辄数千美元），对大多数人不可及
+- **大学课程**虽然体系化，但未必人人有条件报读
+- **自学路线混乱**——在不同平台间拼凑课程，往往比预想的更贵、更不连贯
+
+### 2. 2026 年自学 AI 的核心原则
+
+Sabrine 提出了一条**项目驱动**的务实路线：
+
+| 核心原则 | 说明 |
+|---------|------|
+| **学会建造（Learn & Build）** | 只看视频、重复小练习在 2026 年已行不通。真正有效的学习方式是**边学边做** |
+| **端到端交付（End-to-End）** | 招聘者不再满足于"你能清洗数据"，而是要求你能**从问题定义到可部署成果**完成闭环 |
+| **差异化竞争力** | 区别你与其他求职者的，不是上过多少课，而是**可展示的项目成果** |
+| **不走全栈路线** | AI 领域巨大，没有人是"全栈 AI 专家"。打好基础后，选择一个方向深耕 |
+
+### 3. AI Agent：2026 年最热门的入门切入点
+
+Agent（智能体）已成为 2026 年 AI 领域最热门的关键词之一。与传统的聊天机器人（Chatbot）不同：
+
+| | 聊天机器人 (Chatbot) | AI Agent (智能体) |
+|---|---|---|
+| **交互方式** | 一问一答，被动响应 | 自主观察→思考→决策→行动 |
+| **记忆能力** | 有限或无记忆 | 可维护上下文和长期记忆 |
+| **工具使用** | 通常不支持 | 可调用搜索、计算器、API 等工具 |
+| **任务完成** | 文本生成 | 端到端任务执行（搜索→对比→规划→输出） |
+
+**示例对比**：假设用户想买一台编程用笔记本电脑：
+- **Chatbot**：一条消息推荐几款机型，再逐一回答后续问题
+- **AI Agent**：自动搜索、对比规格、分析价格、生成对比表格，并给出综合建议
+
+#### 构建一个 AI Agent 的简易流程
+
+根据 Mahnoor 的教程，一个 AI Agent 的工作流程如下：
+
+```
+用户输入目标 → Agent 拆解为子任务 → 
+  调用工具（搜索/计算/数据库）→ 
+  分析结果 → 综合回答 → 交付成果
+```
+
+对于零编程基础的初学者，2026 年完全可以用 Python 在几分钟内构建一个简单的 AI Agent。
+
+### 4. 2026 年入门 AI 的推荐路径
+
+1. **先用浏览器体验 AI**：访问 HuggingFace Spaces 上的 Bonsai WebGPU（1-Bit LLM），感受模型实时生成文本
+2. **上手构建 AI Agent**：用 Python 跟着教程做一个教育助手 Agent，体验 AI 的"动手感"
+3. **看视频建立直觉**：3Blue1Brown 神经网络系列 + Luis Serrano 的 Transformer 讲解
+4. **进入系统学习**：fork [start-machine-learning](https://github.com/louisfb01/start-machine-learning) 仓库，按模块推进
+5. **在 Kaggle 上实战**：完成 Intro to ML 课程，用真实数据集建立第一个模型
+
+### 参考来源
+
+- [Sabrine Bendimerad — A Realistic Roadmap to Start an AI Career in 2026](https://towardsdatascience.com/a-realistic-roadmap-to-start-an-ai-career-in-2026/)（Towards Data Science, 2025-12-09）
+- [Mahnoor Javed — The Ultimate Beginners' Guide to Building an AI Agent in Python](https://towardsdatascience.com/the-ultimate-beginners-guide-to-building-an-ai-agent-in-python/)（Towards Data Science, 2026-05-24）
+- [louisfb01/start-machine-learning — Complete ML/AI Guide for 2026](https://github.com/louisfb01/start-machine-learning)（2026-07-20 更新，⭐ 5278）
+- [HuggingFace — Bonsai WebGPU: 1-Bit LLM in the Browser](https://huggingface.co/spaces/webml-community/bonsai-webgpu)（2026-07-20）
+- [How to Build Your First AI Agent — A Real Beginner's Guide (2026)](https://thoughts.jock.pl/p/how-to-build-your-first-ai-agent-beginners-guide-2026)
+- [A Pragmatic Beginner's Guide to Introducing AI to Your Engineering Workflow](https://jeffammons.com/2026/05/05/a-pragmatic-beginners-guide-to-introducing-ai-to-your-engineering-workflow/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -496,4 +760,4 @@ MIT Lincoln Laboratory 的最新项目显示，即使是航空军学员也能利
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-16 00:08:55*
+*资源区块更新时间：2026-07-20 21:29:01*

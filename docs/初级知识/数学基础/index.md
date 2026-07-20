@@ -111,13 +111,92 @@ AI 系统本质上都在处理不确定性：
 - **Gradient Checkpointing**：用时间换空间，减少显存占用
 - **混合精度训练**：FP16/BF16 计算 + FP32 参数存储，速度翻倍
 
-### 推荐学习路径（2026）
+## 2026 年 AI 数学的实践视角
 
-1. **快速上手**：3Blue1Brown《线性代数的本质》+《微积分的本质》视频系列
-2. **AI 专项**：Stanford CS229 讲义中的数学附录（最精简）
-3. **动手代码**：PyTorch 官方教程的自动求导（autograd）实验
+### 关键认知转变
+
+2025-2026 年，随着 LoRA、QLoRA、AutoML 等工具的成熟，入门 AI 对公式推导的要求降低，但对**数学直觉和维度理解**的要求反而提高了。
+
+| 过去 | 现在 |
+|------|------|
+| 从零推导反向传播公式 | 理解梯度回传的方向和维度变化 |
+| 手写矩阵求导 | 追踪矩阵维度变换（shape tracking） |
+| 自己实现优化器 | 何时用 AdamW、何时用 SGD、何时用 Cosine Annealing |
+| 数学证明收敛性 | 通过训练曲线判断是否收敛 |
+
+### 线性代数：AI 工程师最频繁使用的数学
+
+**维度追踪**是 2026 年 AI 工程师最常遇到的数学概念：
+
+- **Embedding 维度**：text-embedding-3-small（1536 维）、BGE-M3（1024 维）——维度直接影响检索精度和存储成本
+- **注意力机制**：Q/K/V 矩阵乘法的维度对齐是 Transformer 的核心操作，`[batch, seq_len, d_model] × [d_model, d_out]` 的维度匹配是调试 Transformer 代码的日常任务
+- **LoRA 低秩适配**：用低秩矩阵分解（`r=8~64`）近似全量微调——理解**秩（Rank）** 的意义直接关系微调效果
+- **多头注意力**：将高维拆成多个子空间并行计算，再拼接回去
+
+> **实用技巧**：不要怕矩阵公式，先从「维度的变化」开始理解——每次矩阵乘法都会改变形状，养成标注维度的习惯。
+
+### 概率论：模型输出的本质
+
+LLM 的核心是概率预测，不是确定性推理：
+
+- **Softmax 输出**：模型输出的是概率分布，0.7 不代表"70% 正确"，只代表"相对置信度"
+- **贝叶斯思维**：先验（预训练知识）+ 证据（新数据）= 后验（微调后模型）
+- **困惑度（Perplexity）**：语言模型的核心指标，等价于模型对下一个 token 的不确定性
+- **Temperature**：控制概率分布的"锐度"——温度低 → 趋近贪婪采样，温度高 → 增加多样性
+- **对比学习损失**：CLIP、Sentence-BERT 等模型用对比损失拉近相似样本的距离、推远不相似样本
+
+### 微积分：梯度下降的实际理解
+
+不需要精通链式法则推导，但需要理解：
+
+- **梯度**：微分的向量形式，指向损失函数增长最快的方向。梯度下降沿反方向更新参数
+- **链式法则**：反向传播的基础——误差从输出层逐层传回输入层
+- **梯度消失/爆炸**：深层网络中梯度过小（停止学习）或过大（训练震荡），LayerNorm 和残差连接是解决方案
+- **学习率调度**：Cosine Annealing 是 2026 年最常用的调度策略，Warmup + 余弦衰减的组合是标准配置
+
+### 实际应用：从代码理解数学
+
+以下 PyTorch 代码展示了数学概念如何在实际中应用：
+
+```python
+import torch
+import torch.nn.functional as F
+
+# 线性代数：矩阵乘法即全连接层
+x = torch.randn(32, 768)           # batch=32, 特征维度=768
+W = torch.randn(768, 2048)         # 权重矩阵
+h = x @ W                          # [32, 768] @ [768, 2048] = [32, 2048]
+
+# 概率：Softmax 将 logits 转为概率分布
+logits = torch.randn(32, 10)       # 10 个类别的原始分数
+probs = F.softmax(logits, dim=-1)  # 每行和为 1，表示概率分布
+
+# 微积分：自动求导计算梯度
+x = torch.tensor([3.0], requires_grad=True)
+y = x**2 + 2*x + 1
+y.backward()                       # dy/dx = 2x + 2 = 8
+print(x.grad)                      # tensor([8.])
+
+# 损失函数：交叉熵
+loss = F.cross_entropy(logits, torch.randint(0, 10, (32,)))
+```
+
+### 推荐学习路径（2026 更新）
+
+1. **快速建立直觉**：3Blue1Brown《线性代数的本质》《微积分的本质》视频系列（YouTube 免费）
+2. **AI 专项数学**：Stanford CS229 讲义中的数学附录（最精简且针对 ML）
+3. **动手代码**：PyTorch 官方教程的自动求导实验 + Tensor 操作练习
 4. **深入理解**：Gilbert Strang《线性代数及其应用》+ Bishop《模式识别与机器学习》
-5. **前沿数学**：阅读 Transformer 论文（Attention Is All You Need）中注意力公式
+5. **前沿实战**：阅读 Transformer 论文《Attention Is All You Need》中的注意力公式，理解维度变换
+
+### 参考来源
+
+- 3Blue1Brown, "Linear Algebra" / "Calculus" 系列, YouTube
+- Stanford CS229 课程讲义, https://cs229.stanford.edu/
+- PyTorch 官方文档 - Autograd, https://pytorch.org/docs/stable/autograd.html
+- Vaswani et al., "Attention Is All You Need", 2017
+
+---
 
 ## 初学者常见误区
 
@@ -154,4 +233,4 @@ AI 系统本质上都在处理不确定性：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-16 00:08:55*
+*资源区块更新时间：2026-07-20 21:29:01*

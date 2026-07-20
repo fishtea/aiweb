@@ -180,6 +180,86 @@ model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-8B")
 tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-8B")
 ```
 
+### 生产部署：SGLang / vLLM
+
+Qwen3 官方推荐使用 **SGLang (>=0.4.6.post1)** 或 **vLLM (>=0.8.4)** 搭建 OpenAI 兼容 API 服务：
+
+```bash
+# SGLang 部署（推荐结构化和推理场景）
+python -m sglang.launch_server \
+  --model-path Qwen/Qwen3-30B-A3B \
+  --reasoning-parser qwen3
+
+# vLLM 部署（高吞吐场景）
+vllm serve Qwen/Qwen3-30B-A3B \
+  --enable-reasoning \
+  --reasoning-parser deepseek_r1
+```
+
+### 思考模式控制
+
+Qwen3 支持在 tokenizer 中通过 `enable_thinking` 参数控制推理模式：
+
+```python
+# 思考模式（深度推理）
+text = tokenizer.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True,
+    enable_thinking=True  # 默认开启
+)
+
+# 非思考模式（快速问答）
+text = tokenizer.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True,
+    enable_thinking=False
+)
+```
+
+在多轮对话中，可以通过 `/think` 和 `/no_think` 标签动态切换模式：
+
+```text
+User: 1+1等于多少？ /no_think
+Assistant: 2
+
+User: 证明哥德巴赫猜想 /think
+Assistant: <think>这是一个未解决的数学难题...
+```
+
+### Agent 集成：Qwen-Agent + MCP
+
+Qwen3 原生支持 MCP（Model Context Protocol）和工具调用。使用 [Qwen-Agent](https://github.com/QwenLM/Qwen-Agent) 框架可快速搭建 Agent：
+
+```python
+from qwen_agent.agents import Assistant
+
+bot = Assistant(
+    llm={
+        "model": "Qwen3-30B-A3B",
+        "model_server": "http://localhost:8000/v1",  # 本地 SGLang/vLLM 端点
+        "api_key": "EMPTY",
+    },
+    function_list=[{
+        "mcpServers": {
+            "time": {"command": "uvx", "args": ["mcp-server-time", "--local-timezone=Asia/Shanghai"]},
+            "fetch": {"command": "uvx", "args": ["mcp-server-fetch"]}
+        }
+    }]
+)
+
+messages = [{"role": "user", "content": "搜索最新的 AI 新闻"}]
+for responses in bot.run(messages=messages):
+    pass
+print(responses)
+```
+
+### 本地快速体验（Ollama）
+
+```bash
+ollama run qwen3:30b-a3b
+# 或较小的密集模型
+ollama run qwen3:8b
+ollama run qwen3:4b
+```
+
 ---
 
 ## 优势与局限
@@ -220,4 +300,4 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-8B")
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-16 00:08:55*
+*资源区块更新时间：2026-07-20 21:29:01*

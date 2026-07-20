@@ -468,6 +468,309 @@ model.load_state_dict(torch.load("model.pth")) # 加载权重
 
 ---
 
+## 📓 2026 年深度学习自学新资源：deep-learning-notes 与系统性方法论
+
+### 概述
+
+深度学习领域发展极快，经典教材《动手学深度学习》（d2l.ai）的更新速度已逐渐跟不上前沿进展。2026 年，以 `jshn9515/deep-learning-notes`（⭐557）为代表的新一代自学笔记项目，正在填补从「基础理论」到「前沿实践」之间的空白。这些资源采用**系统性归纳 + 动手实战**的方法，适合有一定基础后想全面梳理 DL 知识体系的学习者。
+
+### 核心要点
+
+#### 1. deep-learning-notes：从碎片到体系
+
+`jshn9515/deep-learning-notes` 是一个个人深度学习学习笔记项目，已发布为静态网站，配套 CI/CD 自动构建。
+
+**项目技术栈（2026-07）：**
+```
+Python 3.14  +  PyTorch 2.12.0  +  Transformers 5.12.0
+```
+
+> 作者自述：「很长一段时间里，我一直苦于如何有效地学习深度学习。《动手学深度学习》是一本很好的入门书，但它的更新速度逐渐落后于这个领域的进展。自从 Transformer 兴起以来，CLIP、Diffusion、vLLM 等主题变得越来越重要……」
+
+**覆盖的主题（系统化梳理）：**
+- PyTorch 基础（张量、自动微分、神经网络模块）
+- Attention 机制与 Transformer 架构
+- GAN（生成对抗网络）
+- CLIP（多模态对比学习）
+- Stable Diffusion（扩散模型）
+- SAM3（分割模型）
+
+每个主题包含：核心思想 → 数学推导 → 代码实现 → 常见踩坑点
+
+**来源：** [deep-learning-notes — GitHub](https://github.com/jshn9515/deep-learning-notes)（2026-07-19 更新，⭐557）
+
+#### 2. 「系统性」为什么比「碎片化」重要
+
+作者指出了大多数自学者面临的困境：
+
+> 「网上资料并不少，但大多是碎片化的。今天学 Attention，明天 LoRA，后天扩散模型——最后留下的往往只是碎片，很难构建真正连贯的理解。」
+
+**推荐的深度学习自学路径（2026 版）：**
+
+```
+阶段 1：基础（2-4 周）
+  PyTorch 入门 → 前馈网络 → 训练循环
+  资源：PyTorch 官方教程 + d2l.ai 前 5 章
+
+阶段 2：架构理解（4-6 周）
+  CNN → RNN/LSTM → Attention → Transformer
+  资源：deep-learning-notes + The Annotated Transformer
+
+阶段 3：前沿应用（6-8 周）
+  CLIP → Diffusion → LLM 推理优化
+  资源：deep-learning-notes + 论文精读
+
+阶段 4：工程落地（持续）
+  vLLM → 模型部署 → 性能优化
+  资源：vLLM 官方文档 + PyTorch Profiler
+```
+
+#### 3. 2026 年深度学习工具链现状
+
+| 组件 | 推荐选择 | 备注 |
+|------|---------|------|
+| **框架** | PyTorch 2.13.0 | 行业标准，研究/工业通用 |
+| **高层 API** | fastai 2.8.7 | 快速原型，教学友好 |
+| **Transformers** | HuggingFace 5.12.0 | LLM 生态标准 |
+| **部署** | vLLM / torch.compile | 推理加速必备 |
+| **可视化** | TensorBoard / W&B | 训练监控 |
+| **笔记本** | Jupyter / VS Code | 交互式开发 |
+
+**对初学者的建议：**
+- 不要同时学多个框架——**PyTorch 优先**，学透一个再扩展
+- HuggingFace Transformers 不是"高级"话题，2026 年已成为 DL 入门必学
+- 尽早接触 `torch.compile()`——一行代码获得免费加速，没有学习成本
+
+**来源：** [PyTorch 2.13.0 Release — GitHub](https://github.com/pytorch/pytorch/releases/tag/v2.13.0)
+
+#### 4. d2l.ai vs 新一代资源：如何选择
+
+| 对比维度 | d2l.ai（动手学深度学习） | 新一代笔记（如 deep-learning-notes） |
+|---------|--------------------------|--------------------------------------|
+| **覆盖范围** | 基础 → 中级 | 中级 → 前沿 |
+| **更新速度** | 较慢（书籍级审校） | 快速（个人笔记级） |
+| **前沿主题** | 有限（Transformer 后较少） | 丰富（CLIP、Diffusion、SAM3 等） |
+| **数学深度** | 详细推导 | 精炼推导 + 代码实现 |
+| **适合阶段** | 0 → 6 个月 | 3 → 12 个月 |
+
+**建议**：先用 d2l.ai 打基础（前 5-8 章），然后切换到 deep-learning-notes 或类似资源跟进前沿。
+
+### 实践建议
+
+1. **搭建学习环境**：
+   ```bash
+   pip install torch torchvision torchaudio
+   pip install transformers datasets accelerate
+   pip install jupyter matplotlib seaborn
+   ```
+
+2. **第一个实战项目**：用 PyTorch 从头实现一个 Transformer 并在小数据集上训练（理解每个组件的作用）
+
+3. **系统化记录**：像 deep-learning-notes 一样建立自己的笔记仓库，用 GitHub Pages 发布
+
+### 参考来源
+- [deep-learning-notes — GitHub](https://github.com/jshn9515/deep-learning-notes)（Python 3.14 + PyTorch 2.12.0 + Transformers 5.12.0，⭐557，2026-07-19 更新）
+- [PyTorch 2.13.0 Release Notes](https://github.com/pytorch/pytorch/releases/tag/v2.13.0)
+- [fastai v2.8.7 Release](https://github.com/fastai/fastai/releases/tag/2.8.7)
+
+---
+
+## 🧠 2026 年神经网络入门：从感知机到深度学习的完整演进
+
+> 撰写日期：2026-07-20 | 基于 GeeksforGeeks（2026-07-04 更新）、Google Deep Learning Tuning Playbook 等权威来源
+
+### 概述
+
+神经网络是深度学习的基础构件。本文基于 [GeeksforGeeks 神经网络入门指南](https://www.geeksforgeeks.org/deep-learning/neural-networks-a-beginners-guide/)（2026 年 7 月 4 日更新），从零开始讲解神经网络的核心概念、工作原理及 2026 年主流架构。
+
+### 神经网络的核心构件
+
+根据 GeeksforGeeks 2026 年教程，神经网络由五个基本组件构成：
+
+| 组件 | 作用 | 类比 |
+|------|------|------|
+| **神经元（Neuron）** | 接收输入，经阈值和激活函数处理后输出 | 人脑神经元 |
+| **连接（Connection）** | 神经元之间的信息通道 | 神经突触 |
+| **权重与偏置（Weights & Biases）** | 控制连接的强度和影响力 | 突触强度 |
+| **传播函数（Propagation Function）** | 跨层处理和传输数据的机制 | 信号传递 |
+| **学习规则（Learning Rule）** | 随时间调整权重和偏置以提高准确率 | 学习机制 |
+
+### 神经网络的三阶段学习过程
+
+每个神经网络的学习都遵循标准的三阶段循环：
+
+```
+1. 输入计算（Input Computation）
+   → 数据送入网络
+   
+2. 输出生成（Output Generation）
+   → 基于当前参数，网络生成预测输出
+   
+3. 迭代优化（Iterative Refinement）
+   → 通过调整权重和偏置，逐步提高性能
+```
+
+### 前向传播与反向传播（核心机制拆解）
+
+**前向传播（Forward Propagation）**：
+
+数据从输入层经隐藏层流向输出层。每个神经元执行：
+
+$$\nz = w_1x_1 + w_2x_2 + ... + w_nx_n + b\n$$
+
+其中 $w$ 是权重，$x$ 是输入，$b$ 是偏置。然后通过**激活函数**引入非线性：
+
+- **ReLU**（最常用）：$f(x) = \max(0, x)$
+- **Sigmoid**：$f(x) = \frac{1}{1+e^{-x}}$（用于二分类输出）
+- **Tanh**：$f(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$（零中心化）
+
+**反向传播（Backpropagation）**：
+
+1. **损失计算**：用损失函数衡量预测与真值的差距（MSE 用于回归，Cross-Entropy 用于分类）
+2. **梯度计算**：用链式法则计算损失对每个权重/偏置的梯度
+3. **参数更新**：用优化器（SGD、Adam）沿梯度反方向调整参数
+
+### 2026 年主流神经网络架构
+
+| 架构 | 适用场景 | 核心特点 |
+|------|---------|---------|
+| **前馈神经网络（FNN）** | 通用分类/回归 | 数据单向流动，最简单 |
+| **多层感知机（MLP）** | 非线性分类 | 3+ 层，含隐藏层 |
+| **卷积神经网络（CNN）** | 图像识别/处理 | 卷积层自动提取特征 |
+| **循环神经网络（RNN）** | 序列数据 | 反馈循环保留上下文 |
+| **长短期记忆网络（LSTM）** | 长期依赖 | 记忆门控机制，解决梯度消失 |
+| **Transformer** | NLP/多模态 | 自注意力机制，2026 年统治地位 |
+
+### 实战示例：垃圾邮件分类
+
+以 GeeksforGeeks 教程中的邮件分类为例——输入特征向量 `[1, 0, 1]`（关键词 "free"=1, "win"=0, "offer"=1），经隐藏层加权计算后，输出层 Sigmoid 激活给出概率 ≈0.636 > 0.5，判定为垃圾邮件。整个过程展示了神经网络如何从原始文本特征学习分类规则。
+
+### 2026 年学习建议
+
+1. **先理解原理**：手动推导一个小型神经网络的前向和反向传播（纸上或用 NumPy）
+2. **再上手框架**：PyTorch（推荐）或 TensorFlow/Keras
+3. **从小项目开始**：MNIST 手写数字识别 → CIFAR-10 图像分类 → 文本情感分析
+4. **学习调优**：参考 [Google Deep Learning Tuning Playbook](https://developers.google.com/machine-learning/guides/deep-learning-tuning-playbook)
+
+### 参考来源
+
+- [GeeksforGeeks — Introduction To Neural Networks](https://www.geeksforgeeks.org/deep-learning/neural-networks-a-beginners-guide/)（2026-07-04 更新）
+- [Kaggle — Intro to Deep Learning](https://www.kaggle.com/learn/intro-to-deep-learning)
+- [Google — Deep Learning Tuning Playbook](https://developers.google.com/machine-learning/guides/deep-learning-tuning-playbook)
+- [upGrad — Neural Networks and Deep Learning in 2026](https://www.upgrad.com/us/blog/details-neural-networks-and-deep-learning/)
+
+---
+
+## 🚀 2026 年深度学习工具与学习路径新变化
+
+> 撰写日期：2026-07-20 | 基于 GitHub、arXiv、PyTorch 社区等渠道
+
+### 概述
+
+2026 年上半年的深度学习生态出现了一些值得关注的新变化：PyTorch 迎来了原生大规模 RL 训练方案、深度学习入门学习路径更加清晰，而 `louisfb01/start-machine-learning` 等 GitHub 项目已经将 2026 年的最佳免费学习资源系统整合。以下是最值得关注的更新。
+
+### 核心要点
+
+1. **Miles：大规模 LLM 强化学习后训练的 PyTorch 原生方案**
+   2026 年发布的 [Miles](https://github.com/okoge-kaz/llm-recipes-miles)（基于 PyTorch Recipes 改造）是一个专注于大规模 LLM 强化学习后训练（RLHF/RL）的 PyTorch 原生方案。它的核心价值在于：
+   - **与 DeepSpeed、FSDP 等分布式框架完全兼容**
+   - **原生支持 MoE（混合专家）LLM 的训练与微调**
+   - **提供了从 SFT → RLHF → 推理的完整生产管线**
+   - 这意味着学习深度学习的初学者可以更容易地接触到前沿的训练技术，而不需要掌握多套框架
+
+2. **deep-learning-notes：系统化的深度学习自学资源**
+   [deep-learning-notes](https://github.com/glaukov/deep-learning-notes) 是一个高质量的中级深度学习自学笔记库，特别适合已完成"速成课"但需要系统性巩固的学习者。其特色包括：
+   - **从 d2l.ai（Dive into Deep Learning）出发**，但提供更多补充注释和代码练习
+   - **涵盖 CNN、RNN、Transformer、GNN 全系列架构**
+   - **2026 年更新了 PyTorch 2.x Compile 和分布式训练章节**
+
+3. **深度学习入门路径在 2026 年趋于标准化**
+   综合 GitHub 高星项目 [start-machine-learning](https://github.com/louisfb01/start-machine-learning)（⭐ 5278, 2026-07-20 更新）的最新推荐，深度学习入门路径已形成行业共识：
+   - **第 0-1 月**：数学基础（线代 + 概率 + 微积分，Khan Academy）+ Python 入门
+   - **第 1-2 月**：Stanford CS229（机器学习基础）或 Andrew Ng 课程
+   - **第 2-4 月**：MIT 6.S191（深度学习）或 DeepLearning.AI 专项课程
+   - **第 4-6 月**：选择 PyTorch 路线（推荐），从 MNIST → CIFAR-10 → 文本情感分析
+   - **第 6-9 月**：LLM 微调 + RAG + Agent（参加 Towards AI 的《From Beginner to Advanced LLM Developer》课程）
+
+### 2026 年深度学习新手指南：神经网络如何"深度"工作
+
+> 综合 365 Data Science（2026-04-24）和 TechGig（2026-01-11）的最新教程。
+
+#### 深度学习的 2026 年定义
+
+根据 365 Data Science 在 2026 年 4 月更新的定义：
+
+> 深度学习（Deep Learning）是机器学习的一个子集，通过使用**模仿人脑细胞的人工神经网络（ANN）**，让计算机能够自主发现数据中的复杂模式。其"深度"体现在**多层处理架构**——每一层在前一层的基础上提取更高级的抽象特征。
+
+#### 神经网络的三层架构
+
+深度学习模型的核心是人工神经网络，由三个核心组件构成：
+
+```
+输入层（Input Layer）    →  接收原始数据（图像像素、文本词向量等）
+隐藏层（Hidden Layers）  →  多层抽象特征提取，逐层递进
+输出层（Output Layer）   →  产生最终结果（分类标签、预测值、生成文本）
+```
+
+每一层包含大量"神经元"（Neuron），它们通过以下机制协同工作：
+- **激活函数（Activation Function）**：ReLU（最常用）、Sigmoid、Tanh——决定神经元是否"激活"
+- **权重（Weights）与偏置（Bias）**：通过学习调整的参数
+- **反向传播（Backpropagation）**：将误差从输出层逐层传回，更新权重
+
+#### 深度学习 vs 机器学习：一张表说清区别
+
+| 维度 | 传统机器学习 | 深度学习 |
+|------|------------|---------|
+| **特征工程** | 需要人工设计和提取特征 | 自动从数据中学习特征 |
+| **数据需求** | 几百~几千条即可 | 通常需要数万~数百万条 |
+| **计算资源** | CPU 即可 | 需要 GPU/TPU |
+| **可解释性** | 高（决策树可直观展示） | 低（"黑箱"问题） |
+| **代表算法** | 随机森林、XGBoost、SVM | CNN、RNN/LSTM、Transformer |
+| **典型应用** | 表格数据预测、信用评分 | 图像识别、NLP、语音合成 |
+
+#### 2026 年 DL 学习五步路线图
+
+根据 TechGig 2026 年 1 月发布的入门指南，从零到就业的 DL 学习路线分为五步：
+
+| 步骤 | 内容 | 关键技能 | 时间 |
+|------|------|---------|------|
+| **Step 1：ML 基础** | 监督/无监督学习、回归、分类、聚类 | Python + scikit-learn + Jupyter | 1-2 月 |
+| **Step 2：核心 DL** | 前馈网络、激活函数、损失函数、反向传播 | TensorFlow 或 PyTorch | 2-3 月 |
+| **Step 3：进阶架构** | CNN（图像）、RNN/LSTM（序列）、Transformer（NLP） | 各架构的原理与实现 | 2-3 月 |
+| **Step 4：生成式 AI** | GAN、扩散模型（Diffusion）、LLM | Stable Diffusion、GPT API | 2-3 月 |
+| **Step 5：部署与作品集** | 模型优化、MLOps、边缘 AI | ONNX、Docker、FastAPI | 持续 |
+
+**Step 3 的三大核心架构速览**：
+
+| 架构 | 擅长领域 | 核心机制 | 代表模型 |
+|------|---------|---------|---------|
+| **CNN（卷积神经网络）** | 图像分类、目标检测 | 卷积核滑动提取空间特征 | ResNet、YOLO、EfficientNet |
+| **RNN/LSTM（循环网络）** | 序列数据、时序预测 | 循环连接 + 门控机制保持记忆 | LSTM、GRU |
+| **Transformer** | NLP、多模态 | 自注意力（Self-Attention）并行处理 | GPT、BERT、Vision Transformer |
+
+> ⚠️ **关键提醒**：2026 年市场对 DL 人才的要求已升级——不仅要求会训练模型，更要求能**将模型部署到生产环境**。建议从 Step 4 开始就积累 MLOps 经验。
+
+### 推荐学习资源（2026 年 7 月更新）
+
+| 资源 | 类型 | 适合 | 链接 |
+|------|------|------|------|
+| Start Machine Learning 2026 | GitHub 指南 | 零基础，完整路线 | [louisfb01/start-machine-learning](https://github.com/louisfb01/start-machine-learning) |
+| Train & Fine-Tune LLMs 课程 | 免费视频课程 | 已有 ML 基础 | [Activeloop + Towards AI + Intel](https://learn.activeloop.ai/courses/llms/) |
+| deep-learning-notes | GitHub 笔记 | 中级巩固 | [glaukov/deep-learning-notes](https://github.com/glaukov/deep-learning-notes) |
+| PyTorch 官方教程 (2026) | 官方文档 | 初学者上手 | [PyTorch Tutorials](https://pytorch.org/tutorials/) |
+
+### 参考来源
+
+- [365 Data Science — What Is Deep Learning? A Complete Beginner's Guide for 2026](https://365datascience.com/trending/what-is-deep-learning/)（2026-04-24）
+- [TechGig/Nandini Mishra — Master Deep Learning 2026: Step-by-Step Beginner's Roadmap](https://content.techgig.com/upskilling-at-techgig/master-deep-learning-2026-beginners-roadmap/articleshow/126448658.cms)（2026-01-11）
+- [louisfb01/start-machine-learning — Complete ML/AI Guide for 2026](https://github.com/louisfb01/start-machine-learning)（⭐ 5278，2026-07-20 更新）
+- [Miles: PyTorch-native RL post-training for large LLMs](https://github.com/okoge-kaz/llm-recipes-miles)
+- [glaukov/deep-learning-notes — Structured DL self-study notes](https://github.com/glaukov/deep-learning-notes)
+- [Activeloop — Training & Fine-Tuning LLMs for Production (Free Course)](https://learn.activeloop.ai/courses/llms/)
+- [GeeksforGeeks — Neural Networks: A Beginner's Guide (2026 Update)](https://www.geeksforgeeks.org/deep-learning/neural-networks-a-beginners-guide/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -480,4 +783,4 @@ model.load_state_dict(torch.load("model.pth")) # 加载权重
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-16 00:08:55*
+*资源区块更新时间：2026-07-20 21:29:01*
