@@ -250,6 +250,70 @@ collection.insert([docs_embeddings, doc_ids, metadata])
 
 ---
 
+## 2026 生产级向量数据库实战全景
+
+> 来源：[Vector Databases in 2026: The Complete Production Guide](https://devstarsj.github.io/2026/02/24/vector-databases-ai-applications-production-guide/)（2026年2月）；[The Ultimate Guide to Vector Databases in 2026](https://codeboxr.com/the-ultimate-guide-to-vector-databases-in-2026/)（2026年4月）；[Embeddings & Vector Databases: A Practitioner's Guide](https://www.aitraining2u.com/embeddings-vector-databases-2026.html)（2026）
+
+### HNSW 为什么是 2026 年的王者算法？
+
+ANN（近似最近邻）算法是向量数据库的核心引擎。2026 年，**HNSW（Hierarchical Navigable Small World）** 已成为绝对主流——pgvector、Pinecone、Qdrant、Weaviate、Milvus 全部默认或主要使用 HNSW。
+
+| 算法 | 速度 | 精度 | 内存占用 | 2026 年地位 |
+|------|------|------|---------|------------|
+| **HNSW** | 极快 | 极高 | 高 | 🏆 绝对主流 |
+| IVF（倒排索引） | 快 | 高 | 中 | 大基数场景替代方案 |
+| ScaNN（分区+重排） | 快 | 高 | 中 | Google 系使用 |
+| DiskANN | 中 | 高 | 低 | 磁盘优化场景 |
+
+HNSW 构建多层图结构，每层都是一个小世界网络，搜索时从顶层快速跳跃到底层精确匹配，实现**对数级别**的搜索复杂度。核心权衡：**构建索引慢、内存占用高，但查询速度极快且精度损失极小。**
+
+### 向量数据库 2026 年全景对比
+
+| 数据库 | 类型 | 最适合场景 | 托管选项 |
+|--------|------|-----------|---------|
+| **pgvector** | PostgreSQL 扩展 | 简单 RAG，已有 Postgres 基础设施 | AWS RDS, Supabase, Neon |
+| **Pinecone** | 托管云原生 | 企业级，全托管，零运维 | 仅托管 |
+| **Qdrant** | 独立，Rust 原生 | 高性能，自托管 | Qdrant Cloud |
+| **Weaviate** | 独立 + 多模态 | 多模态搜索，GraphQL API | Weaviate Cloud |
+| **Milvus** | 独立，云原生 | 十亿级规模，复杂过滤 | Zilliz Cloud |
+| **Chroma** | 嵌入式/本地 | 开发原型，本地测试 | 无 |
+| **Redis（向量）** | Redis 模块 | 低延迟，已有 Redis 基础设施 | Redis Cloud |
+
+### 选型决策三步法
+
+**第一步：明确规模**
+
+```
+你的向量数量级？
+├─ < 10万 → Chroma / pgvector（够用，零额外成本）
+├─ 10万 - 1000万 → Qdrant / Weaviate / pgvector（需关注查询延迟）
+└─ > 1000万 → Milvus / Pinecone（需要分布式和 HA）
+```
+
+**第二步：看基础设施**
+
+- **已有 PostgreSQL？** → 优先 pgvector，同库管理，减少运维复杂度
+- **已有 Redis？** → Redis Stack 向量搜索够用且延迟最低
+- **MongoDB 生态？** → Atlas Vector Search 统一文档+向量查询
+- **全新项目？** → Qdrant（自托管高性能）或 Pinecone（全托管省心）
+
+**第三步：评估非功能性需求**
+
+- **元数据过滤能力**：是否需要复杂条件组合？（Milvus > Qdrant > pgvector）
+- **多模态支持**：是否需要文本+图片统一检索？（Weaviate 原生支持）
+- **增量更新效率**：是否需要频繁写入？（Qdrant 写入最快）
+- **运维能力**：是否有人维护分布式系统？（没有 → Pinecone 托管）
+
+### 2026 年不可忽视的三个实践
+
+1. **混合检索不是可选项而是标配**：稠密向量 + BM25 + 重排序（reranker）的三层架构是 2026 年的基线。单纯向量检索的召回率天花板约为 85%，加上 BM25 可提升至 92%，再加 reranker 可达 97%+。
+2. **语义缓存让成本砍半**：FAQ 和文档查询场景下，60-85% 的查询可被语义缓存命中，API 成本降低最高 73%，延迟从 1.67s 降至 0.052s。
+3. **不要把向量数据库当成"万能存储器"**：它擅长相似性检索，但不适合事务、聚合查询、复杂关系建模——这些仍由关系数据库承担。
+
+> 来源：[Vector Databases in 2026: The Complete Production Guide](https://devstarsj.github.io/2026/02/24/vector-databases-ai-applications-production-guide/) | [The Ultimate Guide to Vector Databases in 2026](https://codeboxr.com/the-ultimate-guide-to-vector-databases-in-2026/) | [Embeddings & Vector Databases: A Practitioner's Guide (2026)](https://www.aitraining2u.com/embeddings-vector-databases-2026.html)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -262,4 +326,4 @@ collection.insert([docs_embeddings, doc_ids, metadata])
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-20 21:29:01*
+*资源区块更新时间：2026-07-21 00:08:07*
