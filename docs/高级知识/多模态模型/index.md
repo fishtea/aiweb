@@ -668,6 +668,59 @@ def get_image_embedding(image_path: str) -> torch.Tensor:
 
 ---
 
+## 10. 2026年开源VLM新格局：从感知到行动的闭环
+
+**来源：** [BentoML - Multimodal AI Guide (2025-12)](https://www.bentoml.com/blog/multimodal-ai-a-guide-to-open-source-vision-language-models) | [Roboflow - Best Multimodal Models 2026 (2026-02)](https://blog.roboflow.com/best-multimodal-models/) | [Zylos Research - Multimodal AI 2026 (2026-01)](https://zylos.ai/research/2026-01-13-multimodal-ai-vision-language-models)
+
+2026 年，开源多模态模型完成了从"感知"到"感知+推理+行动"的范式升级。以下是最值得关注的新模型和能力：
+
+### 10.1 GLM-4.6V：原生视觉工具调用
+
+Z.ai 推出的 GLM-4.6V 是 2026 上半年最具代表性的开源 VLM 之一，主打**原生多模态工具调用**（Native Multimodal Tool Calling）：
+
+- **端到端视觉驱动**：图像、UI 截图、文档页面可以直接作为工具参数传入，不需要先转成文本描述
+- **视觉输出理解**：工具返回的图表、搜索结果、网页截图，模型可以直接解读并融入推理流程
+- **双版本**：GLM-4.6V（106B，云端高性能）和 GLM-4.6V-Flash（9B，本地/低延迟部署）
+- **前端复刻能力**：可根据 UI 截图直接生成对应前端代码
+
+这一能力使 VLM 从"看图说话"进化为"看图办事"，极大降低了构建视觉 Agent 的系统复杂度。
+
+### 10.2 Qwen3-VL 与 Qwen2.5-VL：通义千问的多模态矩阵
+
+阿里巴巴的 Qwen-VL 系列在 2026 年形成了完整的产品矩阵：
+
+- **Qwen2.5-VL-32B-Instruct**：被 SiliconFlow 评为 2026 年最佳开源多模态聊天模型之一，在视觉问答、文档理解和推理任务上表现突出
+- **Qwen3-VL**：支持 1M 上下文窗口，可处理极长视频和多页文档；支持 32 种语言的 OCR
+- **Qwen VL Max**：云端旗舰，针对多语言和文档密集型工作负载优化
+
+### 10.3 SAM 3：分割一切模型的第三代
+
+Meta 的 SAM 3 在 Roboflow 2026 年 AI 视觉模型排行榜中以 1391 分位居榜首：
+
+- **零样本分割**（Zero-Shot Segmentation）：跨医学影像、卫星图、工业质检等多个领域
+- **交互式分割精度大幅提升**：单点提示即可产生高质量掩码
+- 这是目前最强的通用图像分割基础模型
+
+### 10.4 2026年 VLM 趋势总结
+
+| 趋势 | 说明 |
+|------|------|
+| 原生多模态架构 | 不再"外挂"视觉编码器+LLM，而是从预训练阶段就融合多模态（如 SigLIP 2 替代 CLIP） |
+| 工具调用闭环 | VLM 不仅能看，还能操作——截图→理解→调用工具→解读结果 |
+| 开源追赶闭源 | GLM-4.6V、Qwen3-VL 在多项基准上接近 GPT-5/Gemini 2.5 Pro 水平 |
+| 上下文窗口膨胀 | 1M token 成为标配，支持小时级视频理解 |
+| 小型化与本地部署 | 9B 级别的 VLM 已具备实用级多模态能力，可在消费级 GPU 上运行 |
+
+> **2026 核心建议**：构建视觉 Agent 时优先考虑支持原生工具调用的模型（GLM-4.6V），避免文本中介层的信息损失；文档处理场景优先 Qwen3-VL 的多语言 OCR；通用分割任务首选 SAM 3。
+
+**来源：**
+- [BentoML - Multimodal AI: Open-Source VLMs in 2026](https://www.bentoml.com/blog/multimodal-ai-a-guide-to-open-source-vision-language-models)
+- [Roboflow - Best Multimodal Models of 2026](https://blog.roboflow.com/best-multimodal-models/)
+- [SiliconFlow - Best Multimodal AI for Chat and Vision (2026)](https://www.siliconflow.com/articles/en/best-multimodal-AI-for-chat-and-vision)
+- [Zylos Research - Multimodal AI and VLMs 2026](https://zylos.ai/research/2026-01-13-multimodal-ai-vision-language-models)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -680,4 +733,4 @@ def get_image_embedding(image_path: str) -> torch.Tensor:
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-21 00:08:07*
+*资源区块更新时间：2026-07-22 00:08:01*

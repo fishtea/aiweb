@@ -491,6 +491,90 @@ BenchLM 追踪的 321 个基准中，**64 个（20%）属于 Agentic 类别**—
 
 ---
 
+## 2026 最新进展：Benchmark 饱和与 Agent 评测崛起
+
+**来源：** [BenchLM.ai - 321 LLM Evaluations Ranked (July 2026)](https://benchlm.ai/benchmarks) | [Vellum LLM Leaderboard 2026](https://www.vellum.ai/llm-leaderboard) | [Artificial Analysis Leaderboards](https://artificialanalysis.ai/leaderboards/models)
+
+### 2026 年 7 月最新 LLM 排行榜
+
+截至 2026 年 7 月，**Humanity's Last Exam（HLE）** 已成为衡量前沿模型综合能力的最权威基准。以下是 HLE 最新排名：
+
+| 排名 | 模型 | HLE 得分 | 备注 |
+|------|------|---------|------|
+| 1 | **Claude Mythos 5** | 64.5% | 2026 年新旗舰 |
+| 2 | Claude Opus 4.8 | 57.9% | Anthropic 中高端 |
+| 3 | Claude Sonnet 5 | 57.4% | Anthropic 性价比之选 |
+| 4 | GLM 5.2 | 54.7% | 智谱旗舰 |
+| 5 | Kimi K2.6 | 54.0% | 月之暗面 |
+| 6 | DeepSeek V4 Flash | 51.6% | DeepSeek 快速版 |
+| 7 | DeepSeek V4 Pro | 48.2% | DeepSeek 增强版 |
+| 8 | Gemini 3 Pro | 45.8% | Google |
+| 9 | GPT-5.5 Pro | 43.1% | OpenAI |
+| 10 | GPT-5.5 | 41.4% | OpenAI |
+
+### 专项能力排行榜（2026.07）
+
+**推理能力（GPQA Diamond）**：
+| 排名 | 模型 | 得分 |
+|------|------|------|
+| 1 | Claude Sonnet 5 | 96.2% |
+| 2 | Claude 3 Opus | 95.4% |
+| 3 | Gemini 3.1 Pro | 94.3% |
+| 4 | Claude Opus 4.7 | 94.2% |
+| 5 | Claude Fable 5 | 94.1% |
+
+**Agent 编程（SWE-Bench Verified）**：
+| 排名 | 模型 | 得分 |
+|------|------|------|
+| 1 | Claude Mythos 5 | 95.5% |
+| 2 | Claude Fable 5 | 95.0% |
+| 3 | Claude Opus 4.8 | 88.6% |
+| 4 | Claude Opus 4.7 | 87.6% |
+| 5 | Claude Sonnet 5 | 85.2% |
+
+### 传统 Benchmark 饱和危机
+
+2026 年公开基准的**自然寿命已缩短到 12-18 个月**——新基准发布后不到一年半就会被刷到天花板。因此行业正转向三类新型评估：
+
+**1. Agent 基准的爆发**
+
+BenchLM.ai 追踪的 321 个基准中，**Agentic 类别占 64 个**（20%），是最活跃的类别。2026 年新晋重要 Agent 基准包括：
+
+| 基准 | 测试内容 | 特点 |
+|------|---------|------|
+| **Terminal-Bench 2.1** | 终端环境下的软件工程任务 | 交互式 CLI Agent 评估（Claude Mythos 5: 88%） |
+| **BrowseComp** | 网页浏览 Agent 研究类问题 | 需搜索、检查来源、收集证据（Claude Fable 5: 88%） |
+| **AA AutomationBench** | 业务流程自动化 | 独立评估的任务成功率 |
+| **AA EnterpriseOps-Gym** | 企业运维工作流 | 企业 Agent 运维 |
+| **AA Harvey LAB** | 法律 Agent 任务 | 专业法律工作（独立评估） |
+| **APEX-Agents** | 452 个专业服务 Agent 任务 | 长周期职场 Agent 任务 |
+| **AA Tau3 Banking** | 银行工具调用工作流 | Agent 银行工作流 |
+
+**2. 计算机使用（OSWorld）**：Claude Fable 5 以 **85%** 领先，测试 Agent 操作真实操作系统桌面环境的能力。
+
+**3. 工作自动化（AutoBench）**：Claude Fable 5 以 **17.4%** 领先，说明真实工作自动化仍有极大的提升空间——这个分数本身就说明这条路很长。
+
+### 性价比与速度排行榜
+
+**最快模型（Tokens/秒）**：
+1. Llama 4 Scout — 2,600 t/s
+2. Llama 3.1 405B — 969 t/s
+3. GLM 5.2 — 347 t/s
+
+**最便宜模型（每百万 token 输入/输出）**：
+1. Nova Micro — $0.04 / $0.14
+2. Gemini 1.5 Flash — $0.075 / $0.30
+3. Gemini 2.0 Flash — $0.10 / $0.40
+
+### 2026 年评估建议
+
+1. **三层评估体系**：自动化基准（快速回归检测）→ LLM-as-Judge（生成质量评估）→ 人工抽检（校准兜底）。
+2. **Agent 系统用任务成功率**：如果你的系统是 Agent，用 SWE-Bench Verified 或自建端到端任务集评估，不要用选择题。
+3. **优先建业务评估集**：50 条真实标注的业务场景数据，比任何公开榜单更有参考价值。
+4. **不要等新基准**：公开基准饱和速度太快（12-18个月），应建立自己的持续评估体系。
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -503,4 +587,4 @@ BenchLM 追踪的 321 个基准中，**64 个（20%）属于 Agentic 类别**—
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-21 00:08:07*
+*资源区块更新时间：2026-07-22 00:08:01*

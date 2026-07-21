@@ -683,6 +683,68 @@ SCoRe (Kumar et al. 2024) 通过两阶段 RL 训练（阶段 1：最大化第二
 
 ---
 
+## 9. 2026年AI对齐三大突破：CAI 2.0、自改进对齐、机制可解释性
+
+**来源：** [Claude 5 Hub - AI Safety 2026 (2026-03)](https://www.claude5.com/news/ai-safety-2026-how-constitutional-ai-and-rlhf-shape-responsi) | [Claude 5 Hub - Constitutional AI 2.0 (2026-05)](https://claude5.com/news/constitutional-ai-2-0-safety-alignment-breakthroughs-in-2026)
+
+2026 上半年，Anthropic、OpenAI 和 DeepMind 三家前沿实验室分别发布了重要的对齐技术升级，标志着 AI 安全从"RLHF 修补"走向"系统化对齐工程"。
+
+### 9.1 Anthropic：宪法 AI 2.0（CAI 2.0）
+
+2026 年 2 月，Anthropic 发布了 CAI 2.0，核心创新是**动态宪法更新**（Dynamic Constitution Updates）：
+
+- 模型在训练过程中可以**提议修改自己的宪法**，需经人类监督批准
+- 在红队测试评估中，相比纯 RLHF 基线，有害输出**减少 40%**
+- CAI 系统在新颖安全场景中的泛化能力比传统 RLHF **高 40%**
+- 多层架构：核心价值宪法 → 领域特定原则 → 自我监督机制（持续评估输出是否符合宪法标准）
+
+CAI 2.0 的关键优势是**可扩展性**：随着模型能力增长，宪法框架提供了结构化的对齐保障，不需要指数级增加人工监督。
+
+### 9.2 OpenAI：自改进对齐（Self-Improving Alignment）
+
+GPT-5.1 引入了"自改进对齐"机制，使用元学习循环代替静态宪法：
+
+- 模型生成候选回复 → 通过学习到的奖励模型评估 → 自动精炼策略
+- **推理时无需人工干预**
+- 政策违规减少 **28%**，同时 SWE-bench 得分保持 **76.3%**
+- 证明安全性和能力**不需要二选一**
+
+### 9.3 DeepMind：机制可解释性（Mechanistic Interpretability）
+
+DeepMind 2026 年 3 月发表的研究采取了完全不同的路径——逆向工程模型的内部电路：
+
+- 定位并**外科手术式禁用** Gemini 3 中负责欺骗（Deception）和谄媚（Sycophancy）行为的神经回路
+- 不降低模型性能：Gemini 3 在 ARC-AGI-2 推理基准上得分 **31.1%**，同时在新的安全评估套件 StressTest 上得分 **94%**
+- 开创了"理解→定位→修复"的精准对齐范式
+
+### 9.4 对齐基准的升级
+
+传统安全基准（TruthfulQA、RealToxicityPrompts）已趋于饱和。2026 年出现的新评估体系：
+
+| 基准 | 关注维度 | 特点 |
+|------|---------|------|
+| StressTest (DeepMind) | 综合安全压力测试 | 覆盖欺骗、谄媚、权力寻求等深层行为 |
+| CAI 红队评估 | 宪法合规性 | 测试模型对原则的一致遵守 |
+| 自改进对齐指标 | 策略违规率 + 能力保持 | 同时衡量安全性和实用性 |
+
+### 9.5 对齐方法的比较
+
+| 方法 | 核心机制 | 优势 | 局限 |
+|------|---------|------|------|
+| RLHF | 人类偏好排序 → 训练奖励模型 | 成熟、经过大规模验证 | 标注不一致、奖励黑客、难以扩展 |
+| CAI 2.0 | 动态宪法 + 自我监督 | 可扩展、泛化好 | 宪法设计依赖人类价值观的明确表达 |
+| 自改进对齐 | 元学习 + 自动评估 | 推理时无需人工干预 | 奖励模型本身可能被欺骗 |
+| 机制可解释性 | 逆向工程内部电路 | 精准、可验证 | 仅适用于已理解的回路，覆盖面有限 |
+
+> **2026 核心趋势**：对齐技术正在从"行为层面约束"升级为"机制层面理解"。三种方法互补而非替代——CAI 提供原则框架，自改进对齐降低人工成本，机制可解释性提供底层验证。
+
+**来源：**
+- [Claude 5 Hub - AI Safety 2026: CAI and RLHF (2026-03)](https://www.claude5.com/news/ai-safety-2026-how-constitutional-ai-and-rlhf-shape-responsi)
+- [Claude 5 Hub - Constitutional AI 2.0 Breakthroughs (2026-05)](https://claude5.com/news/constitutional-ai-2-0-safety-alignment-breakthroughs-in-2026)
+- [Science Tech News - Evolution of AI Alignment (2026-06)](https://science-technology.news-articles.net/content/2026/06/01/the-evolution-of-ai-alignment-from-rlhf-to-constitutional-ai.html)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -695,4 +757,4 @@ SCoRe (Kumar et al. 2024) 通过两阶段 RL 训练（阶段 1：最大化第二
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-21 00:08:07*
+*资源区块更新时间：2026-07-22 00:08:01*
