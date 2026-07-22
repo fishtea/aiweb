@@ -153,6 +153,39 @@ SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择
     └── TensorRT-LLM（深度优化，但开发和运维成本最高）
 ```
 
+## 2026 开源模型实战排名
+
+根据 [Ryz Labs 2026 年 6 月开源 LLM 部署选型报告](https://learn.ryzlabs.com/llm-development/best-open-source-llms-for-deployment-in-2026)及社区实践共识，2026 年生产级开源模型的推荐排序如下：
+
+| 排名 | 模型 | 核心优势 | 最佳场景 | 注意事项 |
+|------|------|---------|---------|---------|
+| 1 | **LLaMA 4** (Meta) | GLUE/SuperGLUE SOTA，生态最丰富 | 研究应用、复杂 NLP | 微调需要大量计算资源 |
+| 2 | **DeepSeek-V3/R1** | 推理+代码双优，MoE 高性价比 | 代码生成、推理、中文 | MoE 路由需关注稳定性 |
+| 3 | **Qwen3** (阿里) | 中文能力顶尖，工具调用原生支持 | 中文应用、Agent、代码 | 部分版本许可证需确认 |
+| 4 | **Mistral Medium 3.1** | 企业合规，欧洲部署首选 | 企业内部应用、合规场景 | 生态不如 LLaMA 丰富 |
+| 5 | **GPT-NeoX 20B** (EleutherAI) | 20B 参数，社区驱动改进 | 文本生成、对话 Agent | 推理需 ≥40GB GPU 显存 |
+| 6 | **BLOOM** (BigScience) | 46 种语言多语言模型 | 多语言应用 | 推理速度较慢 |
+
+### ollama、vLLM、llama.cpp 场景化选型
+
+根据 [CSDN 2026 年本地部署对比](https://blog.csdn.net/weixin_64358901/article/details/161665173)及社区实践：
+
+| 维度 | Ollama | vLLM | llama.cpp |
+|------|--------|------|-----------|
+| **上手难度** | ★☆☆☆☆ 零配置 | ★★★☆☆ 需了解 GPU 和模型格式 | ★★☆☆☆ 需了解量化格式 |
+| **推理吞吐** | 中等（单请求友好） | 极高（PagedAttention） | 中低（CPU 场景） |
+| **量化支持** | GGUF（自动管理） | AWQ/GPTQ/FP8 | GGUF（格式最丰富） |
+| **并发能力** | 有限（社区版） | 企业级（continuous batching） | 有限 |
+| **API 兼容** | OpenAI 兼容 | OpenAI 兼容 + 多模型服务 | server 模式提供基础 API |
+| **硬件要求** | Apple Silicon 友好 | NVIDIA GPU 优先 | CPU/Apple Silicon/边缘设备 |
+| **适用规模** | 个人 ~ 小团队 | 团队 ~ 企业生产 | 个人 ~ 嵌入式 |
+
+**选型口诀：**
+- 🏠 想省事 → **Ollama**（一行命令跑模型）
+- ⚡ 要高吞吐 → **vLLM**（生产环境首选）
+- 💻 没显卡 → **llama.cpp**（CPU 也能跑 7B）
+- 🔧 Agent + 结构化输出 → **SGLang**（约束解码天然优势）
+
 ## 参考来源
 
 - [vLLM 文档](https://docs.vllm.ai/)
@@ -162,6 +195,8 @@ SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择
 - [Hugging Face TGI](https://huggingface.co/docs/text-generation-inference/index)
 - [vLLM Blog — v1 Engine](https://blog.vllm.ai/)
 - [SGLang — Structured Generation](https://docs.sglang.ai/)
+- [Best Open Source LLMs for Deployment in 2026 — Ryz Labs](https://learn.ryzlabs.com/llm-development/best-open-source-llms-for-deployment-in-2026)
+- [2026 本地部署大模型深度对比 — CSDN](https://blog.csdn.net/weixin_64358901/article/details/161665173)
 
 ---
 
@@ -177,4 +212,4 @@ SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-22 00:08:01*
+*资源区块更新时间：2026-07-23 00:09:06*

@@ -102,6 +102,60 @@ Fable 5 的使用场景定位包括：复杂多步 Agent、深度推理、创造
 
 > 注意：Sonnet 5 的价格至 2026 年 8 月 31 日有优惠价 $2/$10 每百万 token。
 
+## Claude Sonnet 5 深度解析（2026 年 6 月发布）
+
+根据 [Anthropic 官方发布公告](https://www.anthropic.com/news/claude-sonnet-5)（2026 年 6 月 30 日）和 [MarkTechPost 基准对比](https://www.marktechpost.com/2026/07/13/anthropic-claude-sonnet-5-vs-sonnet-4-6-vs-opus-4-8-agentic-coding-benchmarks-api-pricing-and-cost-performance-tradeoffs-compared/)（2026 年 7 月 13 日）：
+
+### 核心定位
+
+Claude Sonnet 5 被 Anthropic 称为「有史以来最具 Agent 能力的 Sonnet 模型」。它能够制定计划、使用浏览器和终端等工具，并以接近 Opus 4.8 的水平自主运行——而仅在几个月前，这些能力还需要更大、更昂贵的 Opus 级模型。
+
+### 关键基准测试
+
+| 基准 | Sonnet 4.6 | Sonnet 5 | Opus 4.8 | 解读 |
+|------|-----------|----------|----------|------|
+| SWE-bench Pro（编码） | 未公布 | **63.2%** | — | 自主修复真实 GitHub Issue |
+| OSWorld-Verified（计算机使用） | — | **81.2%** | — | 真实操作系统任务完成 |
+| HLE（知识工作） | — | **57.4%** | — | Humanity's Last Exam 难度 |
+| GDPval-AA v2（知识工作） | — | **1,618** | 1,615 | 略超 Opus 4.8 |
+| Terminal-Bench 2.1 | — | 显著提升 | — | 终端操作能力 |
+
+### 成本与性能权衡
+
+Sonnet 5 引入了 **effort level（努力级别）** 机制：low / medium / high / xhigh，通过控制推理 token 消耗来平衡质量和成本：
+
+| 努力级别 | 适用场景 | 成本特征 |
+|---------|---------|---------|
+| Low | 简单问答、分类、抽取 | 最省 token |
+| Medium | 常规编码、知识工作 | 推荐默认级别 |
+| High | 复杂多步推理、长 Agent 任务 | token 消耗增加 |
+| XHigh | 极难任务，接近 Opus 4.8 水平 | 成本可能超过 Opus 4.8 |
+
+**定价**（2026 年 8 月 31 日前优惠价）：
+- 输入：$2/百万 tokens（标准价 $3）
+- 输出：$10/百万 tokens（标准价 $15）
+- 对比 Opus 4.8：$5 输入 / $25 输出
+
+### Tokenizer 变更
+
+Sonnet 5 使用了与 Opus 4.7 相同的新版 tokenizer。相同文本映射的 token 数量大约是旧版的 **1.0~1.35 倍**，实际成本估算时需考虑这一因素。
+
+### 安全性
+
+Anthropic 的安全评估显示 Sonnet 5 整体不良行为率低于 Sonnet 4.6，且在 Agent 场景下更安全。网络安全能力远低于 Opus 级模型——如果你需要最高准确度的安全关键任务，Opus 仍是首选。
+
+### 生产选型建议
+
+| 场景 | 推荐 | 原因 |
+|------|------|------|
+| 日常编码 + 知识工作 | **Sonnet 5**（medium effort） | 性价比最优 |
+| 复杂 Agent（浏览器/终端操作） | **Sonnet 5**（high effort） | 接近 Opus 4.8 水平 |
+| 最高准确度 + 安全审查 | **Opus 4.8** | 旗舰能力 + 更低风险 |
+| 高吞吐分类/抽取/路由 | **Haiku 4.5** | 最低延迟 + 最低成本 |
+| 极致 Agent 推理 | **Fable 5** | 1M 上下文 + 始终开启思考 |
+
+> **一句话总结**：Sonnet 5 把 Opus 级的 Agent 能力带到了 Sonnet 价位。对大多数工程团队来说，这是 2026 年下半年最值得评估的模型。
+
 ### Claude Code 与 The Making of Claude Code
 
 根据 [Anthropic 官方文章](https://www.anthropic.com/features/making-of-claude-code)，Claude Code（CLI 编程 Agent）是 Anthropic 在 Agentic Coding 领域的重要实践。核心设计理念：
@@ -178,4 +232,4 @@ print(message.content[0].text)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-22 00:08:01*
+*资源区块更新时间：2026-07-23 00:09:06*
