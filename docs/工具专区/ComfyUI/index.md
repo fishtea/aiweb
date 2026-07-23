@@ -237,6 +237,113 @@ ComfyUI 在 2026 年 5 月 14 日发布了 **v0.21.1 稳定版**，这是一次"
 
 ---
 
+## 2026年7月最新：v0.27.0 与 v0.28.0 更新
+
+根据 [ComfyUI GitHub Releases](https://github.com/Comfy-Org/ComfyUI/releases)（**注意**：仓库已于 2026 年从 `comfyanonymous/ComfyUI` 迁移至 `Comfy-Org/ComfyUI`），2026 年 6–7 月 ComfyUI 连续发布了三个重要版本，引入了多项新模型支持和核心改进。
+
+### v0.28.0（2026-07-15）— 量化革命 + 视频/音频 + 3D 全面扩展
+
+#### 1. 模型量化：int8 / int4 全面支持
+
+v0.28.0 最重要的底层改进是 **int4 和 int8 量化模型的全面支持**，大幅降低 VRAM 需求：
+
+| 量化精度 | 适用显卡 | 效果 |
+|---------|---------|------|
+| **FP16**（原始） | 24GB+ | 最高质量 |
+| **int8** | 16GB (v0.27 引入) | 质量基本无损，VRAM 减半 |
+| **int4** | 12GB 甚至更低 (v0.28 新增) | Turing 显卡优化，黑图问题已修复 |
+
+具体改进：
+- **ConvRot int8 模型支持**（v0.27）：支持压缩旋转位置编码的 8-bit 量化模型
+- **ConvRot int4 模型支持**（v0.28）：4-bit 量化支持，面向低 VRAM 显卡
+- **Turing 架构优化**：修复 GTX 16xx 系列 int4 黑图问题、int8 性能回归
+- **PID 1.5 模型支持**：新增对 PID（Position Interpolation Distillation）1.5 模型格式的支持
+- **GQA 全注意力后端支持**：Group Query Attention 在所有注意力后端通用
+- 放弃 PyTorch 2.4 支持，PyTorch 2.5+ 成为最低要求
+
+#### 2. 视频与音频生成新纪元
+
+| 新功能 | 说明 |
+|--------|------|
+| **SeedVR2**（CORE-6） | 全新视频超分辨率模型，正式加入核心支持 |
+| **Seed Audio 1.0** | 字节跳动音频生成模型，可通过节点直接生成配乐/音效 |
+| **Seedream 5 Pro** | 字节跳动最新图像生成模型，新增"思考开关"（Disable Thinking）widget |
+| **SeeDance 2.0 4K 支持**（v0.27） | 视频生成分辨率上限提升至 4K |
+| **HappyHorse 1.1**（v0.27） | 阿里巴巴新模型，提供完整的图像生成 workflow 模板 |
+| **视频容错** | 解码失败的音频流不再导致工作流崩溃 |
+
+#### 3. 3D 工作流扩展
+
+- **Save 3D (Advanced) 节点族**（CORE-329）：支持选择合并方式（Merge Vertices）、重计算法线、应用变换、导出材质
+- **FBX 输出恢复**：Tencent3DPartNode 修复 FBX 格式输出
+- **Create Bounding Boxes 增强**：新增 bboxes 输入，支持批量生成包围盒
+
+#### 4. 文本与叠加层节点
+
+- **Text Overlay 节点**（CORE-137）：在图像上叠加文字，支持字体、颜色、位置自定义
+- **Save Text Node**（CORE-176）：将文本内容保存到文件
+- **文本节点保留**：原计划废弃的文本节点被撤销，保持向后兼容
+
+#### 5. AMD ROCm 优化（v0.28）
+
+| 改进 | 说明 |
+|------|------|
+| **Triton 后端默认启用** | AMD 矩阵核心 GPU 自动启用 comfy-kitchen Triton 后端 |
+| **Flash Attention AMD** | 修复相关兼容性问题 |
+| **FP8 激活量化** | 修复 >2D 激活的混合精度运算（AMD 贡献） |
+| 暂时禁用 AMD Triton 自动启用 | 因稳定性问题后续回退 |
+
+#### 6. 伙伴节点生态调整
+
+| 变更 | 说明 |
+|------|------|
+| **移除** Ideogram V1/V2 | 旧版本节点下线 |
+| **移除** StabilityAI 节点 | 从核心仓库移除 |
+| **新增** sync.so sync-3 模型 | 3D 生成新伙伴 |
+| **Google Gemini** 图像预览路由至正式版 | 不再使用预览版模型 |
+| **Grok Image 1080p** | 分辨率提升支持 |
+| **核心版本请求头** | 伙伴节点发送 ComfyUI Core 版本号，便于追踪兼容性 |
+
+#### 7. 工程改进
+
+- **AGENTS.md / CLAUDE.md**：为 AI 辅助开发添加项目级指引文件
+- **CLA Assistant**：新增贡献者许可协议检查 CI
+- **前端升级**：comfyui-frontend-package 升级至 1.45.21
+- **嵌入式文档更新**：v0.5.8
+- **安全修复**：修复 4 个安全漏洞（GHSA-779p-m5rp-r4h4）
+- **模型目录启动参数**：`--models-directory` 允许自定义模型存放路径
+- **API Base 目标**：`--comfy-api-base` 支持指向临时测试环境
+
+### v0.27.0 亮点（2026-06-30）
+
+- **int8 ConvRot 模型支持**（为 v0.28 的 int4 奠定基础）
+- **HappyHorse 1.1** 图像生成模型支持
+- **Grok Image 1080p** 分辨率
+- **SeeDance 2.0 4K** 视频生成
+- 工作流模板更新至 v0.10.2
+
+### v0.26.0 亮点（2026-06-23）
+
+- **Qwen3-VL 文本生成**：通义千问 3 视觉语言模型在 ComfyUI 中支持文生文
+- **节点分类重构**（CORE-263）：节点菜单重新组织，查找更便捷
+- SoniloTextToMusic 降价 50%
+
+### ComfyUI Desktop 应用
+
+ComfyUI 已推出独立的 **Comfy Desktop** 桌面应用（[comfy.org/download](https://comfy.org/download)），支持在本地硬件上运行，提供：
+- 超过 5,000 个社区扩展，共 60,000+ 节点
+- 零配置安装体验
+- 自动 GPU 检测和优化
+
+### 参考来源
+- [ComfyUI v0.28.0 Release Notes](https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.28.0)
+- [ComfyUI v0.27.0 Release Notes](https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.27.0)
+- [ComfyUI v0.26.0 Release Notes](https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.26.0)
+- [Comfy Desktop Download](https://comfy.org/download)
+- [ComfyUI Official Docs](https://docs.comfy.org/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -249,4 +356,4 @@ ComfyUI 在 2026 年 5 月 14 日发布了 **v0.21.1 稳定版**，这是一次"
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

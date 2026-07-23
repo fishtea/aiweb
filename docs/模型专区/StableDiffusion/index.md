@@ -213,6 +213,67 @@ image.save("cat.png")
 
 ---
 
+---
+
+## 2026 年图像生成生态最新进展
+
+### FLUX.2 — 2025 年底的视觉智能革命
+
+**Black Forest Labs**（BFL）于 **2025 年 11 月 25 日** 发布 FLUX.2，定位为"前沿视觉智能"模型。由 Stable Diffusion 原论文作者团队创立，BFL 在短短一年多内从 FLUX.1（2024 年 8 月）快速进化到 FLUX.2。
+
+**FLUX.2 核心能力：**
+- **4MP 超高清输出：** 生成和编辑可达 400 万像素，保持细节和一致性
+- **多参考图控制：** 支持多张参考图，保持角色和风格一致性
+- **文本渲染突破：** 准确生成图中文字，支持品牌指南、Logo 等
+- **子秒级生成：** 相比 FLUX.1 显著加速
+- **图像编辑：** 支持高达 4MP 的编辑，保留细节和连贯性
+- **生产级工作流：** 专为实际创意工作流设计，非演示 demo
+
+**产品线：**
+
+| 变体 | 说明 |
+|------|------|
+| FLUX.2 [pro] | 生产级 API，面向 Adobe、Meta 等企业客户 |
+| FLUX.2 [flex] | 灵活版 API，适合开发者和中小团队 |
+| FLUX.2 [dev] | 开源权重版（开放核心），社区可自由使用和研究 |
+| FLUX.2 [schnell] | 快速版，极速推理 |
+
+### 2026 图像生成格局对比
+
+| 模型 | 架构 | 参数量 | 生成速度 | 文字渲染 | 成本 |
+|------|------|--------|---------|---------|------|
+| **FLUX.2** | Flow Matching + DiT | 未公开 | 子秒级 | ⭐⭐⭐⭐⭐ | API/开源 |
+| **SD 3.5 Large** | MMDiT | 8B | 中等 | ⭐⭐⭐⭐ | 开源免费 |
+| **FLUX.1** | DiT | 12B | 中等 | ⭐⭐⭐⭐ | 开源免费 |
+| **Midjourney v7** | 闭源 DiT | 未公开 | 快 | ⭐⭐⭐⭐ | 订阅 $30-60/月 |
+| **GPT Image** | 闭源 | 未公开 | 快 | ⭐⭐⭐⭐ | API 按量计费 |
+
+### 开源 vs 闭源 — BFL 的"开放核心"路线
+
+Black Forest Labs 采用 **开放核心（Open Core）** 策略：
+- 发布可审计、可组合的开源权重模型（FLUX.2 [dev]）
+- 同时提供专业级生产 API（FLUX.2 [pro]）
+- 支持社区创新，同时维持商业可持续性
+
+这使得 BFL 成为 Stability AI 之后的"第二代"开源图像生成领导者。
+
+### 对 Stable Diffusion 生态的影响
+
+- **SD 3.5** 仍然是重要的开源选择，尤其适合 8B 以下硬件
+- **FLUX.2** 在质量、速度和文字渲染方面全面领先，但需要更高硬件配置
+- **ComfyUI** 已原生支持 FLUX.2 工作流
+- **ControlNet / IP-Adapter** 等控制工具正在适配 FLUX 生态
+- 实际选型建议：硬件受限用 SD 3.5，追求品质用 FLUX.2
+
+**资料来源：**
+- [FLUX.2: Frontier Visual Intelligence (BFL Official Blog)](https://bfl.ai/blog/flux-2)
+- [FLUX.2 Model Page (BFL)](https://bfl.ai/models/flux-2)
+- [BFL Flux vs Stable Diffusion 2026: AI Showdown](https://resource.digen.ai/black-forest-labs-flux-vs-stable-diffusion-2026/)
+- [FLUX.2 and the Future of AI Image Generation in 2026](https://ropewalk.ai/blog/flux-2-ai-image-generation-2026)
+- [Stable Diffusion vs Flux in 2026 — Which Model Should You Use?](https://willitrunai.com/blog/stable-diffusion-vs-flux-2026)
+
+---
+
 **参考资料：**
 - [Stable Diffusion 3 Research Paper (Stability AI)](https://stability.ai/news-updates/stable-diffusion-3-research-paper)
 - [Stable Diffusion 3.5 发布公告](https://stability.ai/news/introducing-stable-diffusion-3-5)
@@ -221,6 +282,66 @@ image.save("cat.png")
 - [BFL API 文档](https://docs.bfl.ai/)
 - [BFL Hugging Face 组织](https://huggingface.co/black-forest-labs)
 - [Diffusers Stable Diffusion 3 文档](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_3)
+
+---
+
+## 2026 最新进展
+
+### FLUX.2：Black Forest Labs 的全能图像引擎
+
+2026 年，图像生成领域的话语权已从 Stability AI 转移到 Black Forest Labs（BFL）。BFL 由 Stable Diffusion 原始团队创立，其 FLUX 系列已成为开源图像生成的事实标准。
+
+#### FLUX.2 Klein（2026.01）：实时图像生成与编辑
+
+根据 [StableDiffusionTutorials 评测](https://www.stablediffusiontutorials.com/2026/01/flux2-klein.html)，FLUX.2 Klein 将文本生成图像、图像编辑和**多参考图工作流**统一到单一紧凑架构中，无需切换模型：
+
+| 变体 | 参数量 | 许可 | 硬件需求 | 核心用法 |
+|------|--------|------|---------|---------|
+| FLUX.2 Klein 4B | 4B | **Apache 2.0** | RTX 3090/4070 (~13GB VRAM) | 图像编辑 + 多参考图生成 |
+| FLUX.2 Klein 9B | 9B | BFL 非商用 | ~20GB VRAM | 旗舰文生图，4 步出图 |
+
+**核心特性**：
+
+- **实时推理**：9B 蒸馏版仅需 **4 步采样**，在 **0.5 秒内**生成质量媲美 5 倍参数量模型的结果。
+- **统一架构**：文生图 + 图像编辑 + 多参考图在同一个模型中完成，无需串联多个模型。
+- **8B Qwen3 文本编码器**：9B 版采用 Qwen3-8B 作为文本编码器，大幅提升提示词遵循能力。
+- **ComfyUI 原生支持**：GGUF 量化版本由 Unsloth 提供，可在 8GB 显存消费卡上运行。
+
+**工作流要点**：
+
+- 基础版：20-50 步、CFG=4、Euler 采样器
+- 蒸馏版：4 步、CFG=1、Euler 采样器，速度优先
+- 提示词结构推荐：主体 → 场景 → 细节 → 光照 → 氛围（模型不会自动增强提示词）
+
+> 来源：[Flux.2 Klein Guide](https://www.stablediffusiontutorials.com/2026/01/flux2-klein.html)、[BFL HuggingFace](https://huggingface.co/black-forest-labs)
+
+#### FLUX.2 Pro / Kontext：专业级图像编辑
+
+BFL 还推出了 **FLUX.2 Pro** 和 **Kontext** 系列（通过 [Replicate](https://replicate.com/collections/flux) 和 BFL API 提供）：
+
+- **Kontext Pro/Max**：支持自然语言图像编辑——"把衬衫换成蓝色"、"改变背景为海滩"等指令直接执行。
+- **多图参考**：可同时参考多张图片的风格/内容进行生成。
+- **4MP 分辨率**：原生支持高分辨率输出，真实感极强。
+
+### 2026 年图像生成生态格局
+
+| 阵营 | 代表模型 | 定位 |
+|------|---------|------|
+| **Black Forest Labs** | FLUX.2 Pro / Klein / Kontext | 开源图像生成领导者，全栈覆盖 |
+| **Stability AI** | SD 3.5 | 仍在使用但已退居二线 |
+| **Midjourney** | V7 | 闭源，艺术品质最高 |
+| **Ideogram** | 3.0 | 文字渲染最强 |
+| **Google** | Imagen 系列 | 闭源，集成 Gemini 生态 |
+| **OpenAI** | DALL·E 4 | 闭源，集成 ChatGPT |
+
+**关键趋势**：
+
+- **速度革命**：Turbo/Lightning 蒸馏 + 4 步采样成为标配，实时交互成为可能。
+- **文字渲染突破**：FLUX.2、Ideogram 3.0 已能准确渲染英文文本，中文渲染仍有差距。
+- **多参考图工作流**：不再局限于单图生成，多参考图引导成为专业工作流标准。
+- **本地化 + 开源**：FLUX.2 Klein 4B 的 Apache 2.0 许可 + GGUF 量化，使消费级 GPU 也能运行生产级图像模型。
+
+> 来源：[BFL 官网](https://bfl.ai/)、[StableDiffusionTutorials](https://www.stablediffusiontutorials.com/2026/01/flux2-klein.html)、[Replicate FLUX Collection](https://replicate.com/collections/flux)
 
 ---
 
@@ -236,4 +357,4 @@ image.save("cat.png")
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

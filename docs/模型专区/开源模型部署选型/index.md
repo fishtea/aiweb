@@ -186,6 +186,59 @@ SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择
 - 💻 没显卡 → **llama.cpp**（CPU 也能跑 7B）
 - 🔧 Agent + 结构化输出 → **SGLang**（约束解码天然优势）
 
+## 2026 年 7 月推理框架最新动态
+
+### vLLM v0.25.0：Model Runner V2 成为默认引擎
+
+[vLLM v0.25.0](https://github.com/vllm-project/vllm/releases/tag/v0.25.0)（2026-07-11）是一个重大里程碑版本，**558 个 commits、232 位贡献者**参与：
+
+- **Model Runner V2 成为所有 Dense 模型的默认引擎**（#44443）。这意味着所有非 MoE 模型将自动使用新一代推理管线，无需手动配置
+- 性能提升：更高效的 KV cache 管理、更好的批处理调度
+- 迁移建议：现有 v0.x 部署可直接升级，v1 引擎用户需关注兼容性变更
+
+同时 [v0.24.0](https://github.com/vllm-project/vllm/releases/tag/v0.24.0)（2026-06-29）新增了：
+- **MiniMax-M3** 模型支持（#45381）
+- **DSpark 推测解码**支持，与 DeepSeek-V4 原生推测解码配合可提升推理吞吐
+
+### Ollama v0.32.3 与本地推理生态
+
+[Ollama v0.32.3](https://github.com/ollama/ollama/releases)（2026-07-23，今天发布）包含 MLX 框架更新，优化了 Apple Silicon 上的推理性能。近期版本的关键更新：
+
+| 版本 | 日期 | 关键更新 |
+|------|------|---------|
+| v0.32.3 | 2026-07-23 | MLX 更新（Apple Silicon 优化） |
+| v0.32.2 | 2026-07-20 | Claude Code 通道保持可用；移除废弃的 Agent prompt wrappers |
+| v0.32.1 | 2026-07-16 | Gemma 4 工具调用改进；修复 MLX 缓存泄漏 |
+
+> **趋势**：Ollama 正在向 Agent 场景靠拢——v0.32.2 专门为 Claude Code 保留了通道，v0.32.1 改进了 Gemma 4 的工具调用能力。本地 Agent 开发栈（Ollama + Claude Code / OpenCode）正在成为 2026 年开发者的重要选择。
+
+### llama.cpp 的持续进化
+
+llama.cpp 项目在 2026 年持续高频更新，保持 **CPU 推理和边缘部署的事实标准**地位。其 GGUF 量化生态仍然是格式最丰富、社区最活跃的选择，尤其在以下场景：
+- Apple Silicon Mac 上的本地推理（MLX 和 llama.cpp 双轨支持）
+- 嵌入式和边缘设备（Raspberry Pi、Android）
+- 低成本 CPU-only 服务（无需 GPU）
+
+### 2026 下半年部署趋势预判
+
+| 趋势 | 说明 |
+|------|------|
+| **模型路由常态化** | 生产系统不再单一模型，而是小模型做分类→中模型做抽取→大模型做推理的路由管线 |
+| **vLLM vs SGLang 双雄格局** | vLLM 主导通用高吞吐，SGLang 主导 Agent + 结构化输出，各有阵地 |
+| **本地 Agent 开发栈兴起** | Ollama + Claude Code / OpenCode 的组合让本地 Agent 开发门槛大幅降低 |
+| **量化即默认** | FP4/FP8 量化正在成为推理部署的默认选项，而非可选项——DeepSeek-V4 证明了 4-bit 量化在推理质量上的可行性 |
+| **端侧推理加速** | Apple MLX、Qualcomm AI Engine、Intel OpenVINO 等端侧推理框架的成熟使 MacBook/手机上的模型运行体验接近 GPU 服务器 |
+
+## 2026 年硬件选型快速参考
+
+| 模型规模 | 推荐硬件 | 推理框架 | 预估成本 |
+|---------|---------|---------|---------|
+| 1B-7B 量化 | MacBook M4 / RTX 3060+ | Ollama / llama.cpp | $0（已有硬件） |
+| 7B-13B 量化 | RTX 3090/4090 24GB | Ollama / vLLM | $800-$2000 |
+| 13B-70B 量化 | A6000 48GB / 2× RTX 3090 | vLLM / SGLang | $4000-$8000 |
+| MoE（如 DeepSeek-V4-Flash） | A100 80GB / H100 | vLLM / SGLang | $10K-$30K |
+| 集群生产 | 多节点 H100/B200 | vLLM + K8s | 按需 |
+
 ## 参考来源
 
 - [vLLM 文档](https://docs.vllm.ai/)
@@ -197,6 +250,8 @@ SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择
 - [SGLang — Structured Generation](https://docs.sglang.ai/)
 - [Best Open Source LLMs for Deployment in 2026 — Ryz Labs](https://learn.ryzlabs.com/llm-development/best-open-source-llms-for-deployment-in-2026)
 - [2026 本地部署大模型深度对比 — CSDN](https://blog.csdn.net/weixin_64358901/article/details/161665173)
+- [vLLM v0.25.0 Release](https://github.com/vllm-project/vllm/releases/tag/v0.25.0)
+- [Ollama v0.32.3 Release](https://github.com/ollama/ollama/releases)
 
 ---
 
@@ -212,4 +267,4 @@ SGLang 在 2026 年已成为结构化生成和 Agent 工作负载的重要选择
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

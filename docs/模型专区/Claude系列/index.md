@@ -212,6 +212,68 @@ print(message.content[0].text)
 
 ---
 
+---
+
+## 2026 年 7 月最新进展
+
+### Claude Sonnet 5 — 迄今最具 Agent 能力的 Sonnet（2026 年 6 月 30 日）
+
+Anthropic 于 **2026 年 6 月 30 日** 发布 Claude Sonnet 5，定位为"最具 Agent 能力的 Sonnet 模型"。它可以自主制定计划、使用浏览器和终端等工具，并在无需人类介入的情况下长时间运行。
+
+**关键提升：**
+- **Agent 能力飞跃：** 接近 Opus 4.8 的 Agent 推理水平，但价格大幅降低
+- **编码：** 在 SWE-bench 等 Agent 编码评测上显著超越 Sonnet 4.6
+- **工具使用：** 原生支持函数调用、结构化输出和长时间 Agent 编排
+- **Computer Use：** 增强的桌面/浏览器操控能力
+- **安全性：** 不良行为率低于 Sonnet 4.6，Agent 场景更安全
+
+**定价（2026 年 7-8 月推广价）：** $2/M 输入 token，$10/M 输出 token
+**正式定价（2026 年 9 月起）：** $3/M 输入 token，$15/M 输出 token
+
+Sonnet 5 提供广泛的性价比选择范围——在中等推理预算下可以匹配 Opus 4.8 的部分任务表现，在高推理预算下进一步缩小差距。
+
+### Claude Fable 5 — Mythos 级旗舰（2026 年 6 月 9 日）
+
+Claude **Fable 5** 是 Anthropic 首个公开的 Mythos 级模型，代表第五代智能，面向最复杂的编码和知识工作。
+
+**核心能力：**
+- **长时间自主 Agent：** 可在 Claude Code 或 Managed Agents 中连续工作数天，规划多阶段任务、委派子 Agent、自我检查
+- **编码：** 能够处理大型迁移、复杂实现和多日自主编码会话，自动编写测试验证自己的工作
+- **视觉理解：** 理解嵌套在文档和 PDF 中的图表、表格，辅助评估编码输出
+- **企业工作流：** 处理多阶段知识工作，从深度研究到交付物
+
+**可用时间线：**
+- 6 月 9 日：发布上线
+- 6 月 12 日：因需求过大暂停访问
+- 7 月 1 日：恢复访问，正式面向 Pro/Max/Team/Enterprise 用户
+
+**定价：** $10/M 输入 token，$50/M 输出 token（支持提示缓存 90% 输入折扣）
+
+### Claude Opus 4.8 — 当前旗舰
+
+截至 2026 年 7 月，Claude Opus 4.8 仍是 Anthropic 最高能力模型，适合最高难度推理、长任务审查和高风险决策。
+
+### Claude 2026 全线产品
+
+| 模型 | 定位 | 定价（输入/输出 per M tokens） |
+|------|------|-------------------------------|
+| Claude Fable 5 | Mythos 级旗舰，长时间 Agent | $10 / $50 |
+| Claude Opus 4.8 | 高能力推理与审查 | — |
+| Claude Sonnet 5 | Agent 性价比首选 | $3 / $15（正式） |
+| Claude Haiku 4.5 | 低延迟高吞吐 | — |
+
+### Claude Skills 新特性
+
+2026 年 Anthropic 推出了 **Claude Skills** 功能，允许用户创建可复用的定制化能力模块，让 Claude 在特定领域（如代码审查、数据分析、内容创作）表现出更一致的专业水平。
+
+**资料来源：**
+- [Introducing Claude Sonnet 5 (Anthropic Official)](https://www.anthropic.com/news/claude-sonnet-5)
+- [Claude Fable 5 (Anthropic Official)](https://www.anthropic.com/claude/fable)
+- [Latest Claude Updates 2026: Fable 5 Shutdown, Opus 4.8, Skills](https://appscribed.com/claude-updates-list/)
+- [Claude Fable 5 vs Sonnet 5: Full Benchmark Comparison (July 2026)](https://codingfleet.com/blog/claude-fable-5-vs-claude-sonnet-5/)
+
+---
+
 **参考资料：**
 - [Anthropic Claude 3.5 Sonnet 发布公告](https://www.anthropic.com/news/claude-3-5-sonnet)
 - [Anthropic Claude 4 发布公告](https://www.anthropic.com/news/claude-4)
@@ -232,4 +294,4 @@ print(message.content[0].text)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

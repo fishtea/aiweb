@@ -247,6 +247,168 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 ---
 
+## 2026 年 7 月补充：实用工程细节
+
+### 上下文缓存（Context Caching）
+
+根据 [DeepSeek API 上下文缓存文档](https://api-docs.deepseek.com/guides/kv_cache)，DeepSeek V4 默认开启硬盘上下文缓存，无需修改代码即可受益。其缓存机制有以下特点：
+
+**缓存持久化规则：**
+- **请求边界持久化**：每个请求在用户输入末尾和模型输出末尾各产生一个缓存前缀单元，后续请求完全匹配即可命中缓存
+- **公共前缀检测**：系统检测到多个请求共享公共前缀时，会将该公共前缀持久化为独立缓存单元
+- **固定 Token 间隔持久化**：对于长输入/长输出，系统按固定 token 间隔切分缓存单元，避免长前缀因不到结束位置而完全无法缓存
+
+**缓存命中检查：** API 响应中 `usage` 部分新增两个字段：
+- `prompt_cache_hit_tokens`：缓存命中的输入 token 数
+- `prompt_cache_miss_tokens`：未命中的输入 token 数
+
+**工程价值：** 在系统提示固定的多轮对话、长文档 QA（同一文档不同问题）等场景中，缓存命中可大幅降低延迟和成本。V4 缓存命中的输入价格仅为 `$0.003625/1M tokens`（Pro）/ `$0.0028/1M tokens`（Flash），远低于未命中的定价。
+
+> ⚠️ 缓存系统为 "best-effort" 工作模式，不保证 100% 命中率。缓存构建通常需要数秒，无使用后会在数小时到数天内自动清除。
+
+### Anthropic API 兼容性
+
+DeepSeek 已支持 **Anthropic API 格式**，通过 `https://api.deepseek.com/anthropic` 端点使用 Anthropic SDK 直接调用 DeepSeek 模型：
+
+| 参数 | 值 |
+|------|-----|
+| base_url | `https://api.deepseek.com/anthropic` |
+| api_key | DeepSeek Platform API Key |
+| 支持模型 | `claude-3-5-sonnet-20241022`（实际映射到 deepseek-v4-pro） |
+
+这使得使用 Claude Code、Anthropic SDK 的现有项目可以零代码切换到 DeepSeek 后端。
+
+### ⚠️ 生产系统迁移检查清单（截止 2026-07-24）
+
+`deepseek-chat` 和 `deepseek-reasoner` 模型名将于 **2026 年 7 月 24 日 15:59 UTC** 完全废弃。所有生产系统需要在此前完成以下操作：
+
+1. ✅ 搜索代码库和配置文件中所有 `deepseek-chat` 和 `deepseek-reasoner` 引用
+2. ✅ 替换 `model` 参数：
+   - `deepseek-chat` → `deepseek-v4-flash`（非思考模式）
+   - `deepseek-reasoner` → `deepseek-v4-pro`（思考模式，设置 `thinking.type: "enabled"` + `reasoning_effort: "high"`）
+3. ✅ 验证 API 调用在新模型名下正常工作
+4. ✅ 检查缓存命中率变化（新模型使用不同上下文窗口策略，可能需要预热）
+5. ✅ 更新 CI/CD 配置文件、环境变量和文档
+
+> 截至 2026 年 7 月 23 日，旧名称已自动路由到 `deepseek-v4-flash`。迁移后可继续使用相同的 API key 和 base URL。
+
+### 🚨 D-Day 倒计时：2026 年 7 月 24 日旧模型名彻底下线
+
+**明天（2026 年 7 月 24 日 15:59 UTC）**，`deepseek-chat` 和 `deepseek-reasoner` 将从 API 中完全移除，任何使用这两个名称的请求将返回错误。这是 DeepSeek API 自 V4 发布以来最重要的变更。
+
+**迁移自动化检查脚本（Python）：**
+
+```python
+import os
+import re
+
+# 扫描项目中所有引用旧模型名的文件
+OLD_MODELS = ['deepseek-chat', 'deepseek-reasoner']
+NEW_MODEL = 'deepseek-v4-flash'  # 或 deepseek-v4-pro
+
+def scan_project(root_dir='.'):
+    found = []
+    for dirpath, _, filenames in os.walk(root_dir):
+        # 跳过 .git, node_modules, venv
+        if any(skip in dirpath for skip in ['.git', 'node_modules', 'venv', '__pycache__']):
+            continue
+        for fname in filenames:
+            if fname.endswith(('.py', '.js', '.ts', '.yaml', '.yml', '.json', '.env', '.sh', '.toml')):
+                fpath = os.path.join(dirpath, fname)
+                try:
+                    with open(fpath) as f:
+                        content = f.read()
+                    for old in OLD_MODELS:
+                        if old in content:
+                            found.append((fpath, old))
+                except:
+                    pass
+    return found
+
+results = scan_project()
+if results:
+    print(f"⚠️ 发现 {len(results)} 处旧模型名引用：")
+    for fpath, model in results:
+        print(f"  {fpath} → {model}")
+else:
+    print("✅ 未发现旧模型名引用，迁移完成")
+```
+
+**Docker/环境变量检查清单（补充）：**
+- `.env` 文件中的 `MODEL_NAME` 变量
+- Docker Compose `environment` 字段
+- Kubernetes ConfigMap / Secret
+- CI/CD pipeline 配置（GitHub Actions、GitLab CI）
+- 监控告警规则中硬编码的模型名
+- 成本追踪系统按模型名分组过滤的规则
+
+> ⚠️ 迁移窗口仅剩一天。如果生产系统仍有 `deepseek-chat` 或 `deepseek-reasoner` 引用，**立即执行上述扫描脚本并切换**。
+
+### V4 发布一个月回顾：生态影响与社区反馈
+
+DeepSeek-V4 自 2026 年 6 月 27 日发布以来，在开源社区产生了深远影响：
+
+| 维度 | 影响 |
+|------|------|
+| **代码能力** | LiveCodeBench 93.5% 成为开源模型最高分，推动编程 Agent（Claude Code / OpenCode）大量采用 DeepSeek 后端 |
+| **成本倒逼** | V4 Pro $0.435/1M input 的定价迫使 Gemini 3.6 Flash 降价至 $4.50、3.5 Flash-Lite 低至 $0.30/1M，引发新一轮 API 价格战 |
+| **Agent 生态** | 官方原生集成 Claude Code、GitHub Copilot、OpenCode 等，降低了 Agent 开发门槛 |
+| **1M 上下文** | FP4 + 混合注意力使超长上下文推理成本大幅降低，部分 RAG 场景可跳过分段 |
+| **MIT 许可证** | 全权重开源 + MIT 许可，吸引了大量企业私有化部署和二次开发 |
+
+### DeepSeek 在本地部署生态的最新进展
+
+截至 2026 年 7 月，Ollama（[v0.32.3](https://github.com/ollama/ollama/releases)，2026-07-23 发布）已支持 DeepSeek-V4 系列的本地运行。vLLM（[v0.25.0](https://github.com/vllm-project/vllm/releases)，2026-07-11）的 Model Runner V2 已成为所有 Dense 模型的默认推理引擎，对 DeepSeek 的 MoE 架构支持更加成熟。vLLM v0.24.0（2026-06-29）新增了 DSpark 推测解码支持，与 DeepSeek-V4 原生的推测解码能力配合可进一步提升推理吞吐。
+
+---
+
+## 2026 最新进展
+
+### DeepSeek-V4 Preview（2026.04）
+
+2026 年 4 月 24 日，DeepSeek 发布了 **DeepSeek-V4 Preview**，标志着 DeepSeek 正式进入百万 Token 上下文时代。根据 [官方公告](https://api-docs.deepseek.com/news/news260424/) 和 [HuggingFace 开源仓库](https://huggingface.co/collections/deepseek-ai/deepseek-v4)：
+
+**两款主力模型**：
+
+| 模型 | 总参数 | 激活参数 | 定位 |
+|------|--------|---------|------|
+| DeepSeek-V4-Pro | 1.6T | 49B | 旗舰推理，媲美顶级闭源模型 |
+| DeepSeek-V4-Flash | 284B | 13B | 快速经济，Agent 任务接近 Pro |
+
+**核心创新：DSA 稀疏注意力 + 1M 上下文**：
+
+- **Token-wise 压缩 + DSA（DeepSeek Sparse Attention）**：通过逐 Token 压缩与稀疏注意力机制，大幅降低长上下文的计算与显存开销，使 1M 上下文成为所有官方服务的默认配置。
+- **MoE 架构深化**：延续 DeepSeek 的 MoE 路线，V4-Pro 总参数量达到 1.6T，但每 Token 仅激活 49B 参数，保持极致推理效率。
+
+**Agent 能力飞跃**：
+
+- V4-Pro 在 Agentic Coding 基准上取得**开源 SOTA**，与 Claude Code、OpenClaw、OpenCode 等主流 Agent 框架无缝集成。
+- 世界知识领先所有开源模型，仅次于 Gemini-3.1-Pro。
+- 数学/STEM/编程推理全面超越已有开源模型，逼近顶级闭源模型。
+
+**API 迁移提醒**：DeepSeek 官方宣布旧模型名 `deepseek-chat` 和 `deepseek-reasoner` 将于 **2026 年 7 月 24 日** 完全退役，届时不可访问。当前这些名称已自动路由至 `deepseek-v4-pro` / `deepseek-v4-flash`，建议尽快更新代码中的模型名。
+
+> 来源：[DeepSeek-V4 Preview Release](https://api-docs.deepseek.com/news/news260424/)、[Change Log](https://api-docs.deepseek.com/updates/)
+
+### DeepSeek-V3.2：推理优先的 Agent 模型（2025.12）
+
+2025 年 12 月 1 日，DeepSeek 发布 V3.2 系列，首次将**思考能力直接融入工具调用（Tool-Use）**。根据 [官方公告](https://api-docs.deepseek.com/news/news251201/)：
+
+- **V3.2**：均衡推理与长度的日常主力，性能达到 GPT-5 水平，支持 Thinking + Non-Thinking 双模式下的工具调用。
+- **V3.2-Speciale**：极致推理变体，在 IMO、CMO、ICPC World Finals、IOI 2025 等竞赛中获得**金牌级别成绩**，推理能力媲美 Gemini-3.0-Pro（仅 API，不支持工具调用）。
+- **Thinking in Tool-Use**：首次将思考链嵌入工具调用流程——模型在决定调用哪个工具、如何构造参数时也会进行逐步推理，大幅提升复杂 Agent 任务的成功率。
+- **大规模 Agent 训练数据合成**：覆盖 1,800+ 环境和 85,000+ 复杂指令，通过环境反馈直接优化 Agent 行为。
+
+> 来源：[DeepSeek-V3.2 Release](https://api-docs.deepseek.com/news/news251201/)、[技术报告](https://huggingface.co/deepseek-ai/DeepSeek-V3.2/resolve/main/assets/paper.pdf)
+
+### 2026 年生态进展
+
+- **Ollama v0.32.3**（2026-07-23）已完整支持 DeepSeek-V4 系列本地运行。
+- **vLLM v0.25.0** 的 Model Runner V2 成为所有 Dense 模型的默认推理引擎，MoE 架构支持更加成熟。
+- HuggingFace 上 DeepSeek 系列模型的下载量和社区适配持续增长，蒸馏模型生态（R1 蒸馏系列）仍然是消费级硬件运行推理模型的首选方案。
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -259,4 +421,4 @@ vllm serve deepseek-ai/DeepSeek-V3
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

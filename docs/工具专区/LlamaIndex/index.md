@@ -222,6 +222,118 @@ AgentWorkflow 的**四个核心设计优势**：
 
 ---
 
+## 2026年6-7月最新：v0.14.21–v0.14.23 更新
+
+根据 [LlamaIndex Changelog](https://github.com/run-llama/llama_index/blob/main/CHANGELOG.md)，2026 年 4–6 月版本集中在三个方向：多模态能力、Agent-UI 集成和新模型支持。
+
+### 1. 多模态合成与查询引擎（v0.14.21 / v0.14.23）
+
+这是 LlamaIndex 在 2026 Q2 最重要的架构升级——从"纯文本 RAG"扩展到"多模态 RAG"。
+
+**Multimodal Synthesis（多模态合成）**分两步交付：
+
+| 版本 | 内容 |
+|------|------|
+| v0.14.21 | Multimodal synthesis Part 1（#21374）：基础的图文混合合成 |
+| v0.14.23 | Multimodal synthesis Part 2（#21561）：完整的合成管线 |
+
+**Multimodal Query Engines（多模态查询引擎）**（v0.14.23）：
+- 支持对包含图片、视频、文档的混合数据源进行统一查询
+- `DocumentBlock` 和 `VideoBlock` 正式集成到 `FunctionTool` 输出解析中
+- URL 支持的视频和文档记忆块得到保留
+
+```python
+# 多模态查询引擎示例概念
+from llama_index.core.query_engine import MultimodalQueryEngine
+
+engine = MultimodalQueryEngine.from_documents(
+    documents=[text_doc, image_doc, video_doc],
+    llm=llm,
+    image_parser=image_model,
+)
+
+response = engine.query("这张图和这段文字一起说明了什么？")
+# 引擎会同时检索文本、图片、视频，综合生成回答
+```
+
+### 2. AG-UI（Agent-User Interface）集成（v0.14.21）
+
+**AG-UI** 是 LlamaIndex 在 2026 年推出的 Agent 前端交互标准，允许从外部动态注入工具：
+
+- **动态工具注入**（#21149）：Agent 可在运行时从 AG-UI 前端接收新工具，无需重启
+- **AG-UI 前端工具消息持久化**（#22109）：修复工具消息在 AG-UI 界面中的丢失问题
+- **AgentCore Runtime 适配器**（#21008）：将 LlamaIndex Agent 桥接到 AgentCore 运行时
+
+这意味着 LlamaIndex Agent 可以作为服务运行，前端（如 ChatGPT 风格的 UI）可以动态地向 Agent 注入新工具。
+
+### 3. 新模型支持
+
+LlamaIndex 在 2026 Q2 持续跟进各厂商最新模型：
+
+| 模型 | 支持版本 | 说明 |
+|------|---------|------|
+| **GPT-5.6** | 2026.07 | 最新 OpenAI 旗舰模型 |
+| **GPT-5.5 / GPT-5.4 / GPT-5.3** | v0.14.21+ | 多代 GPT-5 子版本 |
+| **Claude Opus 4.8 / Fable 5** | v0.14.22–23 | Anthropic 最新模型 |
+| **Gemini 3** | v0.14.21 | Google 多模态模型，设为默认 |
+| **DeepSeek V3** (Bedrock) | v0.14.21 | 通过 AWS Bedrock 使用 |
+| **MiniMax M2.7** | v0.14.21 | 新增 MiniMax LLM 集成 |
+| **OpenAILike Responses API** | v0.14.21 | 支持兼容 OpenAI 的 Responses API 接口 |
+
+### 4. Agent 工具链改进
+
+**Tool Calling Mock LLM**（v0.14.23）：
+- 新增 `MockLLM` 用于测试工具调用
+- 无需真实 LLM 即可验证 Agent 的工具选择逻辑
+- 大幅加速 Agent 开发迭代
+
+**FunctionTool 输出解析扩展**：
+- `DocumentBlock` 和 `VideoBlock` 正式进入 FunctionTool
+- 多模态 Agent 的 ReAct 循环可以处理文档和视频
+
+### 5. 数据管道改进
+
+| 改进 | 说明 |
+|------|------|
+| **IngestionPipeline upsert** | 修复每次插入保留文档所有节点，避免丢失 |
+| **set 替代 list 去重** | 批量去重性能优化 |
+| **CodeSplitter** | 修复超大叶节点丢失问题 |
+| **Metadata 过滤器** | 默认条件改为 AND，falsy 元数据值正常保留 |
+| **RedisKVStore** | 支持 `decode_responses=True` |
+
+### 6. Workflow 修复
+
+- **initial_state 深拷贝**：防止多次运行间的状态污染（#21780）
+- **多块聊天历史保留**：修复多轮对话中的消息丢失（#22124）
+
+### LlamaIndex 2026 趋势总结
+
+```mermaid
+graph LR
+    A[纯文本 RAG] --> B[多模态 RAG]
+    B --> C[多模态 Agent]
+    A --> D[Agent 框架]
+    D --> E[AG-UI 标准]
+    E --> F[全栈 Agent 平台]
+```
+
+| 阶段 | LlamaIndex 核心能力 | 时间 |
+|------|-------------------|------|
+| 1.0 | 文档索引 + RAG 查询 | 2023–2024 |
+| 2.0 | AgentWorkflow + LlamaParse | 2025 |
+| 3.0 | 多模态合成 + AG-UI | 2026 H1 |
+| 4.0（预期） | 实时多模态 Agent + 端到端平台 | 2026 H2 |
+
+> 📌 LlamaIndex 的 2026 主线很清晰：从"文本 RAG 工具"发展为"多模态 Agent 平台"。多模态合成、AG-UI 动态工具注入、以及跟进的各厂商最新模型，构成了一个完整的技术栈。
+
+### 参考来源
+- [LlamaIndex Changelog](https://github.com/run-llama/llama_index/blob/main/CHANGELOG.md)
+- [LlamaIndex GitHub Releases](https://github.com/run-llama/llama_index/releases)
+- [AgentWorkflow Documentation](https://docs.llamaindex.ai/en/stable/understanding/agent/multi_agents/)
+- [AG-UI Protocol](https://docs.ag-ui.com/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -234,4 +346,4 @@ AgentWorkflow 的**四个核心设计优势**：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

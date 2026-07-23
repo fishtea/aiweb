@@ -245,6 +245,93 @@ AutoGPT Platform 现在支持主流 LLM 提供商，包括但不限于：
 
 ---
 
+## 2026年7月最新：v0.6.67–v0.6.69 重大更新
+
+根据 [AutoGPT GitHub Releases](https://github.com/Significant-Gravitas/AutoGPT/releases)，2026 年 7 月 AutoGPT Platform 连续发布了三个重要版本，引入了多项生产级功能。
+
+### 1. Agent-Building Mode（代理构建模式）— v0.6.69 核心功能
+
+**Agent-Building Mode** 是此次更新的最大亮点。它提供了一个防压缩的引导式界面和自动引擎切换，让用户无需理解底层架构就能构建 Agent：
+
+- **引导式创建流程**：通过交互式向导构建 Agent，而非手动编写配置
+- **防压缩指南**：构建指南使用特殊标记防止被 LLM 上下文压缩丢失
+- **自动引擎切换**：根据 Agent 类型自动选择最合适的执行引擎
+- **AutoPilot 简化**：Streamline AutoPilot agent creation（#13579）让创建过程进一步简化
+
+### 2. 组织与工作区（Org/Workspace）— v0.6.67
+
+```mermaid
+graph TD
+    A[Organization] --> B[Workspace 1]
+    A --> C[Workspace 2]
+    B --> D[Agents]
+    B --> E[Members]
+    B --> F[Integrations]
+    C --> G[Agents]
+    C --> H[Members]
+```
+
+- **一级组织支持**：Schema、认证、API、数据库迁移、前端界面全面支持
+- **组织切换器**：v0.6.69 新增侧边栏组织切换器和 Agent 活动面板
+- **多人协作**：同一组织下多成员共享 Agent 和资源
+
+### 3. Slack & Telegram 集成 — v0.6.67 / v0.6.69
+
+AutoGPT 正式支持通过消息平台与 Agent 交互：
+
+| 平台 | 功能 | 版本 |
+|------|------|------|
+| **Slack** | Webhook + Events API 适配器 | v0.6.67 |
+| **Slack** | 主动推送（Proactive Posting） | v0.6.69 |
+| **Telegram** | 主动推送（Proactive Posting） | v0.6.69 |
+| **DM 投递** | 私信直投 Agent 消息 | v0.6.69 |
+
+这意味着你可以直接在 Slack 或 Telegram 中 @Agent 让它执行任务，Agent 完成任务后主动推送结果。
+
+### 4. Copilot Composer — v0.6.67
+
+**Copilot Composer** 是一个集成化菜单界面，将 Agent 的能力分模块展示：
+
+- **Skills 模块**：管理 Agent 的技能
+- **Scheduled 模块**：设置定时任务
+- **Integrations 模块**：连接外部服务（Slack、GitHub 等）
+- **引导式创建流程**：每个模块提供向导式配置
+
+### 5. Adapter 架构解耦 — v0.6.67
+
+底层架构重大重构：将 Adapter 基类拆分为 **Socket** 和 **Webhook** 两类：
+
+```
+旧: Adapter (耦合)
+新: SocketAdapter | WebhookAdapter (解耦)
+```
+
+这解决了共享核心的耦合问题，让新平台集成（如 Slack Webhook、Telegram Bot）更快更独立。
+
+### 6. 新模型支持一览
+
+| 版本 | 新增模型 |
+|------|---------|
+| v0.6.69 | GPT-5.6, GPT-5.5, GPT-5.4, o-series |
+| v0.6.67 | 各主流 LLM 提供商持续跟进 |
+
+### 7. Multi-Batch 部署 — v0.6.69
+
+Batch-deploy bot 现在支持**多批次部署**，每批次最多 4 个 Agent，支持命名批次管理。这适合需要批量运行多个 Agent 的场景（如同时处理多个客户的工单、批量数据采集等）。
+
+### 演进总结
+
+| 时间 | 里程碑 |
+|------|--------|
+| 2023 Q1 | AutoGPT Classic：命令行自主 Agent（MIT） |
+| 2025 | AutoGPT Platform Beta：Web 前端 + Block 系统 |
+| 2026.07 | v0.6.67–0.6.69：Org/Workspace、Slack/Telegram、Agent-Building Mode、多批次部署 |
+| 2026+ | 云托管 GA → 完整的企业级 Agent 平台 |
+
+> 📌 关键趋势：AutoGPT 正在从"个人开发者工具"转变为"团队协作的 Agent 平台"。Workspace、Slack 集成、批次部署这些功能明确指向企业场景。
+
+---
+
 **参考资料：**
 - [What Is AutoGPT? A 2025 Guide (Medium)](https://medium.com/lets-code-future/what-is-autogpt-a-2025-guide-for-developers-on-autonomous-ai-agents-187870d52603)
 - [Building Autonomous AI Agents 2025 Guide (Facebook/Medium)](https://medium.com/@Micheal-Lanham/building-the-future-your-guide-to-autonomous-ai-agents-in-2025-fb690ebc1caa)
@@ -266,4 +353,4 @@ AutoGPT Platform 现在支持主流 LLM 提供商，包括但不限于：
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

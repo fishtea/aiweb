@@ -258,6 +258,59 @@ print(result.final_answer)
 
 ---
 
+---
+
+## 2026 年 7 月最新进展
+
+### GPT-5.5 — 2026 年 4 月前沿模型
+
+OpenAI 于 **2026 年 4 月 23 日** 发布 GPT-5.5（内部代号"Spud"），定位为面向真实工作的前沿模型。距 GPT-5.4 仅间隔 6 周，展示了 OpenAI 加速迭代的节奏。
+
+**三个变体：**
+
+| 变体 | 说明 | 可用范围 |
+|------|------|---------|
+| GPT-5.5（标准） | 默认版，更快的思考速度，更少 token 消耗 | ChatGPT 全档位、Codex |
+| GPT-5.5 Thinking | 扩展推理预算，适合复杂电子表格、研究简报、多文件调试 | ChatGPT(约 3000 条/周) |
+| GPT-5.5 Pro | 最高精度版，面向正确性关键任务 | Pro/Business/Enterprise |
+
+**核心指标：**
+- **SWE-bench：88.7%** — 多步编码能力大幅领先
+- **MMLU：92.4%** — 知识广度保持领先
+- **幻觉率降低 60%** — 相比 GPT-5.4 显著改善
+- **定价：** $5/M 输入 token，$30/M 输出 token（约为 GPT-5.4 两倍，但 token 消耗更高效）
+- **Computer Use：** 支持浏览器操控、桌面交互等 Agent 场景
+
+### GPT-5.6 — 2026 年 7 月最新旗舰
+
+OpenAI 于 **2026 年 7 月 9 日** 公开发布 GPT-5.6，作为最新的前沿预览模型，面向付费用户。GPT-5.6 进一步提升了复杂任务、Agent 执行和高难度编码的能力，被视为即将到来的 GPT-6 的技术验证。
+
+### ChatGPT 全面升级 + Codex 集成
+
+2026 年中，ChatGPT 界面进行了彻底改造，不再是单纯的聊天框。主要变化：
+
+- **Codex 集成：** OpenAI 开发环境 Codex 成为 ChatGPT 的一部分，支持直接编写、运行和调试代码
+- **Agent 模式：** 模型可自主规划、使用浏览器和终端工具、运行多步工作流
+- **Computer Use 增强：** GPT-5.5/5.6 可直接操控桌面应用，实现自动化操作
+- **免费档位可体验：** 免费和 Go 用户也可临时使用 GPT-5.5（有限额）
+
+### 生产选型更新（2026 年 7 月）
+
+| 场景 | 2026 Q2 推荐 | 新增选型 |
+|------|-------------|---------|
+| 前沿能力验证 | GPT-5.6/GPT-5.5 Pro | GPT-5.6 可选 |
+| Agent 多步工具编排 | GPT-5.6/GPT-5.5 | GPT-5.5 Thinking 可选 |
+| 复杂编码 | GPT-5.5 Thinking | GPT-5.6 候选 |
+| 成本平衡 | GPT-5.5-mini | 已稳定可用 |
+
+**资料来源：**
+- [What Is GPT-5.5? OpenAI's New Frontier Model Explained (Apidog)](https://apidog.com/blog/what-is-gpt-5-5/)
+- [OpenRouter — GPT-5.5 API Pricing & Benchmarks](https://openrouter.ai/openai/gpt-5.5)
+- [ChatGPT Free Plan Limits 2026: GPT-5.5 & the Caps](https://freeacademy.ai/blog/chatgpt-free-plan-limits-2026)
+- [OpenAI API Models 文档](https://platform.openai.com/docs/models)
+
+---
+
 **参考资料：**
 - [OpenAI GPT-4 官方页面](https://openai.com/index/gpt-4)
 - [OpenAI API Models 文档](https://platform.openai.com/docs/models)
@@ -277,4 +330,4 @@ print(result.final_answer)
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*

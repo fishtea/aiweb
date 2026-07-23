@@ -88,6 +88,54 @@ Qwen3 支持 **119 种语言和方言**，覆盖主要语系：
 
 ---
 
+## 2026 年 7 月补充：新模型与实战指南
+
+### Qwen3-Coder 深度解析
+
+根据 [Qwen3-Coder 官方博客](https://qwenlm.github.io/blog/qwen3-coder/)（2025 年 7 月发布），Qwen3-Coder Qwen 家族中首个 **Agentic Coding** 专用模型，其旗舰版本 **Qwen3-Coder-480B-A35B-Instruct** 在多项 Agent 编码基准上达到了开源模型最强水平：
+
+**模型规格：**
+- 总参数 480B，激活参数 35B（MoE 架构）
+- 原生支持 **256K tokens** 上下文，通过外推方法可扩展至 **1M tokens**
+- 覆盖多个规格：从 7B 开源版到 480B 旗舰版
+
+**Agent 编码能力：** 在 Agentic Coding、Agentic Browser-Use 和 Agentic Tool-Use 三大维度上表现领先，性能与 **Claude Sonnet 4** 相当。这意味着 Qwen3-Coder 不仅能写代码，还能:
+- 自主浏览网页并提取信息
+- 使用工具完成端到端开发任务
+- 在复杂编码工作流中做决策和规划
+
+**部署建议：**
+- 旗舰版（480B-A35B）需要多 GPU 部署（建议 4×A100 80GB 以上），使用 vLLM 或 SGLang
+- 轻量版可在单卡上运行，适合日常编码辅助和 CI/CD 管线集成
+- 支持 OpenAI 兼容 API 格式，可直接替换现有的代码模型后端
+
+### Qwen3Guard — 安全护栏模型
+
+根据 [Qwen3Guard 官方博客](https://qwenlm.github.io/blog/qwen3guard/)（2025 年 9 月），Qwen3Guard 是 Qwen 家族首个安全护栏模型：
+
+- 基于 **Qwen3 基础模型**微调，专用于安全分类任务
+- 支持**提示词和回复的双向安全检测**，包含风险等级和分类标签
+- 在多项安全基准上达到 SOTA（State-of-the-Art）
+- 支持中英文及多语言环境
+- **开源可部署**：可作为中间件部署在模型服务之前或之后，过滤不安全内容
+
+生产部署中，可将 Qwen3Guard 作为 API 网关的安全过滤层，在 LLM 调用前后分别做输入安全检测和输出安全检测。
+
+### 部署框架对比与实践建议
+
+Qwen3 系列的官方推荐部署方式，根据场景选择：
+
+| 框架 | 优点 | 适合场景 | 部署难度 |
+|------|------|---------|---------|
+| **SGLang (>=0.4.6.post1)** | 原生支持 Qwen3 推理解析器，结构化输出好 | 推理场景、精确控制 | 中等 |
+| **vLLM (>=0.8.4)** | 高吞吐、生态成熟、与现有系统集成好 | 高并发生产部署 | 低 |
+| **Ollama** | 一键运行、零配置 | 本地实验、个人学习 | 最低 |
+| **Hugging Face Transformers** | 灵活、易于调试 | 研究实验、模型微调 | 中等 |
+
+> 选型建议：生产系统优先选 **vLLM**（高吞吐优先）或 **SGLang**（推理质量优先）。Ollama 适合快速实验。注意所有框架均需 `--enable-reasoning` 和 `--reasoning-parser` 参数来启用 Qwen3 的思考模式。
+
+---
+
 ## Qwen2.5 系列
 
 根据 [Qwen2.5 技术报告 (arXiv:2412.15115)](https://arxiv.org/abs/2412.15115)：
@@ -288,6 +336,59 @@ ollama run qwen3:4b
 
 ---
 
+## 2026 最新进展
+
+### Qwen3-Coder-Next（2026.02）：80B/3A 的极致代码 Agent
+
+2026 年 2 月，Qwen 团队发布 [Qwen3-Coder-Next](https://arxiv.org/abs/2603.00729)，一个专为代码 Agent 设计的 80B 参数模型，**推理时仅激活 3B 参数**——用极小的计算预算实现了强大的编码能力。
+
+**架构与训练**：
+
+- **高效 MoE**：80B 总参数，每 Token 仅激活 3B（激活率 ~3.75%），在保持强能力的同时将推理成本压缩到极致。
+- **Agentic Training**：通过大规模合成可验证编码任务 + 可执行环境，在 Mid-Training 和 Reinforcement Learning 阶段直接从环境反馈中学习。
+- **Fill-in-the-Middle (FIM)**：原生支持代码补全，提升 IDE 场景下的实用性。
+
+**基准表现**：
+
+- SWE-Bench、Terminal-Bench 等 Agent 编码基准上，以仅 3B 激活参数取得了有竞争力的成绩，效率比（性能/激活参数）远超同类。
+- 同时发布 Base 和 Instruct 版本，以开源权重形式供研究和实际开发使用。
+
+> 来源：[Qwen3-Coder-Next Technical Report (arXiv)](https://arxiv.org/abs/2603.00729)、[Qwen3-Coder 官方博客](https://qwenlm.github.io/blog/qwen3-coder/)
+
+### Qwen3.5-Omni（2026.04）：全能多模态旗舰
+
+2026 年 4 月，Qwen 团队发布 [Qwen3.5-Omni](https://arxiv.org/abs/2604.15804)，千亿参数级全模态模型，将文本、音频、图像、视频统一到一个架构中。
+
+**核心能力**：
+
+- **超长上下文**：256K Token，支持 10+ 小时音频理解和 400 秒 720P 视频（1FPS）。
+- **Hybrid Attention MoE**：Thinker 和 Talker 均采用混合注意力 MoE 架构，高效处理超长序列。
+- **ARIA 语音合成**：引入动态对齐技术（ARIA），解决文本和语音 Tokenizer 编码效率差异导致的流式语音不稳定问题，在不增加显著延迟的前提下大幅提升对话的自然度和韵律感。
+- **多语言 + 情感表达**：支持 10 种语言的理解与语音生成，带有人类级别的情感细腻度。
+
+**基准表现**：
+
+- 在 215 个音频和音视频理解、推理、交互子任务和基准上取得 **SOTA**。
+- 关键音频任务**超越 Gemini-3.1 Pro**，综合音视频理解与之持平。
+- 具备脚本级结构化字幕生成能力，支持精确时间同步和自动场景分割。
+
+**Audio-Visual Vibe Coding**：最引人注目的涌现能力——模型可以直接基于音视频指令进行编码，被团队称为「音视频氛围编程」。
+
+> 来源：[Qwen3.5-Omni Technical Report (arXiv)](https://arxiv.org/abs/2604.15804)
+
+### 2026 年 Qwen 系列全景
+
+| 模型 | 发布时间 | 核心定位 | 关键创新 |
+|------|---------|---------|---------|
+| Qwen3 | 2025.04 | 通用旗舰 | 混合思考模式、Dense+MoE 双路线 |
+| Qwen3-Coder | 2025.07 | 代码 Agent | Agentic Coding、多尺寸覆盖 |
+| **Qwen3-Coder-Next** | **2026.02** | **极致效率代码 Agent** | **80B/3A MoE、环境反馈 RL** |
+| **Qwen3.5-Omni** | **2026.04** | **全模态旗舰** | **Hybrid Attention MoE、ARIA、AV Vibe Coding** |
+
+Qwen 系列已形成从端侧 0.6B 到千亿级全模态的完整产品矩阵，在开源模型生态中与 DeepSeek、LLaMA 形成三足鼎立之势。
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -300,4 +401,4 @@ ollama run qwen3:4b
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-23 00:09:06*
+*资源区块更新时间：2026-07-24 00:15:31*
