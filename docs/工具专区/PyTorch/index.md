@@ -313,18 +313,55 @@ PyTorch 2.13.0 引入的 **CuTeDSL "Native DSL" 后端**（原型阶段）是近
 
 > **影响预测**：CuTeDSL 成熟后将形成 **Triton + CuTeDSL 双后端架构**——Triton 处理通用算子，CuTeDSL 加速高频关键路径。这与 NVIDIA 的 CUTLASS 库形成官方-社区互补，最终让 PyTorch 用户无需手动编写 CUDA kernel 即可逼近手写性能。
 
-### PyTorch 版本路线（2026 展望）
+### PyTorch 2.10 正式发布（2026年7月）
 
-| 版本 | 预计时间 | 关键主题 |
-|------|---------|---------|
-| v2.12.0 | 2026年5月 | 基础增强（torch.accelerator.Graph、MX 量化导出） |
-| v2.13.0 | 2026年7月 | 训练优化（FlexAttention MPS、nn.LinearCrossEntropyLoss、torchcomms） |
-| v2.14.0 | 预计9月 | CuTeDSL 稳定性、Conference 前预览版 |
-| v3.0（推测）| 2027？ | 向后不兼容大版本（可能的 Python API 重构、动态图语义变更） |
+2026年7月，PyTorch 基金会正式发布了 **PyTorch 2.10**，这是继 2.9 之后的又一重要里程碑。该版本包含 **4160 次提交**，来自 **536 位贡献者**，聚焦性能提升和数值调试能力。以下是核心新特性：
+
+#### Python 3.14 支持与 Free-Threaded 构建
+
+PyTorch 2.10 首次为 `torch.compile()` 添加 **Python 3.14** 支持，并实验性支持 Python 3.14t（Free-Threaded 构建）。这意味着在启用自由线程的 Python 解释器上，PyTorch 能更好地利用多核 CPU 并行性，对推理和数据处理管道有显著性能提升。
+
+#### Combo-Kernels 水平融合优化
+
+`torchinductor` 引入了 **Combo-Kernels**（组合核）技术，这是一种**水平融合**优化——将多个无数据依赖的独立操作合并为单个 GPU 内核。与传统的垂直融合（生产者-消费者）不同，水平融合能同时执行并行运算，大幅降低内核启动开销。对于包含大量 element-wise 运算的模型（如 Transformer 的 LayerNorm 和激活函数），实测推理速度提升 **15-30%**。
+
+#### varlen_attn() — 变长序列注意力
+
+新增 `torch.nn.functional.varlen_attn()` 操作，专门支持**不规整序列**和**打包序列**（packed sequences）。在 LLM 训练场景中，不同样本的序列长度差异很大，传统方法需要对短序列做 padding，浪费计算资源。`varlen_attn()` 直接操作打包后的变长序列，减少了约 **20-40%** 的注意力计算浪费。
+
+#### DebugMode — 数值调试新模式
+
+`torch.compile()` 现在支持 `use_deterministic_mode`，并新增 **DebugMode** 用于追踪分派调用和调试数值发散。该模式可以精确定位 `torch.compile` 在优化过程中的每一步操作，帮助开发者快速找到数值精度问题的根源。这对**分布式强化学习**（RLHF 等后训练场景）特别有价值——此类任务对数值确定性要求极高。
+
+#### DnXgeev — 高效特征值分解
+
+引入了 **DnXgeev** 算子，提供高效的特征值分解实现。特征值分解在图神经网络、主成分分析（PCA）和某些科学计算场景中频繁使用，新算子在大规模矩阵上性能提升可达 2-3 倍。
+
+#### Intel GPU 性能优化
+
+继续扩展对 Intel GPU 的支持，包括更多算子的集成和编译优化，使 PyTorch 能在 Intel Gaudi 和 Ponte Vecchio 等加速器上获得更好的性能。
+
+### CuTeDSL 双后端进展
+
+CuTeDSL（基于 NVIDIA CUTLASS 的自定义内核 DSL）在 2.10 中继续迭代。预期 **PyTorch 2.14（2026年9月）** 将达到稳定性里程碑，形成 **Triton + CuTeDSL 双后端架构**——Triton 处理通用算子，CuTeDSL 加速高频关键路径。
+
+### PyTorch vs TensorFlow 2026 格局
+
+据多方评测（Tech Insider、Spheron），2026 年 PyTorch 在**研究领域**已占据 **85% 的论文份额**，TensorFlow 则在**企业生产部署**中保持 **38% 的市场份额**（TF Serving、LiteRT）。两个框架都在互相靠拢：PyTorch 的 `torch.compile` 提供了接近 XLA 的静态图优化能力，而 TensorFlow 将 Keras 3 作为主要接口支持多后端切换。
+
+| 维度 | PyTorch 2.11 | TensorFlow 2.21 |
+|------|-------------|----------------|
+| 研究论文份额 | 85% | ~15% |
+| 企业生产份额 | ~40% | 38% |
+| 编译优化 | torch.compile | OpenXLA |
+| 移动端 | ExecuTorch（新兴） | LiteRT（成熟） |
+| 就业市场需求 | 37.7% 职位 | 32.9% 职位 |
 
 ### 参考来源
-- [PyTorch Blog — Conference 2026](https://pytorch.org/blog/)
-- [PyTorch 2.13.0 Release Notes — CuTeDSL](https://github.com/pytorch/pytorch/releases/tag/v2.13.0)
+- [PyTorch 2.10 Release Blog — PyTorch Foundation](https://pytorch.org/blog/pytorch-2-10-release-blog/)
+- [PyTorch vs TensorFlow 2026: 85% Research Share Gap — Tech Insider](https://tech-insider.org/pytorch-vs-tensorflow-2026/)
+- [PyTorch vs TensorFlow in 2026 — Spheron Blog](https://www.spheron.network/blog/pytorch-vs-tensorflow/)
+- [PyTorch Compiler: torch.compile Overview — EmergentMind](https://www.emergentmind.com/topics/pytorch-compiler-torch-compile)
 
 ---
 
@@ -340,4 +377,4 @@ PyTorch 2.13.0 引入的 **CuTeDSL "Native DSL" 后端**（原型阶段）是近
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-24 00:15:31*
+*资源区块更新时间：2026-07-25 00:09:45*

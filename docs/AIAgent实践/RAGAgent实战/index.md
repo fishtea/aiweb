@@ -565,6 +565,69 @@ Anthropic 的建议是：**先追求简单**。如果以下条件不满足，标
 
 ---
 
+## 🎯 2026 Agentic RAG 五大生产模式
+
+### 先打地基，再加 Agent
+
+2026 年 RAG 生产部署中最常见、最昂贵的错误是**在检索基础不牢固时就开始加 Agentic 编排**。一个在弱检索器上循环的 Agent 只会花更多钱错得更精致。正确的路径是：**先做到 Advanced RAG，再在上面加 Agent**。
+
+Advanced RAG 的三块基石：
+
+1. **混合搜索**：同时使用稠密向量（语义）和 BM25 稀疏检索（精确术语、错误码、缩写）——覆盖两种失败模式
+2. **重排序（Reranker）**：第一阶段宽召回 → Cross-encoder 精确重排 → 少量高质量 chunk 进入 LLM 上下文。**这是提升 RAG 质量性价比最高的单一改动**
+3. **评估先行**：Faithfulness（忠实度）、Context Precision（上下文精确度）、Answer Relevancy（回答相关性）——在加任何 Agentic 复杂度之前先建好评测体系
+
+### 五大生产模式（按复杂度递增）
+
+> 来源：[Brightter — Agentic RAG: Five Production Retrieval Patterns (2026)](https://www.brightter.com/articles/agentic-rag-five-retrieval-patterns-that-survive-production)
+
+| # | 模式 | 工作方式 | 适用场景 | 成本倍率 |
+|---|------|---------|---------|---------|
+| 1 | **Router（路由器）** | 分类器检视查询，简单问题走向量检索快速路径，复杂问题走重型管道 | 混合难度查询，需要控制成本 | 1-1.5x |
+| 2 | **ReAct** | 模型交替推理与行动：思考→检索→观察→再思考→再检索 | 需要可追踪推理过程 | 2-3x |
+| 3 | **Plan-and-Execute** | Agent 起草完整子查询计划，并行或顺序执行后综合 | 可分解的复杂问题 | 2-4x |
+| 4 | **Multi-Agent Retrieval** | Supervisor 将查询分派给领域 Agent（SQL Agent、文档 Agent、Web Agent） | 异构知识跨系统分布 | 3-5x |
+| 5 | **Self-RAG** | 检索→生成→自评估→证据不足则改写查询重检索 | 高准确率要求（法律/医疗） | 3-10x |
+
+### Router 模式：最简单，回报最高
+
+Router 是所有 Agentic RAG 模式中最简单的，也是投入回报比最高的。核心思想：**不是所有查询都需要 Agentic 循环**。
+
+```python
+def route_query(query: str) -> str:
+    """分类查询难度，选择快速路径或深度路径"""
+    if is_simple_fact(query):       # "什么是RAG？"
+        return "fast_path"          # 向量检索 → 直接生成
+    elif is_comparative(query):     # "比较方案A和B"
+        return "deep_path"          # 多源检索 → 综合生成
+    elif needs_realtime(query):      # "今天股价？"
+        return "web_search"         # 跳过知识库，联网搜索
+```
+
+**关键洞察**：Agentic RAG 的 token 消耗通常是朴素 RAG 的 3-10 倍，延迟增加 2-5 倍。成熟系统将简单查询路由到快速路径，只为难题保留循环——这样既控制了成本，又不牺牲复杂场景的质量。
+
+### ReAct 模式：可追踪的推理循环
+
+ReAct（Reasoning + Acting）是 Agentic RAG 的默认选择。模型的推理轨迹（thought trace）对调试至关重要——你能看到它在每一步的思考：为什么选择了这个检索词、对结果质量的判断、为什么决定重新检索。
+
+### Plan-and-Execute：先规划再执行
+
+与 ReAct 的"走一步看一步"不同，Plan-and-Execute 让 Agent 先起草完整的子查询计划，再批量执行。适用于事先知道需要哪些信息的场景（如报告生成），可以并行执行多个子查询减少延迟。
+
+### 选择指南
+
+| 你的情况 | 推荐模式 | 理由 |
+|---------|---------|------|
+| 刚起步，想控制成本 | Router | 只在需要时启用 Agentic 循环 |
+| 需要可调试、可审计的推理 | ReAct | 每一步都有可见的 thought trace |
+| 查询可明确分解 | Plan-and-Execute | 并行执行，延迟更低 |
+| 数据分散在多个异构系统 | Multi-Agent | 每个 Agent 专精一个数据源 |
+| 正确率是第一优先级 | Self-RAG | 自评估循环保障质量 |
+
+> 来源：[Brightter — Agentic RAG: The Five Retrieval Patterns That Survive Production (2026)](https://www.brightter.com/articles/agentic-rag-five-retrieval-patterns-that-survive-production)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -577,4 +640,4 @@ Anthropic 的建议是：**先追求简单**。如果以下条件不满足，标
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-24 00:15:31*
+*资源区块更新时间：2026-07-25 00:09:45*

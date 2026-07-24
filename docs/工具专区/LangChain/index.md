@@ -354,6 +354,50 @@ LangChain 生态在 2026 年 Q3 初的迭代节奏约为：
 
 ---
 
+## LangChain core 1.5.0：`reasoning_effort` 标准参数（2026年7月23日）
+
+2026年7月23日，LangChain 发布 **langchain-core 1.5.0**（从 1.3.x 直接跃升至 1.5.x），核心变化是新增 `reasoning_effort` 作为聊天模型的标准参数，标志着 LangChain 对推理模型的全面正式支持。
+
+### `reasoning_effort` — 推理模型的标准协议
+
+`reasoning_effort` 是一个标准化参数，用于控制推理模型（如 DeepSeek-R1、o3、Gemini 2.5 Pro Thinking 等）的推理深度：
+
+| 取值 | 含义 | 适用场景 |
+|------|------|---------|
+| `"low"` | 轻量推理 | 简单问题、快速响应 |
+| `"medium"` | 中等推理（默认） | 通用场景 |
+| `"high"` | 深度推理 | 复杂逻辑、数学、编程 |
+
+```python
+from langchain.chat_models import ChatOpenAI
+
+# 使用推理模型时指定 effort
+llm = ChatOpenAI(
+    model="o3-mini",
+    reasoning_effort="high",
+)
+```
+
+这项参数的标准化消除了各模型提供商之间不同的推理控制方式（OpenAI 的 `reasoning_effort`、Anthropic 的 `thinking`、Google 的 `thinking_config`），LangChain 在底层自动映射到对应提供商的参数格式。
+
+### 配套更新
+
+- **langchain-core 1.5.1**（同日）：修复 langsmith gateway 环境变量支持（`LANGSMITH_GATEWAY_URL`）和工具调用 token 计数缓存
+- 配套包同步更新：`langchain-openai==1.4.1`、`langchain-anthropic==1.5.1`、`langchain-fireworks==1.5.1`
+
+### 对 Agent 开发者的意义
+
+1. **推理 Agent 更易构建**：无需为不同模型手写参数映射
+2. **成本精细控制**：简单问题用 `"low"` 省 token，复杂问题用 `"high"` 保证质量
+3. **跨模型迁移**：从 o3 换到 Gemini 2.5 Pro，推理参数自动适配
+
+### 参考来源
+- [LangChain core 1.5.0 Release Notes](https://github.com/langchain-ai/langchain/releases/tag/langchain-core==1.5.0)
+- [LangChain core 1.5.1 Release Notes](https://github.com/langchain-ai/langchain/releases/tag/langchain-core==1.5.1)
+- [LangChain Changelog](https://docs.langchain.com/oss/python/releases/changelog)
+
+---
+
 ## LangChain v1.x `create_agent` 全解析（2026 实战模式）
 
 > 来源：JetBrains Blog — [LangChain Python Tutorial: A Complete Guide for 2026](https://blog.jetbrains.com/pycharm/2026/02/langchain-tutorial-2026)
@@ -472,6 +516,53 @@ result = agent.invoke({"messages": [{"role": "user", "content": "How to debug in
 
 ---
 
+## 2026 最新进展：LangChain 的"安静出走"与生态重塑
+
+### 概述
+
+2025 年 10 月 LangChain 1.0 发布后，社区曾寄予厚望。但进入 2026 年，一股"安静出走"（Quiet Migration）的趋势正在生产环境中蔓延——越来越多的工程团队正悄然将代码从 LangChain 迁移至 OpenAI Agents SDK、Claude Agent SDK 或直接 API 调用。这场迁移没有喧哗，没有告别博文，但正在深刻改变 LLM 框架的格局。
+
+### 核心要点
+
+#### 1. 为什么生产团队在"离开"LangChain？
+
+根据 Ravoid 2026 年 4 月的深度分析 *The LangChain Exit*（Fernando, 2026），迁移的根本原因不是 LangChain 做得不好，而是**结构性问题**：
+
+- **抽象层价值被模型厂商吸收**：OpenAI、Anthropic 等厂商推出的原生 Agent SDK 已经内置了 LangChain 过去提供的核心抽象（工具调用、函数选择、多步推理），开发者不再需要一个中间层框架。
+- **1.0 来得太晚**：LangChain 在 v0.x 阶段经历了 3 年的频繁破坏性变更，许多团队在 1.0 发布前就已经转向其他方案。1.0 稳定后反而失去了"早期尝鲜者"的意义。
+- **隐藏的复杂度成本**：表面上 LangChain 用几行代码就能搭建 Agent，但在生产环境中，调试、定制、性能调优时需要深入理解框架内部——这种"漏抽象"反而增加了维护负担。
+
+> *"Engineering teams do not write celebratory blog posts about frameworks they removed. They write about frameworks they adopted."* — 这正是 2026 年 LangChain 迁移潮在公开讨论中几乎不可见的原因。
+
+#### 2. LangChain 生态系统在 2026 年仍然是完整的工具链
+
+尽管有迁移趋势，LangChain 生态在 2026 年仍然是最完整的 LLM 应用开发工具链（来源：LangChain 2026 年 1 月 Newsletter）：
+
+| 组件 | 2026 状态 | 说明 |
+|------|----------|------|
+| **LangChain v1.x** | 稳定维护 | 快速搭建 Agent 的框架，`create_agent()` API |
+| **LangGraph** | 生产级编排 | 精确控制循环、分支、人工干预的 StateGraph |
+| **LangSmith Agent Builder** | GA (2026.01) | 用自然语言描述需求，自动生成完整 Agent（含 prompt、工具选择、子 Agent 和技能） |
+| **DeepAgents** | 新推出 | 面向长时间运行（数小时/天）的复杂编程和研究任务 |
+| **LangSmith 可观测性** | 持续增强 | 支持 Side-by-side LLM 实验对比，快速发现回归和改进 |
+
+#### 3. 当前最佳实践：分层选择
+
+2026 年 LangChain 生态的推荐使用策略（综合 Ravoid 分析和官方文档）：
+
+- **快速原型 / 简单 Agent**：`LangChain v1.x create_agent()` — 几行代码即可跑通，适合 PoC 和小型项目
+- **生产级 Agent（需精确控制）**：`LangGraph StateGraph` — 适合需要复杂循环、人工审批、条件分支的场景
+- **长时间自主任务（研究/编程）**：`DeepAgents` — 可运行数天的复杂任务 Agent
+- **团队快速交付**：`LangSmith Agent Builder` — 自然语言描述需求，自动生成可部署的 Agent
+
+### 参考来源
+
+- [The LangChain Exit: Why Production Teams Are Quietly Rewriting to Raw SDKs in 2026 — Ravoid (2026.04)](https://ravoid.com/blog/langchain-exit-raw-sdk-migration-2026)
+- [January 2026: LangChain Newsletter — LangChain Blog (2026.01.29)](https://blog.langchain.com/january-2026-langchain-newsletter/)
+- [LangChain Changelog — docs.langchain.com](https://docs.langchain.com/oss/python/releases/changelog)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -484,4 +575,4 @@ result = agent.invoke({"messages": [{"role": "user", "content": "How to debug in
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-24 00:15:31*
+*资源区块更新时间：2026-07-25 00:09:45*

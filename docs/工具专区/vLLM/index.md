@@ -333,6 +333,74 @@ vllm serve Qwen/Qwen3-4B --model-impl transformers
 - [vLLM v0.22.1 Release Notes](https://github.com/vllm-project/vllm/releases/tag/v0.22.1)
 - [vLLM 官方文档](https://docs.vllm.ai/en/latest/)
 
+### v0.25.0 发布（2026年7月11日）
+
+2026年7月11日，vLLM 发布 **v0.25.0**，558 个提交、232 位贡献者（64 位新加入）。这是 vLLM 2026 年最重要的架构里程碑。
+
+#### MRv2 成为所有密集模型的默认引擎
+
+**Model Runner V2 (MRv2)** 经过 v0.22.0–v0.24.0 的逐步推广，现在正式成为所有密集（Dense）模型的默认执行路径。这是 vLLM 推理引擎架构从 V1 向 MRv2 全面迁移的最终节点。
+
+MRv2 在本次版本新增的关键能力：
+
+| 新能力 | 说明 |
+|--------|------|
+| **EVS（Efficient Variable Scheduling）** | 更高效的变量长度调度（#46535） |
+| **实时 Embedding** | 推理过程中实时获取嵌入向量（#46762） |
+| **Mamba 混合模型 Prefix Caching** | Mamba 混合注意力模型的公共前缀缓存（#42406） |
+| **多模态 Prefix 双向注意力** | 图像/文本混合前缀的双向注意力支持（#46942） |
+| **动态推测解码 + 完整 CUDA Graphs** | 推测解码现在可完全兼容 CUDA Graph，消除 Python 开销（#45953） |
+
+#### PagedAttention 正式移除
+
+**PagedAttention 被删除**（#47361）。作为 vLLM 最初的核心创新，PagedAttention 已在 V1/MRv2 的多后端架构下被替代。这标志着 vLLM 架构的完整代际更替——从单后端（PagedAttention）到多后端（V1/MRv2）。
+
+#### Transformers 后端追平原生速度
+
+HuggingFace Transformers 建模后端（`--model-impl transformers`）在本版本中**性能已全面追平 vLLM 原生实现**（#47187），并新增：
+
+- **FP8 MoE 支持**（#46820）：Transformers 后端首次支持 FP8 量化 MoE 模型
+- **CUDA Graph + Embed 缩放修复**（#48010）
+- **GPTBigCode / Starcoder2 迁移**（#30966）
+- **RoBERTa 迁移**（#47452）
+
+#### 新模型支持
+
+| 新模型 | 说明 |
+|--------|------|
+| **LLaVA-OneVision-2** | 多模态视觉语言模型 |
+| **Unlimited OCR** | Triton R-SWA 后端加速 OCR 模型 |
+| **MOSS-Transcribe-Diarize** | 语音转录 + 说话人分离 |
+| **openai/privacy-filter** | OpenAI 隐私过滤模型 |
+| **Hy3** | 支持 token-suffix 和 JSON Schema array 的模型 |
+| **MiniMax-M3** | 新增 Pipeline Parallelism 和 NVFP4 量化支持 |
+
+#### Streaming Parser Engine
+
+引入统一的工具调用/推理解析框架（#46610），新增：
+
+- Kimi k2.5/k2.6/k2.7 专用解析器
+- seed_oss 和 DeepSeek V4 解析器移植
+- Rust 前端持续成熟（HTTPS/mTLS、DP supervisor、profiler control routes）
+
+#### 版本演进
+
+| 版本 | 日期 | 关键变化 |
+|------|------|---------|
+| v0.22.0 | 5月底 | DeepSeek-V4 首次引入 |
+| v0.23.0 | 6月15日 | DeepSeek-V4 多后端固化、MRv2 默认 Llama/Mistral |
+| v0.24.0 | 6月29日 | MiniMax-M3、SM120 支持、MRv2 扩展 |
+| **v0.25.0** | **7月11日** | **MRv2 默认所有密集模型、PagedAttention 移除、Transformers 后端追平** |
+| v0.25.1 | 7月14日 | 补丁版：2 个修复 |
+
+> **趋势**：vLLM 完成了从 PagedAttention 单核引擎到 MRv2 多后端架构的完整迁移。2026 下半年的核心方向将是：多模态推理深度优化 + Transformers 后端统一 + 更多硬件后端（SM120/Blackwell）覆盖。
+
+### 参考来源
+
+- [vLLM v0.25.0 Release Notes](https://github.com/vllm-project/vllm/releases/tag/v0.25.0)
+- [vLLM v0.25.1 Release Notes](https://github.com/vllm-project/vllm/releases/tag/v0.25.1)
+- [vLLM 官方文档](https://docs.vllm.ai/en/latest/)
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -345,4 +413,4 @@ vllm serve Qwen/Qwen3-4B --model-impl transformers
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-24 00:15:31*
+*资源区块更新时间：2026-07-25 00:09:45*

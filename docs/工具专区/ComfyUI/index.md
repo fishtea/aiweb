@@ -356,4 +356,4 @@ ComfyUI 已推出独立的 **Comfy Desktop** 桌面应用（[comfy.org/download]
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-24 00:15:31*
+*资源区块更新时间：2026-07-25 00:09:45*

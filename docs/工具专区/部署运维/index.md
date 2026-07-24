@@ -291,12 +291,49 @@ Braintrust 发布了一份 [2026 LLM 监控工具全面对比指南](https://bra
 
 > **2026 年趋势**：LLM 监控正从"事后看板"向"实时干预"演进——Langfuse 的 Agent 仪表盘和 Braintrust 的 A/B 实验框架代表了行业方向：不仅观测，还要能基于数据快速迭代模型和提示词。
 
+### 2026 年 LLM 可观测性新范式
+
+#### LLM 可观测性的三大支柱
+
+根据 AgntLog 2026 年 3 月的深度分析，生产级 LLM 监控已超越传统日志记录，形成三大支柱：
+
+**1. 输入/输出监控** — 记录每次推理请求的完整输入和输出，包括系统提示词、用户输入、模型回复、token 用量。这不仅是审计需要，也是回放和调试的基础。
+
+**2. 内部状态追踪** — 对 Agent 类应用，需要追踪工具调用链、检索召回链、重排序结果等中间状态。当 Agent 行为异常时，仅看输入输出往往不足以定位根因。
+
+**3. 实时质量评估** — 利用一个更小的"评估模型"对生产输出做即时质量打分（正确性、安全性、相关性），发现分数低于阈值时自动触发回滚或告警。
+
+#### n8n 的"防御性架构"——生产级 Agent 工具调用
+
+2026 年 7 月，n8n 发布了一套全面的架构指南，解决 Agent 工具调用中最顽固的瓶颈：**LLM 无法准确区分不同类型的失败**。
+
+**核心问题"黑盒"**：LLM 无法区分"无结果返回"（合法响应）和"服务器故障返回空列表"（异常）。这种缺乏细微差别的判断常导致 Agent 陷入"循环"或产生幻觉。
+
+**n8n 的解决方案**：
+
+- **协议层（Protocol Layer）** — 介于 LLM 和外部 API 之间的中间过滤层，将技术 API 失败转化为"LLM 可理解的"错误消息
+- **子工作流包装** — 将每个 AI Agent 工具封装为独立子工作流，实现模块化错误处理
+- **弹性重试模式** — 结构化重试策略，区分可重试（超时）和不可重试（参数非法）错误
+- **降级回退策略** — 当工具调用连续失败时，预定义降级路径而非让 Agent 无限循环
+
+这一指南将 AI Agent 从实验性"游乐场"推向稳定的生产环境。
+
+#### 企业级 Agent 可观测性工具
+
+2026 年，Agent 可观测性工具链快速成熟：
+
+| 工具 | 定位 | 核心能力 |
+|------|------|---------|
+| **Comet/Opik** | Agent 生产监控 | 追踪 Agent 生产足迹，在线评估，治理合规，成本追踪 |
+| **Langfuse v3.210+** | LLM 观测平台 | Agent 仪表盘，Prompt 版本管理，回放调试 |
+| **Braintrust** | A/B 实验框架 | 基于数据快速迭代模型和 Prompt，评估集管理 |
+| **Arena.ai** | 模型排行榜 | 跨文档、视频、文本、代码模型的评估排名 |
+
 ### 参考来源
-- [Langfuse v3.210 Release Notes](https://github.com/langfuse/langfuse/releases/tag/v3.210.0)
-- [Best LLM Monitoring Tools in 2026 — Braintrust](https://braintrust.dev/articles/best-llm-monitoring-tools-2026)
-- [What is LLM Observability & Monitoring? — Langfuse](https://langfuse.com/faq/all/llm-observability)
-- [Practical Steps for a Smooth LLM Application Rollout — Traceloop](https://traceloop.com/blog/practical-checklist-to-deploy-an-llm-app-into-product)
-- [LLM Monitoring: The Key to Successful LLM Deployments — Fiddler AI](https://fiddler.ai/blog/llm-monitoring-the-key-to-successful-llm-deployments)
+- [LLM Observability: Essential AI Monitoring in Production — AgntLog](https://agntlog.com/llm-observability-essential-ai-monitoring-in-production/)
+- [n8n Launches Architectural Guide to Solve Broken LLM Tool Calling — Pikka AI News](https://news.pikkaai.com/news/2026-07-12-n8n-launches-architectural-guide-to-solve-broken-llm-tool-calling-news)
+- [Comet - The AI Developer Platform](https://www.comet.com/)
+- [LLM Monitoring Tools 2026 — Brave](https://braintrust.dev/articles/best-llm-monitoring-tools-2026)
 
 ---
 
@@ -312,4 +349,4 @@ Braintrust 发布了一份 [2026 LLM 监控工具全面对比指南](https://bra
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-24 00:15:31*
+*资源区块更新时间：2026-07-25 00:09:45*
