@@ -492,6 +492,61 @@ UniClawBench 的结果表明：**Agent 框架的设计选择和基模型能力�
 
 ---
 
+### 2026 年 7 月实践：结合可观测性的 Agent 变更验证
+
+2026 年 7 月，两个重要的 Agent 可观测性实践案例相继公开，展示了**可观测性从\"被动排查\"走向\"主动验证\"**的演进方向。
+
+#### 案例一：Cursor Agent Factory — 基于 Trace 的验证架构
+
+Cursor 的生产级 Agent 可观测性方案将评估嵌入到 Agent 工作流的每个环节：
+
+| 层级 | Cursor 的实现 | 评估方式 |
+|------|-------------|---------|
+| **CI 集成** | 每次 Agent 生成的 PR 自动触发验证管线 | 风险评分 + Bugbot 审阅 |
+| **行为证据** | Agent 在沙箱执行变更并产出录屏/Trace | 人工或自动化对比行为预期 |
+| **风险评分** | 评估变更的影响范围（几行改动 vs 架构变更） | 规则引擎路由，高风险转人工 |
+| **评估闭环** | 人工修正反馈成为规则和评估用例 | 自动写入评估集，下次 CI 执行 |
+| **诊断工作流** | 评估失败自动触发，携带完整 Trace 上下文 | 无需手动关联日志 |
+
+**关键创新**：Cursor 不再仅看\"代码是否通过测试\"，而是要求 Agent 产出行**为证据**——录屏展示变更后产品的实际表现。当 Agent 能录屏证明\"添加了固定聊天功能\"的效果时，验证信任从\"相信代码\"转向\"相信行为\"。
+
+#### 案例二：Kiro CLI + Arize Skills — 编码 Agent 的观察评估闭环
+
+Amazon 的 Kiro CLI 与 Arize Skills 集成提供了一个端到端的 Agent 评估方案：
+
+1. **变更生成**：Kiro CLI 根据自然语言指令修改代码
+2. **自动插桩**：Arize Skills 自动为变更后的代码注入可观测性工具
+3. **Trace 导出**：运行变更并导出完整 Trace——包括 LLM 调用、工具使用、执行路径
+4. **数据集构建**：将 Trace 转化为评估数据集
+5. **实验验证**：在保留数据集上对比变更前后的质量、延迟和成本
+6. **决策门控**：仅当评估指标改善时才合并变更
+
+```python
+# 伪代码：Agent 变更验证流程
+# 1. Agent 生成变更
+change = coding_agent.make_change("添加用户登录功能")
+# 2. Arize Skills 自动插桩可观测性
+instrumented = arize_skills.instrument(change)
+# 3. 运行并导出 Trace
+trace = run_with_observability(instrumented, test_suite)
+# 4. 对比基线评估
+before_metrics = baseline_eval(test_suite)
+after_metrics = eval_with_trace(trace, test_suite)
+# 5. 决策：仅当改善时合并
+if after_metrics.score > before_metrics.score:
+    merge(change)
+else:
+    reject_with_diagnosis(trace)
+```
+
+**核心启示**：Agent 评估与可观测性正在从\"事后复盘\"工具升级为\"**门控决策**\"系统——评估结果直接决定 Agent 的输出是否被采纳。这意味着可观测性不再仅是运维工具，而是 Agent 安全护栏的核心组成部分。
+
+> 来源：
+> - [Arize AI — Inside Cursor's Agent Factory (Jul 2026)](https://arize.com/blog/inside-cursors-agent-factory-how-it-verifies-ai-written-code/)
+> - [Arize AI — Kiro CLI Observability with Arize Skills (Jul 2026)](https://arize.com/blog/kiro-cli-observability-arize-skills/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -504,4 +559,4 @@ UniClawBench 的结果表明：**Agent 框架的设计选择和基模型能力�
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-25 00:09:45*
+*资源区块更新时间：2026-07-26 00:09:30*

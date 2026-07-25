@@ -373,6 +373,71 @@ SDPA Prefill 更新为使用 FlashAttention 内核配合 `StaticCache`，对于�
 
 ---
 
+## 2026 年 7 月社区与生态热点
+
+> 以下内容基于 HuggingFace 官方博客 2026 年 7 月发布的文章整理。
+
+### Kimi K3：2.8T 参数开源 MoE 模型
+
+Kimi K3 是月之暗面（Moonshot AI）发布的新一代开源混合专家模型，总参数量 **2.8T**（万亿），采用 **MXFP4** 微缩放浮点量化格式。这是目前 HuggingFace 上参数量最大的开源权重模型之一。
+
+| 属性 | 详情 |
+|------|------|
+| **参数量** | 2.8T 总参数 |
+| **量化** | MXFP4（微缩放浮点 4-bit），兼顾精度和内存 |
+| **架构** | MoE（混合专家） |
+| **开源** | 开放权重（Open Weights） |
+
+MXFP4 量化格式的意义在于：以 4-bit 精度存储的同时保持接近 FP8 的推理质量，大幅降低部署成本。
+
+> 来源：HuggingFace Blog, \"Kimi K3 Model Overview\", https://huggingface.co/blog/ResterChed/kimi-k3-model-overview-mxfp4-quantization-open-wei。
+
+### Aether-7B-5Attn：100% 开源主权基础模型
+
+FINAL-Bench 团队发布了 **Aether-7B-5Attn**，一个完全开源（训练数据、代码、权重全公开）的 7B 参数基础模型。其独特之处在于使用了 **5 头注意力机制**（而非标准的多头注意力均分数），作为一个对照实验来探索异构注意力对模型能力的影响。
+
+> 来源：HuggingFace Blog, \"Aether-7B-5Attn\", https://huggingface.co/blog/FINAL-Bench/opensource-llm。
+
+### POCKET：iPhone 上运行的 35B 模型
+
+**POCKET** 是一个 350 亿参数的模型，能在 **iPhone 上本地运行**（使用 NPU + CPU 混合推理），也可以在无 GPU 的 PC 上运行。这代表了端侧大模型部署的重要里程碑。
+
+> 来源：HuggingFace Blog, \"POCKET\", https://huggingface.co/blog/FINAL-Bench/pocket。
+
+### AMD Instinct MI455X 支持
+
+HuggingFace 社区贡献者完成了 Transformers 在 **AMD Instinct MI455X** GPU 上的首批性能测试。结果显示，通过 `torch.compile` 和 FlashAttention 的组合，MI455X 在推理场景中表现出色，为 NVIDIA 替代方案提供了可行路径。
+
+> 来源：HuggingFace Blog, \"Hugging Face on AMD Instinct MI455X\", https://huggingface.co/blog/badaoui/transformers-on-amd-mi455。
+
+### Nemotron 3 Embed：RTEB 基准排名第一
+
+NVIDIA 的 **Nemotron 3 Embed** 模型在 RTEB（Retrieval Token Embedding Benchmark）基准测试中取得 **总排名第一**，专为 Agent 驱动的检索场景优化。该模型擅长处理需要多步推理和工具调用的复杂检索任务。
+
+> 来源：HuggingFace Blog, \"NVIDIA Nemotron 3 Embed Ranks #1 Overall on RTEB\", https://huggingface.co/blog/nvidia/nemotron-3-embed-wins-rteb。
+
+### Moon Bot：Slack 原生编程 Agent
+
+HuggingFace 团队构建了 **Moon Bot**，一个基于 Slack 的编程 Agent，使用 **HuggingFace Storage Buckets** 作为模型和大文件的存储后端。这展示了 Agent + 平台工具 + 对象存储的完整闭环。
+
+> 来源：HuggingFace Blog, \"Building Moon Bot\", https://huggingface.co/blog/huggingface/moon-bot。
+
+### 安全事件披露（2026 年 7 月）
+
+HuggingFace 于 2026 年 7 月发布了安全事件披露公告。作为承载百万级模型和数十万开发者账户的平台，安全透明度对社区信任至关重要。建议所有用户定期检查账户安全设置并启用双因素认证。
+
+> 来源：HuggingFace Blog, \"Security incident disclosure — July 2026\", https://huggingface.co/blog（安全披露页面）。
+
+### 关键趋势总结
+
+| 趋势 | 说明 |
+|------|------|
+| **万亿参数开源** | Kimi K3（2.8T）代表开源模型参数量新高度 |
+| **端侧大模型** | POCKET（35B）在手机上运行，端侧推理不再是"小模型专利" |
+| **硬件多元化** | AMD MI455X 等替代 GPU 方案成熟，降低对 NVIDIA 的单一依赖 |
+| **Embedding 竞争激烈** | Nemotron 3 Embed 登顶 RTEB，Agent 场景推动嵌入模型迭代 |
+| **Agent 基础设施** | Moon Bot 展示 Agent + Buckets 的生产实践模式 |
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -385,4 +450,4 @@ SDPA Prefill 更新为使用 FlashAttention 内核配合 `StaticCache`，对于�
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-25 00:09:45*
+*资源区块更新时间：2026-07-26 00:09:30*

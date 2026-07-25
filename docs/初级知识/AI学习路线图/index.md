@@ -118,6 +118,94 @@
 - **加入学习社区**：Microsoft AI Discord、Hugging Face 社区、Reddit r/MachineLearning 都是不错的讨论场所。
 - **定期回顾**：AI 领域更新很快，但基础概念（偏差-方差、过拟合、梯度下降）不会变。打好基础再看新论文会更轻松。
 
+## 2026 年 AI 学习路径更新
+
+AI 领域在 2025-2026 年发生了几个影响学习路径的关键变化：
+
+### 变化一：AI 辅助学习 AI
+
+2026 年，**用 AI 学 AI** 已经成为主流学习方式。Copilot、Cursor、Claude Code 等 AI 编程助手极大地降低了入门门槛。但这把双刃剑也需要警惕：
+
+| 优势 | 风险 |
+|------|------|
+| 零基础也能跑通代码，学习反馈周期大幅缩短 | 过度依赖 AI 生成代码，不理解背后原理 |
+| AI 可解释报错、推荐调试方案 | 跳过"痛苦调试"环节，丧失排查能力 |
+| 直接与模型对话学习概念，无需死记硬背 | 可能接受 AI "幻觉"输出的错误知识 |
+
+> 建议：用 AI 辅助理解代码和概念，但坚持手写核心逻辑（至少写一遍）；遇到报错先自己排查 5 分钟，再求助 AI。
+
+### 变化二：Agent 开发成为必学技能
+
+2026 年，Agent（智能体）已经从"前沿概念"变成常规开发范式。学习路径中应尽早引入：
+
+- **工具调用（Function Calling）**：让 LLM 连接外部世界
+- **MCP 协议**：Anthropic 推出的标准工具接口，已被主流模型支持
+- **Agent 框架入门**：从 smolagents（HuggingFace，约 1000 行代码，极致简洁）或 LangGraph 开始
+
+### 变化三：多模态成为默认能力
+
+GPT-5、Claude Opus 4.7、Gemini 2.5 Pro 等前沿模型的原生多模态能力意味着：
+
+- 图片理解、OCR、视频分析不再需要拼接专用模型
+- 学习重心从"如何调多个模型"转向"如何设计统一的多模态任务"
+- 视觉语言模型（VLM）的基础概念应纳入学习路线
+
+### 变化四：AI 伦理与监管实用化
+
+随着 EU AI Act 于 2026 年 8 月全面执行，AI 伦理从"理论话题"变为"合规刚需"：
+
+- 了解风险分级（不可接受/高风险/有限/最小）
+- 学会判断你开发的 AI 系统属于哪个风险等级
+- 掌握基础的文档记录和透明度实践
+
+### 2026 更新版推荐学习顺序
+
+```text
+第 1 步：AI 概念与边界
+理解 AI/ML/DL/LLM 关系、能力边界、典型应用场景。
+新增：理解 EU AI Act 风险分级基本概念。
+
+第 2 步：Python + AI 辅助编码
+Python 基础 + 数据操作（Pandas/Polars），同时学会用 AI 编程助手加速学习。
+新增：Polars 作为 Pandas 的现代替代，DuckDB 用于快速数据探索。
+
+第 3 步：机器学习基础
+监督学习、过拟合、评估指标。用 scikit-learn 训练第一个模型。
+
+第 4 步：深度学习与 Transformer
+神经网络 → 注意力机制 → Transformer 架构。理解 token 和 embedding。
+
+第 5 步：LLM 应用开发
+提示词工程 → API 调用 → 结构化输出 → 工具调用（Function Calling）。
+新增：MCP 协议基础，Agent 的基本循环（Think → Act → Observe）。
+
+第 6 步：RAG 与 Agent 实战
+检索增强生成（RAG）→ 多工具 Agent → 多模态 Agent。
+新增：smolagents / LangGraph 框架入门，可观测性工具（Langfuse）。
+
+第 7 步：评估、安全与部署
+自定义评估集 → 安全护栏（Guardrails）→ 成本控制 → 部署上线。
+新增：AI 伦理合规自查、人工审核通道设计。
+```
+
+### 2026 新增推荐资源
+
+| 资源 | 类型 | 说明 |
+|------|------|------|
+| [HuggingFace Agents Course](https://huggingface.co/learn/agents-course) | 免费课程 | 以 smolagents 为主线，涵盖 Code Agent、工具调用、多 Agent 编排 |
+| [Anthropic MCP 文档](https://modelcontextprotocol.io/) | 规范文档 | 模型上下文协议，Agent 工具调用的标准接口 |
+| [Polars 官方教程](https://pola.rs/) | 文档 | Pandas 的现代替代，适合大数据处理 |
+| [Jupyter AI](https://jupyter-ai.readthedocs.io/) | 工具 | 在 Notebook 中用 `%%ai` 魔法命令直接调用 LLM |
+
+### 不同角色的 2026 优先级调整
+
+| 角色 | 2026 新增优先学习项 |
+|------|---------------------|
+| 产品/管理者 | AI 伦理合规（EU AI Act）、Agent 的能力边界、AI 辅助决策的风险 |
+| 应用开发者 | Agent 框架（smolagents/LangGraph）、MCP 协议、多模态 API |
+| 数据分析师 | Polars/DuckDB、Jupyter AI、LLM 辅助数据分析 |
+| 入门学习者 | AI 辅助学习技巧、Python 基础、提示词工程 |
+
 ## 延伸阅读
 
 - [人工智能入门](../人工智能入门/)
@@ -138,4 +226,4 @@
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-25 00:09:45*
+*资源区块更新时间：2026-07-26 00:09:30*

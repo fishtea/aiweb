@@ -920,18 +920,297 @@ Agent 作为对话对等体直接交流，无需中心协调者。一个 Agent �
 高风险决策 → Ensemble/Debate
 ```
 
-大多数真实系统组合多种模式。例如，文档处理管道主体用 DAG，但在模糊分类决策节点内调用 Peer-to-Peer 辩论模式。
+### 2026 年多 Agent 落地的残酷现实
 
-### 运维考量
+根据 2026 年生产数据的分析，多 Agent 并非"越多越好"：
 
-| 考量 | 要点 |
-|------|------|
-| **可观测性** | 每次 Agent 调用都要追踪：输入、输出、延迟、成本。LangSmith/Arize Phoenix/自定义 OpenTelemetry。没有这个，在五 Agent 管道中调试故障是噩梦 |
-| **成本核算** | 层级系统中，主管调用消耗 token、Worker 调用消耗 token、最终合成调用消耗 token。全部用 GPT-4o 的系统比用轻量模型做路由的系统贵 5-10 倍 |
-| **故障传播** | 提前决定 Worker 失败时做什么：重试？跳过该子任务？降级到简单策略？**这些决策要编码进编排逻辑，不要在凌晨 2 点的线上事故中临时发现** |
-| **状态管理** | Agent 数量增长时，共享状态成为负债。偏好不可变状态 + 显式版本控制：每个 Agent 接收状态快照、返回增量，编排器合并增量 |
+- ✅ **可并行化任务**上，集中式多 Agent 协调提升 **80.9%** 的效率
+- ❌ **顺序规划任务**上，每个多 Agent 变体都**退化 39–70%**
+- ⚠️ 大多数多 Agent 部署是"过度工程"——降级到单 Agent 反而效果更好
+- ✅ Graph-based 编排（LangGraph）在故障恢复和合规上表现最佳
 
-> 来源：[Vinayaka Jyothi — Multi-Agent Orchestration: Patterns That Actually Scale (Feb 2026)](https://vinayakajyothi.com/blog/2026-02-16-multi-agent-orchestration-patterns/)
+**核心原则**：小任务优先用单 Agent，复杂任务再考虑多智能体。每多一个 Agent 就多一轮 LLM 调用，成本和延迟成倍上升。
+
+> 来源：[Medium — Multi-Agent in Production in 2026: What Actually Survived](https://medium.com/@Micheal-Lanham/multi-agent-in-production-in-2026-what-actually-survived-f86de8bb1cd1)
+
+---
+
+## 🏗️ 2026 多 Agent 六大编排模式（附 LangGraph 代码）
+
+根据 MACCOME 的 2026 年生产指南，以下六种编排模式覆盖了 **95%+ 的生产场景**：
+
+### 模式 1：顺序流水线（Sequential Pipeline）
+
+Agent 依次处理，输出为下一个的输入。适合有强依赖的线性任务。
+
+```python
+from langgraph.graph import StateGraph, START, END
+from typing import TypedDict
+
+class PipelineState(TypedDict):
+    query: str
+    retrieved_docs: str
+    analysis: str
+    final_report: str
+
+def retrieval_agent(state): ...    # 检索
+def analysis_agent(state): ...     # 分析
+builder = StateGraph(PipelineState)
+builder.add_node("retriever", retrieval_agent)
+builder.add_node("analyzer", analysis_agent)
+builder.add_edge(START, "retriever")
+builder.add_edge("retriever", "analyzer")
+builder.add_edge("analyzer", END)
+```
+
+### 模式 2：并行 Fan-out / Fan-in
+
+多个 Agent 独立处理子任务后合并。总时间 = max(T₁, T₂, ..., Tₙ)，适合多源研究、多维度分析。
+
+```python
+from langgraph.types import Send
+from typing import Annotated
+import operator
+
+class ResearchState(TypedDict):
+    query: str
+    research_results: Annotated[list, operator.add]
+    final_synthesis: str
+
+def supervisor(state):
+    return [Send("research_worker", {"query": state["query"], "source": s})
+            for s in ("academic", "industry", "news")]
+
+def research_worker(state):
+    return {"research_results": [search_by_source(state["query"], state["source"])]}
+```
+
+### 模式 3：层级 Supervisor-Worker
+
+Supervisor 负责意图识别、任务分解和路由；Worker 专精特定领域；Supervisor 汇总结果。这是 2026 年**最流行的生产模式**。
+
+### 模式 4：辩论/投票（Debate）
+
+多个 Agent 独立完成同一任务，一个 Judge Agent 选取最佳输出。适合质量难以自动验证的场景。
+
+### 模式 5：路由分发（Router）
+
+调度 Agent 按意图将任务分发给最合适的专家 Agent。适合客服系统按意图分流。
+
+### 模式 6：扁平路由（Flat Router）
+
+无中心调度，消息按 channel 直接路由到对应 Agent。适合多平台 Agent 矩阵。
+
+| 模式 | 适用场景 | 框架支持 |
+|------|---------|---------|
+| 顺序流水线 | 内容创作、文档处理 | LangGraph, CrewAI |
+| 并行 Fan-out/Fan-in | 多源研究、风控分析 | LangGraph Send API |
+| 层级 Supervisor-Worker | 复杂研究、代码审查 | Google ADK, LangGraph |
+| 辩论/投票 | 代码生成、策略建议 | AutoGen GroupChat |
+| 路由分发 | 客服系统 | Dify, CrewAI |
+| 扁平路由 | 多平台 Agent | OpenClaw |
+
+> 来源：[MACCOME — Multi-Agent Kollaboration Design-Patterns 2026](https://maccome.com/de/blog/2026-multi-agent-collaboration-architecture-design-patterns-production.html)
+
+---
+
+## 🔧 2026 生产级多 Agent 基础设施清单
+
+| 层次 | 基础设施 | 可选项 |
+|------|---------|--------|
+| **模型策略** | 复杂推理用强模型，简单任务用轻模型 | GPT-4o + GPT-4o-mini / Claude |
+| **错误处理** | 每个 Agent try-catch，失败重试 3 次，指数退避 | LangFuse / Weave 追踪 |
+| **监控** | 每次 LLM 调用的成本、延迟、成功率看板 | LangFuse / Weave |
+| **人工审批** | 关键操作前插入确认节点 | 发送邮件、修改数据库 |
+| **步数上限** | 每个 Agent 和编排流设硬上限 | 防止死循环烧钱 |
+| **上下文压缩** | 多 Agent 传递时对历史对话做摘要 | 避免上下文膨胀 |
+
+---
+
+## 🆕 2026 新入局者：微软 Agent Framework 的 Agentic Workflows
+
+### 三大核心组件
+
+Microsoft 在 2026 年推出 **Agent Framework**，与现有的 CrewAI / LangGraph 形成三足鼎立之势。它的核心差异化在于 **Harness** 组件——一个"即用型"的预制 Agent，开箱即用地提供了多步任务所需的所有基础设施：
+
+| 功能 | Harness 内置 | CrewAI | LangGraph |
+|------|------------|--------|-----------|
+| 计划和 Todo 追踪 | ✅ 内置 | ❌ 需手动实现 | ❌ 需手动实现 |
+| 上下文压缩 | ✅ 自动 | ❌ 需配置 Memory | ❌ 需手动 Checkpoint |
+| 文件访问和记忆 | ✅ 内置 | ✅ Crew Memory | ❌ 需手动集成 |
+| "不再询问"工具审批 | ✅ 一键确认 | ❌ 依赖 human_input | ✅ 需自定义节点 |
+| 可观测性 | ✅ 内置 | ✅ AMP Suite（企业版） | ✅ LangSmith |
+| MCP 原生支持 | ✅ | ✅ | ❌ 需 LangChain 集成 |
+| 跨平台语言 | .NET / Go / Python（路线图） | Python only | Python only |
+
+```python
+# 微软 Agent Framework：一个 Harness Agent 自动处理复杂任务
+agent = client.as_harness(
+    name="ResearchAgent",
+    instructions="Research the given topic and produce a structured report.",
+    tools=[WebSearchTool(), DocumentReader(), DataAnalyzer()],
+    # 以下全部自动处理：
+    # - 计划生成与追踪
+    # - 工具审批（首次后不再询问）
+    # - 上下文窗口管理
+    # - 输出结构化报告
+)
+```
+
+> 来源：[Microsoft Agent Framework Overview (2026)](https://learn.microsoft.com/en-us/agent-framework/overview/)
+
+### 亚马逊 Bedrock 的层级 Supervisor 模式
+
+AWS 在 2026 年对 Amazon Bedrock Agents 推出了 **多 Agent 协作**（multi-agent collaboration），采用层级 Supervisor-Worker 架构：
+
+```
+用户提问 → Supervisor Agent（意图识别+路由）
+              ├→ Collaborator Agent 1（现有贷款业务）
+              ├→ Collaborator Agent 2（新贷款申请）
+              └→ Collaborator Agent 3（通用问题）
+```
+
+每个 Agent 用自然语言描述角色和职责，Supervisor 自动分解任务、路由给专业 Agent 并汇总结果。关键要求：**角色描述必须精确，避免职责重叠**，否则 Supervisor 会出现路由歧义。
+
+⚠️ 注意：Amazon Bedrock Agents Classic 自 2026 年 7 月 30 日起将停止接收新客户，新方案是 **Amazon Bedrock AgentCore**。
+
+> 来源：[AWS — Use multi-agent collaboration with Amazon Bedrock Agents](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html)
+
+### CrewAI 2026 进化：Flows + AMP Suite
+
+CrewAI 从纯 Agent 编排框架演进为双模式架构，新增了 **Flows** 概念：
+
+| 模式 | 设计哲学 | 使用场景 |
+|------|---------|---------|
+| **Crews** | 自主协作——基于角色的 Agent 团队自动化 | 创意任务、研究分析、内容生产 |
+| **Flows** | 精确控制——事件驱动的结构化工作流 | 审批流程、数据管道、有严格顺序的业务逻辑 |
+
+Flows 可以内嵌 Crews，实现了"宏观精确控制 + 微观自主智能"的混合模式。
+
+**CrewAI AMP Suite**（2026 新增企业版）提供了生产级控制平面：统一控制面板、追踪与可观测性、企业安全合规、本地部署选项。
+
+> 来源：[CrewAI GitHub (2026)](https://github.com/crewAIInc/crewAI)
+
+---
+
+### 2026 年 7 月案例：Cursor 的多 Agent 验证架构
+
+2026 年 7 月，Cursor 公开了其生产级 Agent 验证架构——这是一个由多个专业 Agent 协同工作的多 Agent 系统范例。
+
+#### 架构组件
+
+| 组件 | 角色 | 类型 |
+|------|------|------|
+| **Bugbot** | PR 审阅 Agent，验证 AI 生成代码的质量 | 专用审阅 Agent |
+| **风险评分引擎** | 评估变更的影响范围和风险等级 | 规则驱动，自动路由 |
+| **验证 Agent** | 在开发者环境中实际运行变更，产出行为证据 | 沙箱执行 Agent |
+| **诊断 Agent** | 评估失败时自动触发，携带 Trace 和日志上下文 | 故障诊断 Agent |
+
+#### 关键设计原则
+
+1. **风险路由**：风险评分引擎将常规 PR 路由到自动化路径，而高风险变更定向到合适的人工审阅者——不需要所有变更都走相同流程。
+2. **行为证据优先**：Agent 在类开发者环境中执行变更并返回证据（如录屏），证明产品行为是否符合预期。当 Agent 能录屏展示\"添加了固定聊天功能\"的效果时，验证从\"相信代码\"转向\"相信行为证据\"。
+3. **知识库精简**：Cursor 持续裁剪技能库——更精准的上下文比持续增长的指令数量更重要。这呼应了 SkillsBench 研究的发现：1–3 个精选定义优于全量注入。
+4. **评估闭环**：人工修正反馈成为 Bugbot 的规则和评估用例。失败的评估自动触发诊断工作流，附带的 Trace 和日志上下文帮助快速定位。
+
+#### 对多 Agent 协作的启示
+
+Cursor 的实践表明：多 Agent 系统不仅是\"多个 Agent 一起工作\"，更重要的是**建立 Agent 之间的验证和制衡机制**——一个 Agent 产生代码，另一个 Agent 审查风险，第三个 Agent 运行验证，第四个 Agent 在失败时诊断。这种专业化分工和交叉验证，是生产级多 Agent 系统的关键特征。
+
+> 来源：[Arize AI — Inside Cursor's Agent Factory: How It Verifies AI-Written Code (Jul 2026)](https://arize.com/blog/inside-cursors-agent-factory-how-it-verifies-ai-written-code/)
+
+---
+
+## 🎯 2026 编排哲学：CrewAI vs AutoGen 深度对比
+
+### 编排才是难点，不是 Agent 本身
+
+2026 年，多 Agent 系统最大的挑战不是单个 Agent 的能力，而是**协调多个 Agent 的编排层**。单个 Agent 是一个循环：读取目标 → 调用模型 → 使用工具 → 检查结果 → 重复。构建一个不难。难点出现在：你有了 3-4 个 Agent，需要它们的组合行为可预测。
+
+编排是围绕 Agent 的四类决策，也是 CrewAI 和 AutoGen 两种框架的核心分水岭：
+
+1. **顺序（Order）**：哪个 Agent 先运行？下一个是等待还是并行？
+2. **上下文（Context）**：每个 Agent 看到什么？什么保持私有？
+3. **控制（Control）**：谁决定下一步——硬编码规则还是模型自身？
+4. **终止（Termination）**：任务何时完成？如何防止无限循环？
+
+> 来源：[FreeAcademy — CrewAI vs AutoGen: Multi-Agent Orchestration 2026](https://freeacademy.ai/blog/crewai-vs-autogen-multi-agent-orchestration)（2026 年 7 月 22 日更新）
+
+### 两种编排哲学速查
+
+| 维度 | CrewAI | AutoGen |
+|------|--------|---------|
+| 核心隐喻 | 有明确角色和计划的团队 | Agent 之间的对话 |
+| 谁驱动下一步 | 主要是工作流（Roles、Tasks、Flows） | 通常是模型（Speaker Selection） |
+| 主要构建单元 | Crews 和 Flows | Agents 和 Teams（Group Chat） |
+| 最适合 | 可重复的、基于角色的管道 | 开放式、探索性问题解决 |
+| 语言 | Python | Python 和 .NET |
+| 2026 年状态 | 活跃开发，开源 | 维护模式；由 Microsoft Agent Framework 接替 |
+
+**关键信息**：AutoGen 已进入维护模式，Microsoft 的重心已转移到新的 Agent Framework。如果你在 2026 年开始新项目，CrewAI 是更安全的选择——但理解两种哲学仍然重要，因为编排模式本身是跨框架通用的。
+
+### CrewAI：以角色驱动的编排
+
+CrewAI 的隐喻是一个**有明确角色的团队**。你不是在定义 Agent 如何对话，而是在定义角色（Role）、目标（Goal）和任务（Task），框架自动处理执行顺序。
+
+优势：
+- **低心智负担**：定义角色和任务即可，无需设计对话流程
+- **可重复性**：同样的角色+任务配置，每次运行产出结构一致
+- **成本可控**：流程是确定性的，不会出现 Agent 间无休止对话
+
+局限：
+- 不适合需要 Agent 灵活协商的场景
+- 对开放式探索性问题（"帮我研究这个领域并告诉我发现了什么"）表现不如对话式框架
+
+### AutoGen：以对话驱动的编排
+
+AutoGen 的隐喻是**一群 Agent 在群聊中协作**。一个 Agent 发言 → 另一个回应 → 第三个插入 → 逐步推进任务。谁"说话"由模型动态决定（Speaker Selection）。
+
+优势：
+- **灵活性极高**：Agent 可以"即兴"参与，不需要预定义流程
+- **发现式协作**：Agent 可以自主提出："等等，我看到了另一个问题，让我检查一下"
+- **自然处理异常**：当工具调用失败时，Agent 可以像人类一样讨论备选方案
+
+局限：
+- **不可预测**：同样的输入可能产生不同的对话路径
+- **成本风险**：Agent 可能"聊太多"，token 消耗失控
+- **调试困难**：不明白为什么某个 Agent"决定不说话"
+
+### 多 Agent 系统的五层架构（来自 MAS 生产实践）
+
+根据 Logiciel 对多 Agent 系统（MAS）的剖析，一个可生产的多 Agent 架构包含五个必要层：
+
+| 层 | 职责 | 示例工具 |
+|---|------|---------|
+| **协调器（Coordinator）** | 规划、任务分配、资源管理 | LangGraph Supervisor、CrewAI Flows |
+| **工作 Agent（Workers）** | 执行专项任务 | 检索 Agent、分析 Agent、写作 Agent |
+| **通信层** | Agent 间结构化消息传递 | JSON-RPC、LangGraph State、消息队列 |
+| **记忆层** | 共享/私有上下文仓库 | 短期历史 + 长期向量记忆 |
+| **观测层** | 状态追踪、性能度量、反馈 | Langfuse、Weave、自建 trace |
+
+**核心洞察**：MAS 架构本质上是人类组织的镜像——角色、沟通、记忆和治理。缺少任何一层，协作就会崩溃。这解释了大量多 Agent 在生产中"降级回单 Agent 反而更好"的现象：不是多 Agent 不好，而是没有建好协调层。
+
+### 2026 年生产级 MAS 避坑指南
+
+| 反模式 | 后果 | 正确做法 |
+|--------|------|---------|
+| 每个子任务都建一个 Agent | 编排成本吃掉收益 | 先问：单 Agent + 好提示词能解决吗？ |
+| Agent 间自由对话无预算 | token 账单失控 | 每个 Agent 设步数上限 + 总步数上限 |
+| 所有 Agent 用同一强模型 | 成本线性膨胀 | 复杂推理用强模型，简单任务用轻模型 |
+| 无人工审批节点 | 误发邮件/误改数据 | 写操作前插入 Human-in-the-loop |
+| Agent 间传递原始全文 | 上下文爆炸 | 传递摘要而非全文，需要时再拉详情 |
+
+### 2026 年多 Agent 的趋势：从"有 Agent"到"有协调"
+
+Gartner 报告显示多 Agent 系统企业咨询量暴增 1,445%，57% 的企业已将 Agent 投入生产。但 2026 年真正的分水岭是基础设施的成熟——三个协议正在成为多 Agent 系统的"TCP/IP"：
+
+1. **MCP（Model Context Protocol）**：标准化 Agent-工具连接（Anthropic 主导，已被全行业采纳）
+2. **A2A（Agent-to-Agent Protocol）**：标准化 Agent-Agent 通信（Google 主导）
+3. **ACP（Agent Communication Protocol）**：标准化 Agent 间消息格式
+
+这些协议让不同框架、不同提供商构建的 Agent 可以互操作——一个 CrewAI 构建的内容 Agent 理论上可以与 LangGraph 构建的审查 Agent 协作，不再需要"全家桶"式锁定单一框架。
+
+> 来源：[Rush Blog — 2026: The Year Multi-Agent Systems Go Mainstream](https://getrush.ai/blog/year-agents-go-mainstream)、[Logiciel — Multi-Agent Systems: Collaboration, Orchestration, and Avoiding Chaos](https://logiciel.io/blog/multi-agent-systems-orchestration-collaboration)
 
 ---
 
@@ -947,4 +1226,4 @@ Agent 作为对话对等体直接交流，无需中心协调者。一个 Agent �
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-25 00:09:45*
+*资源区块更新时间：2026-07-26 00:09:30*

@@ -612,19 +612,195 @@ ReAct（Reasoning + Acting）是 Agentic RAG 的默认选择。模型的推理�
 
 ### Plan-and-Execute：先规划再执行
 
-与 ReAct 的"走一步看一步"不同，Plan-and-Execute 让 Agent 先起草完整的子查询计划，再批量执行。适用于事先知道需要哪些信息的场景（如报告生成），可以并行执行多个子查询减少延迟。
+### 五种经生产验证的检索模式
 
-### 选择指南
+Brightter 在 2026 年的研究中总结了五种在真实生产环境中存活的 Agentic RAG 检索模式：
 
-| 你的情况 | 推荐模式 | 理由 |
-|---------|---------|------|
-| 刚起步，想控制成本 | Router | 只在需要时启用 Agentic 循环 |
-| 需要可调试、可审计的推理 | ReAct | 每一步都有可见的 thought trace |
-| 查询可明确分解 | Plan-and-Execute | 并行执行，延迟更低 |
-| 数据分散在多个异构系统 | Multi-Agent | 每个 Agent 专精一个数据源 |
-| 正确率是第一优先级 | Self-RAG | 自评估循环保障质量 |
+| 模式 | 核心思路 | 适用场景 | 复杂度 |
+|------|---------|---------|--------|
+| **查询分解（Query Decomposition）** | 将用户问题拆解为多个子查询后并行检索 | 多跳问题、跨文档问答 | 低 |
+| **自纠正检索（Self-Corrective）** | 首次检索后评估相关性，不足则改写查询重试 | 高准确率要求的场景 | 中 |
+| **工具化检索（Tool-Using）** | Agent 将多个检索器作为工具，自主选择调用 | 多数据源的企业知识库 | 高 |
+| **融合检索（Fusion）** | 向量 + BM25 + Reranking 三重融合 | 通用生产环境标配 | 中 |
+| **图增强检索（GraphRAG）** | 知识图谱 + 向量检索，显式推理实体关系 | 多跳推理、对比问题 | 高 |
 
 > 来源：[Brightter — Agentic RAG: The Five Retrieval Patterns That Survive Production (2026)](https://www.brightter.com/articles/agentic-rag-five-retrieval-patterns-that-survive-production)
+
+---
+
+## 📊 2026 生产级 RAG Agent 检查清单
+
+### 检索失败是头号瓶颈
+
+2026 年的共识：**朴素 RAG 管线在检索阶段大约有 40% 的失败率**。LLM 生成自信、结构工整的回答，却建立在错误的文档之上。检索，而非生成，才是 RAG 系统的真正瓶颈。
+
+> 来源：[Lushbinary — RAG Production Guide 2026](https://lushbinary.com/blog/rag-retrieval-augmented-generation-production-guide/)
+
+### 朴素 RAG 的三个失效假设
+
+| 失效假设 | 现实 | 后果 |
+|---------|------|------|
+| 一次向量搜索就够了 | 用户用词与文档用词存在语义鸿沟（semantic gap） | "为什么被收两次费" vs "重复授权扣款"——检索不到 |
+| 答案在一个 chunk 里 | 真实问题横跨多个文档、多个时间段的多个段落 | top-k 返回相似 chunk，而非完整答案 |
+| LLM 会在检索差时拒绝回答 | 现代 LLM 被训练为"乐于助人"，给出什么内容都会加工 | 自信地产生幻觉（confident hallucination） |
+
+### Agentic RAG 的三条生产经验
+
+1. **查询分解是性价比最高的改进**：把用户问题改写为更接近文档用语的子查询，多项并行检索后合并。无需改索引、无需改分块策略。
+2. **自纠正检索将幻觉率降低 52%+**：首次检索后让 LLM 评估相关性，低分时改写重试或降级到 Web Search。这是 Self-RAG / CRAG 的核心机制。
+3. **RAGAS 评估成为标配**：从 Context Precision（>0.7）、Context Recall（>0.7）、Faithfulness（>0.8）三个维度持续监控检索-生成质量。
+
+> 来源：[Devinity Solutions — Agentic RAG in 2026](https://www.devinitysolutions.com/blog/agentic-rag-2026)
+
+### 2026 RAG 架构选型快速指南
+
+| 场景 | 推荐架构 | 核心组件 |
+|------|---------|---------|
+| 文档 QA | 混合检索 + Reranking | 向量 DB + BM25 + Cross-encoder |
+| 多跳推理 | GraphRAG + 向量检索 | 知识图谱 + 向量 DB |
+| 动态/实时数据 | Agentic RAG + Web Search | Agent 控制器 + 多检索器工具 |
+| 企业知识库 | 混合检索 + 多源路由 | 路由层 + 多个专用检索器 |
+| 客服 FAQ | 查询扩展 + 混合检索 | Query Expansion + BM25 + 向量 |
+
+---
+
+## 💰 2026 RAG 架构成本/延迟对比：选对架构的决策框架
+
+### 六种架构的真实代价
+
+2026 年的 RAG 已经分化出六种不同的架构模式，每种模式的成本、延迟、质量差异巨大。Starmorph 的研究给出了以下实测对比：
+
+| 架构 | 延迟 | 质量 | 每次查询成本 | 最佳场景 |
+|------|------|------|------------|---------|
+| **Naive RAG** | 100-500ms | 基线 | $0.001-0.01 | 简单 QA、FAQ、文档搜索 |
+| **Advanced RAG** | 500ms-2s | 高 | $0.005-0.03 | 需要更高准确率的生产系统 |
+| **Modular RAG** | 500ms-3s | 高 | $0.01-0.05 | 多领域企业级应用 |
+| **Agentic RAG** | 2-10s+ | 最高 | $0.01-0.10 | 复杂多跳推理、研究级任务 |
+| **GraphRAG** | 1-5s | 关系推理最优 | $0.02-0.15 | 跨文档综合分析 |
+| **Adaptive RAG** | 可变 | 动态优化 | 可变 | 混合难度查询（推荐） |
+
+**核心决策原则**：大多数生产系统不需要最贵的选项——需要的是**满足质量标准的最便宜选项**。一个 Agentic RAG 管道完成同样任务的成本是朴素 RAG 的 10 倍，延迟多 5 秒以上。**只在朴素/高级 RAG 确实不满足准确率要求时才升级到 Agentic。**
+
+> 来源：[Starmorph — RAG Techniques Compared: A Practical Guide (2026)](https://blog.starmorph.com/blog/rag-techniques-compared-best-practices-guide)
+
+### Advanced RAG：性价比最高的升级路径
+
+Advanced RAG 在朴素 RAG 管线外包裹了两层优化，是投入产出比最高的生产方案：
+
+```
+用户查询 → 查询变换 → 嵌入 → 向量搜索 → 重排序 → 上下文选择 → LLM → 回复
+```
+
+**两个最高杠杆的优化**：
+
+1. **混合检索（Hybrid）**：向量（语义相似）+ BM25（关键词匹配）双路召回，解决"词汇不匹配"问题——用户说"续费"但文档写"合同展期"时仍能检索到
+2. **重排序（Reranking）**：用 Cross-encoder 对 top-K 结果精排，将精确率提升 **25-40%**，增量成本仅 ~$0.001/查询（Cohere Rerank）
+
+> 来源：[Lushbinary — RAG Production Guide 2026](https://lushbinary.com/blog/rag-retrieval-augmented-generation-production-guide/)
+
+### 企业级 RAG 的三大战略转变
+
+Techment 2026 年总结了企业 RAG 从实验到关键基础设施的三大转变：
+
+| 转变 | 2024 年的做法 | 2026 年的做法 |
+|------|-------------|-------------|
+| **架构定位** | AI 技术实验 | 系统架构选择——重塑企业知识运营方式 |
+| **思维模式** | 模型为中心（fine-tune 所有内容） | 数据为中心（让数据驱动生成，而非将数据写入模型） |
+| **更新策略** | 频繁微调（昂贵、慢、难回滚） | 动态检索——知识变更即时生效 |
+
+**RAG 不是一种 AI 技术，而是一种系统架构选择**。它不是替代微调，而是让企业从"模型中心"转向"数据中心"的 AI 战略。
+
+> 来源：[Techment — RAG in 2026: How Retrieval-Augmented Generation Works for Enterprise AI](https://www.techment.com/blogs/rag-in-2026/)
+
+### 从朴素到 Agentic 的升级决策树
+
+```
+你的查询是简单的、与文档用词匹配的吗？
+  ├─ 是 → Naive RAG（100-500ms, $0.001/次）✅
+  └─ 否 → 需要跨多个文档综合信息吗？
+           ├─ 是 → 查询可以预分解为子问题吗？
+           │        ├─ 是 → Plan-and-Execute Agentic RAG
+           │        └─ 否 → GraphRAG（显式跨文档关系）
+           └─ 否 → 需要多轮"检索→评估→再检索"循环吗？
+                    ├─ 是 → Self-RAG / ReAct Agentic RAG
+                    └─ 否 → Advanced RAG（混合检索+Reranking）← 80%场景的正确答案
+```
+
+---
+
+## 🧠 Agentic RAG 深度剖析：四大原语与自检循环
+
+### Agentic RAG 不等于"RAG + Agent wrapper"
+
+2026 年，Agentic RAG 已经从"在 RAG 管道外裹一层 Agent"演进为**检索本身即是 Agent 循环的核心行为**。根据 FutureAGI 2026 年 5 月的系统分析，Agentic RAG 包含经典 RAG 所没有的四个原语（primitives），它们共同将检索从一次性函数调用转变为有决策能力的智能过程。
+
+> 来源：[FutureAGI — Agentic RAG in 2026: Patterns, Code, Observability](https://futureagi.com/blog/agentic-rag-systems-2025/)
+
+### 四大核心原语
+
+#### 1. 检索决策（Decision to Retrieve）
+
+经典 RAG 对每个问题都执行检索——即使是 LLM 参数知识完全能回答的通用问题。Agentic RAG 让 Agent 先判断："这个问题是否需要检索？"
+
+- 通用知识问题（如"解释什么是 REST API"）→ 从参数知识直接回答，跳过检索
+- 领域特定问题（如"我们公司的退款政策是什么？"）→ 触发检索
+
+效果：减少 30-50% 不必要的检索调用，降低延迟和成本。
+
+#### 2. 查询变换（Query Transformation）
+
+用户查询通常不是最优检索词。Agentic RAG 在检索前对查询进行改写：
+
+- **分解（Decomposition）**："比较产品 A 和 B 的价格和性能" → 拆为 2 个子查询分别检索
+- **扩展（Expansion）**：补充领域术语、同义词，"退款政策" → "退款政策 refund policy 退换货规则"
+- **重述（Restatement）**：用领域词汇重新表达模糊查询
+
+#### 3. 迭代检索（Iterative Retrieval）
+
+这是 Agentic RAG 与传统 RAG 最本质的区别——检索不是一次性操作而是循环：
+
+```
+检索 → 阅读结果 → 足够回答？→ 是 → 生成
+                    → 否 → 改写查询 → 再次检索 → 阅读 → ...
+```
+
+每次迭代都基于前一次检索的发现调整策略。代价是 3-8 次 LLM 调用 + 2-6 次检索，但换来了对模糊问题的 40-60% 准确率提升。
+
+#### 4. 自检（Self-Check）
+
+Agentic RAG 最被低估的能力。生成草稿后，用一个独立 judge 检查：
+
+```
+生成草稿 → Faithfulness judge: "这个回答的每个声明都有检索证据支撑吗？"
+  ├─ 通过 → 输出答案
+  └─ 未通过 → 标记幻觉声明 → 再检索 → 修正 → 再检查
+```
+
+这是 2026 年生产级 RAG Agent 与原型系统的分水岭——没有自检的 Agentic RAG 只是更贵的朴素 RAG。
+
+### 经典 RAG vs Agentic RAG 速查
+
+| 维度 | 经典 RAG (2023-2024) | Agentic RAG (2026) |
+|------|---------------------|-------------------|
+| 每轮检索次数 | 1 次 | 1-6 次，动态决定 |
+| 查询改写 | 可选 | 默认，常配合分解 |
+| 多跳推理 | 不支持 | 支持，状态跨跳保持 |
+| 草稿自检 | 无 | Faithfulness judge 门控 |
+| 检索失败处理 | 无（直接生成） | 重新检索或拒答 |
+| 延迟 | 1 LLM 调用 + 1 检索 | 3-8 LLM 调用 + 2-6 检索 |
+| 最佳场景 | FAQ、单文档查询 | 多跳研究、合规审查、模糊查询 |
+| 核心失败模式 | 检索不足（漏检） | 过度检索（循环不终止） |
+
+**一句话总结**：Agentic RAG 用延迟和 token 换取对难题的忠实度（faithfulness）。如果最难的问题是单文档查询，经典 RAG 就够了。如果最难的问题是多跳或模糊的，Agentic RAG + 自检循环胜出。
+
+### 可观测性：Agentic RAG 的必选项
+
+Agentic RAG 的复杂性要求**每一跳都可追踪**。2026 年的生产实践要求：
+
+- **每跳 trace**：检索了什么、用了什么查询、返回了什么、模型如何决策下一步
+- **Faithfulness 评分**：每个生成声明是否在检索结果中有对应证据
+- **步数监控**：实际步数 vs 预算上限，接近上限时告警
+- **幻觉溯源**：当发现幻觉时，能回溯到哪一跳引入了错误
 
 ---
 
@@ -640,4 +816,4 @@ ReAct（Reasoning + Acting）是 Agentic RAG 的默认选择。模型的推理�
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-25 00:09:45*
+*资源区块更新时间：2026-07-26 00:09:30*

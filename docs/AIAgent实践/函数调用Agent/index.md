@@ -991,6 +991,228 @@ docker run --gpus all --ipc=host \
 
 ---
 
+---
+
+## 🏭 2026 函数调用 Provider 全景对比：OpenAI vs Anthropic vs Google
+
+### 三大厂商的差异化定位
+
+2026 年，函数调用（Function Calling / Tool Use）已成为 LLM 的能力标配，但三大厂商的实现路线显著分化。理解这些差异是选择 API 的基础。
+
+| 维度 | OpenAI | Anthropic | Google Gemini |
+|------|--------|-----------|-------------|
+| **核心优势** | 最早推出（2023.06），API 生态最成熟 | Agent 优先设计，工具调用准确率最高 | Broad ecosystem（AI Studio/Vertex AI/Raw API） |
+| **Strict Mode** | `strict: true` 参数保障 100% schema 合规 | 无 strict mode，但原生调用更精准 | 无 strict mode，依赖 streaming arguments |
+| **并行调用** | 默认支持，单轮可执行多个独立工具 | 支持，通过 code-writing 链式组合 | 支持原生并行 |
+| **MCP 支持** | ✅ 2025.03 集成至 Agents SDK | ✅ 首创 MCP 协议，原生支持 | ✅ 支持 |
+| **BFCL v4 得分** | GPT-4o: ~82% | Claude Sonnet 4: ~79% | Gemini 2.x: ~76% |
+| **平台锁定** | 强——工具格式不可移植 | 中等——XML 格式较灵活 | 中等——Protocol Buffers + JSON |
+
+> 来源：[Zylos Research — Tool Use and Function Calling Standards, Benchmarks (2026-04)](https://zylos.ai/research/2026-04-07-tool-use-function-calling-standards-benchmarks/)
+
+### 跨 Provider 的通用 5 步模式
+
+无论使用哪家 API，函数调用的核心流程始终相同——区别仅在于 JSON Schema 的格式：
+
+1. **定义工具** — 用结构化 Schema 描述函数名称、描述和参数类型
+2. **发送请求** — 用户消息 + tools 数组一起发送给 LLM
+3. **检测调用** — 模型返回结构化的工具调用对象而非纯文本
+4. **执行函数** — 在应用代码中执行实际函数
+5. **回传结果** — 将执行结果返回给模型生成最终答案
+
+> 来源：[baeseokjae — LLM Function Calling and Tool Use Guide 2026](https://baeseokjae.github.io/posts/llm-function-calling-tool-use-guide-2026/)
+
+### 实操：OpenAI vs Anthropic vs Google 的代码差异
+
+**OpenAI（Tools Array + Strict Mode）：**
+```python
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=messages,
+    tools=tools,  # JSON Schema in tools array
+    tool_choice="auto"  # 或 "required" 强制调用
+)
+```
+
+**Anthropic（Input Schema + Content Blocks）：**
+```python
+response = client.messages.create(
+    model="claude-sonnet-4",
+    messages=messages,
+    tools=tools,  # Anthropic 支持的 input_schema
+    tool_choice={"type": "auto"}
+)
+```
+
+**Google Gemini（Function Declarations + Protocol Buffers）：**
+```python
+model = genai.GenerativeModel("gemini-2.0-flash")
+response = model.generate_content(
+    contents=user_message,
+    tools=[types.Tool(function_declarations=functions)]
+)
+```
+
+### Tool Search 模式：2026 年的关键突破
+
+当工具数量超过 15-20 个时，全量注入上下文不再可行（每个工具定义消耗 100-300 token）。**Tool Search（工具检索）** 模式应运而生：模型初始只获得一个"search for tools"能力，按需查询相关工具定义后仅展开匹配的工具。在生产基准测试中，该模式节省了 **34–64%** 的总 token 消耗。
+
+> 来源：[Zylos Research — Tool Use and Function Calling (2026-04)](https://zylos.ai/research/2026-04-07-tool-use-function-calling-standards-benchmarks/)
+
+---
+
+## 🏗️ 2026 微软 Agent Framework：函数调用 Agent 的新范式
+
+Microsoft 于 2026 年正式推出 **Agent Framework**（目前在 .NET 和 Go 中预览，Python 路线图已公布），它提供了一套全新的 Agent 开发框架，将函数调用抽象到了三个维度：
+
+| 维度 | 组件 | 定位 |
+|------|------|------|
+| **Agents** | 单个 Agent，使用 LLM 处理输入、调用工具和 MCP 服务器 | 最基础的工具调用单元 |
+| **Harness** | "即用型"Agent，内置多步规划、上下文压缩、文件访问、记忆、可观测性 | 快速启动复杂任务的预制方案 |
+| **Workflows** | 基于图谱的工作流编排，支持类型安全路由、检查点和人工审批 | 生产级多步 Agent 系统 |
+
+```python
+# Python SDK 示例（agent-framework 包，预览阶段）
+from agent_framework.foundry import FoundryChatClient
+from azure.identity import AzureCliCredential
+
+client = FoundryChatClient(
+    project_endpoint="https://your-foundry-service.services.ai.azure.com/...",
+    model="gpt-5.4-mini",
+    credential=AzureCliCredential(),
+)
+agent = client.as_agent(
+    name="HelloAgent",
+    instructions="You are a friendly assistant. Keep your answers brief.",
+)
+```
+
+**关键设计哲学**：Agent Framework 把"工具调用"从代码级别提升到了基础设施级别——MCP 客户端直接内建，工具注册、授权和可观测性都作为框架的一等公民。Context providers（上下文提供者）和 Middleware（中间件）为函数调用增加了横切关注点控制。
+
+> 来源：[Microsoft Agent Framework Overview](https://learn.microsoft.com/en-us/agent-framework/overview/)
+
+### Java 生态的函数调用：Tools4AI
+
+在 Python 主导的函数调用生态中，Java 的支持长期滞后。2026 年涌现的 **Tools4AI** 开源项目填补了这一空白——通过注解驱动的简洁 API 让 Java 开发者用几行代码就能实现函数调用：
+
+```java
+// Gemini function calling in Java
+FunctionDeclaration functionDeclaration = FunctionDeclaration.newBuilder()
+    .setDescription("provide the taste of recipe based on name")
+    .putProperties("recipe", Schema.newBuilder()...)
+    .build();
+```
+
+Tools4AI 将工具定义从冗长的 Protocol Buffers Builder 模式抽象为 `@Action` 注解，大幅降低了 Java 生态的函数调用门槛。
+
+> 来源：[OpenAI vs Gemini: Function Calling & Autonomous Agent (dev.to, 2026)](https://dev.to/vishalmysore/openai-vs-gemini-function-calling-autonomous-agent-4025)
+
+### 本地消费级 GPU 的 Agent 部署现实
+
+2026 年，12GB RTX 3060 级别的消费级显卡已能运行 **7-8B 参数的函数调用模型**（q4KM 量化），在 16K 上下文下产生约 30-45 tokens/秒——足够单用户 Agent 循环。但 Agentic 循环的隐藏成本不可忽视：
+
+| 瓶颈 | 表现 | 原因 |
+|------|------|------|
+| 工具调用链 | 重摄入大输出时卡顿 | 192-bit 显存总线吞吐不足 |
+| >13B Agent 模型 | 直接 OOM | 12GB VRAM 天花板 |
+| 多工具并发 | 显存吃紧 | 工具 Schema + KV Cache 叠加 |
+
+当 Agent 需要多轮复杂工具调用时，云端 API（如 DeepSeek V4 Pro，$0.04/百万 token）反而更经济——本地部署适合**简单实时**的任务，云端适合**复杂多步**的推理。
+
+> 来源：[SpecPicks — Intelligence Index v4.1 Goes Agentic: Can a 12GB RTX 3060 Keep Up Locally? (Jun 2026)](https://specpicks.com/reviews/intelligence-index-v41-agentic-rtx-3060-local-2026/)
+
+---
+
+### 2026 年 7 月新研究：数据驱动的有效函数定义写作
+
+2026 年 7 月 24 日，Arize AI 发表了基于三项最新研究的数据驱动实践指南，揭示了**函数定义（Skill）写作**的量化规律——这对函数调用 Agent 的工具定义质量有直接影响。
+
+#### 关键发现
+
+| 研究 | 问题 | 核心信号 |
+|------|------|---------|
+| **SkillsBench** | 人工编排 vs 模型自生成 | 人工编排的函数定义平均提升 +16.6 百分点，模型自生成反而比无定义基线低 8.1–11.5 点 |
+| **SkillComposer** | 模型能否自主改进定义 | 仅在通过 pass-rate 阈值验证的条件下有效 |
+| **生成式组合研究** | 大库应加载多少定义 | 按序加载小规模精选集（1–3 个）优于全量注入 |
+
+#### 对实践的启示
+
+1. **以人为起点，而非模型**：函数定义应源于领域专家的程序性知识（俗称、边界情况、恢复步骤），模型只负责在评估门控后优化。自我生成的函数定义可能编码了错误假设，让 Agent 沿着自信的错误方向执行。
+2. **保持紧凑**：紧凑和标准长度的定义分别提升 19.0 和 21.5 点，而全面文档仅提升 0.7 点——每段文字都在竞争模型的注意力预算。
+3. **渐进披露**：将长示例和参考文档移到独立文件，Agent 按需打开，避免每次调用都支付完整上下文成本。
+4. **每个模型-框架对单独测试**：可移植的文件格式并不能保证可移植的行为表现。
+
+**一句话总结**：好的函数定义不是最长的 prompt 或最聪明的写法，而是一个紧凑的程序性知识包——修复可重复的失败模式、仅在相关时加载、通过匹配的评估证明自身价值。
+
+> 来源：[Arize AI — How to Write Effective AI Agent Skills: 6 Data-Backed Practices (Jul 2026)](https://arize.com/blog/how-to-write-effective-ai-agent-skills/)
+
+---
+
+## 🏭 2026 函数调用提供商全景对比
+
+### 三强格局：OpenAI vs Anthropic vs Google
+
+2026 年，函数调用已从 OpenAI 的单一实验性功能发展为所有主流提供商的标配能力，但三家的技术路线和设计哲学存在显著差异。根据 Zylos Research 2026 年 4 月发布的行业分析，三家在标准化、评估和安全三个维度上展开竞争。
+
+> 来源：[Zylos Research — Tool Use and Function Calling in AI Agents](https://zylos.ai/research/2026-04-07-tool-use-function-calling-standards-benchmarks/)
+
+#### OpenAI：最全面的内置工具生态
+
+OpenAI 在 2023 年 6 月首创函数调用模式。2024 年 8 月通过 **Structured Outputs**（`strict: true` 参数结合约束解码）实现了 100% Schema 遵从，解决了困扰生产环境的可靠性问题。2025 年 3 月发布 **Agents SDK**，提供多步工具链、Agent 间交接和 **Responses API**——专为 Agentic 循环设计。并行工具调用（单轮多工具调用）已成为默认行为。
+
+**优势**：内置 web search、代码执行、文件管理三大工具，降低构建门槛。
+**劣势**：工具格式不可移植到其他提供商，需要 Schema 翻译层。
+
+#### Anthropic：Agent 优先的原生设计
+
+Anthropic 的工具使用接口从第一天起就以 Agent 工作流为主要场景设计。与 OpenAI 的关键架构差异：Anthropic 在模型训练中深度嵌入工具使用能力，而不是后加的功能层。Claude 能更自然地进行多步推理——调用工具 → 解读结果 → 决定下一步 → 再次调用。
+
+**优势**：工具使用内化为推理能力的一部分，多步工具链表现更连贯。
+**关键贡献**：**MCP（Model Context Protocol）**——已被 OpenAI、Google、Microsoft、AWS 采纳，成为行业标准协议。
+
+#### Google Gemini：长上下文 + 多模态
+
+Google Gemini 的函数调用利用了其长上下文窗口优势——可同时处理大量工具定义而不过早遗忘。Gemini 2.0 后的模型支持**原生多模态工具调用**，即工具参数可以包含图像、音频等非文本输入。这对需要视觉理解 + 工具调用的场景（如\"识别这张发票上的金额并录入系统\"）特别有价值。
+
+### 跨提供商函数调用速查
+
+| 特性 | OpenAI | Anthropic (Claude) | Google (Gemini) |
+|------|--------|-------------------|-----------------|
+| Schema 遵从 | strict: true 强制 (2024.08) | 原生高质量遵从 | 良好但非强制 |
+| 并行工具调用 | 默认开启 | 支持 | 支持 |
+| 多步工具链 | Agents SDK (2025.03) | 内建推理循环 | 依赖开发者实现 |
+| 内置工具 | Web Search / Code / Files | 无，全通过 MCP | Google Search / Maps |
+| 工具定义格式 | JSON Schema (OpenAI 风格) | JSON Schema (Anthropic 风格) | OpenAPI / JSON Schema |
+| 协议标准 | 已采纳 MCP (2025.03) | MCP 创始人 | 支持 MCP |
+| 安全护栏 | 输入/工具/输出三层 | Constitutional AI 护栏 | Safety filters |
+| 最佳场景 | 快速原型、全栈 Agent | 多步复杂推理工具链 | 多模态 + 工具调用 |
+
+### 工具定义的三大铁律
+
+来自 FutureAGI 2026 年跨提供商函数调用指南的三个关键规则：
+
+1. **描述要短且精确**："Look up the current status of a customer order by order ID" 优于 "This function helps you find order information for customers."
+2. **用 enum 约束选项**：对有限选项（如状态值、货币类型）用 enum 而非 string，模型选择准确率提升 25-40%。
+3. **required 数组只列必需参数**：optional 参数不要放进 required，减少模型困惑。
+
+### 并行工具调用：从可选到标配
+
+2026 年，并行工具调用已成为所有主流模型的标配能力。关键场景：
+
+- **独立查询**："北京和上海的天气" → 一次调用，两个并行 weather() 调用
+- **多源验证**："用邮件和短信通知用户" → 并行 send_email() + send_sms()
+- **数据聚合**："对比这三只股票" → 并行三次 stock_price() 调用
+
+实现要点：Agent 循环需要支持 `tool_calls` 数组中**全部执行完后再统一回传结果**，而非顺序执行逐个回传——顺序模式会让模型的第二次 tool_calls 无法利用第一次的结果进行推理。
+
+> 来源：[FutureAGI — LLM Function Calling 2026: Tool Use Across Providers](https://futureagi.com/blog/llm-function-calling-2025/)
+
+### BFCL V4：评估进入 Agentic 时代
+
+**Berkeley Function Calling Leaderboard (BFCL) V4** 在 2026 年发生了重大转变：不再只评估单次函数调用的准确率，而是评估**全 Agentic 行为**——多步工具链、工具选择策略、失败恢复。这反映了行业共识：函数调用的价值不在单次调用的精度，而在 Agent 能否在需要时调用正确的工具、用正确的参数、处理失败并继续。
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -1003,4 +1225,4 @@ docker run --gpus all --ipc=host \
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-25 00:09:45*
+*资源区块更新时间：2026-07-26 00:09:30*
