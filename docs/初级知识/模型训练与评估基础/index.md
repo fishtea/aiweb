@@ -138,6 +138,100 @@ K 折交叉验证的流程：将数据集随机分成 K 份（通常是 5 份或
 
 基本原则：先用少量数据做粗调，确定参数范围；再用全量数据做细调。不要一次调太多参数，优先调整对模型影响最大的参数（如学习率、正则化强度）。
 
+## 交叉验证与深度学习评估进阶
+
+### 用 PyTorch Lightning 实现 K 折交叉验证
+
+交叉验证在深度学习中的实现比传统 ML 更复杂，因为训练成本高。PyTorch Lightning 提供了简洁的 API 来结合 sklearn 的 KFold 实现交叉验证：
+
+```python
+import pytorch_lightning as pl
+from sklearn.model_selection import KFold
+from torch.utils.data import DataLoader, Subset
+
+# 定义 Lightning 模型
+class MyModel(pl.LightningModule):
+    def __init__(self):
+        super().__init__()
+        self.layer = torch.nn.Linear(784, 10)
+
+    def training_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self.layer(x.view(x.size(0), -1))
+        loss = torch.nn.functional.cross_entropy(y_hat, y)
+        return loss
+
+    def configure_optimizers(self):
+        return torch.optim.Adam(self.parameters(), lr=0.001)
+
+# K 折交叉验证
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+for fold, (train_idx, val_idx) in enumerate(kfold.split(dataset)):
+    train_subset = Subset(dataset, train_idx)
+    val_subset = Subset(dataset, val_idx)
+
+    model = MyModel()
+    trainer = pl.Trainer(max_epochs=10)
+    trainer.fit(model, DataLoader(train_subset), DataLoader(val_subset))
+    print(f"Fold {fold+1} 完成")
+```
+
+### 分层交叉验证（Stratified K-Fold）的重要性
+
+对于类别不均衡的数据集，普通 K 折交叉验证可能导致某些折中完全缺失某一类别。分层 K 折（Stratified K-Fold）保证每折的类别比例与原始数据集一致，是处理不均衡数据的**默认选择**。
+
+```python
+from sklearn.model_selection import StratifiedKFold
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+# y 是标签数组，必须传入以保持分层
+for train_idx, val_idx in skf.split(X, y):
+    # 每折的类别比例与原始数据一致
+    ...
+```
+
+### 时间序列交叉验证
+
+时间序列数据不能使用随机划分，因为未来数据不能出现在训练集中。正确的做法是使用**时间序列交叉验证**（也称为前向链验证）：
+
+```python
+from sklearn.model_selection import TimeSeriesSplit
+
+tscv = TimeSeriesSplit(n_splits=5)
+for train_idx, val_idx in tscv.split(X):
+    # 训练集永远是时间上更早的数据
+    # 验证集是紧接训练集之后的数据
+    ...
+```
+
+每次划分中，训练集逐渐增大，验证集始终是紧接训练集的固定长度窗口。这是金融预测、销量预测等时序任务的**标准做法**。
+
+### 模型评估的常见误区
+
+| 误区 | 说明 | 正确做法 |
+|------|------|----------|
+| 数据泄漏 | 在划分前做了全局标准化/特征选择 | 先划分，再在训练集上计算统计量，应用到验证集 |
+| 反复使用测试集调参 | 测试集不再是客观评估 | 保留测试集直到最终评估，用验证集调参 |
+| 只看平均分 | 忽略不同折之间的方差 | 同时报告均值和标准差，检查每折结果 |
+| 忽略数据分布变化 | 训练集和真实场景分布不同 | 检查数据漂移，使用时间序列划分 |
+
+### 生产环境评估要点
+
+根据 2026 年的行业实践，模型上线前需要确认：
+
+1. **离线 vs 在线一致性**：离线交叉验证分数高不等于在线效果好。上线前做 A/B 测试或影子部署。
+2. **数据漂移监控**：训练数据分布会随时间变化。用统计检验（如 Kolmogorov-Smirnov 检验）监控特征分布变化。
+3. **切片评估**：不只报告总体指标，还要按人群、地区、时间段等维度切片评估。一个模型可能在整体上表现良好，但在某个细分群体上完全失效。
+4. **可复现性**：固定随机种子，记录数据版本和模型超参数，确保评估结果可复现。
+
+### 参考来源
+
+- DataExpertise — [Cross Validation: The Ultimate Power Guide to Reliable Model Evaluation](https://www.dataexpertise.in/cross-validation-reliable-model-evaluation/)
+- Codegenes — [Mastering Cross-Validation with PyTorch Lightning](https://www.codegenes.net/blog/cross-validation-pytorch-lightning/)
+- sklearn 官方文档 — [Cross-validation: evaluating estimator performance](https://scikit-learn.org/stable/modules/cross_validation.html)
+
+---
+
 ## 延伸阅读
 
 - [机器学习基础](../机器学习基础/)
@@ -158,4 +252,4 @@ K 折交叉验证的流程：将数据集随机分成 K 份（通常是 5 份或
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-26 00:09:30*
+*资源区块更新时间：2026-07-26 09:04:58*

@@ -486,6 +486,120 @@ Anthropic 在 2024年底发布的《Building Effective Agents》指南中给出�
 
 ---
 
+## LLM 流式输出架构：SSE/WebSocket/gRPC 协议深度对比
+
+**来源：** [LLM Output Streaming and Real-Time Token Delivery Architectures — Zylos Research (2026-03)](https://zylos.ai/research/2026-03-28-llm-output-streaming-token-delivery-architectures/)
+
+### 概述
+
+流式输出是 2026 年 LLM 应用的**标配**——用户等待超过 2 秒即流失。但"用哪个协议"和"怎么处理反压、缓冲、多模型聚合"是生产环境中的工程难题。Zylos Research 2026 年 3 月的深度报告系统梳理了主流通协议的选择逻辑和基础设施要求。
+
+### 协议矩阵
+
+| 协议 | 方向 | 延迟 | 扩展性 | 最佳场景 |
+|------|------|------|--------|---------|
+| **SSE (Server-Sent Events)** | 单向（服务端→客户端） | 低 | ⭐⭐⭐ 无状态，标准负载均衡 | **浏览器端 Token 下发（主力方案）** |
+| **WebSocket** | 双向全双工 | 低 | ⭐⭐ 需粘性会话 | 语音交互、实时工具结果注入、中途取消 |
+| **gRPC (HTTP/2)** | 双向流式 | 极低 | ⭐⭐⭐ 单连接多路复用 | **服务间通信（编排器↔模型后端）** |
+| **HTTP/3 / WebTransport** | 多路复用+数据报 | 极低 | ⭐⭐⭐ 无队头阻塞 | 未来 2-3 年的 WebSocket 替代方案 |
+
+### SSE：2026 年的绝对主流
+
+SSE 是 Anthropic、OpenAI、Google Gemini 的共同选择。其优势在于：
+- **纯 HTTP**：通过任何合规代理，无需特殊基础设施
+- **无状态**：标准负载均衡器直接处理，无需粘性会话
+- **原生重连**：浏览器 `EventSource` API 自动重连
+
+⚠️ **关键限制**：浏览器 `EventSource` 仅支持 GET 请求，无法发送自定义 Header 和请求体。LLM API 普遍使用 POST + JSON Body + Auth Header，因此**必须使用 `fetch()` + `ReadableStream` 手动解析 SSE 字节流**，不能直接用 `EventSource`。
+
+### WebSocket：双向场景的刚需
+
+WebSocket 建立持久化全双工 TCP 连接。对纯 Token 下发（服务端→客户端），WebSocket 是**架构上的过度设计**——双向能力闲置，且有状态连接增加水平扩展复杂度。
+
+WebSocket 在以下场景不可替代：
+- 语音交互：发送音频流 + 接收转录 Token
+- 实时工具结果注入：Agent 执行中提交工具结果影响后续生成
+- 中途取消/转向：用户介入修改正在运行的生成
+
+**生产实践（混合架构）**：SSE 处理下行数据面（Token→UI），WebSocket 处理控制面（取消、反馈注入）。vLLM 的 Realtime API（2026年1月）即为 WebSocket 用于音频输入/文本输出场景。
+
+### gRPC：服务间通信的首选
+
+在编排器→模型后端、编排器→向量数据库的服务间通信中，gRPC 优势显著：
+
+| 指标 | REST/SSE | gRPC |
+|------|---------|------|
+| 连接效率 | 每次请求新 TCP 连接 | 单连接多路复用（50 并发流） |
+| 吞吐量 | 基准 | **+40-60%** 请求数/秒 |
+| 流式延迟 | 基准 | **-25-35%** |
+| 带宽 | JSON 基准 | **-60-70%**（Protobuf 二进制） |
+
+⚠️ **队头阻塞**：HTTP/2 的多流跑在单 TCP 连接上，一个丢包阻塞所有流。HTTP/3/QUIC 通过独立 QUIC 流解决此问题，但在 2026 年初尚未完全成熟。
+
+### 推荐架构
+
+```
+浏览器 ←── SSE ──→ API 网关 ←── gRPC ──→ 模型后端（vLLM/TGI）
+                   (Envoy 做 gRPC-Web 转码)
+```
+
+### 反压处理与基础设施
+
+- **反向代理缓冲**：Nginx/HAProxy 默认缓冲响应，必须在 `location` 块中设置 `proxy_buffering off`，否则 SSE 流会变成"等待→一次性输出全部 Token"
+- **慢消费者反压**：WebSocket 需监控 `ws.bufferedAmount`，非零时暂停写入
+- **部分结构化输出解析**：流式 JSON 需增量解析器（如 `partial-json`），在未完成时已可展示部分字段
+
+> **趋势**：SSE over HTTP 在至少未来 2-3 年内仍将是 LLM Token 下发的主流标准，直到 WebTransport 生态成熟。A2A 和 MCP 协议均已采用 SSE 做流式传输。
+
+---
+
+## 2026 生产级 Agent 架构：从 Prompt 工程到基础设施工程
+
+**来源：** [LLM Architecture 2026: Components, Patterns, Diagrams — RankSquire (2026-04)](https://ranksquire.com/2026/04/13/llm-architecture-2026/)
+
+### 两个架构层
+
+2026 年的 LLM 架构有两个工程师必须理解的层级：
+
+| 层级 | 组件 | 关注点 |
+|------|------|--------|
+| **模型架构层** | Tokenizer → Embedding → 位置编码 → Transformer Blocks → Output Head → Sampler | 模型如何理解文本并生成 Token |
+| **部署架构层** | API Gateway → 推理服务器 → KV Cache → 向量存储 → 输出校验器 | 模型如何集成到生产 AI Agent 基础设施 |
+
+大多数技术文章只覆盖第一层。**生产故障出在第二层**。
+
+### 四个源自架构误解的生产故障模式
+
+| 故障 | 根因 | 修复 |
+|------|------|------|
+| **上下文退化** | 200K 上下文窗口在 60-80% 填充时即失去指令保真度 | 实际可用窗口 = 标称窗口 × 0.7；关键指令放开头和结尾（首因+近因效应） |
+| **温度引发的 Schema 漂移** | Temperature 控制采样分布，直接影响结构化输出一致性 | Agent 工具调用：**0.0-0.2**，永远不要 0.7 |
+| **突发负载下 KV Cache 未命中** | 冷启动时系统提示词+记忆注入需重新计算 | 预热 KV Cache，节省 40-60% 推理计算成本 |
+| **Embedding 模型不匹配** | 写入向量库和检索时使用了不同的 Embedding 模型 | 确保写入和检索使用**同一模型**，否则产生语义漂移 |
+
+### MoE 架构进入主流
+
+2026 年，MoE（Mixture-of-Experts）架构已成主流——DeepSeek V3、Qwen3-Next、Mistral 变体均使用 MoE。每个 Token 仅路由到部分专家层，减少活跃计算量而不降低总模型容量。
+
+**生产启示**：MoE 降低推理延迟但**增加部署复杂度**——所有专家权重必须加载到 VRAM，往往需要多 GPU/多节点。
+
+### 上下文窗口设计的工程原则
+
+上下文窗口不是"能塞多少塞多少"的桶，而是**注意力在全部 Token 上的分布**：
+
+- **首因效应（Primacy）**：开头的 Token 获得不成比例的高注意力
+- **近因效应（Recency）**：结尾的 Token 同理
+- **中间塌陷**：夹在中间的指令受到的注意力远低于其位置应有的关注
+
+**实践**：关键指令放开头或结尾，不要埋在冗长上下文的中间。这不是 Prompt 质量问题——是**架构特性**。
+
+### 参考来源
+
+- [LLM Output Streaming Architectures — Zylos Research (2026)](https://zylos.ai/research/2026-03-28-llm-output-streaming-token-delivery-architectures/)
+- [LLM Architecture 2026 — RankSquire (2026-04)](https://ranksquire.com/2026/04/13/llm-architecture-2026/)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -498,4 +612,4 @@ Anthropic 在 2024年底发布的《Building Effective Agents》指南中给出�
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-26 00:09:30*
+*资源区块更新时间：2026-07-26 09:04:58*

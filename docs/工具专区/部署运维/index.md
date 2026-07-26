@@ -337,6 +337,60 @@ Braintrust 发布了一份 [2026 LLM 监控工具全面对比指南](https://bra
 
 ---
 
+## MLOps 与 LLMOps 工具全景（2026年）
+
+### 概述
+
+2026 年，MLOps 已从"锦上添花"变为生产级 AI 的**基础设施标配**。随着 LLM 应用的爆发，传统 MLOps 工具正在向 **LLMOps** 演进——不仅要管理模型训练和部署，还要处理 Prompt 版本、Token 成本、RAG 链路和 Agent 工具调用的可观测性。
+
+> **核心洞察**：选择 MLOps 平台的关键不是功能清单长度，而是它能否覆盖你的完整 ML 生命周期——从数据版本控制到在线监控——且与你现有的基础设施（Kubernetes、云厂商、CI/CD）无缝集成。
+
+### MLOps 是什么？
+
+MLOps = **ML + DevOps + 数据工程** 三者的交汇。它继承 DevOps 的版本控制、CI/CD、自动化测试，但扩展了机器学习特有的挑战：数据漂移、模型退化、非确定性评估和可复现性管理。
+
+### 2026 年 MLOps 工具矩阵
+
+| 工具 | 定位 | 开源 | 核心能力 | 适用场景 |
+|------|------|------|---------|---------|
+| **MLflow** | 实验追踪 + 模型注册 | ✅ Apache 2.0 | 实验日志、模型版本管理、轻量部署 | 小型团队、灵活工作流 |
+| **Kubeflow** | K8s 原生 MLOps | ✅ Apache 2.0 | 模块化管道、多租户隔离、云无关 | 有 K8s 专业知识的团队 |
+| **TrueFoundry** | LLMOps 一体化 | 部分开源 | vLLM/SGLang 服务、RAG/Agent 编排、SOC2/HIPAA 合规 | GenAI 优先的团队 |
+| **Weights & Biases** | 实验追踪 + 可视化 | 部分开源 | 实时仪表盘、框架集成、协作功能 | 重视实验管理的团队 |
+| **DVC** | 数据 + 模型版本 | ✅ Apache 2.0 | Git 式数据版本控制、可复现管道 | 数据密集型项目 |
+| **Braintrust** | AI 评估 + 观测 | 部分开源 | Evals 框架、A/B 实验、数据集管理 | 评估驱动的 AI 产品团队 |
+| **Langfuse** | LLM 可观测 | ✅ MIT | Trace/Spans、Prompt 管理、成本追踪 | 自托管、LangChain 集成 |
+
+### 选型维度
+
+选择 MLOps 平台时，2026 年建议按以下维度评估：
+
+1. **端到端生命周期覆盖**：从数据版本化到在线监控的完整性——碎片化的工具链会增加团队协作成本和出错概率。
+2. **扩展性与基础设施灵活性**：支持本地实验到分布式训练（多 GPU/节点），云原生、本地部署和混合环境。
+3. **开发者体验**：UI + CLI + SDK 的完整度，与 PyTorch、HuggingFace 等主流框架的集成深度。
+4. **集成生态**：与 S3/GCS 存储、GitHub Actions/Jenkins CI/CD、Prometheus/Grafana 可观测性的对接能力。
+5. **治理与合规**：RBAC、审计日志、数据血缘追踪，SOC 2 / HIPAA / GDPR 合规（尤其对受监管行业）。
+
+### LLMOps 的特殊需求
+
+LLMOps 在 MLOps 基础上增加了 LLM 特有的关注点：
+
+| 维度 | MLOps 关注 | LLMOps 额外关注 |
+|------|-----------|----------------|
+| 训练 | 模型权重、训练指标 | Prompt 模板、RLHF/DPO 偏好数据 |
+| 部署 | 模型服务延迟、吞吐 | Token 成本、KV Cache 利用率、模型路由 |
+| 监控 | 统计漂移、准确率 | 幻觉率、Prompt 有效性、每次请求成本 |
+| 版本控制 | 模型权重 + 数据 | Prompt 版本 + 检索索引 + 工具 Schema |
+
+> **2026 年趋势**：LLMOps 平台正在从"事后看板"向"实时干预"演进——当检测到质量下降或成本异常时，自动触发模型切换、缓存降级或 Prompt 回滚，而非等待人工介入。
+
+### 参考来源
+
+- [25 Best MLOps Tools for Building & Scaling ML Workflows — TrueFoundry (2026)](https://www.truefoundry.com/blog/mlops-tools)
+- [Best LLMOps platforms in 2026 compared — Braintrust](https://www.braintrust.dev/articles/best-llmops-platforms-2025)
+
+---
+
 ## 资料整理状态
 
 > 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
@@ -349,4 +403,4 @@ Braintrust 发布了一份 [2026 LLM 监控工具全面对比指南](https://bra
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-26 00:09:30*
+*资源区块更新时间：2026-07-26 09:04:58*

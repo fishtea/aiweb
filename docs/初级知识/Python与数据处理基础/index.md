@@ -147,6 +147,95 @@ Pandas 仍然是 Python 数据处理的标配，但 [Polars](https://pola.rs/) �
 
 > 参考：ABC Trainings, "Artificial Intelligence Fundamentals India 2026", https://abctraining.in/blog/artificial-intelligence-fundamentals-india-1775082075095。
 
+### 完整数据分析实战流程（Pandas + Polars）
+
+以下是用 Python 做数据分析的完整工作流示例，从读取数据到可视化：
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 1. 读取数据
+df = pd.read_csv("sales_data.csv")
+
+# 2. 快速概览
+print(df.info())           # 字段类型和缺失值
+print(df.describe())       # 数值列的统计摘要
+
+# 3. 清洗数据
+df = df.dropna(subset=["price", "sales"])          # 删除关键字段缺失的行
+df["date"] = pd.to_datetime(df["date"])            # 转换日期格式
+df = df[df["price"] > 0]                           # 剔除异常价格
+
+# 4. 特征工程
+df["month"] = df["date"].dt.month
+df["revenue"] = df["price"] * df["sales"]
+
+# 5. 分组统计
+monthly_summary = df.groupby("month").agg(
+    total_revenue=("revenue", "sum"),
+    avg_price=("price", "mean"),
+    total_orders=("sales", "count")
+).reset_index()
+
+# 6. 可视化
+monthly_summary.plot(x="month", y="total_revenue", kind="bar")
+plt.title("月度营收趋势")
+plt.show()
+```
+
+### 当数据变大：迁移到 Polars
+
+当数据集超过几百万行（例如 5GB+ CSV），Pandas 会变慢甚至内存不足。Polars 的惰性执行模式可以高效处理这类场景：
+
+```python
+import polars as pl
+
+# 惰性读取——此时还未真正加载数据
+lazy_df = pl.scan_csv("large_sales_data.csv")
+
+# 定义查询管道
+result = (
+    lazy_df
+    .filter(pl.col("price") > 0)
+    .with_columns(pl.col("date").str.to_date())
+    .group_by("month")
+    .agg([
+        pl.sum("revenue").alias("total_revenue"),
+        pl.mean("price").alias("avg_price")
+    ])
+    .sort("total_revenue", descending=True)
+)
+
+# 真正执行——Polars 会自动优化执行计划
+final = result.collect()
+print(final)
+```
+
+Polars 的 `scan_csv()` 只是注册了操作计划，`collect()` 才真正触发计算。中间的优化器会自动推下过滤条件、合并操作，避免不必要的数据加载。
+
+### 测试数据分析代码
+
+生产环境的数据分析代码需要用测试来确保变换不意外破坏数据：
+
+```python
+# 简单的数据质量断言
+def test_data_quality(df):
+    assert df.shape[0] > 0, "数据为空"
+    assert df["price"].min() >= 0, "价格列包含负值"
+    assert df["date"].isna().sum() == 0, "日期列有缺失值"
+    assert df.duplicated().sum() == 0, "存在重复行"
+    print("数据质量检查通过！")
+
+test_data_quality(df)
+```
+
+### 参考来源
+
+- NerdLevelTech — [Mastering Python Data Analysis in 2026: From Pandas to Polars](https://nerdleveltech.com/mastering-python-data-analysis-in-2026-from-pandas-to-polars)
+- Pynions — [Python Data Analysis Guide (2026): Libraries & Workflow](https://pynions.com/python-data-analysis)
+- HERE AND NOW AI — [Comprehensive Pandas 2026 Tutorial](https://github.com/hereandnowai/pandas-tutorial-2026)
+
 ## 延伸阅读
 
 - [数据与特征工程](../数据与特征工程/)
@@ -167,4 +256,4 @@ Pandas 仍然是 Python 数据处理的标配，但 [Polars](https://pola.rs/) �
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-07-26 00:09:30*
+*资源区块更新时间：2026-07-26 09:04:58*

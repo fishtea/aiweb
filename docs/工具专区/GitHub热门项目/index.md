@@ -1,136 +1,141 @@
 # 🔥 GitHub 热门 AI 项目（每周更新）
 
-> **更新周期**: 截至 2026-07-12
+> **更新周期**: 截至 2026-07-26
 >
-> 数据来源：GitHub Trending、GitHub API、社区汇总。
+> 数据来源：GitHub API、GitHub Trending、社区汇总。
 
 ---
 
-## 📈 本周 Star 增长 TOP 15
+## 📈 本周 AI 生态全景速览
 
-| # | 项目 | +Stars/周 | 总 Stars | 类别 | 语言 |
-|---|------|-----------|----------|------|------|
-| 1 | [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) | **+1,766** | 19,966 | AI 渗透测试 | Go |
-| 2 | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 爆款 | 46,697 | Agent DevTools | TypeScript |
-| 3 | [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills) | +549 | 7,080 | Agent Skills | TypeScript |
-| 4 | [alibaba/page-agent](https://github.com/alibaba/page-agent) | 持续 | 26,060 | 页面 GUI Agent | TypeScript |
-| 5 | [usestrix/strix](https://github.com/usestrix/strix) | 持续 | 40,563 | AI 安全测试 | Python |
-| 6 | [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | 持续 | 22,226 | Agent Skills | Python |
-| 7 | [TencentCloud/CubeSandbox](https://github.com/TencentCloud/CubeSandbox) | 新星 | 9,700 | Agent 沙箱 | Rust |
-| 8 | [ogulcancelik/herdr](https://github.com/ogulcancelik/herdr) | 持续 | 15,519 | Agent 多路复用 | Rust |
-| 9 | [stablyai/orca](https://github.com/stablyai/orca) | 持续 | 16,392 | Agent 开发环境 | TypeScript |
-| 10 | [bradautomates/claude-video](https://github.com/bradautomates/claude-video) | 持续 | 7,569 | 视频理解 Agent | Python |
-| 11 | [tt-a1i/archify](https://github.com/tt-a1i/archify) | 新星 | 3,714 | 架构图技能 | JavaScript |
-| 12 | [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) | +1,766 | 19,966 | 渗透测试 | Go |
-| 13 | [agentskills/agentskills](https://github.com/agentskills/agentskills) | 持续 | 22,922 | Agent Skills 标准 | Python |
-| 14 | [facebook/astryx](https://github.com/facebook/astryx) | 新星 | 7,936 | Agent 设计系统 | TypeScript |
-| 15 | [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | **+1,829** | 49,823 | Claude Code 资源 | - |
+本周 GitHub AI 生态多个项目突破里程碑，呈现 Agent Skills 全面爆发、编码 Agent 进入主流、Agent 教育体系成熟的三大趋势。
 
-> 注：GitHub Trending 每周一更新周榜。部分长期热门项目标记为"持续"或"爆款"而非精确周增长数。+Stars/周四舍五入标注。
+### 本周突破性里程碑
+
+| 项目 | 里程碑 | 本周动态 |
+|------|--------|---------|
+| **obra/superpowers** | ⭐261k | Agentic Skills 框架持续领跑，成为 Skills 生态标杆 |
+| **anthropics/skills** | ⭐164k | Anthropic 官方发布 Agent Skills 仓库，Skills 标准化里程碑 |
+| **mattpocock/skills** | ⭐188k | 面向真正工程师的技能集合，来自 `.agents` 目录 |
+| **anomalyco/opencode** | ⭐190k | 开源编码 Agent 超越众多商业产品，成为最受欢迎的开源编码 Agent |
+| **TauricResearch/TradingAgents** | ⭐94k | 多 Agent 金融交易框架持续增长 |
+| **ChromeDevTools/chrome-devtools-mcp** | ⭐48k | Chrome 官方 DevTools MCP，浏览器 Agent 基础设施 |
+| **microsoft/ai-agents-for-beginners** | ⭐70k | 微软 Agent 入门教程成学习首选 |
+| **addyosmani/agent-skills** | ⭐80k | 生产级 Agent 工程技能库 |
 
 ---
 
-## 🔟 最值得关注的项目（2026.07.12 精选）
+## 🔟 最值得关注的项目（2026.07.26 精选）
 
 ---
 
-### 🥇 1. ChromeDevTools/chrome-devtools-mcp
+### 🥇 1. obra/superpowers
+
+- **链接**: https://github.com/obra/superpowers
+- **🌟 Stars**: 261,122
+- **一句话概括**: Agentic Skills 框架 + 软件开发方法论，一套完整的 Agent 工作流程封装。
+- **本周亮点**: 持续快速增长，成为 Skills 生态的标杆项目。Shell 实现，MIT 许可。
+- **为什么值得关注**: 这不仅是技能集合，更是一套完整的软件开发方法论——把 Agent 的技能组织、版本管理、共享和复用都做了规范化。社区称之为"Agent 时代的 npm"——Skills 的分发和复用标准正在形成。当 Google（stitch-skills）和 Anthropic（anthropics/skills）都在做类似事情时，superpowers 作为社区先行者提供了最完整的参考实现。
+- **语言**: Shell
+
+---
+
+### 🥇 2. anthropics/skills
+
+- **链接**: https://github.com/anthropics/skills
+- **🌟 Stars**: 164,164
+- **一句话概括**: Anthropic 官方发布的 Agent Skills 公共仓库，Skill 标准化的重要一步。
+- **本周亮点**: 新项目发布即突破 164k⭐，显示了 Anthropic 社区的巨大影响力。
+- **为什么值得关注**: Anthropic 正式入局 Skills 标准化。这不是一个简单的 CLI 插件库，而是 Agent Skills 的官方仓库——Anthropic 在定义 Agent 能力的标准封装格式。与 Google 的 stitch-skills 形成竞争格局。如果你在构建 Agent 应用，Skills 是比传统 Agent 框架更轻量的选择。
+- **语言**: 多种
+
+---
+
+### 🥇 3. anomalyco/opencode
+
+- **链接**: https://github.com/anomalyco/opencode
+- **🌟 Stars**: 189,696
+- **一句话概括**: 开源编码 Agent，在终端中运行的开源替代方案。
+- **本周亮点**: 超越 Codex（101k⭐），成为最受欢迎的开源编码 Agent，增长势头迅猛。
+- **为什么值得关注**: 当 Claude Code（139k⭐）和 Codex（101k⭐）都是闭源产品时，OpenCode 提供了完全开源的编码 Agent 方案。TypeScript 实现，MIT 许可。你可以自托管、自定义模型、集成自己的工具链。对于需要私有化部署的企业来说，这是目前最成熟的开源编码 Agent 选项。
+- **语言**: TypeScript
+
+---
+
+### 🥇 4. TauricResearch/TradingAgents
+
+- **链接**: https://github.com/TauricResearch/TradingAgents
+- **🌟 Stars**: 94,523
+- **一句话概括**: 多智能体 LLM 金融交易框架，多个 Agent 协作完成交易决策。
+- **本周亮点**: 突破 94k⭐，中文增强版（TradingAgents-CN）同步增长至 31k⭐。
+- **为什么值得关注**: 这代表了 Agent 在金融领域的最高级应用——不是简单问答，而是多 Agent 协作执行真实交易决策。每个 Agent 扮演不同角色（市场分析、风险控制、执行策略），通过 LLM 协调。对于量化团队和金融科技公司来说，这是目前最完整的多 Agent 交易框架参考。
+- **语言**: Python
+
+---
+
+### 🥇 5. addyosmani/agent-skills
+
+- **链接**: https://github.com/addyosmani/agent-skills
+- **🌟 Stars**: 80,374
+- **一句话概括**: 生产级工程技能库，专为 AI 编码 Agent 设计的实战技能集合。
+- **本周亮点**: 稳定增长至 80k⭐，Chrome 团队工程师出品，质量有保障。
+- **为什么值得关注**: 作者 Addy Osmani 是 Google Chrome 团队工程师，这些技能不是"玩具示例"而是真实的生产级工程实践——代码审查、测试驱动开发、性能优化、安全审计等。每个技能都是可复用的工程工作流，你的 Agent 可以直接执行。适合工程团队快速提升 Agent 的工程能力。
+- **语言**: TypeScript
+
+---
+
+### 🥇 6. ChromeDevTools/chrome-devtools-mcp
 
 - **链接**: https://github.com/ChromeDevTools/chrome-devtools-mcp
-- **🌟 当前 Stars**: 46,697
+- **🌟 Stars**: 47,601
 - **一句话概括**: Chrome 官方出品的 DevTools MCP 服务，让编码 Agent 直接控制浏览器开发者工具。
-- **为什么值得关注**: 这是 Google Chrome 团队官方项目，将 Chrome DevTools 以 MCP（Model Context Protocol）协议暴露给编码 Agent（如 Claude Code、Gemini CLI）。Agent 不再需要手动操作浏览器，而是可以直接：检查 DOM、调试 JavaScript、查看网络请求、分析性能等。**浏览器厂商主动为 Agent 构建基础设施**，这是 Agent 生态成熟的关键信号。
-- **语言**: TypeScript | **链接**: https://github.com/ChromeDevTools/chrome-devtools-mcp
+- **本周亮点**: 稳定 48k⭐，成为 MCP 生态中最受关注的工具之一。
+- **为什么值得关注**: 这是 Google Chrome 团队官方项目，将 Chrome DevTools 以 MCP（Model Context Protocol）协议暴露给编码 Agent。Agent 不再需要手动操作浏览器，而是可以直接：检查 DOM、调试 JavaScript、查看网络请求、分析性能。**浏览器厂商主动为 Agent 构建基础设施**，这是 Agent 生态成熟的关键信号。
+- **语言**: TypeScript
 
 ---
 
-### 🥇 2. vxcontrol/pentagi
+### 🥇 7. microsoft/ai-agents-for-beginners
 
-- **链接**: https://github.com/vxcontrol/pentagi
-- **🌟 本周增长**: +1,766（总 19,966）
-- **一句话概括**: 完全自主的 AI Agent 渗透测试系统，可自动化执行复杂渗透测试任务。
-- **为什么值得关注**: 用 Go 实现的全自主 AI Agent 系统，能够：信息收集、漏洞扫描、漏洞利用、权限提升、横向移动。不是传统漏洞扫描器，而是 Agent 自主规划、决策和执行完整攻击链路。本周增长最快的 AI 安全项目。
-- **语言**: Go | **链接**: https://github.com/vxcontrol/pentagi
-
----
-
-### 🥇 3. google-labs-code/stitch-skills
-
-- **链接**: https://github.com/google-labs-code/stitch-skills
-- **🌟 本周增长**: +549（总 7,080）
-- **一句话概括**: Google 官方的 Agent Skills 库，遵循 Agent Skills 开放标准，兼容主流编码 Agent。
-- **为什么值得关注**: Google 官方正式入场 Agent Skills 赛道。每个 Skill 按照 Agent Skills 开放标准封装，兼容 Antigravity、Gemini CLI、Claude Code、Cursor 等主流 Agent。这标志着 Skills 作为 Agent 能力的标准封装单元获得头部科技公司背书。TypeScript 实现，MIT 许可。
-- **语言**: TypeScript | **链接**: https://github.com/google-labs-code/stitch-skills
+- **链接**: https://github.com/microsoft/ai-agents-for-beginners
+- **🌟 Stars**: 70,344
+- **一句话概括**: 微软官方出品的 AI Agent 入门教程，18 课时系统学习 Agent 构建。
+- **本周亮点**: 稳定增长，配合微软 Copilot Studio 生态，成为 Agent 学习首选资源。
+- **为什么值得关注**: 微软的 AI For Beginners 系列一直以高质量著称。这个 Agent 专题延续了同样的风格：每节课包含理论讲解、代码示例和练习。覆盖 Agent 核心概念、工具调用、多 Agent 协作、安全评估等主题。已经有 70k+ 开发者从中受益，是 Agent 入门的最佳起点。
+- **语言**: Jupyter Notebook / Python
 
 ---
 
-### 🥇 4. alibaba/page-agent
+### 🥇 8. datawhalechina/hello-agents
 
-- **链接**: https://github.com/alibaba/page-agent
-- **🌟 当前 Stars**: 26,060
-- **一句话概括**: JavaScript 实现的页面 GUI Agent，用自然语言控制 Web 界面。
-- **为什么值得关注**: 阿里巴巴出品的浏览器自动化 Agent，与 Google 的 stitch-skills 形成东西方 Agent Web 自动化竞争格局。直接作用于页面 DOM 层而非 DevTools 层，适合表单填写、数据采集、页面操作等场景。与 browser-use（Python，102k⭐）形成不同技术栈的互补。
-- **语言**: TypeScript | **链接**: https://github.com/alibaba/page-agent
-
----
-
-### 🥇 5. TencentCloud/CubeSandbox
-
-- **链接**: https://github.com/TencentCloud/CubeSandbox
-- **🌟 当前 Stars**: 9,700
-- **一句话概括**: 腾讯云开源的即时、并发、安全、轻量 AI Agent 沙箱。
-- **为什么值得关注**: Rust 实现，专为 AI Agent 代码执行场景设计：毫秒级启动、安全隔离、支持高并发。Agent 在执行代码时面临安全风险（代码注入、数据泄露、资源滥用），CubeSandbox 提供了企业级隔离方案。在 Agent 安全评估和可观测性成为刚需的背景下，沙箱基础设施至关重要。
-- **语言**: Rust | **链接**: https://github.com/TencentCloud/CubeSandbox
+- **链接**: https://github.com/datawhalechina/hello-agents
+- **🌟 Stars**: 68,583
+- **一句话概括**: 《从零开始构建智能体》——中文社区最全面的 Agent 原理与实践教程。
+- **本周亮点**: 突破 68k⭐，成为中文 Agent 学习资料的首选。
+- **为什么值得关注**: 这是 Datawhale 社区精心打磨的中文 Agent 教程，从零开始讲解智能体的原理与实践。内容覆盖 Agent 核心概念、CoT（思维链）、ReAct 模式、工具调用、RAG、多 Agent 协作等。对于中文开发者来说，这是目前最系统、最完整的 Agent 学习资源。与微软的英文教程形成互补。
+- **语言**: Python / Jupyter Notebook
 
 ---
 
-### 🥇 6. alirezarezvani/claude-skills
+### 🥇 9. zhayujie/CowAgent
 
-- **链接**: https://github.com/alirezarezvani/claude-skills
-- **🌟 当前 Stars**: 22,226
-- **一句话概括**: 345+ Claude Code 技能库，覆盖 30+ Agent 场景和 70+ 自定义命令。
-- **为什么值得关注**: 社区最大规模的 Claude Code 技能集合，涵盖：工程开发、市场营销、产品管理、合规审查、C-level 咨询、研究分析、商业运营、财务分析、个人效率等领域。每个技能都是精心设计的工程工作流封装。与 Google 的 stitch-skills 形成官方 vs 社区的两大技能生态。
-- **语言**: Python | **链接**: https://github.com/alirezarezvani/claude-skills
-
----
-
-### 🥇 7. stablyai/orca
-
-- **链接**: https://github.com/stablyai/orca
-- **🌟 当前 Stars**: 16,392
-- **一句话概括**: 并行 Agent 舰队开发环境（ADE），可在桌面和移动端运行任意编码 Agent。
-- **为什么值得关注**: 提出了 "Agent Development Environment (ADE)" 新概念——就像 IDE 之于程序员。可同时运行多个 Agent 并行完成不同任务，自带模型订阅。支持桌面和移动端，TypeScript 实现。代表 Agent 从 "单个助手" 走向 "Agent 舰队" 的操作系统级管理。
-- **语言**: TypeScript | **链接**: https://github.com/stablyai/orca
+- **链接**: https://github.com/zhayujie/CowAgent
+- **🌟 Stars**: 46,121
+- **一句话概括**: 开源超级 AI 助手 & Agent Harness——自主规划任务、运行工具和技能。
+- **本周亮点**: 持续增长，成为中文社区最活跃的 Agent Harness 实现之一。
+- **为什么值得关注**: 这是一个完整的 Agent Harness（Agent 管控框架），不仅仅是代理调用，而是完整的任务规划、工具编排和技能执行系统。设计理念与 superpowers 类似但更偏重实用。对于希望自己搭建 Agent 系统的团队来说，CowAgent 提供了比 LangChain 更轻量、更直观的选择。
+- **语言**: Python
 
 ---
 
-### 🥇 8. ogulcancelik/herdr
+### 🥇 10. Panniantong/Agent-Reach
 
-- **链接**: https://github.com/ogulcancelik/herdr
-- **🌟 当前 Stars**: 15,519
-- **一句话概括**: Rust 实现的终端 Agent 多路复用器，统一管理多个 Agent 会话。
-- **为什么值得关注**: Agent 的使用方式正在从 "单会话聊天" 走向 "多会话并行"。herdr 解决了多 Agent 会话管理的痛点：在一个终端窗口中同时管理多个 Agent 对话、切换上下文、共享工具和配置。Rust 实现保证了性能和内存安全。
-- **语言**: Rust | **链接**: https://github.com/ogulcancelik/herdr
-
----
-
-### 🥇 9. bradautomates/claude-video
-
-- **链接**: https://github.com/bradautomates/claude-video
-- **🌟 当前 Stars**: 7,569
-- **一句话概括**: 让 Claude 能观看任何视频——自动下载、抽帧、转录，交给 Claude 理解。
-- **为什么值得关注**: 视频理解 Agent 的代表项目。/watch 命令自动完成：视频下载、帧提取、语音转录、多模态分析。Agent 的多模态能力从文本/图片正式扩展到视频理解。Python 实现，适合视频内容分析、监控审查、媒体研究等场景。
-- **语言**: Python | **链接**: https://github.com/bradautomates/claude-video
-
----
-
-### 🥇 10. facebook/astryx
-
-- **链接**: https://github.com/facebook/astryx
-- **🌟 当前 Stars**: 7,936
-- **一句话概括**: Meta 开源的设计系统，完全可定制且 Agent 就绪（agent ready）。
-- **为什么值得关注**: Facebook 推出的开源设计系统，核心创新在于 "agent ready"——组件、样式、交互都被设计为 AI Agent 可理解、可操作。当一个 Agent 需要生成 UI 时，astryx 提供了标准化的组件库和 API。这是 UI 基础设施向 Agent 时代适应的先兆。
-- **语言**: TypeScript | **链接**: https://github.com/facebook/astryx
+- **链接**: https://github.com/Panniantong/Agent-Reach
+- **🌟 Stars**: 60,839
+- **一句话概括**: 给 AI Agent "眼睛"看整个互联网——读取和搜索 Twitter、Reddit 等社交平台。
+- **本周亮点**: 突破 60k⭐，展示 Agent 信息获取能力的重大扩展。
+- **为什么值得关注**: Agent 的信息获取能力一直是瓶颈——模型知识有截止日期，而实时信息需要工具链支持。Agent-Reach 解决了 Agent "看到"实时互联网的问题，支持 Twitter、Reddit、网页搜索等。对于舆情监控、市场研究、竞品分析等场景，这是 Agent 能力的关键扩展。
+- **语言**: Python
 
 ---
 
@@ -138,19 +143,19 @@
 
 | 趋势 | 代表项目 | 解读 |
 |------|---------|------|
-| **Agent Skills 标准化** | stitch-skills, claude-skills, archify, agentskills | Skills 正成为 Agent 能力的标准封装单元，Google 官方入场 |
-| **Agent 安全基础设施** | pentagi, CubeSandbox, strix | 从攻击（渗透测试）到防御（沙箱隔离）的完整安全链 |
-| **浏览器 Agent 对垒** | chrome-devtools-mcp, page-agent | 浏览器厂商主动为 Agent 建 DevTools 层 |
-| **Agent 开发环境兴起** | orca, herdr | ADE（Agent Development Environment）新概念诞生 |
-| **Agent 多模态扩展** | claude-video, speech-to-speech | Agent 从文本扩展到视频/语音理解 |
-| **Agent 就绪的前端** | facebook/astryx | UI 组件开始面向 Agent 而非仅面向人类设计 |
+| **Agent Skills 标准化** | superpowers, anthropics/skills, mattpocock/skills, addyosmani/agent-skills | Skills 作为 Agent 能力的标准封装单元达成行业共识，Google/Anthropic/社区三方同步发力 |
+| **编码 Agent 主流化** | opencode, claude-code, codex | 三大编码 Agent 各超 100k⭐，编码 Agent 成为开发者日常工具 |
+| **金融 Agent 爆发** | TradingAgents (94k⭐ + CN版31k⭐) | 多 Agent 协作框架在金融领域最先落地 |
+| **Agent 教育体系化** | microsoft/ai-agents-for-beginners, hello-agents, huggingface/agents-course | 中英文 Agent 教程体系成熟，入门门槛大幅降低 |
+| **Agent 安全基础设施** | Chrome DevTools MCP, strix, headroom | Agent 安全从理论讨论进入实战工具阶段 |
+| **MCP 协议成主流** | chrome-devtools-mcp, modelcontextprotocol/servers | MCP 作为 Agent 连接外部工具的标准被广泛采用 |
 
 ### 本周关键信号
 
-1. **Google 双管齐下**：chrome-devtools-mcp（46k⭐）+ stitch-skills（7k⭐），一个控制浏览器底层，一个封装上层应用能力
-2. **Agent 安全进入实战**：pentagi（+1,766/周）自主渗透测试 + CubeSandbox 沙箱隔离，攻防两端都在成熟
-3. **技能生态 vs 框架竞争**：Skills 作为轻量级能力封装正在取代部分 Agent 框架的需求——"不要给 Agent 框架，给它技能"
-4. **Rust 在 Agent 基础设施层的崛起**：CubeSandbox、herdr 都用 Rust，性能和安全驱动 Agent 底层技术栈选择
+1. **Skills 正在取代传统 Agent 框架**：社区共识从"给 Agent 框架"转向"给 Agent 技能"——Skills 更轻量、更可复用、更易标准化
+2. **Anthropic 官方入场 Skills**：anthropics/skills 仓库发布即 164k⭐，Skills 标准化获得大厂背书
+3. **金融 Agent 率先商业化**：TradingAgents 94k⭐ 标志着 Agent 在金融领域的应用从实验走向生产
+4. **Agent 教育体系成熟**：微软、HuggingFace、Datawhale 三方形成完整学习路径
 
 ---
 
@@ -158,27 +163,38 @@
 
 | 项目 | Stars | 类别 | 一句话 | 链接 |
 |------|-------|------|--------|------|
-| browser-use/browser-use | 102k | 浏览器 Agent | 让 Agent 操作网页完成在线任务 | [GitHub](https://github.com/browser-use/browser-use) |
-| huggingface/speech-to-speech | 6k | 语音 Agent | 用开源模型构建本地语音 Agent | [GitHub](https://github.com/huggingface/speech-to-speech) |
-| modelcontextprotocol/servers | 88k | MCP 生态 | 标准化 Agent 连接外部系统的协议 | [GitHub](https://github.com/modelcontextprotocol/servers) |
-| vllm-project/vllm | 85k | 推理引擎 | Agent 后端的高吞吐推理服务 | [GitHub](https://github.com/vllm-project/vllm) |
-| All-Hands-AI/OpenHands | 79k | 编程 Agent | 开源 AI 软件工程 Agent | [GitHub](https://github.com/All-Hands-AI/OpenHands) |
-| langgenius/dify | 147k | Agent 平台 | 面向生产的 Agent 工作流平台 | [GitHub](https://github.com/langgenius/dify) |
-| n8n-io/n8n | 195k | AI 工作流 | 自托管工作流平台，400+ 集成 | [GitHub](https://github.com/n8n-io/n8n) |
-| crewAIInc/crewAI | 55k | 多 Agent 协作 | 角色分工模式的多 Agent 框架 | [GitHub](https://github.com/crewAIInc/crewAI) |
+| openclaw/openclaw | 384k+ | 个人 AI 助手 | 本地运行的 AI 助手，50+ 集成 | [GitHub](https://github.com/openclaw/openclaw) |
+| n8n-io/n8n | 198k | AI 工作流 | 自托管工作流平台，原生 AI 集成 | [GitHub](https://github.com/n8n-io/n8n) |
+| langgenius/dify | 150k+ | Agent 平台 | 可视化 Agent 工作流平台 | [GitHub](https://github.com/langgenius/dify) |
+| langchain-ai/langchain | 143k | Agent 工程 | Agent 工程平台 | [GitHub](https://github.com/langchain-ai/langchain) |
+| openai/codex | 101k | 编码 Agent | 轻量终端编码 Agent | [GitHub](https://github.com/openai/codex) |
+| modelcontextprotocol/servers | 90k+ | MCP 生态 | Agent 连接外部系统的标准协议 | [GitHub](https://github.com/modelcontextprotocol/servers) |
+| All-Hands-AI/OpenHands | 82k | 编程 Agent | 开源 AI 软件工程 Agent | [GitHub](https://github.com/All-Hands-AI/OpenHands) |
+| crewAIInc/crewAI | 55k | 多 Agent 协作 | 角色分工的多 Agent 框架 | [GitHub](https://github.com/crewAIInc/crewAI) |
+| usestrix/strix | 44k | AI 安全 | 开源 AI 渗透测试工具 | [GitHub](https://github.com/usestrix/strix) |
+| langchain-ai/langgraph | 38k | Agent 编排 | 弹性 Agent 状态机 | [GitHub](https://github.com/langchain-ai/langgraph) |
 
 ---
 
-## 资料整理状态
+## 🆕 本周新项目速览（2026.07.20 - 2026.07.26）
 
-> 自动采集只作为后台资料来源，不直接发布搜索结果链接；教程正文需要经过阅读、筛选、归纳后再更新。
+| 项目 | Stars | 一句话 | 语言 |
+|------|-------|--------|------|
+| **mikehasa/agentacct** | ⭐322 | 本地优先的 Agent 工作智能——记录、反思、工作痕迹持久化 | TypeScript |
+| **realfishsam/agent-notch** | ⭐272 | vibe-island 的开源替代品 | TypeScript |
+| **NVIDIA-NeMo/labs-OO-Agents** | ⭐209 | NVIDIA 面向对象的 Agent 实验框架 | Python |
+| **eli-labz/Agent-Execution-Partnership** | ⭐197 | Agent 执行控制平面，确保可追溯性和合规性 | TypeScript |
+| **0xwilliamortiz/agents-council** | ⭐111 | 多 Agent 协作插件，编排 Claude Code 多 Agent | TypeScript |
+| **anthropics/skills** | ⭐164k | Anthropic 官方 Agent Skills 仓库（新发布项目） | 多种 |
 
-<!-- RESOURCES_START -->
+---
 
-- 后台候选资料：4 条，覆盖 1 个来源域名。
-- 最近采集日期：2026-07-04。
-- 发布规则：候选资料必须先经过阅读、去重、事实核验和中文归纳，再合并进正文；本区块不发布原始搜索结果。
+### 参考来源
 
-<!-- RESOURCES_END -->
+- GitHub API / Trending — https://github.com/trending
+- GitHub Search API — 2026-07-26 采集
+- GitHub Repository Data — 各仓库公开信息
 
-*资源区块更新时间：2026-07-26 00:09:30*
+---
+
+> *自动采集只作为后台资料来源，不直接发布搜索结果链接；正文经过阅读、筛选、归纳后再更新。*
