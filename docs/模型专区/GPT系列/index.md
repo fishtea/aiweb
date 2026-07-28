@@ -1,322 +1,191 @@
-# GPT 系列 — OpenAI
+# GPT 系列 - OpenAI
 
-> GPT（Generative Pre-trained Transformer）系列是 OpenAI 开发的旗舰大语言模型家族。按 OpenAI 2026-07-06 官方模型列表，生产选型应重点关注 GPT-5.6、GPT-5.5、GPT-5.5-mini、GPT-4.1 和 o 系列推理模型。
+GPT（Generative Pre-trained Transformer）是 OpenAI 的生成模型家族。本页把历史架构、ChatGPT 产品和当前 API 模型分开说明，避免把未公开参数、第三方传闻或随时变化的价格写成稳定事实。
 
----
+> 时效说明：当前模型与 API 部分按 OpenAI 官方开发者文档于 **2026-07-28** 核对。模型别名、可用区域、价格、上下文限制和功能支持可能变化，生产接入前应再次查看官方模型页并运行自己的评估集。
 
-## 架构演进
+## 历史演进
 
-| 模型 | 发布时间 | 参数规模 | 架构特点 |
-|------|---------|---------|---------|
-| GPT-1 | 2018.06 | 117M | 首个 Decoder-only Transformer，开创生成式预训练范式 |
-| GPT-2 | 2019.02 | 1.5B | 扩大模型规模，展示零样本迁移能力 |
-| GPT-3 | 2020.06 | 175B | 大规模 In-context Learning，涌现 Few-shot 能力 |
-| GPT-3.5 | 2022.03 | 175B | InstructGPT 的 RLHF 微调版本，ChatGPT 的基础 |
-| GPT-4 | 2023.03 | 未公开 | 多模态（图像+文本），推理能力大幅飞跃 |
-| GPT-4o | 2024.05 | 未公开 | 原生多模态，实时语音交互，速度提升 |
-| o1 (preview) | 2024.09 | 未公开 | 首个推理模型，通过 RL 学会\"思考\"再回答 |
-| o1 正式版 | 2024.12 | 未公开 | 推理能力大幅提升，竞赛级数学/编程 |
-| o3-mini | 2025.01 | 未公开 | 低成本推理模型，支持函数调用 |
-| GPT-4.5 | 2025.02 | 未公开 | 更强的世界知识和情感智能 |
-| o3 / o4-mini | 2025.04 | 未公开 | 推理 + 工具调用 + 多模态，o4-mini 性价比极高 |
-| GPT-4.1 系列 | 2025.04 | 未公开 | 强化编码、指令遵循和长上下文，提供 mini / nano 档位 |
-| GPT-5.5 系列 | 2026 | 未公开 | 2026 主力通用模型，含 mini 与 nano 档位 |
-| GPT-5.6 | 2026 | 未公开 | 最新旗舰预览模型，面向复杂任务、Agent 和编码 |
+| 模型 | 首次发布 | 已公开规模 | 主要意义 |
+|------|----------|------------|----------|
+| GPT-1 | 2018 | 117M | 展示生成式预训练后进行任务微调的范式 |
+| GPT-2 | 2019 | 最大 1.5B | 扩大自回归语言模型并展示零样本迁移能力 |
+| GPT-3 | 2020 | 最大 175B | 推动 in-context learning 和 few-shot prompting |
+| InstructGPT | 2022 | 论文研究多个 GPT-3 规模 | 使用人类偏好数据改进指令遵循 |
+| GPT-3.5 | 2022 起 | 未公开 | 一组经过后训练的模型，而不是已证实为 175B 的单一架构 |
+| GPT-4 | 2023 | 未公开 | 官方技术报告确认文本与图像输入能力，但未披露参数量和完整架构 |
+| GPT-4o | 2024 | 未公开 | 将文本、视觉与语音交互推进到更统一的多模态路线 |
+| o 系列 | 2024 起 | 未公开 | 通过额外推理计算强化数学、代码和复杂规划等任务 |
+| GPT-5.x | 2025 起 | 未公开 | 将推理、工具调用、多模态和 Agent 工作流进一步整合 |
 
-> **核心架构:** GPT 系列仍以 Decoder-only Transformer 为基础。GPT-4o 将文本、图像、音频交互统一到更低延迟的多模态体验；o 系列是面向复杂推理的模型线，会在内部消耗推理 token；GPT-5.5 / 5.6 系列把通用对话、编码、工具调用和 Agent 执行能力继续合并到更统一的模型路线。
+GPT-3.5 的参数量、GPT-4 的“1.8T 参数”等说法没有 OpenAI 官方确认，不应放入参数对比表。模型质量也不能从参数量单独推出。
 
----
+## 当前 GPT-5.6 模型线
 
-## GPT-4 关键特性
+根据 [OpenAI 最新模型指南](https://developers.openai.com/api/docs/guides/latest-model)，当前 GPT-5.6 采用三档命名：
 
-根据 OpenAI 官方报告 [GPT-4 Technical Report (arXiv:2303.08774)](https://arxiv.org/abs/2303.08774)：
+| 模型 ID | 定位 | 适合先评估的场景 |
+|---------|------|------------------|
+| `gpt-5.6-sol` | 旗舰能力 | 高难度编码、研究、复杂工具工作流和质量优先任务 |
+| `gpt-5.6-terra` | 能力与成本平衡 | 通用生产工作负载 |
+| `gpt-5.6-luna` | 高吞吐 | 分类、抽取、路由和批量处理 |
 
-- **多模态输入:** 接受文本和图像输入，生成文本输出
-- **超长上下文:** 支持 25,000+ 单词（约 32K tokens），GPT-4-32K 模型支持 32K tokens
-- **推理飞跃:** 律师考试从 GPT-3.5 的 10% 分位提升到 90% 分位
-- **安全对齐:** 经过 6 个月的安全训练，拒绝不当请求率提升 82%
+`gpt-5.6` 是指向 `gpt-5.6-sol` 的别名。别名便于跟随官方默认更新，但模型行为可能随路由更新；需要严格回归和可复现基线的系统，应记录请求日期、响应中的模型信息，并按官方提供的快照策略固定版本（若目标模型提供快照）。
 
-### 基准测试表现
+“旗舰、平衡、高吞吐”是产品定位，不是对你任务的质量保证。应在代表性数据上比较任务成功率、延迟、token 使用和总成本。
 
-| 测试 | GPT-3.5 | GPT-4 |
-|------|---------|-------|
-| Uniform Bar Exam | 10% 分位 | 90% 分位 |
-| Biology Olympiad | 31% 分位 | 99% 分位 |
-| MMLU | 70.0% | 86.4% |
+## ChatGPT、GPT 模型与 API
 
----
+这三个概念不要混用：
 
-## 2026 最新模型线
+- **GPT 模型**是执行推理的模型家族。
+- **OpenAI API**是开发者在程序中调用模型和工具的接口。
+- **ChatGPT**是面向用户的产品，包含模型、界面、工具、记忆、文件和订阅权限等产品层能力。
 
-- **GPT-5.6**：OpenAI 官方模型页列出的最新旗舰预览模型，定位为复杂任务、长期 Agent、编码和高难度推理的首选。
-- **GPT-5.5**：2026 主力旗舰模型，适合通用对话、多模态理解、工具调用和生产级 Agent。
-- **GPT-5.5-mini / nano**：面向低成本、高吞吐和低延迟场景，适合路由、抽取、摘要、批处理和简单工具调用。
-- **GPT-4.1 / 4.1-mini / 4.1-nano**：仍适合代码、长上下文和稳定结构化输出；如果系统已经围绕 4.1 做评估，可作为保守生产基线。
-- **GPT-4o / GPT-4o-mini**：多模态交互和低延迟体验仍有价值，但新项目应优先评估 GPT-5.5 系列。
+ChatGPT 中显示的功能和额度不等于 API 的模型 ID、计费或数据保留设置。API key 也不自动授予 ChatGPT 订阅权益。
 
-### GPT-5.6 三档分级（2026 年 7 月最新）
+## Responses API
 
-根据 [OpenAI 官方模型文档](https://platform.openai.com/docs/models)（2026 年 7 月访问），GPT-5.6 系列已正式扩展为 **三档分级模型线**，覆盖从旗舰推理到成本敏感的大规模调用：
+OpenAI 官方将 [Responses API](https://developers.openai.com/api/docs/guides/migrate-to-responses) 推荐用于新项目；Chat Completions 仍受支持。Responses API 统一了文本/多模态输入、工具调用、多轮状态和推理相关能力。
 
-| 模型 | 定位 | 适用场景 |
-|------|------|---------|
-| **GPT-5.6 Sol** | 旗舰模型 | 复杂推理、编程、科学研究、高难度 Agent 任务 |
-| **GPT-5.6 Terra** | 平衡型 | 智能与成本平衡，适合通用生产级部署 |
-| **GPT-5.6 Luna** | 轻量高吞吐 | 成本敏感的大规模调用、批量处理、路由 |
+### Python 最小示例
 
-三个模型均支持文本和图像输入、文本输出、多语言能力、视觉理解和多模态推理，通过 Responses API 和 OpenAI Client SDKs 访问。
-
-#### GPT-5.6 Sol — 旗舰推理与编码模型（2026-06-26 预览）
-
-根据 [OpenAI 官方博客](https://openai.com/index/previewing-gpt-5-6-sol)（2026 年 6 月 26 日发布），GPT-5.6 Sol 在编码、科学研究和网络安全三个领域实现了显著的能力跃升：
-
-- **编码能力**：在复杂软件工程任务、多文件重构和长链工具调用上的表现大幅超越 GPT-5.5
-- **科学研究**：在 GeneBench-Pro 等基因组学和生物学基准测试中展现出前沿水平
-- **网络安全**：配备 OpenAI 最先进的安全栈（safety stack），在保持高风险能力的同时强化了拒绝不当请求的准确性
-- **预览状态**：面向早期测试者和企业客户开放
-
-#### GPT-5.6 Terra — 平衡智能与成本
-
-GPT-5.6 Terra 定位为"智能与成本的最佳折中点"，适合作为日常生产部署的默认选择。Terra 在保持高推理质量的同时，通过更高效的推理路径降低了每 token 成本，适合需要持续运行的大多数生产场景。
-
-#### GPT-5.6 Luna — 成本敏感的高吞吐选择
-
-GPT-5.6 Luna 面向成本优先的大规模调用场景，是 GPT-5.6 系列中最经济的选项。适合批量抽取、摘要、分类、路由和轻量级 Agent 编排等不需要最高推理质量的任务。
-
-> **选型建议**：GPT-5.6 三档模型实现了从旗舰到经济型的完整覆盖。新项目应优先评估三个模型在各档位上的推理质量和成本，按任务复杂度路由：Sol 处理高难度步骤，Terra 处理日常生产负载，Luna 处理大批量低成本任务。
-
-### OpenAI × Broadcom Jalapeño 推理芯片（2026-06-24）
-
-根据 [OpenAI 官方公告](https://openai.com/index/openai-broadcom-jalapeno-inference-chip)（2026 年 6 月 24 日），OpenAI 与 Broadcom 联合发布了 **Jalapeño**——一款专为大语言模型推理优化的定制 AI 芯片：
-
-- **定位**：LLM 推理专用芯片，旨在提升性能、效率和规模化部署能力
-- **意义**：OpenAI 首次涉足自研 AI 硬件，减少对外部 GPU 供应（主要是 NVIDIA）的依赖
-- **产业影响**：标志着头部 AI 公司从纯模型研发向"模型+芯片"垂直整合的战略转型，类似 Google TPU 和 Amazon Trainium 的路径
-
-### Agent 正在改变工作方式（2026-06-25）
-
-根据 [OpenAI 研究论文](https://openai.com/index/how-agents-are-transforming-work)（2026 年 6 月 25 日发布），OpenAI 发布了关于 AI Agent 对工作方式影响的实证研究：
-
-- **任务复杂度提升**：Agent 能完成更长、更复杂的多步任务，不再局限于单轮问答
-- **生产力扩展**：Agent 的使用正在从个人辅助扩展到跨角色、跨团队的协作场景
-- **产业趋势**：研究指出 Agent 正在从"工具"演进为"数字同事"，改变知识工作的组织方式
-
-> 这项研究与 GPT-5.6 Sol 的发布方向一致——OpenAI 正在将其模型能力向 Agent 化方向集中，而非单纯追求基准分数。
-
-### OpenAI 发布新一代语音模型（2026-07-09）
-
-根据 [TechCrunch 报道](https://techcrunch.com/category/artificial-intelligence/)（2026 年 7 月 9 日），OpenAI 发布了**新一代语音模型**，旨在实现更自然的实时语音对话：
-
-- **更自然的对话体验**：新模型在语音语调、停顿和情感表达上更接近真人，减少机械感
-- **实时交互优化**：降低语音响应延迟，支持更流畅的打断和插话
-- **应用场景**：面向语音助手、客服系统、实时翻译和 AI 陪伴等场景
-
-这次发布延续了 OpenAI 从 GPT-4o 开启的语音交互路线，将语音能力从"能用"推向"自然"，标志着语音 AI 正在从辅助功能转变为核心交互方式。
-
-> 同时关注：OpenAI × Broadcom 联合推出的 **Jalapeño 推理芯片**（2026-06-24）标志着 OpenAI 从纯模型公司向"模型+芯片"垂直整合的战略转型，减少对 NVIDIA GPU 的依赖。
-
----
-
-## o 系列 — 推理模型（Reasoning Models）
-
-o 系列是 OpenAI 在 2024-2025 年推出的**推理增强模型线**，与传统 GPT 模型形成互补。其核心区别在于：模型在输出最终答案前，会先在隐藏的"思维链"（chain-of-thought）中进行多步推理，再给出结论。
-
-### 为什么需要推理模型
-
-| 任务类型 | 传统 GPT-4o | o 系列模型 |
-|---------|------------|-----------|
-| 日常对话、写作、翻译 | ✅ 更快、更自然 | ⚠️ 思考时间长，略显刻板 |
-| 竞赛数学（AIME） | 部分正确 | ✅ 接近满分 |
-| 复杂编程（Codeforces） | 中等水平 | ✅ 竞赛级表现 |
-| 多步逻辑推理 | 容易出错 | ✅ 显著更强 |
-| 科学研究问题（GPQA） | 中等 | ✅ 博士级表现 |
-
-### o 系列演进
-
-| 模型 | 发布 | 关键特性 |
-|------|------|---------|
-| **o1-preview / o1-mini** | 2024.09 | 首次引入隐藏思维链，擅长编程和数学 |
-| **o1 正式版** | 2024.12 | AIME 2024 准确率 83.3%（preview 仅 13.4%），达到竞赛选手水平 |
-| **o3-mini** | 2025.01 | 低成本推理模型，首次在推理模型中支持函数调用和结构化输出 |
-| **o3 / o4-mini** | 2025.04 | 支持多模态输入和工具调用；o4-mini 以极低成本达到 o1 级推理能力 |
-
-> **生产建议：** o 系列模型适合需要深度推理、代码生成或复杂规划的场景；对延迟敏感、以对话为主的任务，GPT-4o 仍是更经济的选择。从 o3-mini 起已支持函数调用，可与 Agent 框架结合使用。
-
-### 使用方式
+先在环境变量中设置 `OPENAI_API_KEY`，不要把密钥写进代码或提交到仓库。
 
 ```python
 from openai import OpenAI
 
-client = OpenAI(api_key="your-api-key")
+client = OpenAI()
 
-# 推理模型用法与普通模型一致，但会增加 reasoning_effort 参数
-completion = client.chat.completions.create(
-    model="o4-mini",
-    reasoning_effort="medium",  # low / medium / high，控制思考深度
-    messages=[
-        {"role": "user", "content": "证明根号 2 是无理数。"}
-    ]
+response = client.responses.create(
+    model="gpt-5.6",
+    input="用三句话解释自注意力，并说明一个常见误区。",
 )
 
-print(completion.choices[0].message.content)
+print(response.output_text)
 ```
 
-> 推理模型会消耗更多 token（用于隐藏的推理过程），在计费和延迟评估时需要额外考虑。API 响应中可读取 `usage.completion_tokens_details.reasoning_tokens` 查看推理 token 消耗。
+示例使用别名便于入门。生产代码应先确认组织可用模型、版本策略、错误重试、超时、幂等和评估要求。
 
----
+### 多轮状态
 
-## 2026 生产选型建议
+可以通过 `previous_response_id` 延续前一次响应，也可以由应用自行保存和重放必要上下文。服务端状态不会替你解决：
 
-截至 2026-07-06，OpenAI 的实用选型可以按任务拆分：
+- 敏感数据最小化和保留策略。
+- 超长会话的上下文压缩。
+- 旧指令与新指令冲突。
+- 工具结果是否仍然新鲜。
 
-- **默认旗舰**：GPT-5.5。适合通用助手、多模态、工具调用和生产 Agent。
-- **最高质量 / 前沿能力验证**：GPT-5.6。适合复杂编码、规划、研究和高价值任务。
-- **成本敏感**：GPT-5.5-mini / nano。适合批量抽取、摘要、分类、路由和轻量对话。
-- **专门推理**：o3、o4-mini 或 o3-mini。适合需要显式推理预算和可控延迟的数学、规划、复杂代码修复。
-- **保守迁移**：GPT-4.1 系列。适合已有评估体系且暂不想切换到 GPT-5.5 的生产系统。
+## 推理设置
 
-### 选择建议
-
-| 场景 | 推荐 |
-|------|------|
-| 日常对话、写作、翻译 | GPT-5.5 / GPT-5.5-mini |
-| 复杂推理、数学、竞赛编程 | GPT-5.6 / o3 / o4-mini |
-| Agent 多步工具编排 | GPT-5.6 / GPT-5.5 |
-| 成本敏感的大规模调用 | GPT-5.5-mini / GPT-5.5-nano |
-
-> 趋势：生产系统越来越少依赖单一模型。常见做法是用便宜模型做路由、抽取和简单回答，用推理模型处理少量高难度任务，并通过评估集控制成本和质量。
-
----
-
-## 如何使用
-
-### 通过 ChatGPT（网页/App）
-
-- ChatGPT 付费档位可访问更高能力模型和更高配额；具体模型与限额会随地区和订阅层级变化。
-- Team/Enterprise 有更高配额和隐私保护
-
-### 通过 API
+GPT-5.6 支持通过 `reasoning.effort` 调整推理预算。当前官方指南列出 `none`、`low`、`medium`、`high`、`xhigh` 和 `max`，但支持范围应以具体模型文档为准。
 
 ```python
-from openai import OpenAI
-
-client = OpenAI(api_key="your-api-key")
-
-completion = client.chat.completions.create(
-    model="gpt-5.5",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "解释一下 GPT 的架构特点。"}
-    ]
+response = client.responses.create(
+    model="gpt-5.6",
+    reasoning={"effort": "medium"},
+    input="审查这份迁移方案，找出可能导致数据丢失的步骤。",
 )
-
-print(completion.choices[0].message.content)
 ```
 
-### 结构化输出（Structured Outputs）
+更高 effort 通常增加延迟和 token，不保证每个任务都更准确。应在固定评估集上比较相邻档位，并把最低成本的达标设置作为候选。
 
-OpenAI 在 2024 年 8 月推出 Structured Outputs，通过 JSON Schema 约束模型输出，保证返回严格符合指定格式，可靠性接近 100%：
+API 不返回模型的原始隐藏思维链。部分模型可以返回 reasoning summary；摘要是面向用户的输出，不应视为对内部推理过程的完整审计记录。
 
-```python
-from pydantic import BaseModel
+## 工具调用
 
-class Step(BaseModel):
-    explanation: str
-    output: str
+工具调用让模型生成结构化的调用意图，由应用验证并执行。可靠闭环应包含：
 
-class MathReasoning(BaseModel):
-    steps: list[Step]
-    final_answer: str
-
-completion = client.beta.chat.completions.parse(
-    model="gpt-5.5",
-    messages=[{"role": "user", "content": "解方程 8x + 7 = -23"}],
-    response_format=MathReasoning,  # 模型输出会被约束为该结构
-)
-
-result = completion.choices[0].message.parsed  # 直接得到 Python 对象
-print(result.final_answer)
+```text
+用户请求
+  -> 模型选择工具并生成参数
+  -> 应用校验 schema、权限和业务规则
+  -> 必要时请求人工确认
+  -> 执行工具
+  -> 把结果返回模型
+  -> 生成最终答复并记录审计日志
 ```
 
-> **适用场景：** 需要从非结构化文本中提取结构化数据、保证 Agent 工具调用参数格式正确、生成可被程序直接消费的 JSON 输出。这是构建可靠 Agent 系统的关键能力。
+模型输出符合 JSON Schema 只说明结构通过，不说明参数事实正确、操作被授权或业务状态仍然有效。付款、删除、发送消息和权限变更等动作必须在应用层实施确定性校验。
 
----
+## 结构化输出
 
-## 优势与局限
+[Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs) 可以让支持的模型按 JSON Schema 返回结果，适合抽取、分类和可编程工作流。即使启用严格模式，应用仍要处理：
 
-**优势:**
-- 广泛的世界知识覆盖
-- 强大的多步推理能力
-- 成熟的安全对齐机制
-- 丰富的生态和 API 工具
+- 模型拒答。
+- 达到输出 token 限制导致响应不完整。
+- 网络、超时和服务错误。
+- schema 正确但字段值在业务上无效。
+- SDK 与模型是否支持所用 schema 特性。
 
-**局限:**
-- 闭源，不可自部署
-- 可能产生幻觉
-- API 成本相对较高
-- 缺乏透明度（架构细节未公开）
+因此不应把“符合结构”写成“结果可靠性 100%”。
 
----
+## 模型选型
 
----
+### 先定义评估合同
 
-## 2026 年 7 月最新进展
+在比较模型前明确：
 
-### GPT-5.5 — 2026 年 4 月前沿模型
+- 输入分布和输出格式。
+- 可接受的正确率、拒答率和引用要求。
+- p95/p99 延迟、吞吐和预算。
+- 工具权限与失败恢复。
+- 敏感数据、地区和保留约束。
 
-OpenAI 于 **2026 年 4 月 23 日** 发布 GPT-5.5（内部代号"Spud"），定位为面向真实工作的前沿模型。距 GPT-5.4 仅间隔 6 周，展示了 OpenAI 加速迭代的节奏。
+### 分层路由
 
-**三个变体：**
+常见做法是让高吞吐模型处理分类、抽取和简单请求，把少量困难任务路由到更强模型。但路由器本身也会误判，需要把误路由成本、回退和人工接管纳入评估。
 
-| 变体 | 说明 | 可用范围 |
-|------|------|---------|
-| GPT-5.5（标准） | 默认版，更快的思考速度，更少 token 消耗 | ChatGPT 全档位、Codex |
-| GPT-5.5 Thinking | 扩展推理预算，适合复杂电子表格、研究简报、多文件调试 | ChatGPT(约 3000 条/周) |
-| GPT-5.5 Pro | 最高精度版，面向正确性关键任务 | Pro/Business/Enterprise |
+不要直接复制“某模型最适合代码/长文档/中文”的榜单结论。公开 benchmark、供应商报告和真实业务分布通常不同，模型更新也会改变结果。
 
-**核心指标：**
-- **SWE-bench：88.7%** — 多步编码能力大幅领先
-- **MMLU：92.4%** — 知识广度保持领先
-- **幻觉率降低 60%** — 相比 GPT-5.4 显著改善
-- **定价：** $5/M 输入 token，$30/M 输出 token（约为 GPT-5.4 两倍，但 token 消耗更高效）
-- **Computer Use：** 支持浏览器操控、桌面交互等 Agent 场景
+## 成本与性能
 
-### GPT-5.6 — 2026 年 7 月最新旗舰
+总成本不仅是输入/输出 token 单价，还包括：
 
-OpenAI 于 **2026 年 7 月 9 日** 公开发布 GPT-5.6，作为最新的前沿预览模型，面向付费用户。GPT-5.6 进一步提升了复杂任务、Agent 执行和高难度编码的能力，被视为即将到来的 GPT-6 的技术验证。
+- 推理 token、工具调用和多轮重试。
+- 长上下文中重复发送的固定前缀。
+- 缓存写入/读取策略。
+- 失败请求、超时和降级模型。
+- 评估、监控、人工复核和数据治理。
 
-### ChatGPT 全面升级 + Codex 集成
+价格变化快，本页不复制价格表。以 [OpenAI API 定价文档](https://developers.openai.com/api/docs/pricing) 为准，并用真实请求日志估算。
 
-2026 年中，ChatGPT 界面进行了彻底改造，不再是单纯的聊天框。主要变化：
+## 安全与隐私
 
-- **Codex 集成：** OpenAI 开发环境 Codex 成为 ChatGPT 的一部分，支持直接编写、运行和调试代码
-- **Agent 模式：** 模型可自主规划、使用浏览器和终端工具、运行多步工作流
-- **Computer Use 增强：** GPT-5.5/5.6 可直接操控桌面应用，实现自动化操作
-- **免费档位可体验：** 免费和 Go 用户也可临时使用 GPT-5.5（有限额）
+- 对用户输入、检索文档和工具输出按不可信内容处理，防范提示词注入。
+- 工具使用最小权限凭证，并在应用层做 allowlist 和参数校验。
+- 发送稳定、隐私保护的 `safety_identifier`（适用时遵循官方安全指南）。
+- 不在提示词、日志或代码中保存 API key。
+- 对个人信息、医疗、金融和内部数据确认组织的数据使用与保留设置。
+- 高风险结论要求来源、人工复核和明确的非自动执行边界。
 
-### 生产选型更新（2026 年 7 月）
+## 常见误区
 
-| 场景 | 2026 Q2 推荐 | 新增选型 |
-|------|-------------|---------|
-| 前沿能力验证 | GPT-5.6/GPT-5.5 Pro | GPT-5.6 可选 |
-| Agent 多步工具编排 | GPT-5.6/GPT-5.5 | GPT-5.5 Thinking 可选 |
-| 复杂编码 | GPT-5.5 Thinking | GPT-5.6 候选 |
-| 成本平衡 | GPT-5.5-mini | 已稳定可用 |
+- **GPT-3.5 就是 175B**：官方未确认 GPT-3.5 系列的参数量。
+- **GPT-4 的参数量可以从传闻写入表格**：官方技术报告明确未披露架构和规模细节。
+- **最新旗舰一定最划算**：高吞吐或平衡型号可能在达标前提下更合适。
+- **Responses API 取代后 Chat Completions 已停用**：官方说明 Chat Completions 仍受支持，只是新项目推荐 Responses。
+- **reasoning effort 越高越好**：需要对质量、延迟和成本共同评估。
+- **结构化输出保证业务正确**：schema 不能验证现实世界事实和权限。
+- **工具调用等于模型已经执行动作**：模型提出调用，真正执行和授权由应用负责。
+- **模型别名永远固定**：别名可能更新路由，生产系统应有版本与回归策略。
 
-**资料来源：**
-- [What Is GPT-5.5? OpenAI's New Frontier Model Explained (Apidog)](https://apidog.com/blog/what-is-gpt-5-5/)
-- [OpenRouter — GPT-5.5 API Pricing & Benchmarks](https://openrouter.ai/openai/gpt-5.5)
-- [ChatGPT Free Plan Limits 2026: GPT-5.5 & the Caps](https://freeacademy.ai/blog/chatgpt-free-plan-limits-2026)
-- [OpenAI API Models 文档](https://platform.openai.com/docs/models)
+## 参考资料
 
----
+- [OpenAI 最新模型指南](https://developers.openai.com/api/docs/guides/latest-model)
+- [迁移到 Responses API](https://developers.openai.com/api/docs/guides/migrate-to-responses)
+- [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs)
+- [Reasoning models](https://developers.openai.com/api/docs/guides/reasoning)
+- [GPT-4 Technical Report](https://arxiv.org/abs/2303.08774)
+- [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
+- [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155)
 
-**参考资料：**
-- [OpenAI GPT-4 官方页面](https://openai.com/index/gpt-4)
-- [OpenAI API Models 文档](https://platform.openai.com/docs/models)
-- [GPT-4 Technical Report (arXiv:2303.08774)](https://arxiv.org/abs/2303.08774)
+## 延伸阅读
 
----
+- [大语言模型基础](/初级知识/大语言模型基础/)
+- [提示词工程](/进阶学习/提示词工程/)
+- [函数调用 Agent](/AIAgent实践/函数调用Agent/)
+- [模型评估与基准](/进阶学习/模型评估与基准/)
 
 ## 资料整理状态
 

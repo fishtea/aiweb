@@ -1,258 +1,218 @@
 # 计算机视觉基础
 
-计算机视觉（Computer Vision，CV）研究如何让计算机理解图像和视频。它广泛用于人脸识别、医学影像、自动驾驶、工业质检、OCR 和图像生成。
+计算机视觉（Computer Vision，CV）研究如何从图像和视频中提取可用于判断或行动的信息。一个完整视觉系统不只有模型，还包括采集、标注、数据切分、预处理、推理、后处理、评估和部署。
+
+## 学习目标
+
+读完本页后，你应该能够：
+
+- 区分分类、检测、分割、跟踪、OCR 和视觉语言任务。
+- 理解 CNN、Vision Transformer 和视觉基础模型的基本分工。
+- 为不同任务选择正确指标，而不是只看 Accuracy。
+- 识别数据泄漏、域偏移、类别不均衡和边缘场景。
+- 设计包含延迟、内存、鲁棒性和人工复核的部署检查项。
 
 ## 常见任务
 
-| 任务 | 目标 | 示例 |
-|------|------|------|
-| 图像分类 | 判断整张图属于哪一类 | 猫/狗、良品/缺陷 |
-| 目标检测 | 找出图中物体位置和类别 | 行人、车辆、商品 |
-| 图像分割 | 给每个像素分类 | 医学病灶、道路区域 |
-| OCR | 识别图片中的文字 | 发票、截图、证件 |
-| 人脸识别 | 判断身份或相似度 | 门禁、相册聚类 |
-| 姿态估计 | 识别人身体关键点 | 运动分析、动作识别 |
-| 图像生成 | 根据文本或条件生成图像 | Stable Diffusion |
+| 任务 | 输出 | 示例 | 常见指标 |
+|------|------|------|----------|
+| 图像分类 | 整张图的类别或多标签 | 缺陷类型、影像类别 | Accuracy、F1、AUROC、PR-AUC |
+| 目标检测 | 类别 + 边界框 + 分数 | 行人、车辆、商品 | AP、mAP、Recall、IoU |
+| 语义分割 | 每个像素的语义类别 | 道路、病灶区域 | mIoU、Dice |
+| 实例分割 | 每个对象独立的像素掩码 | 每个人或每件商品 | mask AP、IoU |
+| 跟踪 | 跨帧对象 ID 与轨迹 | 车辆轨迹、客流 | HOTA、IDF1、MOTA |
+| OCR | 文字区域与识别文本 | 发票、表格、证件 | CER、WER、字段准确率 |
+| 姿态估计 | 关键点坐标 | 人体动作、机械臂 | PCK、OKS、关键点 AP |
+| 图文检索/问答 | 相似度、文本回答 | 以文搜图、图表问答 | Recall@k、任务准确率、人工评估 |
 
-## 图像如何表示
+指标名称相同也可能采用不同协议。例如检测 mAP 必须说明数据集、IoU 阈值范围和类别平均方式。
 
-图像本质上是数字矩阵。彩色图片通常包含 RGB 三个通道：
+## 图像与视频如何表示
+
+彩色图像通常表示为高度、宽度和通道组成的数组：
 
 ```text
-高度 × 宽度 × 通道数
-例如：224 × 224 × 3
+单张 RGB 图像: [height, width, 3]
+训练批次:      [batch, channels, height, width]  # PyTorch 常见布局
+视频:          [batch, time, channels, height, width]
 ```
 
-深度学习模型会从像素中逐层提取边缘、纹理、形状和高级语义。
+需要同时记录：
 
-## CNN 的直觉
+- 像素范围是 `0-255`、`0-1` 还是标准化后的值。
+- 通道顺序是 RGB 还是 BGR。
+- resize 是否保持宽高比，是否引入 letterbox padding。
+- 坐标是像素坐标还是归一化坐标，边界是否闭区间。
+- EXIF 方向、颜色空间、透明通道和视频帧率是否已处理。
 
-卷积神经网络（CNN）是视觉任务中的经典架构。
+许多“模型错误”实际来自训练与推理预处理不一致。
 
-| 组件 | 作用 |
-|------|------|
-| 卷积层 | 提取局部特征 |
-| 激活函数 | 引入非线性能力 |
-| 池化层 | 降低尺寸，保留重要信息 |
-| 全连接层 | 汇总特征并输出分类 |
+## 视觉模型架构
 
-Transformer 也已经大量用于视觉任务，但理解 CNN 仍有助于建立基础直觉。
+### CNN
 
-## 数据增强
+卷积神经网络通过局部连接和权重共享提取空间模式。常见组件包括卷积、非线性、归一化、下采样和残差连接。CNN 仍广泛用于边缘部署、检测骨干和对延迟敏感的任务。
 
-视觉模型很容易受数据规模和拍摄条件影响。数据增强可以提高泛化能力：
+ConvNeXt 和 ConvNeXt V2 是现代化的**纯卷积网络**，不是 CNN 与 Transformer 的混合架构。它们借鉴了部分 Transformer 的设计经验，但核心算子仍是卷积。
 
-- 随机裁剪
-- 翻转
-- 旋转
-- 色彩扰动
-- 加噪声
-- MixUp、CutMix
+### Vision Transformer
 
-增强要符合业务常识。比如医学影像不能随意做会改变病灶含义的变换。
+ViT 将图像切成 patch 并作为序列处理，自注意力可以建立远距离关系。Swin Transformer 使用分层表示和局部窗口注意力，更适合检测与分割等多尺度任务。
 
-## 评估指标
+ViT 已成为重要路线，但“所有生产系统都默认使用 ViT”并不准确。数据规模、输入分辨率、延迟、内存、硬件算子和任务类型都会影响选择。
 
-| 任务 | 常见指标 |
-|------|----------|
-| 分类 | Accuracy、Precision、Recall、F1 |
-| 检测 | mAP、IoU |
-| 分割 | IoU、Dice |
-| OCR | 字符准确率、字段准确率 |
+### 自监督与对比学习
 
-视觉任务要特别重视错误样本可视化。只看平均指标，容易忽略某些关键场景失败。
+- **DINOv2**等自监督模型从无人工类别标签的数据中学习通用特征，但训练数据仍需要采集、过滤和治理，不能简单理解为“完全无需标注或数据成本”。
+- **CLIP/SigLIP**等图文模型学习共享表示，可用于零样本分类和图文检索。
+- 通用表征可以减少下游标注量，但领域偏移明显时仍需要目标数据验证和适配。
 
-## 2025-2026 最新进展
+### 视觉语言模型（VLM）
 
-### 视觉 Transformer（ViT）成为主流
+VLM 把视觉编码、语言模型和跨模态对齐组合起来，可完成图像问答、文档理解和界面操作。它们适合开放式语义任务，不会自动取代专用检测器：像素级公差、固定类别计数、低延迟或安全关键任务通常仍需要专用模型和确定性后处理。
 
-传统上 CNN 是视觉任务的默认选择，但 Vision Transformer（ViT）在 2025-2026 年已经全面进入生产环境。ViT 将图像切分为固定大小的 patch，用 Transformer 的注意力机制（Attention）建模 patch 之间的全局关系。
+## 检测、分割与跟踪
 
-| 模型 | 特点 | 适用场景 |
-|------|------|----------|
-| ViT（原版） | 纯 Transformer，需要大量数据预训练 | 大规模分类 |
-| Swin Transformer | 分层窗口注意力，计算量更小 | 检测、分割 |
-| DINOv2 | 自监督学习，无需标注 | 通用特征提取 |
-| EfficientViT | 轻量高效，适合移动端 | 边缘设备部署 |
+### 目标检测
 
-CNN 并未消失——许多最新架构采用 **CNN + Transformer 混合设计**（如 ConvNeXt V2），在速度和精度之间取得平衡。
+检测器输出边界框、类别和置信分数。传统管线常使用 NMS 去除重叠框；部分端到端检测器可以在特定设计下避免 NMS。YOLOv10 提出了 NMS-free 的端到端设计，但不能因此把整个 YOLO 家族都描述成“无需 NMS”。
 
-### YOLO 和实时检测
+部署时至少检查：
 
-目标检测领域 YOLO 系列持续迭代：
+- 小目标、遮挡和密集目标的召回率。
+- 不同置信度阈值对 Precision/Recall 的影响。
+- 输入缩放与坐标还原是否正确。
+- 后处理是否与导出到 ONNX/TensorRT 前一致。
 
-- **YOLOv10** / **YOLO11**：无 NMS（非极大值抑制）设计，推理速度更快
-- **YOLO-World**：开放词汇检测，结合 CLIP 实现零样本目标检测
-- 工业场景中 YOLO 仍然是性价比最高的选择，配合 TensorRT 或 ONNX 在边缘设备上可达实时性能
+### 三类分割
 
-### 多模态融合
+- **语义分割**：同类对象共享一个类别掩码。
+- **实例分割**：区分同类的不同实例。
+- **全景分割**：统一表示可数对象和背景区域。
 
-2025-2026 年最大的趋势是视觉与语言模型的深度融合：
-- **LLaVA** / **LLaVA-NeXT**：语言模型接入视觉编码器，实现看图问答
-- **CLIP** 和 **SigLIP**：图文对比学习，广泛用于搜索和检索
-- **Florence-2**：统一视觉任务的序列到序列模型
-- 多模态 API（GPT-4V/4o、Gemini、Claude 3.5）使得开发者无需自己训练模型，直接调用即可完成图像理解
+### SAM 2 的边界
 
-### 合成数据与数据增强
+[SAM 2](https://github.com/facebookresearch/sam2) 是 Meta 发布的可提示图像与视频分割模型，使用流式记忆处理视频对象。它可以根据点、框或掩码提示传播分割结果，但不是无需验证的“万能自动标注器”。在医学、遥感、透明物体、快速运动和严重遮挡等场景中仍要测量失败率并人工校验。
 
-高质量标注数据稀缺是视觉项目的主要瓶颈：
-- **合成数据生成**：用 Unity/Unreal 等引擎渲染带精确标注的虚拟场景
-- **扩散模型增强**：用 Stable Diffusion 从文字描述生成训练图像
-- **CutMix / MixUp** 等增强方法结合自监督学习（SimCLR、MAE）显著降低标注需求
+API 会随仓库版本变化。实际使用应固定 `sam2` 版本、模型配置和检查点，并以官方 README 的当前函数签名为准，不用含糊的 `predict(prompts)` 代替真实参数。
 
-### 工业落地进展
+### 跟踪
 
-计算机视觉在 2026 年已广泛应用于：
-- **医学影像**：X 光、CT、病理切片辅助诊断（FDA 已批准 200+ AI 医疗设备）
-- **自动驾驶**：BEV（鸟瞰图）感知 + 端到端模型成为主流方案
-- **工业质检**：小样本学习和异常检测方案替代传统人工检测
-- **零售与安防**：人体姿态估计、动作识别、人流密度分析
+多目标跟踪通常组合检测、运动模型和外观特征。单帧检测准确不代表轨迹正确，还要评估 ID 切换、漏轨、遮挡恢复和跨镜头关联。
 
-### 入门项目（2026 版）
+## OCR 不是一个函数
 
-- 用预训练模型做图像分类（HuggingFace `transformers` 一行代码）
-- 用 YOLOv11 训练自定义目标检测器
-- 用 CLIP 做零样本图像搜索
-- 用 LLaVA 做图片问答
-- 用 OpenCV + 传统方法做 OCR（用于理解基础图像处理）
+典型 OCR 管线包括：
 
-### SAM 2：图像与视频分割的基础模型
-
-根据 [SAM 2 GitHub 仓库](https://github.com/facebookresearch/sam2) 和 [Meta 官方发布博客](https://ai.meta.com/blog/segment-anything-2)：
-
-**Segment Anything Model 2（SAM 2）** 是 Meta FAIR 团队推出的分割基础模型，将 SAM 从静态图像扩展到**视频领域**。
-
-#### 核心创新
-
-| 特性 | 说明 |
-|------|------|
-| **图像+视频统一分割** | 图像视为单帧视频，无需单独模型 |
-| **流式记忆（Streaming Memory）** | Transformer 架构 + 流式记忆实现实时视频处理 |
-| **可提示交互** | 点击、框选、涂抹等方式指定分割目标 |
-| **多目标跟踪** | SAM2VideoPredictor 支持多对象独立推理 |
-| **模型内循环数据引擎** | 通过用户交互持续改进模型和数据 |
-
-#### SAM 2.1（2024年9月发布）
-
-- **改进的模型检查点**：SAM 2.1 系列（tiny / small / base_plus / large）
-- **开放训练代码**：支持微调和自定义训练（`training/README.md`）
-- **Web Demo 开源**：前后端完整代码均开源
-- **torch.compile 支持**（2024年12月）：全模型编译，视频对象分割（VOS）推理大幅加速
-
-#### 使用方式
-
-```python
-# 图像分割
-from sam2.build_sam import build_sam2
-from sam2.sam2_image_predictor import SAM2ImagePredictor
-
-checkpoint = "./checkpoints/sam2.1_hiera_large.pt"
-predictor = SAM2ImagePredictor(build_sam2("configs/sam2.1/sam2.1_hiera_l.yaml", checkpoint))
-
-with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
-    predictor.set_image(image)
-    masks, _, _ = predictor.predict(prompts)  # 点击/框选即可
+```text
+图像校正/去噪
+  -> 文本区域检测
+  -> 文本识别
+  -> 版面与阅读顺序分析
+  -> 字段抽取和规则校验
 ```
 
-```python
-# 视频分割与追踪
-from sam2.build_sam import build_sam2_video_predictor
+OpenCV 适合透视校正、二值化、形态学处理和区域裁剪，但它本身通常不是完整文字识别引擎。可以配合 Tesseract、PaddleOCR、云端文档 API 或视觉语言模型。票据和合同还需要表格结构、字段一致性和人工复核。
 
-predictor = build_sam2_video_predictor(model_cfg, checkpoint)
-with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
-    state = predictor.init_state(video_frames)
-    # 在第一帧添加提示，自动传播到所有帧
-    frame_idx, object_ids, masks = predictor.add_new_points_or_box(state, prompts)
-    for frame_idx, object_ids, masks in predictor.propagate_in_video(state):
-        ...  # 获取每一帧的分割结果
+## 数据、标注与切分
+
+### 数据集切分
+
+随机按图片切分可能造成泄漏。应根据数据来源选择分组策略：
+
+- 同一患者、用户、视频或连拍序列只能出现在一个集合中。
+- 时间敏感任务用时间外推测试，而不是把未来样本随机混入训练集。
+- 多工厂、多医院、多摄像头场景应保留跨站点测试集。
+- 测试集只用于最终评估；反复依据测试结果调参会污染结论。
+
+### 标注质量
+
+需要明确类别定义、困难样本、忽略区域和边界标注规则。对一部分数据做双人标注并计算一致性，能区分“模型上限”与“标签含糊”。标签版本应与模型版本关联。
+
+### 数据增强与合成数据
+
+裁剪、翻转、颜色扰动、MixUp 和 CutMix 等增强必须保持标签语义。医学影像、文字方向、交通标志和左右不对称场景不能盲目翻转。
+
+合成数据适合补充稀有场景和已知条件，但可能带来渲染偏差、重复模式和错误标签。“合成数据与真实数据不可区分”或固定成本降幅都不是通用结论；应在独立真实测试集上比较真实数据、合成数据和混合方案。
+
+## 评估与误差分析
+
+### 分类
+
+类别不均衡时，Accuracy 可能被多数类主导。应查看每类 Precision/Recall、宏平均 F1、PR-AUC、混淆矩阵和阈值曲线。概率要用于风险决策时，还需评估校准。
+
+### 检测和分割
+
+IoU 衡量预测区域与真值区域的重叠：
+
+```text
+IoU = intersection_area / union_area
 ```
 
-#### SA-V 数据集
+AP 将不同置信度阈值下的 Precision/Recall 汇总；mAP 再对类别或 IoU 阈值取平均。小目标、稀有类别和安全关键类别应单独报告，不能只看总体均值。
 
-SAM 2 配套发布了 **SA-V（Segment Anything Video）** 数据集——目前最大的视频分割数据集，通过模型内循环数据引擎收集，覆盖广泛的任务和视觉领域。
+### 切片评估
 
-> SAM 2 的意义在于让「分割一切」从图像走进了视频，且延续了 SAM 的开放精神。它在视频编辑、自动驾驶感知、医学影像分析等领域有巨大潜力。
+按光照、天气、设备、距离、分辨率、肤色、年龄、站点和时间等维度分析错误。切片必须有足够样本量，并避免从测试集反复挑选有利子集。
 
-- **参考来源**：[SAM 2 GitHub](https://github.com/facebookresearch/sam2) | [SAM 2 论文](https://ai.meta.com/research/publications/sam-2-segment-anything-in-images-and-videos/) | [SAM 2 博客](https://ai.meta.com/blog/segment-anything-2)
+### 分布外与鲁棒性
 
-## 2026 年 CV 关键突破深度解读
+加入模糊、压缩、遮挡、曝光、传感器变化和未知类别测试。生产系统应能识别低置信度或分布外输入并转人工，而不是强行输出确定答案。
 
-### 概述
+## 部署与性能
 
-计算机视觉市场在 2026 年预计达到 **328.8 亿美元**，到 2031 年增长至 683.8 亿美元。更重要的是，驱动增长的技术栈已发生根本性转变——从"特定任务模型"转向"通用视觉理解"，从"检测"转向"行动"。以下基于 viso.ai、Robotocist、discoverinai 等平台的最新报告整理。
+| 维度 | 需要测量的内容 |
+|------|----------------|
+| 延迟 | 预处理、模型、后处理和网络传输各自耗时；报告 p50/p95/p99 |
+| 吞吐 | 目标硬件上的 batch、并发和视频帧率 |
+| 内存 | 权重、激活、中间张量和视频缓冲区 |
+| 精度变化 | 导出、量化、分辨率调整后的任务指标差异 |
+| 稳定性 | 热启动、长时间运行、异常输入和降级路径 |
+| 可追溯性 | 数据版本、模型版本、阈值、运行时和硬件 |
 
-> 综合来源：viso.ai, "Computer Vision Trends We're Observing in 2026", https://viso.ai/deep-learning/computer-vision-trends-2026/（2026-07-13）；Robotocist, "Computer Vision Breakthroughs of 2026", https://robotocist.com/articles/computer-vision-2026（2026-02-22）；discoverinai.com, "Computer Vision: 5 Key 2026 Trends to Watch", https://discoverinai.com/computer-vision-5-key-2026-trends-to-watch/（2026-06-04）
+“实时”必须绑定具体硬件、输入尺寸、batch 和延迟预算。例如 30 FPS 只说明平均每帧约 33 毫秒，并不代表端到端 p99 延迟达标。
 
-### 1. 视觉通用智能（VGI）：从概念到产品
+## 视觉基础模型的正确用法
 
-**Visual General Intelligence** 是 2026 年 CV 领域最重要的突破。VGI 系统能理解任意物理环境、跨领域推理、用自然语言描述观察结果，无需为每个任务单独训练模型。viso.ai 在 2025 年初发布 VGI 白皮书并推出 Viso Now 平台后，2026 年 VGI 已从概念走向生产部署——制造业、物流、建筑等行业的实际生产环境中已在运行基于 VGI 架构的视觉系统。
+1. 先用预训练模型建立基线，而不是从零训练。
+2. 固定数据切分和评估协议，再比较 zero-shot、线性探针、微调和专用模型。
+3. 用少量领域标注判断域偏移，不以公开 benchmark 替代业务测试。
+4. 在高风险任务中把模型作为辅助，并提供拒答、复核和审计记录。
+5. 对 API 模型记录版本与日期；供应商更新可能改变输出。
 
-**关键区别**：传统 CV 需要标注大量数据训练专用模型，VGI 只需用自然语言描述任务，系统即能理解环境并回答问题。
+## 常见误区
 
-### 2. 自主计算机视觉（Agentic CV）：检测→行动
+- **更大的视觉模型一定更好**：延迟、分辨率、领域数据和输出粒度可能更重要。
+- **零样本意味着不需要标注**：至少需要标注评估集来知道系统是否可用。
+- **mAP 高就能上线**：总体分数可能掩盖关键类别和边缘场景失败。
+- **数据更多总会提升**：重复、错标和来源偏差会降低效果。
+- **VLM 能替代 OCR/检测全流程**：结构化精度、成本和可审计性要分别比较。
+- **厂商命名等于学术共识**：如“视觉通用智能”可能是产品定位，不能直接写成已建立的行业阶段。
+- **市场规模预测是技术事实**：市场报告依赖口径和假设，不应作为算法进展证据。
 
-传统 CV 系统只做检测，产生告警后需要人工处理。**Agentic CV** 系统则能：检测安全违规 → 自动将告警路由至相关负责人 → 附带视觉证据 → 更新 EHS 系统 → 创建整改工单——全过程无需人工介入。
+## 入门实践路线
 
-Gartner 预测到 2028 年，33% 的企业软件将包含 Agentic AI。CV 作为 Agentic AI 在物理世界的核心感知层，正在从"检测端点"转型为"行动起点"。
+1. 用小型分类数据集完成训练、验证、测试和混淆矩阵分析。
+2. 用预训练检测器标注自定义图片，检查阈值和坐标还原。
+3. 比较 CNN 与 ViT 在同一数据、分辨率和预算下的结果。
+4. 构建 OCR 管线，分别记录检测、识别和字段抽取错误。
+5. 加入分组切分、数据漂移和量化前后回归测试。
 
-### 3. 基础模型取代任务特定模型
+## 参考资料
 
-过去构建 CV 系统需要收集标注数据 → 训练专用模型 → 部署。2026 年，**视觉基础模型**（如 GPT-4o、Gemini 2.5 Pro、InternVL3、Qwen3-VL）经过海量视觉数据训练后，开箱即可理解几乎任何场景。
-
-**实际影响**：以前需要数月深度学习和大量标注数据的工作，现在数分钟即可完成。对于大多数监控和智能分析场景，基础模型是更快、更便宜、更灵活的选择。不过高精度检测（如微米级公差质检）仍需专用模型。
-
-### 4. 合成数据达到与真实数据同等的训练效果
-
-2026 年关键进展是：生成式 AI 产出的合成数据在**模型训练效果上已与真实数据无法区分**。照片级渲染、程序化光照和角度调整、AI 生成的边缘案例，覆盖了真实数据集常遗漏的长尾情况。
-
-discoverinai 的数据显示，合成数据可将训练数据采集成本降低约 40%。对于目标检测、缺陷识别和安全监控等应用，传统标注密集型管线已变得非必需。
-
-### 5. Vision Transformer 成为默认架构
-
-Vision Transformer（ViT）在 2026 年已全面成为目标检测、图像分割、深度估计和多模态推理的默认骨干网络。高效 ViT 变体（YOLO26、InternVL 系列）在边缘硬件上已达到此前云端模型的性能——这使得架构选择不再是 CV 系统设计时的关键决策点。
-
-### 6. 3D 场景理解主流化与 Physical AI
-
-**3D Gaussian Splatting** 技术快速成熟——从 30 秒手机视频中 1 分钟内重建完整 3D 场景。应用场景包括房地产虚拟看房、机器人环境建图、游戏/VR 内容创作。同时，**Physical AI**（物理 AI）——能感知、推理物理环境并采取行动的系统——正在从研究走向商业部署，Tesla Optimus 人形机器人已于 2026 年 1 月开始量产。
-
-> 来源：Robotocist, "Computer Vision Breakthroughs of 2026", https://robotocist.com/articles/computer-vision-2026（2026-02-22）；viso.ai（同上）
-
-### 7. 边缘计算成熟与语义视频智能
-
-EU AI Act 等法规对数据跨境传输的限制推动边缘部署以 17.29% CAGR 增长。2026 年，NVIDIA Jetson、Intel 等芯片已能在边缘运行最先进的深度学习推理。
-
-**语义视频搜索**则让用户能用自然语言对监控视频提问——无需预先配置、无需标注、无需人工观看——底层是大视觉模型与视频嵌入语义搜索的结合。
-
-### 8. CV 学习路径建议（2026 更新）
-
-根据 Scaler 的 2026 CV 路线图：
-
-| 阶段 | 内容 | 时长 |
-|------|------|:----:|
-| 基础 | Python、线性代数、概率统计、图像处理基础 | 1-2 月 |
-| 机器学习 | 监督/无监督学习、模型评估、Scikit-learn | 1 月 |
-| 深度学习 | 神经网络、CNN、迁移学习、PyTorch/TensorFlow | 1-2 月 |
-| 现代 CV 架构 | Vision Transformer、YOLO、图像分割 | 1 月 |
-| 目标检测与跟踪 | 检测算法、跟踪算法、视频理解 | 1 月 |
-| 高级主题 | 3D 视觉、生成式 CV、MLOps 部署、模型量化 | 持续 |
-
-> 来源：Scaler, "Computer Vision Roadmap 2026", https://www.scaler.com/blog/computer-vision-roadmap/（2026-07-16）
-
-### 参考来源
-
-- viso.ai, "Computer Vision Trends We're Observing in 2026", https://viso.ai/deep-learning/computer-vision-trends-2026/（2026-07-13）
-- Robotocist, "Computer Vision Breakthroughs of 2026", https://robotocist.com/articles/computer-vision-2026（2026-02-22）
-- discoverinai.com, "Computer Vision: 5 Key 2026 Trends", https://discoverinai.com/computer-vision-5-key-2026-trends-to-watch/（2026-06-04）
-- Scaler, "Computer Vision Roadmap 2026", https://www.scaler.com/blog/computer-vision-roadmap/（2026-07-16）
-
----
+- [ImageNet Classification with Deep Convolutional Neural Networks](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks)
+- [An Image is Worth 16x16 Words](https://arxiv.org/abs/2010.11929)
+- [DINOv2: Learning Robust Visual Features without Supervision](https://arxiv.org/abs/2304.07193)
+- [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)
+- [SAM 2: Segment Anything in Images and Videos](https://arxiv.org/abs/2408.00714)
+- [COCO Detection Evaluation](https://cocodataset.org/#detection-eval)
 
 ## 延伸阅读
 
 - [深度学习入门](../深度学习入门/)
 - [多模态模型](/高级知识/多模态模型/)
 - [Stable Diffusion](/模型专区/StableDiffusion/)
-- [HuggingFace Transformers 教程](/工具专区/HuggingFace/)
+- [Hugging Face 教程](/工具专区/HuggingFace/)
 
 ## 资料整理状态
 
