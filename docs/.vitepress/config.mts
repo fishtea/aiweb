@@ -94,7 +94,10 @@ const nav = [
     text: '知识库',
     items: [
       { text: '使用指南', link: '/知识库/' },
-      { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' }
+      { text: 'Codex 与 Claude Code', link: '/知识库/Codex与ClaudeCode使用指南' },
+      { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' },
+      { text: '文档体检报告', link: '/知识库/文档体检报告' },
+      { text: '最新更新报告', link: '/知识库/更新报告/2026-07-26' }
     ]
   }
 ]
@@ -199,7 +202,10 @@ const sidebar = [
     collapsed: true,
     items: [
       { text: '使用指南', link: '/知识库/' },
-      { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' }
+      { text: 'Codex 与 Claude Code', link: '/知识库/Codex与ClaudeCode使用指南' },
+      { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' },
+      { text: '文档体检报告', link: '/知识库/文档体检报告' },
+      { text: '最新更新报告', link: '/知识库/更新报告/2026-07-26' }
     ]
   }
 ]
@@ -208,7 +214,7 @@ export default defineConfig({
   lang: 'zh-CN',
   base: '/aiweb/',
   title: 'AI 学习路径导航',
-  description: '每日自动更新的中文 AI 教程、模型、工具与 Agent 实践知识库',
+  description: '持续更新的中文 AI 教程、模型、工具与 Agent 实践知识库',
   cleanUrls: true,
   lastUpdated: true,
   ignoreDeadLinks: true,
@@ -259,7 +265,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/fishtea/aiweb' }
     ],
     footer: {
-      message: '每日自动采集、翻译与生成 AI 学习内容',
+      message: '持续采集、筛选与整理 AI 学习内容',
       copyright: 'Copyright © 2026 AI 学习路径导航'
     },
     lastUpdated: {

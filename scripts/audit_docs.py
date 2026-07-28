@@ -59,6 +59,8 @@ def local_link_exists(link: str, current_page: Path) -> bool:
         return (target / "index.md").exists()
     if target.exists():
         return True
+    if Path(f"{target}.md").exists():
+        return True
     return (Path(str(target).rstrip("/")) / "index.md").exists()
 
 

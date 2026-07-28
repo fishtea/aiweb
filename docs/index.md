@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "AI 学习路径导航"
-  text: "自动更新的中文 AI 教程库"
-  tagline: 每天采集 AI 新内容，英文资料翻译为中文，沉淀成可检索、可持续扩展的教程、模型、工具与 Agent 实战知识库。
+  text: "持续更新的中文 AI 教程库"
+  tagline: 持续采集、筛选和整理 AI 内容，沉淀成可检索、可验证、可持续扩展的教程、模型、工具与 Agent 实战知识库。
   image:
     src: /logo.svg
     alt: AI 学习路径导航
@@ -43,7 +43,7 @@ features:
     link: /工具专区/
   - icon: 🧪
     title: AI Agent 实践
-    details: 增加函数调用 Agent、RAG Agent、多 Agent 协作等可复用实战案例，后续适合持续自动扩展。
+    details: 覆盖函数调用、RAG、多 Agent 协作、评估与可观测性、PRD 方案和行业应用案例。
     link: /AIAgent实践/
   - icon: 🧭
     title: 知识库指南
@@ -54,12 +54,12 @@ features:
 <section class="home-section">
   <div class="home-panel">
     <h2>📊 知识库概览</h2>
-    <p>持续自动化采集 AI 前沿内容，英文资料翻译为中文，并按学习路径、专题知识和工程实践重新组织。每篇内容都尽量补齐概念解释、适用场景、实践步骤、来源线索与维护说明，便于检索、复用和持续扩展。</p>
+    <p>持续采集并筛选 AI 前沿内容，按学习路径、专题知识和工程实践重新组织。每篇内容尽量补齐概念解释、适用场景、实践步骤、来源线索与维护说明，便于检索、验证、复用和持续扩展。</p>
     <div class="metric-grid">
-      <div class="metric"><strong>42+</strong><span>已整理教程文档</span></div>
+      <div class="metric"><strong>52</strong><span>已整理专题文档</span></div>
       <div class="metric"><strong>7</strong><span>知识库入口与分类</span></div>
       <div class="metric"><strong>8</strong><span>主流模型专题</span></div>
-      <div class="metric"><strong>4+</strong><span>Agent 实战案例</span></div>
+      <div class="metric"><strong>6</strong><span>Agent 实践专题</span></div>
     </div>
   </div>
 </section>
@@ -79,8 +79,10 @@ features:
 <section class="home-section">
   <div class="home-panel">
     <h2>最新更新</h2>
-    <p>自动生成内容会持续追加到对应栏目，首页保留最近的站点级更新记录。</p>
+    <p>首页展示最近的站点级修订，采集明细与候选资料见知识库更新报告。</p>
     <ul class="update-list">
+      <li><time>2026-07-28</time><span>知识纠错与补全：重写 <a href="/初级知识/数学基础/">数学基础</a>、<a href="/初级知识/大语言模型基础/">大语言模型基础</a>、<a href="/初级知识/计算机视觉基础/">计算机视觉基础</a>、<a href="/进阶学习/Embedding与向量数据库/">Embedding 与向量数据库</a>和 <a href="/模型专区/GPT系列/">GPT 系列</a>，修正未公开参数、架构误解、检索基准和营销式趋势断言。</span></li>
+      <li><time>2026-07-26</time><span>补充 Agent 实际应用、PRD 方案和 GitHub 热门项目，详情见 <a href="/知识库/更新报告/2026-07-26">最新更新报告</a>。</span></li>
       <li><time>2026-06-30</time><span>知识迭代：为模型专区（GPT/Claude/DeepSeek/Gemini/Qwen/LLaMA/Mixtral/SD）、工具专区（LangChain/vLLM/Ollama/HuggingFace/ComfyUI/AutoGPT/PyTorch/TensorFlow/LlamaIndex/部署运维）、进阶学习（RAG/提示词/Agent/评估/微调）、高级知识（架构/训练/安全/多模态/数据）和 Agent 实践补充进阶章节与工程经验。</span></li>
       <li><time>2026-06-30</time><span>重构采集逻辑：新增统一分类配置、结构化资源库、精选资源区块重建和每日采集报告，避免文章被无限追加成链接列表。</span></li>
       <li><time>2026-06-30</time><span>补齐初级知识体系：新增 AI 学习路线图、数学基础、Python 与数据处理、数据与特征工程、模型训练评估、NLP、CV、生成式 AI、提示词入门、AI 伦理安全与隐私。</span></li>
