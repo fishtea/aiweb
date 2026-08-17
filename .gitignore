@@ -23,3 +23,8 @@ venv/
 
 # Node.js
 node_modules/
+
+# Local tooling / editor / temp
+.codegraph/
+.cursor/
+.tmp-ai-note/
