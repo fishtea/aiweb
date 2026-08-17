@@ -6,6 +6,7 @@
 
 | 主题 | 简介 |
 |------|------|
+| [从零构建智能体](从零构建智能体/index.md) | 系统化学习路径：Agent 原理、经典范式与实战（Hello-Agents 教程精读） |
 | [函数调用 Agent](函数调用Agent/index.md) | 从零搭建支持工具调用的 AI Agent |
 | [RAG Agent 实战](RAGAgent实战/index.md) | 构建结合检索增强生成的智能 Agent |
 | [多 Agent 协作](多Agent协作/index.md) | 多智能体协作系统设计与框架对比 |

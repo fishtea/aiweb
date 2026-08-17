@@ -82,6 +82,7 @@ const nav = [
     text: 'AI Agent 实践',
     items: [
       { text: '总览', link: '/AIAgent实践/' },
+      { text: '🎓 从零构建智能体', link: '/AIAgent实践/从零构建智能体/' },
       { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
       { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
       { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
@@ -189,6 +190,7 @@ const sidebar = [
     collapsed: false,
     items: [
       { text: '总览', link: '/AIAgent实践/' },
+      { text: '🎓 从零构建智能体', link: '/AIAgent实践/从零构建智能体/' },
       { text: '函数调用 Agent', link: '/AIAgent实践/函数调用Agent/' },
       { text: 'RAG Agent 实战', link: '/AIAgent实践/RAGAgent实战/' },
       { text: '多 Agent 协作', link: '/AIAgent实践/多Agent协作/' },
