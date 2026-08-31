@@ -81,6 +81,7 @@ features:
     <h2>最新更新</h2>
     <p>首页展示最近的站点级修订，采集明细与候选资料见知识库更新报告。</p>
     <ul class="update-list">
+      <li><time>2026-08-17</time><span>发布流程与文档维护：完成一轮批量发布，继续以 <a href="./知识库/文档体检报告">文档体检报告</a>、本地构建和资源区块重建作为发布前检查。</span></li>
       <li><time>2026-07-28</time><span>知识纠错与补全：重写 <a href="./初级知识/数学基础/">数学基础</a>、<a href="./初级知识/大语言模型基础/">大语言模型基础</a>、<a href="./初级知识/计算机视觉基础/">计算机视觉基础</a>、<a href="./进阶学习/Embedding与向量数据库/">Embedding 与向量数据库</a>和 <a href="./模型专区/GPT系列/">GPT 系列</a>，修正未公开参数、架构误解、检索基准和营销式趋势断言。</span></li>
       <li><time>2026-07-26</time><span>补充 Agent 实际应用、PRD 方案和 GitHub 热门项目，详情见 <a href="./知识库/更新报告/2026-07-26">最新更新报告</a>。</span></li>
       <li><time>2026-06-30</time><span>知识迭代：为模型专区（GPT/Claude/DeepSeek/Gemini/Qwen/LLaMA/Mixtral/SD）、工具专区（LangChain/vLLM/Ollama/HuggingFace/ComfyUI/AutoGPT/PyTorch/TensorFlow/LlamaIndex/部署运维）、进阶学习（RAG/提示词/Agent/评估/微调）、高级知识（架构/训练/安全/多模态/数据）和 Agent 实践补充进阶章节与工程经验。</span></li>

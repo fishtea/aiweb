@@ -34,6 +34,7 @@ def expected_topic_pages() -> set[Path]:
     pages.add(DOCS / "index.md")
     pages.add(DOCS / "知识库" / "index.md")
     pages.add(DOCS / "知识库" / "内容治理与采集规划.md")
+    pages.add(DOCS / "知识库" / "Codex与ClaudeCode使用指南.md")
     return pages
 
 
@@ -87,12 +88,13 @@ def audit() -> tuple[list[str], list[str]]:
         content = page.read_text(encoding="utf-8")
         rel = page.relative_to(PROJECT_ROOT)
         is_audit_report = page == REPORT
+        is_update_report = "更新报告" in page.parts
         is_home = page == DOCS / "index.md" and content.lstrip().startswith("---")
         is_category_index = page.name == "index.md" and page.parent.parent == DOCS
         is_topic_index = page.name == "index.md" and page.parent.parent.parent == DOCS
         if not is_home and not content.lstrip().startswith("#"):
             warnings.append(f"缺少一级标题：`{rel}`")
-        if len(content.strip()) < 800 and not is_audit_report:
+        if len(content.strip()) < 800 and not is_audit_report and not is_update_report:
             suggestions.append(f"正文偏短，建议补充概念、步骤和误区：`{rel}`")
         if "TODO" in content or "待补充" in content:
             warnings.append(f"存在未完成标记：`{rel}`")
@@ -103,7 +105,7 @@ def audit() -> tuple[list[str], list[str]]:
             warnings.append(f"资源区块结束标记缺失：`{rel}`")
         if RESOURCE_END in content and RESOURCE_START not in content:
             warnings.append(f"资源区块开始标记缺失：`{rel}`")
-        if heading_count(content) < 2 and not is_home and not is_audit_report:
+        if heading_count(content) < 2 and not is_home and not is_audit_report and not is_update_report:
             suggestions.append(f"二级标题偏少，阅读结构可能不足：`{rel}`")
         for link in extract_links(content):
             if not local_link_exists(link, page):

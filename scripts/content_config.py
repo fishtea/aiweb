@@ -324,10 +324,22 @@ CATEGORIES = {
                 "tags": ["多Agent", "协作", "编排"],
                 "level": "practice",
             },
+            "MCP工具调用实战": {
+                "desc": "MCP 工具发现、权限控制、错误处理和 Agent 集成实践",
+                "queries": ["Model Context Protocol MCP tools tutorial", "MCP 工具调用 Agent 实战"],
+                "tags": ["MCP", "工具调用", "Agent", "安全"],
+                "level": "practice",
+            },
             "Agent评估与可观测性": {
                 "desc": "Agent 运行日志、轨迹评估、质量监控和调试方法",
                 "queries": ["LLM agent evaluation observability", "Agent 评估 可观测性"],
                 "tags": ["Agent", "评估", "可观测性"],
+                "level": "practice",
+            },
+            "从零构建智能体": {
+                "desc": "从 Agent 基础、LLM 交互到记忆、工具调用和评估的系统入门",
+                "queries": ["从零构建智能体 Hello Agents", "LLM agent from scratch tutorial"],
+                "tags": ["Agent", "入门", "工具调用", "RAG"],
                 "level": "practice",
             },
             "PRD方案库": {

@@ -10,6 +10,7 @@
 | [函数调用 Agent](函数调用Agent/index.md) | 从零搭建支持工具调用的 AI Agent |
 | [RAG Agent 实战](RAGAgent实战/index.md) | 构建结合检索增强生成的智能 Agent |
 | [多 Agent 协作](多Agent协作/index.md) | 多智能体协作系统设计与框架对比 |
+| [MCP 工具调用实战](MCP工具调用实战/index.md) | 用标准协议连接工具、资源和企业 API，并建立权限与审计闭环 |
 | [Agent 评估与可观测性](Agent评估与可观测性/index.md) | 评估任务成功率、工具调用轨迹、安全和质量回归 |
 | [实际应用案例](实际应用案例/index.md) | 企业落地案例、行业最佳实践、本周最新动态 |
 | [AI Agent PRD 方案库](PRD方案库/index.md) | 可直接用于立项、选题和课程项目的实用 Agent 产品需求文档 |
@@ -21,6 +22,7 @@
 - 任务边界清晰、只需要调用少量 API：从 [函数调用 Agent](函数调用Agent/index.md) 开始。
 - 需要回答私有资料、产品文档或内部流程：优先阅读 [RAG Agent 实战](RAGAgent实战/index.md)。
 - 任务需要规划、分工、审查或多角色协作：阅读 [多 Agent 协作](多Agent协作/index.md)。
+- 需要连接外部工具、统一协议并控制执行权限：阅读 [MCP 工具调用实战](MCP工具调用实战/index.md)。
 - 需要上线、排障和持续改进：补充 [Agent 评估与可观测性](Agent评估与可观测性/index.md)。
 - 需要了解行业趋势和最新案例：查看 [实际应用案例](实际应用案例/index.md)。
 - 需要快速选择可落地项目或生成立项材料：查看 [AI Agent PRD 方案库](PRD方案库/index.md)。
