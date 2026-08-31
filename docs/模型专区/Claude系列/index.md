@@ -1,6 +1,6 @@
 # Claude 系列 — Anthropic
 
-> Claude 是由 Anthropic 开发的大语言模型家族，以 Constitutional AI、安全性、长上下文和编程体验著称。按 Anthropic 2026-07-06 官方模型文档，生产选型应重点关注 Claude Fable 5、Claude Sonnet 5、Claude Opus 4.8、Claude Haiku 4.5 与 Claude 3.7 Sonnet。
+> Claude 是由 Anthropic 开发的大语言模型家族，以 Constitutional AI、安全性、长上下文和编程体验著称。本文包含历史型号和 2026 年资料快照；**Claude Fable 5、Claude Sonnet 5、Claude Opus 4.8 等名称本次未能从 Anthropic 官方公开模型目录独立核实**，不得据此判断可用性、价格或 API ID。生产接入前必须以官方模型列表和定价页为准。
 
 ---
 
@@ -67,7 +67,7 @@
 
 ---
 
-## 2026 年 6 月：Claude Fable 5 与模型格局重塑
+## 待核验的 2026 年资料（不作为生产事实）
 
 根据 [Anthropic 官方模型文档](https://docs.anthropic.com/en/docs/about-claude/models)（2026-07 访问）及 [Claude Fable 5 发布公告](https://www.anthropic.com/news/claude-fable-5)：
 
@@ -294,4 +294,4 @@ Claude **Fable 5** 是 Anthropic 首个公开的 Mythos 级模型，代表第五
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-08-31 11:50:08*
+*资源区块更新时间：2026-08-31 11:57:56*

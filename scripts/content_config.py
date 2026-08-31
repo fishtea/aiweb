@@ -301,6 +301,12 @@ CATEGORIES = {
                 "tags": ["GitHub", "开源", "热门项目", "AI项目"],
                 "level": "tool",
             },
+            "项目验证清单": {
+                "desc": "采用模型、框架和开源项目前的来源、压测与安全核验",
+                "queries": ["AI project evaluation checklist", "LLM production readiness checklist"],
+                "tags": ["评估", "选型", "安全", "运维"],
+                "level": "tool",
+            },
         },
     },
     "AIAgent实践": {

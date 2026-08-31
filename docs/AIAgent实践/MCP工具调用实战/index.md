@@ -107,4 +107,4 @@ def execute_tool(call, registry, user):
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-08-31 11:50:08*
+*资源区块更新时间：2026-08-31 11:57:56*

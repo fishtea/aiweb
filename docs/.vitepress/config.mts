@@ -75,7 +75,8 @@ const nav = [
       { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
       { text: 'Ollama', link: '/工具专区/Ollama/' },
       { text: '部署运维', link: '/工具专区/部署运维/' },
-      { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' }
+      { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' },
+      { text: '项目验证清单', link: '/工具专区/项目验证清单/' }
     ]
   },
   {
@@ -183,7 +184,8 @@ const sidebar = [
       { text: 'TensorFlow', link: '/工具专区/TensorFlow/' },
       { text: 'Ollama', link: '/工具专区/Ollama/' },
       { text: '部署运维', link: '/工具专区/部署运维/' },
-      { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' }
+      { text: '🔥 GitHub 热门项目', link: '/工具专区/GitHub热门项目/' },
+      { text: '项目验证清单', link: '/工具专区/项目验证清单/' }
     ]
   },
   {

@@ -2,6 +2,8 @@
 
 > Gemini 是 Google DeepMind 开发的原生多模态大模型系列，深度融合文本、图像、音频、视频和代码理解能力。按 Google 2026-07-06 官方模型文档，生产选型重点是 Gemini 3 Pro、Gemini 2.5 Pro / Flash、Gemini Embedding 和 Gemini 图像生成模型。
 
+> **事实核验提示**：Gemini 型号、上下文窗口、价格和发布日期变化较快。Gemini 3.x、Gemini Audio 等 2026 年条目需要以 [Google AI 模型列表](https://ai.google.dev/gemini-api/docs/models) 重新核验，未在官方目录确认的条目不应写入生产配置。
+
 ---
 
 ## 模型演进
@@ -358,4 +360,4 @@ Google Agent 栈
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-08-31 11:50:08*
+*资源区块更新时间：2026-08-31 11:57:56*

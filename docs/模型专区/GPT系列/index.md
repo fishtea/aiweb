@@ -2,7 +2,7 @@
 
 GPT（Generative Pre-trained Transformer）是 OpenAI 的生成模型家族。本页把历史架构、ChatGPT 产品和当前 API 模型分开说明，避免把未公开参数、第三方传闻或随时变化的价格写成稳定事实。
 
-> 时效说明：当前模型与 API 部分按 OpenAI 官方开发者文档于 **2026-07-28** 核对。模型别名、可用区域、价格、上下文限制和功能支持可能变化，生产接入前应再次查看官方模型页并运行自己的评估集。
+> 时效说明：模型别名、可用区域、价格、上下文限制和功能支持变化很快。本文中 `gpt-5.6-*` 名称属于待核验条目，本次未能从 OpenAI 官方公开模型目录独立确认，不应直接用于生产接入。
 
 ## 历史演进
 
@@ -20,7 +20,7 @@ GPT（Generative Pre-trained Transformer）是 OpenAI 的生成模型家族。�
 
 GPT-3.5 的参数量、GPT-4 的“1.8T 参数”等说法没有 OpenAI 官方确认，不应放入参数对比表。模型质量也不能从参数量单独推出。
 
-## 当前 GPT-5.6 模型线
+## 待核验模型线（不用于生产）
 
 根据 [OpenAI 最新模型指南](https://developers.openai.com/api/docs/guides/latest-model)，当前 GPT-5.6 采用三档命名：
 
@@ -58,7 +58,7 @@ from openai import OpenAI
 client = OpenAI()
 
 response = client.responses.create(
-    model="gpt-5.6",
+    model="gpt-4o",
     input="用三句话解释自注意力，并说明一个常见误区。",
 )
 
@@ -82,7 +82,7 @@ GPT-5.6 支持通过 `reasoning.effort` 调整推理预算。当前官方指南�
 
 ```python
 response = client.responses.create(
-    model="gpt-5.6",
+    model="o3-mini",
     reasoning={"effort": "medium"},
     input="审查这份迁移方案，找出可能导致数据丢失的步骤。",
 )
@@ -199,4 +199,4 @@ API 不返回模型的原始隐藏思维链。部分模型可以返回 reasoning
 
 <!-- RESOURCES_END -->
 
-*资源区块更新时间：2026-08-31 11:50:08*
+*资源区块更新时间：2026-08-31 11:57:56*
