@@ -43,7 +43,7 @@ features:
     link: /工具专区/
   - icon: 🧪
     title: AI Agent 实践
-    details: 覆盖函数调用、RAG、多 Agent 协作、评估与可观测性、PRD 方案和行业应用案例。
+    details: 覆盖函数调用、RAG、多 Agent 协作、长任务与长记忆、评估与可观测性、PRD 方案和行业应用案例。
     link: /AIAgent实践/
   - icon: 🧭
     title: 知识库指南
@@ -59,7 +59,7 @@ features:
       <div class="metric"><strong>52</strong><span>已整理专题文档</span></div>
       <div class="metric"><strong>7</strong><span>知识库入口与分类</span></div>
       <div class="metric"><strong>8</strong><span>主流模型专题</span></div>
-      <div class="metric"><strong>6</strong><span>Agent 实践专题</span></div>
+      <div class="metric"><strong>7</strong><span>Agent 实践专题</span></div>
     </div>
   </div>
 </section>
@@ -81,6 +81,7 @@ features:
     <h2>最新更新</h2>
     <p>首页展示最近的站点级修订，采集明细与候选资料见知识库更新报告。</p>
     <ul class="update-list">
+      <li><time>2026-10-08</time><span>新增 <a href="./AIAgent实践/长任务与长记忆架构/">长任务与长记忆架构</a>：整理 Agents API、Agents SDK、Responses API 选型、可暂停/恢复任务、上下文压缩、分层记忆、工具审批、评估追踪和文档发布闭环。</span></li>
       <li><time>2026-08-17</time><span>发布流程与文档维护：完成一轮批量发布，继续以 <a href="./知识库/文档体检报告">文档体检报告</a>、本地构建和资源区块重建作为发布前检查。</span></li>
       <li><time>2026-07-28</time><span>知识纠错与补全：重写 <a href="./初级知识/数学基础/">数学基础</a>、<a href="./初级知识/大语言模型基础/">大语言模型基础</a>、<a href="./初级知识/计算机视觉基础/">计算机视觉基础</a>、<a href="./进阶学习/Embedding与向量数据库/">Embedding 与向量数据库</a>和 <a href="./模型专区/GPT系列/">GPT 系列</a>，修正未公开参数、架构误解、检索基准和营销式趋势断言。</span></li>
       <li><time>2026-07-26</time><span>补充 Agent 实际应用、PRD 方案和 GitHub 热门项目，详情见 <a href="./知识库/更新报告/2026-07-26">最新更新报告</a>。</span></li>
