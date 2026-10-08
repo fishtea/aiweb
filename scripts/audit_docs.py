@@ -34,6 +34,7 @@ def expected_topic_pages() -> set[Path]:
     pages.add(DOCS / "index.md")
     pages.add(DOCS / "知识库" / "index.md")
     pages.add(DOCS / "知识库" / "内容治理与采集规划.md")
+    pages.add(DOCS / "知识库" / "知识架构与维护规范.md")
     pages.add(DOCS / "知识库" / "Codex与ClaudeCode使用指南.md")
     return pages
 

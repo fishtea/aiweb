@@ -100,13 +100,14 @@ const nav = [
       { text: '使用指南', link: '/知识库/' },
       { text: 'Codex 与 Claude Code', link: '/知识库/Codex与ClaudeCode使用指南' },
       { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' },
+      { text: '知识架构与维护规范', link: '/知识库/知识架构与维护规范' },
       { text: '文档体检报告', link: '/知识库/文档体检报告' },
       { text: '最新更新报告', link: '/知识库/更新报告/2026-07-26' }
     ]
   }
 ]
 
-const sidebar = [
+const legacySidebar = [
   {
     text: '初级知识',
     collapsed: false,
@@ -212,11 +213,22 @@ const sidebar = [
       { text: '使用指南', link: '/知识库/' },
       { text: 'Codex 与 Claude Code', link: '/知识库/Codex与ClaudeCode使用指南' },
       { text: '内容治理与采集规划', link: '/知识库/内容治理与采集规划' },
+      { text: '知识架构与维护规范', link: '/知识库/知识架构与维护规范' },
       { text: '文档体检报告', link: '/知识库/文档体检报告' },
       { text: '最新更新报告', link: '/知识库/更新报告/2026-07-26' }
     ]
   }
 ]
+
+// Keep the sidebar derived from the same navigation source so new pages cannot
+// appear in one menu and silently disappear from the other.
+const sidebar = nav
+  .filter((item): item is Extract<typeof item, { items: unknown[] }> => 'items' in item)
+  .map(item => ({
+    text: item.text,
+    collapsed: item.text === '知识库',
+    items: item.items
+  }))
 
 export default defineConfig({
   lang: 'zh-CN',
