@@ -342,6 +342,12 @@ CATEGORIES = {
                 "tags": ["Agent", "评估", "可观测性"],
                 "level": "practice",
             },
+            "长任务与长记忆架构": {
+                "desc": "长时间运行任务、上下文压缩、会话状态、记忆检索与可恢复执行",
+                "queries": ["long running agents context compaction memory architecture", "Agent 长任务 长记忆 上下文压缩"],
+                "tags": ["Agent", "长任务", "长记忆", "上下文工程", "状态管理"],
+                "level": "practice",
+            },
             "从零构建智能体": {
                 "desc": "从 Agent 基础、LLM 交互到记忆、工具调用和评估的系统入门",
                 "queries": ["从零构建智能体 Hello Agents", "LLM agent from scratch tutorial"],

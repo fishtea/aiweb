@@ -11,7 +11,7 @@ AI 学习路径导航是一个基于 VitePress 构建、部署在 GitHub Pages �
 - 高级知识：模型训练与优化、AI 安全与对齐、多模态模型、模型架构研究、数据工程与合成数据。
 - 模型专区：GPT、Claude、LLaMA、DeepSeek、Gemini、Qwen、Stable Diffusion、Mixtral、开源模型部署选型。
 - 工具专区：LangChain、LlamaIndex、AutoGPT、ComfyUI、vLLM、Hugging Face、PyTorch、TensorFlow、Ollama、部署运维、GitHub 热门项目。
-- AI Agent 实践：函数调用 Agent、RAG Agent 实战、多 Agent 协作、Agent 评估与可观测性、实际应用案例。
+- AI Agent 实践：函数调用 Agent、RAG Agent 实战、多 Agent 协作、Agent 评估与可观测性、长任务与长记忆架构、实际应用案例。
 - 知识库：使用指南、内容治理与采集规划、更新报告、文档体检报告。
 
 ## 项目结构
@@ -109,6 +109,10 @@ docs/
     ├── 文档体检报告.md
     └── 更新报告/
 ```
+
+## 当前架构基线
+
+Agent 相关内容按“运行时选择 → 任务状态 → 分层记忆 → 工具与审批 → 评估追踪 → 文档生成与发布”组织。新增的[长任务与长记忆架构](docs/AIAgent实践/长任务与长记忆架构/index.md)以 2026-10-08 的官方 Agents 文档为基线，说明 Agents API、Agents SDK、Responses API 与本项目 Git/CI 发布脚本的职责边界。
 
 ## 技术栈
 
