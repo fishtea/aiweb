@@ -94,9 +94,10 @@ def audit() -> tuple[list[str], list[str]]:
         is_category_index = page.name == "index.md" and page.parent.parent == DOCS
         is_topic_index = page.name == "index.md" and page.parent.parent.parent == DOCS
         is_model_reference = page.parent.parent == DOCS / "模型专区" and page.name == "index.md"
+        is_tool_reference = page.parent.parent == DOCS / "工具专区" and page.name == "index.md"
         if not is_home and not content.lstrip().startswith("#"):
             warnings.append(f"缺少一级标题：`{rel}`")
-        if len(content.strip()) < 800 and not is_audit_report and not is_update_report and not is_model_reference:
+        if len(content.strip()) < 800 and not is_audit_report and not is_update_report and not is_model_reference and not is_tool_reference:
             suggestions.append(f"正文偏短，建议补充概念、步骤和误区：`{rel}`")
         if "TODO" in content or "待补充" in content:
             warnings.append(f"存在未完成标记：`{rel}`")
